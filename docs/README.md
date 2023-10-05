@@ -1,4 +1,4 @@
-# Duke
+# ChessMaster
 
 {Give product intro here}
 
