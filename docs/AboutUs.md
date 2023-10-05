@@ -1,9 +1,9 @@
 # About us
 
-Display | Name | Github Profile | Portfolio 
---------|:----:|:--------------:|:---------:
-![](https://via.placeholder.com/100.png?text=Photo) | John Doe | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
-![](https://via.placeholder.com/100.png?text=Photo) | Don Joe | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
-![](https://via.placeholder.com/100.png?text=Photo) | Ron John | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
-![](https://via.placeholder.com/100.png?text=Photo) | John Roe | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
-![](https://via.placeholder.com/100.png?text=Photo) | Don Roe | [Github](https://github.com/) | [Portfolio](docs/team/johndoe.md)
+| Name            | ID        | Github        |
+|-----------------|-----------|---------------|
+| Antriksh Dhand  | A0278458J | antrikshdhand |
+| Oh Ken Wei      | A0251850J | ken-ruster    |
+| Ou Ningxiang    | A0249445W | onx001        |
+| Tong Zheng Hong | A0251819Y | TongZhengHong |
+| Tricia Boo Koh  | A0264665U | TriciaBK      |
