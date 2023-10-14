@@ -1,11 +1,11 @@
-package seedu.duke;
+package chessmaster;
 
 import java.util.Scanner;
 
-public class Duke {
-    /**
-     * Main entry-point for the java.duke.Duke application.
-     */
+/**
+ * Main entry-point for the java.duke.Duke application.
+ */
+public class ChessMaster {
     public static void main(String[] args) {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
