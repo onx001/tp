@@ -30,6 +30,13 @@ abstract public class ChessPiece {
     protected Coordinate position;
     protected int color;
 
+    /**
+     * Returns available coordinates in multiple directions from the current position. 
+     * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is
+     * in the direction the current chess piece can move to.
+     *
+     * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
+     */
     abstract public Coordinate[][] getAvailablCoordinates();
 
     public ChessPiece(int row, int col, int color) {

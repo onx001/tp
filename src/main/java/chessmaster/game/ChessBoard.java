@@ -10,7 +10,7 @@ public class ChessBoard {
 
     private ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
-    private static final String[][] EMPTY_CHESSBOARD_STRING = {
+    private static final String[][] STARTING_CHESSBOARD_STRING = {
             { "r", "n", "b", "q", "k", "b", "n", "r" },
             { "p", "p", "p", "p", "p", "p", "p", "p" },
             { "", "", "", "", "", "", "", "" },
@@ -24,7 +24,7 @@ public class ChessBoard {
     public ChessBoard() {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
-                String chessPieceString = EMPTY_CHESSBOARD_STRING[row][col];
+                String chessPieceString = STARTING_CHESSBOARD_STRING[row][col];
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);
                 board[row][col] = new ChessTile(initialPiece);
             }
