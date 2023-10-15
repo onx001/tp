@@ -29,7 +29,7 @@ public class ChessMaster {
 
         while (true) {
             board.showChessBoard(ui);
-            String move = ui.getUserCommand();
+            // String move = ui.getUserCommand();
             // TODO: Check if move is valid
             // TODO: Update chessboard (new position with chesspiece, old position empty)
             // TODO: Update ChessPiece (position)

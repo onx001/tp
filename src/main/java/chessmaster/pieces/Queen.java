@@ -9,7 +9,7 @@ public class Queen extends ChessPiece {
     public static final String QUEEN_WHITE = "q"; // ♕
     public static final String QUEEN_BLACK = "Q"; // ♛
 
-    public static final int[][] directions = {
+    public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
 
@@ -19,11 +19,11 @@ public class Queen extends ChessPiece {
 
     @Override
     public Coordinate[][] getAvailablCoordinates() {
-        Coordinate[][] result = new Coordinate[directions.length][0];
+        Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
-        for (int dir = 0; dir < directions.length; dir++) {
-            int offsetX = directions[dir][0];
-            int offsetY = directions[dir][1];
+        for (int dir = 0; dir < DIRECTIONS.length; dir++) {
+            int offsetX = DIRECTIONS[dir][0];
+            int offsetY = DIRECTIONS[dir][1];
 
             int multiplier = 1;
             ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
@@ -33,8 +33,8 @@ public class Queen extends ChessPiece {
                 possibleCoordInDirection.add(possibleCoord);
 
                 multiplier++;
-                offsetX = directions[dir][0] * multiplier;
-                offsetY = directions[dir][1] * multiplier;
+                offsetX = DIRECTIONS[dir][0] * multiplier;
+                offsetY = DIRECTIONS[dir][1] * multiplier;
             }
 
             // Convert arraylist to array

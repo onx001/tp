@@ -6,6 +6,7 @@ public class ChessTile {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
 
+    /** Nullable ChessPiece object. Null signifies that this tile is empty */
     private ChessPiece chessPiece;
 
     public ChessTile() {

@@ -6,7 +6,7 @@ public class Pawn extends ChessPiece {
     public static final String PAWN_WHITE = "p"; // ♙
     public static final String PAWN_BLACK = "P"; // ♟
 
-    public static final int[][] directions = {
+    public static final int[][] DIRECTIONS = {
         UP_LEFT, UP_RIGHT, UP, UP_UP,
     };
 
@@ -16,11 +16,11 @@ public class Pawn extends ChessPiece {
 
     @Override
     public Coordinate[][] getAvailablCoordinates() {
-        Coordinate[][] result = new Coordinate[directions.length][0];
+        Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
-        for (int dir = 0; dir < directions.length; dir++) {
-            int offsetX = directions[dir][0];
-            int offsetY = directions[dir][1];
+        for (int dir = 0; dir < DIRECTIONS.length; dir++) {
+            int offsetX = DIRECTIONS[dir][0];
+            int offsetY = DIRECTIONS[dir][1];
 
             if (position.isOffsetWithinBoard(offsetX, offsetY)) {
                 Coordinate dest = position.addOffsetToCoordinate(offsetX, offsetY);

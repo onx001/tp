@@ -6,7 +6,7 @@ public class Knight extends ChessPiece {
     public static final String KNIGHT_WHITE = "n"; // ♘
     public static final String KNIGHT_BLACK = "N"; // ♞
 
-    public static final int[][] directions = {
+    public static final int[][] DIRECTIONS = {
         UP_UP_LEFT, UP_UP_RIGHT, DOWN_DOWN_LEFT, DOWN_DOWN_RIGHT,
         LEFT_UP_LEFT, LEFT_DOWN_LEFT, RIGHT_UP_RIGHT, RIGHT_DOWN_RIGHT,
     };
@@ -17,11 +17,11 @@ public class Knight extends ChessPiece {
 
     @Override
     public Coordinate[][] getAvailablCoordinates() {
-        Coordinate[][] result = new Coordinate[directions.length][0];
+        Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
-        for (int dir = 0; dir < directions.length; dir++) {
-            int offsetX = directions[dir][0];
-            int offsetY = directions[dir][1];
+        for (int dir = 0; dir < DIRECTIONS.length; dir++) {
+            int offsetX = DIRECTIONS[dir][0];
+            int offsetY = DIRECTIONS[dir][1];
 
             if (position.isOffsetWithinBoard(offsetX, offsetY)) {
                 Coordinate dest = position.addOffsetToCoordinate(offsetX, offsetY);
