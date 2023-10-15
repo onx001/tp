@@ -24,10 +24,8 @@ public class ChessBoard {
     public ChessBoard() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                String key = EMPTY_CHESSBOARD_STRING[i][j].toLowerCase();
-                int color = i > 4 ? ChessPiece.BLACK : ChessPiece.WHITE;
-
-                ChessPiece initialPiece = Parser.parseChessPiece(key, i, j, color);
+                String chessPieceString = EMPTY_CHESSBOARD_STRING[i][j];
+                ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, i, j);
                 board[i][j] = new ChessTile(initialPiece);
             }
         }
