@@ -11,14 +11,14 @@ public class ChessBoard {
     private ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     private static final String[][] EMPTY_CHESSBOARD_STRING = {
-            { "r", "kn", "b", "q", "k", "b", "kn", "r" },
+            { "r", "n", "b", "q", "k", "b", "n", "r" },
             { "p", "p", "p", "p", "p", "p", "p", "p" },
             { "", "", "", "", "", "", "", "" },
             { "", "", "", "", "", "", "", "" },
             { "", "", "", "", "", "", "", "" },
             { "", "", "", "", "", "", "", "" },
             { "P", "P", "P", "P", "P", "P", "P", "P" },
-            { "R", "Kn", "B", "Q", "K", "B", "Kn", "R" },
+            { "R", "N", "B", "Q", "K", "B", "N", "R" },
     };
 
     public ChessBoard() {
@@ -34,13 +34,13 @@ public class ChessBoard {
     }
 
     public void showChessBoard(TextUI ui) {
-        System.out.println(TextUI.CHESS_BOARD_DIVIDER);
+        ui.printChessBoardDivider();
         for (ChessTile[] row : board) {
+            StringBuilder rowString = new StringBuilder();
             for (ChessTile tile : row) {
-                System.out.print(tile.toString());
+                rowString.append(tile.toString());
             }
-            System.out.print(ChessTile.TILE_DIVIDER);
-            System.out.println(System.lineSeparator() + TextUI.CHESS_BOARD_DIVIDER);
+            ui.printChessBoardRow(rowString.toString());
         }
     }
 }

@@ -1,12 +1,14 @@
 package chessmaster.ui;
 
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.ChessTile;
 
 public class TextUI {
 
-    public static final String CHESS_BOARD_DIVIDER = "_".repeat(5 * ChessBoard.SIZE + 1);
+    public static final String CHESS_BOARD_DIVIDER = "_".repeat(4 * ChessBoard.SIZE + 1);
 
     /**
      * Format of a comment input line. Comment lines are silently consumed when
@@ -14,10 +16,12 @@ public class TextUI {
      */
     private static final String COMMENT_LINE_FORMAT_REGEX = "#.*";
 
-    Scanner scanner;
+    private final Scanner scanner;
+    private PrintStream out;
 
     public TextUI() {
         scanner = new Scanner(System.in);
+        out = System.out;
     }
 
     /**
@@ -50,12 +54,15 @@ public class TextUI {
         return rawInputLine.trim().isEmpty() || isCommentLine;
     }
 
-    public void printChessDivider() {
-
+    public void printChessBoardDivider() {
+        out.println(CHESS_BOARD_DIVIDER);
     }
 
-    public void printChessBoardRow() {
-
+    public void printChessBoardRow(String chessBoardRow) {
+        out.print(chessBoardRow);
+        out.print(ChessTile.TILE_DIVIDER);
+        out.print(System.lineSeparator() + CHESS_BOARD_DIVIDER);
+        out.println("");
     }
 
 }
