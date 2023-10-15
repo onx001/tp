@@ -1,11 +1,47 @@
 package chessmaster.pieces;
 
+import java.util.ArrayList;
+
+import chessmaster.game.ChessBoard;
+import chessmaster.game.Coordinate;
+
 public class Queen extends ChessPiece {
     public static final String QUEEN_WHITE = "q"; // ♕
     public static final String QUEEN_BLACK = "Q"; // ♛
 
+    public static final int[][] directions = {
+        UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
+    };
+
     public Queen(int row, int col, int color) {
         super(row, col, color);
+    }
+
+    @Override
+    public Coordinate[][] getAvailablCoordinates() {
+        Coordinate[][] result = new Coordinate[directions.length][0];
+
+        for (int dir = 0; dir < directions.length; dir++) {
+            int offsetX = directions[dir][0];
+            int offsetY = directions[dir][1];
+
+            int multiplier = 1;
+            ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
+            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY)) {
+
+                Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
+                possibleCoordInDirection.add(possibleCoord);
+
+                multiplier++;
+                offsetX = directions[dir][0] * multiplier;
+                offsetY = directions[dir][1] * multiplier;
+            }
+
+            // Convert arraylist to array
+            result[dir] = possibleCoordInDirection.toArray(new Coordinate[0]);
+        }
+
+        return result;
     }
 
     @Override
