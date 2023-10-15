@@ -1,17 +1,15 @@
 package chessmaster.pieces;
 
 public class Pawn extends ChessPiece {
-    public static final String PAWN_KEY = "p";
-
     public static final String PAWN_WHITE = "p"; // ♙
     public static final String PAWN_BLACK = "P"; // ♟
 
-    public Pawn(int row, int col, int player) {
-        super(row, col, player);
+    public Pawn(int row, int col, int color) {
+        super(row, col, color);
     }
 
     @Override
     public String toString() {
-        return color == 1 ? PAWN_BLACK : PAWN_WHITE;
+        return color == ChessPiece.BLACK ? PAWN_BLACK : PAWN_WHITE;
     }
 }
