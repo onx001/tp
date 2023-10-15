@@ -7,7 +7,7 @@ public class King extends ChessPiece {
     public static final String KING_BLACK = "K"; // ♚
 
     public static final int[][] DIRECTIONS = {
-            UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
+        UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
 
     public King(int row, int col, int color) {

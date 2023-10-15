@@ -2,7 +2,7 @@ package chessmaster.pieces;
 
 import chessmaster.game.Coordinate;
 
-abstract public class ChessPiece {
+public abstract class ChessPiece {
 
     public static final int BLACK = 0;
     public static final int WHITE = 1;
@@ -30,6 +30,11 @@ abstract public class ChessPiece {
     protected Coordinate position;
     protected int color;
 
+    public ChessPiece(int row, int col, int color) {
+        this.position = new Coordinate(col, row);
+        this.color = color;
+    }
+
     /**
      * Returns available coordinates in multiple directions from the current position. 
      * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is
@@ -37,10 +42,5 @@ abstract public class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    abstract public Coordinate[][] getAvailablCoordinates();
-
-    public ChessPiece(int row, int col, int color) {
-        this.position = new Coordinate(col, row);
-        this.color = color;
-    }
+    public abstract Coordinate[][] getAvailablCoordinates();
 }

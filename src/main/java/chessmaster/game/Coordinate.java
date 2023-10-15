@@ -3,6 +3,9 @@ package chessmaster.game;
 import chessmaster.exceptions.ParseCoordinateException;
 
 public class Coordinate {
+
+    private static final String BOARD_COLUMNS = "abcdefgh";
+
     private int x;
     private int y;
 
@@ -30,27 +33,31 @@ public class Coordinate {
     }
 
     /**
-     * Checks if applying a given offset from the current position stays within the bounds of the chessboard.
+     * Checks if applying a given offset from the current position stays within the
+     * bounds of the chessboard.
      *
      * @param offsetX The horizontal offset to apply.
      * @param offsetY The vertical offset to apply.
-     * @return true if the resulting position is within the board boundaries; otherwise, false.
+     * @return true if the resulting position is within the board boundaries;
+     *         otherwise, false.
      */
     public boolean isOffsetWithinBoard(int offsetX, int offsetY) {
         int newX = x + offsetX;
         int newY = y + offsetY;
 
-        return (newX >= 0 && newX < ChessBoard.SIZE) && 
-            (newY >= 0 && newY < ChessBoard.SIZE);
+        return (newX >= 0 && newX < ChessBoard.SIZE) &&
+                (newY >= 0 && newY < ChessBoard.SIZE);
     }
 
     /**
-     * Adds the given offsets to the current coordinate and returns the new coordinate.
+     * Adds the given offsets to the current coordinate and returns the new
+     * coordinate.
      *
      * @param offsetX The horizontal offset to apply.
      * @param offsetY The vertical offset to apply.
-     * @return A new coordinate after applying the offsets, or the current coordinate 
-     * if the new position is out of the board boundaries.
+     * @return A new coordinate after applying the offsets, or the current
+     *         coordinate
+     *         if the new position is out of the board boundaries.
      */
     public Coordinate addOffsetToCoordinate(int offsetX, int offsetY) {
         int newX = x + offsetX;
@@ -64,11 +71,13 @@ public class Coordinate {
     }
 
     /**
-     * Parses an algebraic chess coordinate notation (e.g., "a1") and returns a Coordinate object.
+     * Parses an algebraic chess coordinate notation (e.g., "a1") and returns a
+     * Coordinate object.
      *
      * @param notation The algebraic coordinate notation to parse.
      * @return A Coordinate object representing the parsed chess coordinate.
-     * @throws ParseCoordinateException If the input notation is invalid or out of bounds.
+     * @throws ParseCoordinateException If the input notation is invalid or out of
+     *                                  bounds.
      */
     public static Coordinate parseAlgebraicCoor(String notation) throws ParseCoordinateException {
         notation = notation.toLowerCase();
@@ -76,7 +85,6 @@ public class Coordinate {
             throw new ParseCoordinateException();
         }
 
-        String BOARD_COLUMNS = "abcdefgh";
         String colString = Character.toString(notation.charAt(0));
         boolean isColValid = BOARD_COLUMNS.contains(colString);
 
@@ -88,10 +96,10 @@ public class Coordinate {
                 throw new ParseCoordinateException();
             }
 
-            int x_index = (rowInt - 8) * -1;
-            int y_index = BOARD_COLUMNS.indexOf(colString);
+            int indexX = (rowInt - 8) * -1;
+            int indexY = BOARD_COLUMNS.indexOf(colString);
 
-            return new Coordinate(x_index, y_index);
+            return new Coordinate(indexX, indexY);
 
         } catch (NumberFormatException e) {
             throw new ParseCoordinateException();

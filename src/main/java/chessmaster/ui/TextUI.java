@@ -10,6 +10,8 @@ public class TextUI {
 
     public static final String CHESS_BOARD_DIVIDER = "_".repeat(4 * ChessBoard.SIZE + 1);
 
+    private static final String COLUMN_HEADER = "abcdefgh";
+
     /**
      * Format of a comment input line. Comment lines are silently consumed when
      * reading user input.
@@ -59,7 +61,6 @@ public class TextUI {
     }
 
     public void printChessBoardHeader() {
-        String COLUMN_HEADER = "abcdefgh";
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
             out.print(String.format(" (%s)", col));

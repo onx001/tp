@@ -8,8 +8,6 @@ public class ChessBoard {
 
     public static final int SIZE = 8;
 
-    private ChessTile[][] board = new ChessTile[SIZE][SIZE];
-
     private static final String[][] STARTING_CHESSBOARD_STRING = {
             { "r", "n", "b", "q", "k", "b", "n", "r" },
             { "p", "p", "p", "p", "p", "p", "p", "p" },
@@ -20,6 +18,8 @@ public class ChessBoard {
             { "P", "P", "P", "P", "P", "P", "P", "P" },
             { "R", "N", "B", "Q", "K", "B", "N", "R" },
     };
+
+    private ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     public ChessBoard() {
         for (int row = 0; row < SIZE; row++) {
