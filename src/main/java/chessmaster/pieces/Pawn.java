@@ -3,8 +3,8 @@ package chessmaster.pieces;
 public class Pawn extends ChessPiece {
     public static final String PAWN_KEY = "p";
 
-    public static final String PAWN_WHITE = "♙";
-    public static final String PAWN_BLACK = "♟";
+    public static final String PAWN_WHITE = "p"; // ♙
+    public static final String PAWN_BLACK = "P"; // ♟
 
     public Pawn(int row, int col, int player) {
         super(row, col, player);
