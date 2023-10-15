@@ -22,11 +22,11 @@ public class ChessBoard {
     };
 
     public ChessBoard() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                String chessPieceString = EMPTY_CHESSBOARD_STRING[i][j];
-                ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, i, j);
-                board[i][j] = new ChessTile(initialPiece);
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                String chessPieceString = EMPTY_CHESSBOARD_STRING[row][col];
+                ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);
+                board[row][col] = new ChessTile(initialPiece);
             }
         }
     }

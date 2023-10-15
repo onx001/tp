@@ -20,6 +20,10 @@ public class ChessTile {
         return chessPiece == null;
     }
 
+    public ChessPiece getChessPiece() {
+        return chessPiece;
+    }
+
     @Override
     public String toString() {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
