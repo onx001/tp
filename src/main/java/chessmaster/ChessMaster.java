@@ -1,9 +1,10 @@
 package chessmaster;
 
-import java.util.Scanner;
+import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
 
 /**
- * Main entry-point for the java.duke.Duke application.
+ * Main entry-point for ChessMaster application.
  */
 public class ChessMaster {
     public static void main(String[] args) {
@@ -21,12 +22,18 @@ public class ChessMaster {
                 "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░   ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
                 + System.lineSeparator();
 
-        System.out.println("Hello from\n" + logo);
-        System.out.println("What is your name?");
+        System.out.println(logo);
 
-        Scanner in = new Scanner(System.in);
-        System.out.println("Hello " + in.nextLine());
+        TextUI ui = new TextUI();
+        ChessBoard board = new ChessBoard();
 
-        in.close();
+        while (true) {
+            board.showChessBoard(ui);
+            String move = ui.getUserCommand();
+            // TODO: Check if move is valid
+            // TODO: Update chessboard (new position with chesspiece, old position empty)
+            // TODO: Update ChessPiece (position)
+            // TODO: Store updated board in text file
+        }
     }
 }
