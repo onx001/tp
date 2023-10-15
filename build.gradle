@@ -29,11 +29,11 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass.set("chessmaster.ChessMaster")
 }
 
 shadowJar {
-    archiveBaseName.set("duke")
+    archiveBaseName.set("chessmaster")
     archiveClassifier.set("")
 }
 
@@ -43,4 +43,10 @@ checkstyle {
 
 run{
     standardInput = System.in
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
