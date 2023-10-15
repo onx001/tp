@@ -58,9 +58,19 @@ public class TextUI {
         out.println(CHESS_BOARD_DIVIDER);
     }
 
-    public void printChessBoardRow(String chessBoardRow) {
+    public void printChessBoardHeader() {
+        String COLUMN_HEADER = "abcdefgh";
+        for (int i = 0; i < COLUMN_HEADER.length(); i++) {
+            char col = COLUMN_HEADER.charAt(i);
+            out.print(String.format(" (%s)", col));
+        }
+        out.println("");
+    }
+
+    public void printChessBoardRow(int rowNum, String chessBoardRow) {
         out.print(chessBoardRow);
         out.print(ChessTile.TILE_DIVIDER);
+        out.print(String.format(" (%d)", rowNum));
         out.print(System.lineSeparator() + CHESS_BOARD_DIVIDER);
         out.println("");
     }

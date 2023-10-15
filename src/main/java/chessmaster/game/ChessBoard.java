@@ -32,13 +32,18 @@ public class ChessBoard {
     }
 
     public void showChessBoard(TextUI ui) {
+        ui.printChessBoardHeader();
         ui.printChessBoardDivider();
-        for (ChessTile[] row : board) {
+        for (int i = 0; i < board.length; i++) {
+            ChessTile[] row = board[i];
             StringBuilder rowString = new StringBuilder();
+
             for (ChessTile tile : row) {
                 rowString.append(tile.toString());
             }
-            ui.printChessBoardRow(rowString.toString());
+
+            int rowNum = (i - 8) * -1;
+            ui.printChessBoardRow(rowNum, rowString.toString());
         }
     }
 }
