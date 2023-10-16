@@ -1,5 +1,6 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
@@ -49,7 +50,12 @@ public class ChessBoard {
         }
     }
 
-    public ChessPiece getPieceAtCoor(Coordinate coor) {
+
+    public void movePiece(Move move) throws InvalidMoveException {
+    }
+
+    public ChessPiece getPieceAtCoor (Coordinate coor) {
+
         ChessTile tile = board[coor.getX()][coor.getY()];
 
         return tile.getChessPiece();
