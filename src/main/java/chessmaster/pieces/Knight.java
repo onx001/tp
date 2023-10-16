@@ -1,5 +1,6 @@
 package chessmaster.pieces;
 
+import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class Knight extends ChessPiece {
@@ -22,7 +23,7 @@ public class Knight extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates() {
+    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -30,8 +31,10 @@ public class Knight extends ChessPiece {
             int offsetY = DIRECTIONS[dir][1];
 
             if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                Coordinate dest = position.addOffsetToCoordinate(offsetX, offsetY);
-                result[dir] = new Coordinate[] { dest };
+                ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                if (destPiece == null || destPiece.getColour() != this.color) {
+                        result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                }
             }
         }
 

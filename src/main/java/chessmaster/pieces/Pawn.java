@@ -16,7 +16,7 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates() {
+    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
         
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
@@ -24,41 +24,51 @@ public class Pawn extends ChessPiece {
             int offsetX = DIRECTIONS[dir][0];
             int offsetY = DIRECTIONS[dir][1];
 
-            if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                Coordinate dest = position.addOffsetToCoordinate(offsetX, offsetY);
-                result[dir] = new Coordinate[] { dest };
+            switch (dir){
+                case 0:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                        if (destPiece != null && destPiece.getColour() != this.color) {
+                            result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        }
+                    }
+                    break;
+                case 1:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                        if (destPiece != null && destPiece.getColour() != this.color) {
+                            result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        }
+                    }
+                    break;
+                case 2:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                        if (destPiece == null) {
+                            result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        }
+                    }
+                    break;
+                case 3:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                        ChessPiece blockPiece = board[position.getY() - 1][position.getX()].getChessPiece();
+                        if (destPiece == null && !hasMoved && blockPiece == null) {
+                            result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
             }
         }
+    
 
         return result;
 
     }
     
-    @Override
-    public boolean isMoveValid(Coordinate destination, ChessTile[][] board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates();
-
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (possibleCoord.equals(destination)) {
-                    int destX = destination.getX();
-                    int destY = destination.getY();
-
-                    if (position.isOffsetWithinBoard(destX - position.getX(), destY - position.getY())) {
-                        ChessPiece destPiece = board[destY][destX].getChessPiece();
-
-                        if (destPiece == null) {
-                            return true;
-                        } else if (destPiece.getColour() != this.color) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
 
 
     @Override

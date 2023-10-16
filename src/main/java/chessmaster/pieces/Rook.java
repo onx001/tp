@@ -3,6 +3,7 @@ package chessmaster.pieces;
 import java.util.ArrayList;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class Rook extends ChessPiece {
@@ -18,7 +19,7 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates() {
+    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -26,11 +27,20 @@ public class Rook extends ChessPiece {
             int offsetY = DIRECTIONS[dir][1];
 
             int multiplier = 1;
+            boolean isBlocked = false;
             ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
-            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY)) {
+            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY) && !isBlocked) {
 
                 Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
-                possibleCoordInDirection.add(possibleCoord);
+                ChessPiece destPiece = board[possibleCoord.getY()][possibleCoord.getX()].getChessPiece();
+                if (destPiece != null) {
+                    if (destPiece.getColour() != this.color) {
+                        possibleCoordInDirection.add(possibleCoord);
+                    }
+                    isBlocked = true;
+                } else {
+                    possibleCoordInDirection.add(possibleCoord);
+                }
 
                 multiplier++;
                 offsetX = DIRECTIONS[dir][0] * multiplier;
