@@ -1,8 +1,13 @@
 package chessmaster.game;
 
 import chessmaster.parser.Parser;
+import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ChessBoard {
 
@@ -51,5 +56,32 @@ public class ChessBoard {
         ChessTile tile = board[coor.getX()][coor.getY()];
 
         return tile.getChessPiece();
+    }
+
+    private ArrayList<Move> moveHistory = new ArrayList<>();
+
+    public void executeMove(Move move) {
+        Coordinate from = move.getFrom();
+        Coordinate to = move.getTo();
+        ChessPiece piece = move.getPiece();
+
+        if (piece != null) {
+            if (MoveValidator.isValidMove(from, to)) {
+                // Update the board
+                board[to.getX()][to.getY()] = new ChessTile(piece);
+                board[from.getX()][from.getY()] = new ChessTile(null);
+
+                // Add the move to the move history
+                moveHistory.add(move);
+            } else {
+                // Handle invalid move
+            }
+        } else {
+            // Handle empty square or other conditions
+        }
+    }
+
+    public List<Move> getMoveHistory() {
+        return moveHistory;
     }
 }
