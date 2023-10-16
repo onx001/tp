@@ -34,6 +34,19 @@ public class ChessBoard {
         }
     }
 
+    public void displayAvailableMoves(){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length ; j++) {
+                ChessPiece piece = board[i][j].getChessPiece();
+                if (piece != null){
+                    piece.displayAvailableCoordinates(this.board);
+                }
+            }
+
+            
+        }
+    }
+
     public void showChessBoard(TextUI ui) {
         ui.printChessBoardHeader();
         ui.printChessBoardDivider();
@@ -60,6 +73,7 @@ public class ChessBoard {
 
         return tile.getChessPiece();
     }
+
 
 
     public void executeMove(Move move) {

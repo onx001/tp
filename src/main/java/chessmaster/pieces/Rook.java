@@ -18,7 +18,7 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailablCoordinates() {
+    public Coordinate[][] getAvailableCoordinates() {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {

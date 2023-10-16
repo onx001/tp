@@ -15,8 +15,14 @@ public class Knight extends ChessPiece {
         super(row, col, color);
     }
 
+
     @Override
-    public Coordinate[][] getAvailablCoordinates() {
+    public String toString() {
+        return color == ChessPiece.BLACK ? KNIGHT_BLACK : KNIGHT_WHITE;
+    }
+
+    @Override
+    public Coordinate[][] getAvailableCoordinates() {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -25,15 +31,10 @@ public class Knight extends ChessPiece {
 
             if (position.isOffsetWithinBoard(offsetX, offsetY)) {
                 Coordinate dest = position.addOffsetToCoordinate(offsetX, offsetY);
-                result[dir] = new Coordinate[]{ dest };
+                result[dir] = new Coordinate[] { dest };
             }
         }
 
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return color == ChessPiece.BLACK ? KNIGHT_BLACK : KNIGHT_WHITE;
     }
 }
