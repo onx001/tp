@@ -1,5 +1,6 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
@@ -45,6 +46,10 @@ public class ChessBoard {
             int rowNum = (i - 8) * -1;
             ui.printChessBoardRow(rowNum, rowString.toString());
         }
+    }
+
+    public void movePiece(Move move) throws InvalidMoveException {
+
     }
 
     public ChessPiece getPieceAtCoor (Coordinate coor) {
