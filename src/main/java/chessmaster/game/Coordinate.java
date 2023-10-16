@@ -108,7 +108,7 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return String.format("%s%s", BOARD_COLUMNS.charAt(y), (x - 8) * -1);
+        return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
     }
 
     @Override

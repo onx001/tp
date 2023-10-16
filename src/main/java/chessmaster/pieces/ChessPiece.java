@@ -30,6 +30,9 @@ public abstract class ChessPiece {
     protected static final int[] DOWN_LEFT = {1, 1}; 
     protected static final int[] DOWN_RIGHT = {-1, 1}; 
 
+    protected static final int[] CASTLE_LEFT = {-2, 0};
+    protected static final int[] CASTLE_RIGHT = {2, 0};
+
     protected Coordinate position;
     protected int color;
     protected Coordinate[][] availableCoordinates;
@@ -46,7 +49,7 @@ public abstract class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    public abstract Coordinate[][] getAvailableCoordinates();
+    public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
 
     /**
      * Returns the validity of the move to the destination coordinate.
@@ -55,7 +58,7 @@ public abstract class ChessPiece {
      * @return
      */
     public boolean isMoveValid(Coordinate destination, ChessTile[][] board){
-        Coordinate[][] availableCoordinates = getAvailableCoordinates();
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
                 if (possibleCoord.equals(destination)) {
@@ -74,7 +77,7 @@ public abstract class ChessPiece {
     public void displayAvailableCoordinates(ChessTile[][] board) {
 
         System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
-        Coordinate[][] availableCoordinates = getAvailableCoordinates();
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
 
 
         for (Coordinate[] direction : availableCoordinates) {
