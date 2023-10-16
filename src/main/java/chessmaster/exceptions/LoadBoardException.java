@@ -6,5 +6,9 @@ public class LoadBoardException extends Exception {
         super(ExceptionMessages.MESSAGE_LOAD_BOARD_EXCEPTION);
     }
 
+    public LoadBoardException(String message) {
+        super(message);
+    }
+
 }
 

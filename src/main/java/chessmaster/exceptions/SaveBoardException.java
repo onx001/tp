@@ -6,5 +6,9 @@ public class SaveBoardException extends Exception {
         super(ExceptionMessages.MESSAGE_SAVE_BOARD_EXCEPTION);
     }
 
+    public SaveBoardException(String message) {
+        super(message);
+    }
+
 }
 
