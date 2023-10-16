@@ -67,18 +67,20 @@ public class ChessBoard {
 
         if (piece != null) {
             if (MoveValidator.isValidMove(from, to)) {
-                // Update the board
+                // Piece at new position
                 board[to.getX()][to.getY()] = new ChessTile(piece);
-                board[from.getX()][from.getY()] = new ChessTile(null);
+                // Null piece in original position
+                board[from.getX()][from.getY()] = new ChessTile();
 
                 // Add the move to the move history
                 moveHistory.add(move);
             } else {
-                // Handle invalid move
+                // Edit to throw exception
+                System.out.println("Move is invalid. Try again.");
             }
         } else {
-            // Handle empty square or other conditions
-        }
+            // Edit to throw exception
+            System.out.println("No piece at original coordinates.");        }
     }
 
     public List<Move> getMoveHistory() {
