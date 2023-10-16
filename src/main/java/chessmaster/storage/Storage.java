@@ -5,6 +5,7 @@ import chessmaster.exceptions.ParseChessPieceException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
+import chessmaster.game.Coordinate;
 import chessmaster.pieces.*;
 
 import java.io.File;
@@ -18,11 +19,12 @@ public class Storage {
     /**
      * Method to save board to file
      */
-    public static void saveBoard(ChessTile[][] board) throws SaveBoardException {
+    public static void saveBoard(ChessBoard board) throws SaveBoardException {
         try (FileWriter fileWriter = new FileWriter("/tp/data/saved-game.txt")){
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
-                    String tile = board[row][col].toString();
+                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(row, col));
+                    String tile = (piece != null) ? piece.toString() : " ";
                     fileWriter.write(tile);
                 }
                 fileWriter.write("\n");
@@ -39,24 +41,27 @@ public class Storage {
 
         if (!file.exists()) {
             try {
-                if (file.getParentFile().mkdir() && file.createNewFile()) {
-                    System.out.println("File created successfully.");
-                } else {
-                    System.out.println("Failed to create file.");
+                File directory = file.getParentFile();
+                if (!directory.exists() && !directory.mkdirs()) {
+                    throw new LoadBoardException("Failed to create directory structure.");
                 }
-                return chessBoard;
+
+                if (!file.exists() && !file.createNewFile()) {
+                    throw new LoadBoardException("Failed to create the file.");
+                }
             } catch (IOException e) {
                 throw new LoadBoardException();
             }
+            return chessBoard;
         }
         try {
             Scanner fileScanner = new Scanner(file);
             boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
 
             while (fileScanner.hasNext()) {
-                for (int row = ChessBoard.SIZE; row < ChessBoard.SIZE; row++) {
+                for (int row = 0; row < ChessBoard.SIZE; row++) {
                     String tileRow = fileScanner.nextLine();
-                    for (int col = ChessBoard.SIZE; col < ChessBoard.SIZE; col++) {
+                    for (int col = 0; col < ChessBoard.SIZE; col++) {
                         String piece = tileRow.substring(col, col + 1);
                         if (piece.equals(" ")) {
                             boardTiles[row][col] = new ChessTile();
