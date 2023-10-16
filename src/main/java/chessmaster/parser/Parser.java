@@ -27,7 +27,7 @@ public class Parser {
             default:
                 try {
                     Move move = parseMove(in, board);
-                    board.movePiece(move);
+                    board.executeMove(move);
                 } catch (Exception E) {
                     //TODO add function to display error message
                 }

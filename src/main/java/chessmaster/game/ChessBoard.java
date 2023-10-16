@@ -50,10 +50,6 @@ public class ChessBoard {
         }
     }
 
-
-    public void movePiece(Move move) throws InvalidMoveException {
-    }
-
     public ChessPiece getPieceAtCoor (Coordinate coor) {
 
         ChessTile tile = board[coor.getX()][coor.getY()];
