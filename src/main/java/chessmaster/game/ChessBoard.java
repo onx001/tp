@@ -55,6 +55,9 @@ public class ChessBoard {
         return tile.getChessPiece();
     }
 
+    public void setTile(int row, int col, ChessTile tile) {
+        board[row][col] = tile;
+    }
 
     public void executeMove(Move move) {
         Coordinate from = move.getFrom();
@@ -63,13 +66,8 @@ public class ChessBoard {
 
         if (piece != null) {
             if (MoveValidator.isValidMove(from, to)) {
-                // Piece at new position
                 board[to.getX()][to.getY()] = new ChessTile(piece);
-                // Null piece in original position
                 board[from.getX()][from.getY()] = new ChessTile();
-
-                // Add the move to the move history
-                //moveHistory.add(move);
             } else {
                 // Edit to throw exception
                 System.out.println("Move is invalid. Try again.");
