@@ -15,7 +15,7 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailablCoordinates() {
+    public Coordinate[][] getAvailableCoordinates() {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -30,6 +30,7 @@ public class King extends ChessPiece {
 
         return result;
     }
+
 
     @Override
     public String toString() {

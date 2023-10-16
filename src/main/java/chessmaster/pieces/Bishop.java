@@ -18,7 +18,7 @@ public class Bishop extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailablCoordinates() {
+    public Coordinate[][] getAvailableCoordinates() {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -48,4 +48,6 @@ public class Bishop extends ChessPiece {
     public String toString() {
         return color == ChessPiece.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
     }
+    
+
 }
