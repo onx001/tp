@@ -1,5 +1,8 @@
 package chessmaster.parser;
 
+import chessmaster.exceptions.ParseCoordinateException;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.Coordinate;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Bishop;
@@ -7,8 +10,32 @@ import chessmaster.pieces.Rook;
 import chessmaster.pieces.Knight;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.game.Move;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Parser {
+    /**
+     * Parses an input string and returns the move indicated by the string.
+     * Used to read user inputs during the chess game.
+     *
+     * @param in
+     * @param board
+     * @return
+     */
+    public Move parseMove(String in, ChessBoard board) {
+        List<Coordinate> moveArray = Arrays.stream(in.split(" "))
+                .map(coord -> {
+                    try {
+                        return Coordinate.parseAlgebraicCoor(coord);
+                    } catch (ParseCoordinateException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).collect(Collectors.toList());
+        return new Move(moveArray.get(0), moveArray.get(1), board);
+    }
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
      * and column.

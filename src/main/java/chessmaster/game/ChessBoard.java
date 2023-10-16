@@ -46,4 +46,10 @@ public class ChessBoard {
             ui.printChessBoardRow(rowNum, rowString.toString());
         }
     }
+
+    public ChessPiece getPieceAtCoor (Coordinate coor) {
+        ChessTile tile = board[coor.getX()][coor.getY()];
+
+        return tile.getChessPiece();
+    }
 }
