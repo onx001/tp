@@ -12,29 +12,46 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class Parser {
+    /**
+     * Parses the user's typed input into the UI and executes actions accordingly.
+     *
+     * @param in    Command entered by the user.
+     * @param board Chessboard the user is currently playing on.
+     */
+    public void parseCommand(String in, ChessBoard board) {
+        String commandWord = in.split(" ")[0].toLowerCase();
+
+        switch(commandWord){
+            case "abort":
+            default:
+                try {
+                    Move move = parseMove(in, board);
+                    board.executeMove(move);
+                } catch (Exception E) {
+                    //TODO add function to display error message
+                }
+        }
+    }
     /**
      * Parses an input string and returns the move indicated by the string.
      * Used to read user inputs during the chess game.
      *
-     * @param in
-     * @param board
-     * @return
+     * @param in    String containing the user's intended move.
+     * @param board The chessboard the user is currently playing on.
+     * @return Move class containing information about the move to be made.
+     *
+     * @throws ParseCoordinateException If the string entered does not match a coordinate.
      */
-    public Move parseMove(String in, ChessBoard board) {
-        List<Coordinate> moveArray = Arrays.stream(in.split(" "))
-                .map(coord -> {
-                    try {
-                        return Coordinate.parseAlgebraicCoor(coord);
-                    } catch (ParseCoordinateException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList());
-        return new Move(moveArray.get(0), moveArray.get(1), board);
+    public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
+        Coordinate[] moveArray = new Coordinate[2];
+        String[] parseArray = in.split(" ");
+
+        for (int i = 0; i < 2; i += 1) {
+            moveArray[i] = Coordinate.parseAlgebraicCoor(parseArray[i]);
+        }
+
+        return new Move(moveArray[0], moveArray[1], board);
     }
     /**
      * Parses an input string and creates a ChessPiece object at the specified row

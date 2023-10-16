@@ -106,4 +106,19 @@ public class Coordinate {
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Coordinate) {
+            Coordinate other = (Coordinate) obj;
+            return x == other.x && y == other.y;
+        }
+
+        return false;
+    }
+
 }

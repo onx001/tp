@@ -1,5 +1,6 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
@@ -33,6 +34,19 @@ public class ChessBoard {
         }
     }
 
+    public void displayAvailableMoves(){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length ; j++) {
+                ChessPiece piece = board[i][j].getChessPiece();
+                if (piece != null){
+                    piece.displayAvailableCoordinates(this.board);
+                }
+            }
+
+            
+        }
+    }
+
     public void showChessBoard(TextUI ui) {
         ui.printChessBoardHeader();
         ui.printChessBoardDivider();
@@ -49,7 +63,8 @@ public class ChessBoard {
         }
     }
 
-    public ChessPiece getPieceAtCoor(Coordinate coor) {
+    public ChessPiece getPieceAtCoor (Coordinate coor) {
+
         ChessTile tile = board[coor.getX()][coor.getY()];
 
         return tile.getChessPiece();
@@ -58,6 +73,7 @@ public class ChessBoard {
     public void setTile(int row, int col, ChessTile tile) {
         board[row][col] = tile;
     }
+
 
     public void executeMove(Move move) {
         Coordinate from = move.getFrom();
