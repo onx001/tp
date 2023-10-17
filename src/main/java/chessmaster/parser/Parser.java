@@ -33,6 +33,24 @@ public class Parser {
                 }
         }
     }
+
+    public ChessPiece parsePromote(ChessPiece promoteFrom, String promoteTo) {
+        int colour = promoteFrom.getColour();
+        Coordinate position = promoteFrom.getPosition();
+
+        switch (promoteTo.toLowerCase()){
+            case Bishop.BISHOP_BLACK:
+                return new Bishop(position.getX(), position.getY(), colour);
+            case Queen.QUEEN_BLACK:
+                return new Queen(position.getX(), position.getY(), colour);
+            case Knight.KNIGHT_BLACK:
+                return new Knight(position.getX(), position.getY(), colour);
+            case Rook.ROOK_BLACK:
+                return new Rook(position.getX(), position.getY(), colour);
+            default:
+                return null;
+        }
+    }
     /**
      * Parses an input string and returns the move indicated by the string.
      * Used to read user inputs during the chess game.
