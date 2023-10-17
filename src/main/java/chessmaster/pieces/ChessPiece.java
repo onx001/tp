@@ -7,7 +7,6 @@ public abstract class ChessPiece {
 
     public static final int BLACK = 0;
     public static final int WHITE = 1;
-    protected boolean hasMoved = false;
     
     protected static final int[] UP_UP_LEFT = {1, -2}; 
     protected static final int[] UP_UP_RIGHT = {-1, -2}; 
@@ -36,6 +35,7 @@ public abstract class ChessPiece {
     protected Coordinate position;
     protected int color;
     protected Coordinate[][] availableCoordinates;
+    protected boolean hasMoved = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
