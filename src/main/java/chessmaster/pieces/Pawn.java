@@ -6,10 +6,16 @@ import chessmaster.game.ChessTile;
 public class Pawn extends ChessPiece {
     public static final String PAWN_WHITE = "p"; // ♙
     public static final String PAWN_BLACK = "P"; // ♟
-    public static final int[][] DIRECTIONS = {
+    public static final int[][] DIRECTIONS_UP = {
         UP_LEFT, UP_RIGHT, UP, UP_UP,
     };
+    public static final int[][] DIRECTIONS_DOWN = {
+        DOWN_LEFT, DOWN_RIGHT, DOWN, DOWN_DOWN,
+    };
     protected boolean enPassed = false;
+
+    private int[][] DIRECTIONS;
+    private int checkBlockDir;
 
 
 
@@ -19,8 +25,19 @@ public class Pawn extends ChessPiece {
 
     @Override
     public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+
         
+        if (this.color == ChessPiece.WHITE){
+            DIRECTIONS = DIRECTIONS_DOWN;
+            checkBlockDir = -1;
+        } else {
+            DIRECTIONS = DIRECTIONS_UP;
+            checkBlockDir = 1;
+        } 
+
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
+
+        
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
             int offsetX = DIRECTIONS[dir][0];
@@ -54,7 +71,7 @@ public class Pawn extends ChessPiece {
             case 3:
                 if (position.isOffsetWithinBoard(offsetX, offsetY)) {
                     ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
-                    ChessPiece blockPiece = board[position.getY() - 1][position.getX()].getChessPiece();
+                    ChessPiece blockPiece = board[position.getY() - checkBlockDir][position.getX()].getChessPiece();
                     if (destPiece == null && !hasMoved && blockPiece == null) {
                         result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
                     }
