@@ -7,11 +7,10 @@ public class Move {
     private Coordinate to;
     private ChessPiece piece;
 
-    public Move(Coordinate from, Coordinate to, ChessBoard board) {
+    public Move(Coordinate from, Coordinate to, ChessPiece piece) {
         this.from = from;
         this.to = to;
-
-        this.piece = board.getPieceAtCoor(from);
+        this.piece = piece;
     }
 
     public Coordinate getFrom() {

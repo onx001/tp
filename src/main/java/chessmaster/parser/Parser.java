@@ -70,13 +70,13 @@ public class Parser {
      * @throws ParseCoordinateException If the string entered does not match a coordinate.
      */
     public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
-        Coordinate[] moveArray = new Coordinate[2];
         String[] parseArray = in.split(" ", 2);
 
-        moveArray[0] = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
-        moveArray[1] = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
+        ChessPiece relevantPiece = board.getPieceAtCoor(from);
 
-        return new Move(moveArray[0], moveArray[1], board);
+        return new Move(from, to, relevantPiece);
     }
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
