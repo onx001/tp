@@ -34,6 +34,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a string telling which chess piece the user wants to promote his piece to,
+     * and promotes the relevant piece
+     *
+     * @param promoteFrom Chess piece to be promoted.
+     * @param promoteTo   String representing the type of piece to be promoted to.
+     * @return Promoted chess piece.
+     */
     public ChessPiece parsePromote(ChessPiece promoteFrom, String promoteTo) {
         int colour = promoteFrom.getColour();
         Coordinate position = promoteFrom.getPosition();
@@ -62,14 +70,13 @@ public class Parser {
      * @throws ParseCoordinateException If the string entered does not match a coordinate.
      */
     public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
-        Coordinate[] moveArray = new Coordinate[2];
-        String[] parseArray = in.split(" ");
+        String[] parseArray = in.split(" ", 2);
 
-        for (int i = 0; i < 2; i += 1) {
-            moveArray[i] = Coordinate.parseAlgebraicCoor(parseArray[i]);
-        }
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
+        ChessPiece relevantPiece = board.getPieceAtCoor(from);
 
-        return new Move(moveArray[0], moveArray[1], board);
+        return new Move(from, to, relevantPiece);
     }
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
