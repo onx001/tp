@@ -34,6 +34,14 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a string telling which chess piece the user wants to promote his piece to,
+     * and promotes the relevant piece
+     *
+     * @param promoteFrom Chess piece to be promoted.
+     * @param promoteTo   String representing the type of piece to be promoted to.
+     * @return Promoted chess piece.
+     */
     public ChessPiece parsePromote(ChessPiece promoteFrom, String promoteTo) {
         int colour = promoteFrom.getColour();
         Coordinate position = promoteFrom.getPosition();
@@ -63,11 +71,10 @@ public class Parser {
      */
     public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
         Coordinate[] moveArray = new Coordinate[2];
-        String[] parseArray = in.split(" ");
+        String[] parseArray = in.split(" ", 2);
 
-        for (int i = 0; i < 2; i += 1) {
-            moveArray[i] = Coordinate.parseAlgebraicCoor(parseArray[i]);
-        }
+        moveArray[0] = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
+        moveArray[1] = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
 
         return new Move(moveArray[0], moveArray[1], board);
     }
