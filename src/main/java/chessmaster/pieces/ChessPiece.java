@@ -98,4 +98,8 @@ public abstract class ChessPiece {
     public String toString() {
         return "ChessPiece [color=" + color + ", position=" + position + "]";
     }
+
+    protected int getColor(){
+        return color;
+    }
 }
