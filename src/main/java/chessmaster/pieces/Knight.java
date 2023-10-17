@@ -33,7 +33,7 @@ public class Knight extends ChessPiece {
             if (position.isOffsetWithinBoard(offsetX, offsetY)) {
                 ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
                 if (destPiece == null || destPiece.getColour() != this.color) {
-                        result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                    result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
                 }
             }
         }
