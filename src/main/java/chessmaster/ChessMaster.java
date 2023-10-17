@@ -33,6 +33,8 @@ public class ChessMaster {
         TextUI ui = new TextUI();
         ChessBoard board = new ChessBoard();
         board.showChessBoard(ui);
+        board.displayAvailableMoves();
+        
 
         // while (true) {
         // board.showChessBoard(ui);
