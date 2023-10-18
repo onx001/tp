@@ -55,7 +55,6 @@ public class King extends ChessPiece {
         return result;
     }
 
-
     @Override
     public String toString() {
         return color == ChessPiece.BLACK ? KING_BLACK : KING_WHITE;

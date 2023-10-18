@@ -1,6 +1,6 @@
 package chessmaster.exceptions;
 
-public class InvalidMoveException extends Exception{
+public class InvalidMoveException extends ChessMasterException {
     public InvalidMoveException() {
         super(ExceptionMessages.MESSAGE_INVALID_MOVE_EXCEPTION);
     }
