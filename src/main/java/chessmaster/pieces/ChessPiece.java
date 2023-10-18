@@ -98,6 +98,10 @@ public abstract class ChessPiece {
         return this.position;
     }
 
+    public void updatePosition(Coordinate newCoordinate){
+        this.position = newCoordinate;
+    }
+
     @Override
     public String toString() {
         return "ChessPiece [color=" + color + ", position=" + position + "]";

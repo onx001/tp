@@ -84,6 +84,7 @@ public class ChessBoard {
             if (MoveValidator.isValidMove(from, to)) {
                 board[to.getX()][to.getY()] = new ChessTile(piece);
                 board[from.getX()][from.getY()] = new ChessTile();
+                piece.updatePosition(to);
             } else {
                 // Edit to throw exception
                 System.out.println("Move is invalid. Try again.");
