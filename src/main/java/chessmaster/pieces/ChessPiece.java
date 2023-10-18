@@ -94,8 +94,20 @@ public abstract class ChessPiece {
         return color == BLACK ? ChessPiece.BLACK : ChessPiece.WHITE;
     }
 
+    public Coordinate getPosition() {
+        return this.position;
+    }
+
+    public void updatePosition(Coordinate newCoordinate){
+        this.position = newCoordinate;
+    }
+
     @Override
     public String toString() {
         return "ChessPiece [color=" + color + ", position=" + position + "]";
+    }
+
+    protected int getColor(){
+        return color;
     }
 }

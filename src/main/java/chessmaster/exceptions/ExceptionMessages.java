@@ -6,4 +6,5 @@ public class ExceptionMessages {
     public static final String MESSAGE_SAVE_BOARD_EXCEPTION = "Unable to save board!";
     public static final String MESSAGE_LOAD_BOARD_EXCEPTION = "Unable to load board!";
     public static final String MESSAGE_INVALID_MOVE_EXCEPTION = "Oops, that move isn't valid!";
+    public static final String MESSAGE_NULL_PIECE_EXCEPTION = "No piece found at coordinate!";
 }
