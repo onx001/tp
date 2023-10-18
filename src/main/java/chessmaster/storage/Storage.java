@@ -23,9 +23,12 @@ public class Storage {
         try (FileWriter fileWriter = new FileWriter("/tp/data/saved-game.txt")){
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
-                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(row, col));
-                    String tile = (piece != null) ? piece.toString() : " ";
-                    fileWriter.write(tile);
+                    try {
+                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(row, col));
+                        fileWriter.write(piece.toString());
+                    } catch (Exception e) {
+                        fileWriter.write(" ");
+                    }
                 }
                 fileWriter.write("\n");
             }
@@ -71,6 +74,8 @@ public class Storage {
                     }
                 }
             }
+
+            fileScanner.close();
         } catch (FileNotFoundException | ParseChessPieceException e) {
             throw new LoadBoardException();
         }
