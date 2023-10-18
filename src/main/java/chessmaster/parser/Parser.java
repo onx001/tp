@@ -12,29 +12,71 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class Parser {
+    /**
+     * Parses the user's typed input into the UI and executes actions accordingly.
+     *
+     * @param in    Command entered by the user.
+     * @param board Chessboard the user is currently playing on.
+     */
+    public void parseCommand(String in, ChessBoard board) {
+        String commandWord = in.split(" ")[0].toLowerCase();
+
+        switch(commandWord){
+            case "abort":
+            default:
+                try {
+                    Move move = parseMove(in, board);
+                    board.executeMove(move);
+                } catch (Exception E) {
+                    //TODO add function to display error message
+                }
+        }
+    }
+
+    /**
+     * Parses a string telling which chess piece the user wants to promote his piece to,
+     * and promotes the relevant piece
+     *
+     * @param promoteFrom Chess piece to be promoted.
+     * @param promoteTo   String representing the type of piece to be promoted to.
+     * @return Promoted chess piece.
+     */
+    public ChessPiece parsePromote(ChessPiece promoteFrom, String promoteTo) {
+        int colour = promoteFrom.getColour();
+        Coordinate position = promoteFrom.getPosition();
+
+        switch (promoteTo.toLowerCase()){
+            case Bishop.BISHOP_BLACK:
+                return new Bishop(position.getX(), position.getY(), colour);
+            case Queen.QUEEN_BLACK:
+                return new Queen(position.getX(), position.getY(), colour);
+            case Knight.KNIGHT_BLACK:
+                return new Knight(position.getX(), position.getY(), colour);
+            case Rook.ROOK_BLACK:
+                return new Rook(position.getX(), position.getY(), colour);
+            default:
+                return null;
+        }
+    }
     /**
      * Parses an input string and returns the move indicated by the string.
      * Used to read user inputs during the chess game.
      *
-     * @param in
-     * @param board
-     * @return
+     * @param in    String containing the user's intended move.
+     * @param board The chessboard the user is currently playing on.
+     * @return Move class containing information about the move to be made.
+     *
+     * @throws ParseCoordinateException If the string entered does not match a coordinate.
      */
-    public Move parseMove(String in, ChessBoard board) {
-        List<Coordinate> moveArray = Arrays.stream(in.split(" "))
-                .map(coord -> {
-                    try {
-                        return Coordinate.parseAlgebraicCoor(coord);
-                    } catch (ParseCoordinateException e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList());
-        return new Move(moveArray.get(0), moveArray.get(1), board);
+    public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
+        String[] parseArray = in.split(" ", 2);
+
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
+        ChessPiece relevantPiece = board.getPieceAtCoor(from);
+
+        return new Move(from, to, relevantPiece);
     }
     /**
      * Parses an input string and creates a ChessPiece object at the specified row

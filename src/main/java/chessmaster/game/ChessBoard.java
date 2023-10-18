@@ -1,5 +1,7 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.ParseChessPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
@@ -33,6 +35,19 @@ public class ChessBoard {
         }
     }
 
+    public void displayAvailableMoves(){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length ; j++) {
+                ChessPiece piece = board[i][j].getChessPiece();
+                if (piece != null){
+                    piece.displayAvailableCoordinates(this.board);
+                }
+            }
+
+            
+        }
+    }
+
     public void showChessBoard(TextUI ui) {
         ui.printChessBoardHeader();
         ui.printChessBoardDivider();
@@ -49,7 +64,8 @@ public class ChessBoard {
         }
     }
 
-    public ChessPiece getPieceAtCoor(Coordinate coor) {
+    public ChessPiece getPieceAtCoor (Coordinate coor) {
+
         ChessTile tile = board[coor.getX()][coor.getY()];
 
         return tile.getChessPiece();
@@ -59,7 +75,8 @@ public class ChessBoard {
         board[row][col] = tile;
     }
 
-    public void executeMove(Move move) {
+
+    public void executeMove(Move move) throws InvalidMoveException, ParseChessPieceException {
         Coordinate from = move.getFrom();
         Coordinate to = move.getTo();
         ChessPiece piece = move.getPiece();
@@ -68,13 +85,12 @@ public class ChessBoard {
             if (MoveValidator.isValidMove(from, to)) {
                 board[to.getX()][to.getY()] = new ChessTile(piece);
                 board[from.getX()][from.getY()] = new ChessTile();
+                piece.updatePosition(to);
             } else {
-                // Edit to throw exception
-                System.out.println("Move is invalid. Try again.");
+                throw new InvalidMoveException();
             }
         } else {
-            // Edit to throw exception
-            System.out.println("No piece at original coordinates.");
+            throw new ParseChessPieceException();
         }
     }
 
