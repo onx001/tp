@@ -110,8 +110,4 @@ public abstract class ChessPiece {
     protected int getColor(){
         return color;
     }
-
-    // public void updatePosition(Coordinate newCoordinate) {
-    //     this.position = newCoordinate;
-    // }
 }

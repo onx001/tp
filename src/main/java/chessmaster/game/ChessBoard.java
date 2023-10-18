@@ -95,7 +95,7 @@ public class ChessBoard {
             throw new InvalidMoveException();
         }
 
-        // chessPiece.updatePosition(destCoor);
+        chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty();
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
     }
