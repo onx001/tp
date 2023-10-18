@@ -34,16 +34,16 @@ public class Parser {
         Coordinate position = promoteFrom.getPosition();
 
         switch (promoteTo.toLowerCase()){
-            case Bishop.BISHOP_BLACK:
-                return new Bishop(position.getX(), position.getY(), colour);
-            case Queen.QUEEN_BLACK:
-                return new Queen(position.getX(), position.getY(), colour);
-            case Knight.KNIGHT_BLACK:
-                return new Knight(position.getX(), position.getY(), colour);
-            case Rook.ROOK_BLACK:
-                return new Rook(position.getX(), position.getY(), colour);
-            default:
-                return null;
+        case Bishop.BISHOP_BLACK:
+            return new Bishop(position.getX(), position.getY(), colour);
+        case Queen.QUEEN_BLACK:
+            return new Queen(position.getX(), position.getY(), colour);
+        case Knight.KNIGHT_BLACK:
+            return new Knight(position.getX(), position.getY(), colour);
+        case Rook.ROOK_BLACK:
+            return new Rook(position.getX(), position.getY(), colour);
+        default:
+            return null;
         }
     }
 
@@ -61,6 +61,9 @@ public class Parser {
 
     public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
         String[] parseArray = in.toLowerCase().split("\\s+", 2);
+        if (parseArray.length < 2) {
+            throw new ParseCoordinateException();
+        }
 
         Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
