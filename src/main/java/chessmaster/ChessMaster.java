@@ -1,6 +1,9 @@
 package chessmaster;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Move;
+import chessmaster.parser.Parser;
 import chessmaster.ui.TextUI;
 
 /**
@@ -30,19 +33,29 @@ public class ChessMaster {
 
         // System.out.println(logo);
 
+        boolean end = false;
+
         TextUI ui = new TextUI();
         ChessBoard board = new ChessBoard();
-        board.showChessBoard(ui);
-        board.displayAvailableMoves();
-        
 
-        // while (true) {
-        // board.showChessBoard(ui);
-        // String move = ui.getUserCommand();
-        // TODO: Check if move is valid
-        // TODO: Update chessboard (new position with chesspiece, old position empty)
-        // TODO: Update ChessPiece (position)
-        // TODO: Store updated board in text file
-        // }
+        while (!end) {
+            board.showChessBoard(ui);
+            String userInputString = ui.getUserInput();
+            if (Parser.isUserInputAbort(userInputString)) {
+                break; // End the game if user aborts
+            }
+
+            try {
+                Move move = Parser.parseMove(userInputString, board);
+                board.executeMove(move);
+
+                // TODO: Opponent player (AI) pick random move
+                // Todo: board.executeMove(aiMove)
+                // Todo: Check game state
+
+            } catch (ChessMasterException e) {
+                ui.printErorMessage(e);
+            }
+        }
     }
 }

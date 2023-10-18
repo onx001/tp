@@ -1,8 +1,8 @@
 package chessmaster.game;
 
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
-import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
 
@@ -63,10 +63,15 @@ public class ChessBoard {
         }
     }
 
-    public ChessPiece getPieceAtCoor (Coordinate coor) {
+    private ChessTile getTileAtCoor(Coordinate coor) {
+        return board[coor.getY()][coor.getX()];
+    }
 
-        ChessTile tile = board[coor.getX()][coor.getY()];
-
+    public ChessPiece getPieceAtCoor(Coordinate coor) throws NullPieceException {
+        ChessTile tile = getTileAtCoor(coor);
+        if (tile.isEmpty()) {
+            throw new NullPieceException();
+        }
         return tile.getChessPiece();
     }
 
@@ -74,24 +79,25 @@ public class ChessBoard {
         board[row][col] = tile;
     }
 
+    /**
+     * Executes a chess move on the chessboard.
+     *
+     * @param move The Move object representing the move to be executed.
+     * @throws InvalidMoveException If the move is not valid according to the game rules.
+     */
+    public void executeMove(Move move) throws InvalidMoveException {
+        Coordinate startCoor = move.getFrom();
+        Coordinate destCoor = move.getTo();
+        ChessPiece chessPiece = move.getPiece();
 
-    public void executeMove(Move move) {
-        Coordinate from = move.getFrom();
-        Coordinate to = move.getTo();
-        ChessPiece piece = move.getPiece();
-
-        if (piece != null) {
-            if (MoveValidator.isValidMove(from, to)) {
-                board[to.getX()][to.getY()] = new ChessTile(piece);
-                board[from.getX()][from.getY()] = new ChessTile();
-            } else {
-                // Edit to throw exception
-                System.out.println("Move is invalid. Try again.");
-            }
-        } else {
-            // Edit to throw exception
-            System.out.println("No piece at original coordinates.");
+        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(board);
+        if (!move.isValid(possibleCoordinates)) {
+            throw new InvalidMoveException();
         }
+
+        chessPiece.updatePosition(destCoor);
+        getTileAtCoor(startCoor).setTileEmpty();
+        getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
     }
 
 }
