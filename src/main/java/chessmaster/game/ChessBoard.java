@@ -1,6 +1,7 @@
 package chessmaster.game;
 
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.ParseChessPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.parser.MoveValidator;
 import chessmaster.pieces.ChessPiece;
@@ -75,7 +76,7 @@ public class ChessBoard {
     }
 
 
-    public void executeMove(Move move) {
+    public void executeMove(Move move) throws InvalidMoveException, ParseChessPieceException {
         Coordinate from = move.getFrom();
         Coordinate to = move.getTo();
         ChessPiece piece = move.getPiece();
@@ -86,12 +87,10 @@ public class ChessBoard {
                 board[from.getX()][from.getY()] = new ChessTile();
                 piece.updatePosition(to);
             } else {
-                // Edit to throw exception
-                System.out.println("Move is invalid. Try again.");
+                throw new InvalidMoveException();
             }
         } else {
-            // Edit to throw exception
-            System.out.println("No piece at original coordinates.");
+            throw new ParseChessPieceException();
         }
     }
 
