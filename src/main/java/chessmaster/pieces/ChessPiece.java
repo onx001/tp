@@ -107,7 +107,7 @@ public abstract class ChessPiece {
         return color;
     }
 
-    public void updatePosition(Coordinate newCoordinate) {
-        this.position = newCoordinate;
-    }
+    // public void updatePosition(Coordinate newCoordinate) {
+    //     this.position = newCoordinate;
+    // }
 }
