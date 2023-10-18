@@ -1,6 +1,7 @@
 package chessmaster.pieces;
 
 import chessmaster.game.Coordinate;
+import chessmaster.game.ChessTile;
 
 public abstract class ChessPiece {
 
@@ -16,6 +17,7 @@ public abstract class ChessPiece {
     protected static final int[] RIGHT_UP_RIGHT = {-2, -1}; 
     protected static final int[] RIGHT_DOWN_RIGHT = {-2, 1}; 
     protected static final int[] UP_UP = {0, -2}; 
+    protected static final int[] DOWN_DOWN = {0, 2};
 
     protected static final int[] UP = {0, -1}; 
     protected static final int[] DOWN = {0, 1}; 
@@ -27,8 +29,13 @@ public abstract class ChessPiece {
     protected static final int[] DOWN_LEFT = {1, 1}; 
     protected static final int[] DOWN_RIGHT = {-1, 1}; 
 
+    protected static final int[] CASTLE_LEFT = {-2, 0};
+    protected static final int[] CASTLE_RIGHT = {2, 0};
+
     protected Coordinate position;
     protected int color;
+    protected Coordinate[][] availableCoordinates;
+    protected boolean hasMoved = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -42,5 +49,61 @@ public abstract class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    public abstract Coordinate[][] getAvailablCoordinates();
+    public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
+
+    /**
+     * Returns the validity of the move to the destination coordinate.
+     * @param destination
+     * @param board
+     * @return
+     */
+    public boolean isMoveValid(Coordinate destination, ChessTile[][] board){
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (possibleCoord.equals(destination)) {
+                    ChessPiece destPiece = board[destination.getY()][destination.getX()].getChessPiece();
+                    if (destPiece == null){
+                        return true;
+                    } else if (destPiece.getColour() != this.color){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public void displayAvailableCoordinates(ChessTile[][] board) {
+
+        System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+
+
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (this.isMoveValid(possibleCoord, board)){
+                    System.out.print(possibleCoord + " ");
+                }
+            }
+        }
+        System.out.println();
+    }
+
+    public int getColour() {
+        return color == BLACK ? ChessPiece.BLACK : ChessPiece.WHITE;
+    }
+
+    public Coordinate getPosition() {
+        return this.position;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPiece [color=" + color + ", position=" + position + "]";
+    }
+
+    protected int getColor(){
+        return color;
+    }
 }
