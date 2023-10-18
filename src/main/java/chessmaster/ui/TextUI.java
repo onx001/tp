@@ -32,7 +32,7 @@ public class TextUI {
      * 
      * @return command (full line) entered by the user
      */
-    public String getUserCommand() {
+    public String getUserInput() {
         String fullInputLine = scanner.nextLine().trim();
 
         // silently consume all ignored lines
@@ -74,6 +74,10 @@ public class TextUI {
         out.print(String.format(" (%d)", rowNum));
         out.print(System.lineSeparator() + CHESS_BOARD_DIVIDER);
         out.println("");
+    }
+
+    public void printErorMessage(Exception e) {
+        out.println(e.getMessage());
     }
 
 }

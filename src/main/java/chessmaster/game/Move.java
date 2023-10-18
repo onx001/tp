@@ -24,4 +24,15 @@ public class Move {
     public ChessPiece getPiece() {
         return piece;
     }
+
+    public boolean isValid(Coordinate[][] possibleCoordinates) {
+        for (Coordinate[] direction : possibleCoordinates) {
+            for (Coordinate coor : direction) {
+                if (coor.equals(to)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -21,6 +21,14 @@ public class ChessTile {
         return chessPiece == null;
     }
 
+    public void setTileEmpty() {
+        chessPiece = null;
+    }
+
+    public void updateTileChessPiece(ChessPiece piece) {
+        chessPiece = piece;
+    }
+
     public ChessPiece getChessPiece() {
         return chessPiece;
     }
