@@ -6,7 +6,14 @@ import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
-import chessmaster.pieces.*;
+import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Bishop;
+import chessmaster.pieces.King;
+import chessmaster.pieces.Knight;
+import chessmaster.pieces.Pawn;
+import chessmaster.pieces.Queen;
+import chessmaster.pieces.Rook;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -84,33 +91,33 @@ public class Storage {
 
     public static ChessPiece chessPieceIdentification(int row, int col, String piece) throws ParseChessPieceException {
         switch (piece) {
-            case "p":
-                return new Pawn(row, col, 1);
-            case "r":
-                return new Rook(row, col, 1);
-            case "n":
-                return new Knight(row, col, 1);
-            case "b":
-                return new Bishop(row, col, 1);
-            case "q":
-                return new Queen(row, col, 1);
-            case "k":
-                return new King(row, col, 1);
+        case "p":
+            return new Pawn(row, col, 1);
+        case "r":
+            return new Rook(row, col, 1);
+        case "n":
+            return new Knight(row, col, 1);
+        case "b":
+            return new Bishop(row, col, 1);
+        case "q":
+            return new Queen(row, col, 1);
+        case "k":
+            return new King(row, col, 1);
 
-            case "P":
-                return new Pawn(row, col, 0);
-            case "R":
-                return new Rook(row, col, 0);
-            case "N":
-                return new Knight(row, col, 0);
-            case "B":
-                return new Bishop(row, col, 0);
-            case "Q":
-                return new Queen(row, col, 0);
-            case "K":
-                return new King(row, col, 0);
-            default:
-                throw new ParseChessPieceException();
+        case "P":
+            return new Pawn(row, col, 0);
+        case "R":
+            return new Rook(row, col, 0);
+        case "N":
+            return new Knight(row, col, 0);
+        case "B":
+            return new Bishop(row, col, 0);
+        case "Q":
+            return new Queen(row, col, 0);
+        case "K":
+            return new King(row, col, 0);
+        default:
+            throw new ParseChessPieceException();
         }
     }
 }
