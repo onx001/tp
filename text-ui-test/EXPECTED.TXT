@@ -16,6 +16,7 @@ _________________________________
 _________________________________
 | R | N | B | Q | K | B | N | R | (1)
 _________________________________
+<<<<<<< Updated upstream
  (a) (b) (c) (d) (e) (f) (g) (h)
 _________________________________
 | r | n | b | q | k | b | n | r | (8)
@@ -34,3 +35,101 @@ _________________________________
 _________________________________
 | R | N | B | Q | K | B | N | R | (1)
 _________________________________
+=======
+Available coordinates for Rook at a8:
+
+
+Available coordinates for Knight at b8:
+
+c6 a6 
+Available coordinates for Bishop at c8:
+
+
+Available coordinates for Queen at d8:
+
+
+Available coordinates for King at e8:
+
+
+Available coordinates for Bishop at f8:
+
+
+Available coordinates for Knight at g8:
+
+h6 f6 
+Available coordinates for Rook at h8:
+
+
+Available coordinates for Pawn at a7:
+
+
+Available coordinates for Pawn at b7:
+
+
+Available coordinates for Pawn at c7:
+
+
+Available coordinates for Pawn at d7:
+
+
+Available coordinates for Pawn at e7:
+
+
+Available coordinates for Pawn at f7:
+
+
+Available coordinates for Pawn at g7:
+
+
+Available coordinates for Pawn at h7:
+
+
+Available coordinates for Pawn at a2:
+
+a3 a4 
+Available coordinates for Pawn at b2:
+
+b3 b4 
+Available coordinates for Pawn at c2:
+
+c3 c4 
+Available coordinates for Pawn at d2:
+
+d3 d4 
+Available coordinates for Pawn at e2:
+
+e3 e4 
+Available coordinates for Pawn at f2:
+
+f3 f4 
+Available coordinates for Pawn at g2:
+
+g3 g4 
+Available coordinates for Pawn at h2:
+
+h3 h4 
+Available coordinates for Rook at a1:
+
+
+Available coordinates for Knight at b1:
+
+c3 a3 
+Available coordinates for Bishop at c1:
+
+
+Available coordinates for Queen at d1:
+
+
+Available coordinates for King at e1:
+
+
+Available coordinates for Bishop at f1:
+
+
+Available coordinates for Knight at g1:
+
+h3 f3 
+Available coordinates for Rook at h1:
+
+
+>>>>>>> Stashed changes
