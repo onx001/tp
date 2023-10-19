@@ -114,7 +114,7 @@ public class ChessBoard {
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
             rook.setHasMoved(true);
             rook.updatePosition(rookDestCoor);
-            getTileAtCoor(rookStartCoor).setTileEmpty();
+            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         } else if (move.isRightCastling()) {
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() + 3, startCoor.getY());
@@ -122,7 +122,7 @@ public class ChessBoard {
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
             rook.setHasMoved(true);
             rook.updatePosition(rookDestCoor);
-            getTileAtCoor(rookStartCoor).setTileEmpty();
+            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
     }
