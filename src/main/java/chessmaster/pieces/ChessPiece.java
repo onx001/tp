@@ -2,6 +2,8 @@ package chessmaster.pieces;
 
 import chessmaster.game.Coordinate;
 import chessmaster.game.ChessTile;
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.game.ChessBoard;
 
 public abstract class ChessPiece {
 
@@ -49,7 +51,7 @@ public abstract class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
+    public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
 
     /**
      * Returns the validity of the move to the destination coordinate.
@@ -57,24 +59,31 @@ public abstract class ChessPiece {
      * @param board
      * @return
      */
-    public boolean isMoveValid(Coordinate destination, ChessTile[][] board){
+    public boolean isMoveValid(Coordinate destination, ChessBoard board){
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
                 if (possibleCoord.equals(destination)) {
-                    ChessPiece destPiece = board[destination.getY()][destination.getX()].getChessPiece();
-                    if (destPiece == null){
-                        return true;
-                    } else if (destPiece.getColour() != this.color){
+                    try {
+                        ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
+                        if (destPiece.getColour() != this.color){
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } 
+                    
+                    catch (NullPieceException e) {
                         return true;
                     }
+
                 }
             }
         }
         return false;
     }
 
-    public void displayAvailableCoordinates(ChessTile[][] board) {
+    public void displayAvailableCoordinates(ChessBoard board) {
 
         System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);

@@ -2,6 +2,8 @@ package chessmaster.pieces;
 
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.game.ChessBoard;
 
 public class King extends ChessPiece {
     public static final String KING_WHITE = "k"; // ♔
@@ -16,7 +18,7 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -25,7 +27,11 @@ public class King extends ChessPiece {
             ChessPiece destPiece = null;
 
             if (position.isOffsetWithinBoard(offsetX, offsetY)){
-                destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
+                try {
+                    destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
+                } catch (NullPieceException e) {
+                    destPiece = null;
+                }
             } 
 
             if (position.isOffsetWithinBoard(offsetX, offsetY) && hasMoved && dir<8 &&
