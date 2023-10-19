@@ -1,5 +1,7 @@
 package chessmaster.pieces;
 
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.game.ChessTile;
 
@@ -39,6 +41,8 @@ public abstract class ChessPiece {
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
     protected boolean captured = false;
+    protected boolean isLeftCastling = false;
+    protected boolean isRightCastling = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -52,9 +56,9 @@ public abstract class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
+    public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
 
-    public Coordinate[] getFlattenedCoordinates(ChessTile[][] board) {
+    public Coordinate[] getFlattenedCoordinates(ChessBoard board) {
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
 
@@ -75,16 +79,20 @@ public abstract class ChessPiece {
      * @param board
      * @return
      */
-    public boolean isMoveValid(Coordinate destination, ChessTile[][] board){
+    public boolean isMoveValid(Coordinate destination, ChessBoard board){
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
                 if (possibleCoord.equals(destination)) {
-                    ChessPiece destPiece = board[destination.getY()][destination.getX()].getChessPiece();
-                    if (destPiece == null){
-                        return true;
-                    } else if (destPiece.getColour() != this.color){
-                        return true;
+                    try {
+                        ChessPiece destPiece = board.getPieceAtCoor(destination);
+                        if (destPiece.getType().equalsIgnoreCase(" ")) {
+                            return true;
+                        } else if (destPiece.getColour() != this.color) {
+                            return true;
+                        }
+                    } catch (NullPieceException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -92,7 +100,7 @@ public abstract class ChessPiece {
         return false;
     }
 
-    public void displayAvailableCoordinates(ChessTile[][] board) {
+    public void displayAvailableCoordinates(ChessBoard board) {
 
         System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
@@ -121,6 +129,34 @@ public abstract class ChessPiece {
         this.position = newCoordinate;
     }
 
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
+    public boolean getHasMoved() {
+        return this.hasMoved;
+    }
+
+    public void setIsLeftCastling(boolean isLeftCastling) {
+        this.isLeftCastling = isLeftCastling;
+    }
+
+    public void setIsRightCastling(boolean isRightCastling) {
+        this.isRightCastling = isRightCastling;
+    }
+
+    public boolean getIsLeftCastling() {
+        boolean toReturn = this.isLeftCastling;
+        this.isLeftCastling = false;
+        return toReturn;
+    }
+
+    public boolean getIsRightCastling() {
+        boolean toReturn = this.isRightCastling;
+        this.isRightCastling = false;
+        return toReturn;
+    }
+
     @Override
     public String toString() {
         return "ChessPiece [color=" + color + ", position=" + position + "]";
@@ -133,4 +169,8 @@ public abstract class ChessPiece {
     public boolean getCaptured() {
         return this.captured;
     }
+
+    public String getType(){
+        return EmptyPiece.EMPTY_PIECE;
+    };
 }

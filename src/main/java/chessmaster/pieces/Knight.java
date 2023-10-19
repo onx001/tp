@@ -1,5 +1,7 @@
 package chessmaster.pieces;
 
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
@@ -23,21 +25,31 @@ public class Knight extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
             int offsetX = DIRECTIONS[dir][0];
             int offsetY = DIRECTIONS[dir][1];
 
-            if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                ChessPiece destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
-                if (destPiece == null || destPiece.getColour() != this.color) {
-                    result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+            try {
+                if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                    ChessPiece destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
+                    if (destPiece.getType().equals(EmptyPiece.EMPTY_PIECE)
+                            || destPiece.getColour() != this.color) {
+                        result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
+                    }
                 }
+            } catch (NullPieceException e) {
+                e.printStackTrace();
             }
         }
 
         return result;
+    }
+
+    @Override
+    public String getType() {
+        return KNIGHT_WHITE;
     }
 }
