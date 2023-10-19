@@ -4,6 +4,7 @@ import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.EmptyPiece;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
@@ -39,8 +40,8 @@ public class ChessBoard {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board.length ; j++) {
                 ChessPiece piece = board[i][j].getChessPiece();
-                if (piece != null){
-                    piece.displayAvailableCoordinates(this.board);
+                if (piece.getType().equals(EmptyPiece.EMPTY_PIECE)){
+                    piece.displayAvailableCoordinates(this);
                 }
             }
 
@@ -72,7 +73,7 @@ public class ChessBoard {
 
     public ChessPiece getPieceAtCoor(Coordinate coor) throws NullPieceException {
         ChessTile tile = getTileAtCoor(coor);
-        if (tile.isEmpty()) {
+        if (tile.getChessPiece() == null) {
             throw new NullPieceException();
         }
         return tile.getChessPiece();
@@ -97,14 +98,14 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(board);
+        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
         if (!move.isValid(possibleCoordinates)) {
             throw new InvalidMoveException();
         }
 
         chessPiece.setHasMoved(true);
         chessPiece.updatePosition(destCoor);
-        getTileAtCoor(startCoor).setTileEmpty();
+        getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
         if (move.isLeftCastling()) {

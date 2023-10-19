@@ -33,7 +33,7 @@ public class CPU extends Player {
         int iter = 0;
         while (iter < MAX_LOOP_ITERATIONS
                 && (randomPiece.getCaptured()
-                || randomPiece.getFlattenedCoordinates(board.getBoard()).length == 0)) {
+                || randomPiece.getFlattenedCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
             iter++;
         }
@@ -52,7 +52,8 @@ public class CPU extends Player {
      * @return A random move the given piece can make on the given board.
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
-        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board.getBoard());
+        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
+
         Coordinate randomDestination = allPossibleMoves[rand.nextInt(allPossibleMoves.length)];
         return new Move(piece.getPosition(), randomDestination, piece);
     }

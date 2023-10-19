@@ -67,7 +67,7 @@ public class Storage {
                     for (int col = 0; col < ChessBoard.SIZE; col++) {
                         String pieceString = tileRow.substring(col, col + 1);
                         if (pieceString.equals(" ")) {
-                            boardTiles[row][col] = new ChessTile();
+                            boardTiles[row][col] = new ChessTile(new Coordinate(col, row));
                         } else {
                             ChessPiece piece = Parser.parseChessPiece(pieceString, row + 1, col + 1);
                             boardTiles[row][col] = new ChessTile(piece);
