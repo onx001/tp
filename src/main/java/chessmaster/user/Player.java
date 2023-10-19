@@ -12,7 +12,7 @@ import chessmaster.ui.TextUI;
 
 import java.util.ArrayList;
 
-public class Player {
+public abstract class Player {
 
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
