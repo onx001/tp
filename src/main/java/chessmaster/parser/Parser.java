@@ -12,10 +12,17 @@ import chessmaster.pieces.Knight;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
+import chessmaster.commands.Command;
+import chessmaster.commands.MoveCommand;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.HelpCommand;
 
 public class Parser {
 
     private static final String ABORT_COMMAND = "abort";
+
+    public Parser() {
+    }
 
     public static boolean isUserInputAbort(String userInput) {
         return userInput.trim().toLowerCase().equals(ABORT_COMMAND);
@@ -116,5 +123,24 @@ public class Parser {
         default:
             return null;
         }
+    }
+
+    public Command parseCommand(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
+        String[] parseArray = in.toLowerCase().split("\\s+", 2);
+        if (parseArray.length < 2) {
+            assert parseArray.length == 1;
+            switch (parseArray[0]) {
+            case "help":
+                return new HelpCommand();
+            case "abort":
+                return new AbortCommand();
+            default:
+                throw new ParseCoordinateException();
+            }
+        }
+
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
+        return new MoveCommand(board, from, to);
     }
 }

@@ -5,6 +5,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
 import chessmaster.ui.TextUI;
+import chessmaster.commands.Command;
 
 /**
  * Main entry-point for ChessMaster application.
@@ -37,17 +38,14 @@ public class ChessMaster {
 
         TextUI ui = new TextUI();
         ChessBoard board = new ChessBoard();
+        Parser parser = new Parser();
 
         while (!end) {
             board.showChessBoard(ui);
             String userInputString = ui.getUserInput();
-            if (Parser.isUserInputAbort(userInputString)) {
-                break; // End the game if user aborts
-            }
-
             try {
-                Move move = Parser.parseMove(userInputString, board);
-                board.executeMove(move);
+                Command command = parser.parseCommand(userInputString, board);
+                end = command.execute();
 
                 // TODO: Opponent player (AI) pick random move
                 // Todo: board.executeMove(aiMove)
