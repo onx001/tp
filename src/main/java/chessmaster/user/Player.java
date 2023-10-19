@@ -24,7 +24,6 @@ public abstract class Player {
         this.moves = new ArrayList<>();
         this.pieces = new ArrayList<>();
         this.colour = colour;
-
     }
 
     public void addMove(Move move) {
@@ -32,16 +31,19 @@ public abstract class Player {
     }
 
     public void initialisePieces(ChessBoard board) {
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
-            for (int col = 0; col < ChessBoard.SIZE; col++) {
-                if(row >= 2 && row <= 5){
-                    continue;
-                }
+        int row, col;
+        if (this.colour == ChessPiece.BLACK) {
+            row = 6;
+        } else {
+            row = 0;
+        }
+
+        for (int row_temp = row; row < row_temp + 2; row++) {
+            for (col = 0; col < ChessBoard.SIZE; col++) {
+
                 try {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
-                    if (piece.getColour() == this.colour) {
-                        this.pieces.add(piece);
-                    }
+                    this.pieces.add(piece);
                 } catch (NullPieceException e) {
                     e.printStackTrace();
                 }
