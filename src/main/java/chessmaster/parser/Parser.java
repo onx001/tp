@@ -16,10 +16,16 @@ import chessmaster.game.Move;
 public class Parser {
 
     private static final String ABORT_COMMAND = "abort";
+    private static final String EXIT_COMMAND = "exit";
 
     public static boolean isUserInputAbort(String userInput) {
         return userInput.trim().toLowerCase().equals(ABORT_COMMAND);
     }
+
+    public static boolean isUserInputExit(String userInput) {
+        return userInput.trim().toLowerCase().equals(EXIT_COMMAND);
+    }
+
 
     /**
      * Parses a string telling which chess piece the user wants to promote his piece to,
