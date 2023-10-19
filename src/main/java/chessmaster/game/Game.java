@@ -1,12 +1,8 @@
 package chessmaster.game;
 
-import chessmaster.exceptions.ChessMasterException;
-import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.parser.Parser;
-import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-import chessmaster.user.Player;
+
 
 public class Game {
 
@@ -20,18 +16,19 @@ public class Game {
 
     private ChessBoard board;
 
-    private final String logo = "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-     + System.lineSeparator() +
-     "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-     + System.lineSeparator() +
-     "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-     + System.lineSeparator() +
-     "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-     + System.lineSeparator() +
-     "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-     + System.lineSeparator() +
-     "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-     + System.lineSeparator();
+    private final String logo =
+        "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
+        + System.lineSeparator() +
+        "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
+        + System.lineSeparator() +
+        "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
+        + System.lineSeparator() +
+        "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
+        + System.lineSeparator() +
+        "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
+        + System.lineSeparator() +
+        "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+        + System.lineSeparator();
 
     public Game(String mode, int player1Colour) {
         board = new ChessBoard();
