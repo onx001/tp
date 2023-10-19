@@ -6,7 +6,7 @@ import java.util.Scanner;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 
-public class TextUI {
+public final class TextUI {
 
     public static final String CHESS_BOARD_DIVIDER = "_".repeat(4 * ChessBoard.SIZE + 1);
 
@@ -18,13 +18,8 @@ public class TextUI {
      */
     private static final String COMMENT_LINE_FORMAT_REGEX = "#.*";
 
-    private final Scanner scanner;
-    private PrintStream out;
-
-    public TextUI() {
-        scanner = new Scanner(System.in);
-        out = System.out;
-    }
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final PrintStream out = System.out;
 
     /**
      * Prompts for the command and reads the text entered by the user.
@@ -32,7 +27,7 @@ public class TextUI {
      * 
      * @return command (full line) entered by the user
      */
-    public String getUserInput() {
+    public static String getUserInput() {
         String fullInputLine = scanner.nextLine().trim();
 
         // silently consume all ignored lines
@@ -51,24 +46,24 @@ public class TextUI {
      * @param rawInputLine full raw user input line.
      * @return true if the entire user input line should be ignored.
      */
-    private boolean shouldIgnore(String rawInputLine) {
+    private static boolean shouldIgnore(String rawInputLine) {
         boolean isCommentLine = rawInputLine.trim().matches(COMMENT_LINE_FORMAT_REGEX);
         return rawInputLine.trim().isEmpty() || isCommentLine;
     }
 
-    public void printChessBoardDivider() {
+    public static void printChessBoardDivider() {
         out.println(CHESS_BOARD_DIVIDER);
     }
 
-    public void printChessBoardHeader() {
+    public static void printChessBoardHeader() {
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
-            out.print(String.format(" (%s)", col));
+            out.printf(" (%s)", col);
         }
         out.println("");
     }
 
-    public void printChessBoardRow(int rowNum, String chessBoardRow) {
+    public static void printChessBoardRow(int rowNum, String chessBoardRow) {
         out.print(chessBoardRow);
         out.print(ChessTile.TILE_DIVIDER);
         out.print(String.format(" (%d)", rowNum));
@@ -76,7 +71,7 @@ public class TextUI {
         out.println("");
     }
 
-    public void printErorMessage(Exception e) {
+    public static void printErrorMessage(Exception e) {
         out.println(e.getMessage());
     }
 
