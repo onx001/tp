@@ -54,4 +54,12 @@ public class Move {
         }
         return false;
     }
+
+    public boolean isLeftCastling() {
+        return piece.getIsLeftCastling();
+    }
+
+    public boolean isRightCastling() {
+        return piece.getIsRightCastling();
+    }
 }

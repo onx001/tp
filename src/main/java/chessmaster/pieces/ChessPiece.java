@@ -39,6 +39,8 @@ public abstract class ChessPiece {
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
     protected boolean captured = false;
+    protected boolean isLeftCastling = false;
+    protected boolean isRightCastling = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -119,6 +121,34 @@ public abstract class ChessPiece {
 
     public void updatePosition(Coordinate newCoordinate){
         this.position = newCoordinate;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
+    public boolean getHasMoved() {
+        return this.hasMoved;
+    }
+
+    public void setIsLeftCastling(boolean isLeftCastling) {
+        this.isLeftCastling = isLeftCastling;
+    }
+
+    public void setIsRightCastling(boolean isRightCastling) {
+        this.isRightCastling = isRightCastling;
+    }
+
+    public boolean getIsLeftCastling() {
+        boolean toReturn = this.isLeftCastling;
+        this.isLeftCastling = false;
+        return toReturn;
+    }
+
+    public boolean getIsRightCastling() {
+        boolean toReturn = this.isRightCastling;
+        this.isRightCastling = false;
+        return toReturn;
     }
 
     @Override
