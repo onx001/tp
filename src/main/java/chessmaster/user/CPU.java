@@ -21,7 +21,7 @@ public class CPU extends Player {
         //    - has possible legal moves
         ChessPiece randomPiece = getRandomPiece();
         while (randomPiece.getCaptured()
-                || randomPiece.getFlattenedCoordinates(board.getBoard()).length == 0) {
+                || randomPiece.getFlattenedCoordinates(board).length == 0) {
             randomPiece = getRandomPiece();
         }
 
@@ -38,7 +38,7 @@ public class CPU extends Player {
 
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
 
-        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board.getBoard());
+        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
         Coordinate randomDestination = allPossibleMoves[rand.nextInt(allPossibleMoves.length)];
 
         return new Move(piece.getPosition(), randomDestination, piece);

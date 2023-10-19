@@ -4,13 +4,7 @@ import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
-import chessmaster.pieces.King;
-import chessmaster.pieces.Queen;
-import chessmaster.pieces.Bishop;
-import chessmaster.pieces.Rook;
-import chessmaster.pieces.Knight;
-import chessmaster.pieces.Pawn;
-import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.*;
 import chessmaster.game.Move;
 import chessmaster.commands.Command;
 import chessmaster.commands.MoveCommand;
@@ -121,7 +115,7 @@ public class Parser {
         case Rook.ROOK_WHITE:
             return new Rook(row, col, ChessPiece.WHITE);
         default:
-            return null;
+            return new EmptyPiece(row, col, ChessPiece.BLACK);
         }
     }
 

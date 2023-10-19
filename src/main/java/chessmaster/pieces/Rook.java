@@ -2,6 +2,7 @@ package chessmaster.pieces;
 
 import java.util.ArrayList;
 
+import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
@@ -19,7 +20,7 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -32,14 +33,18 @@ public class Rook extends ChessPiece {
             while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY) && !isBlocked) {
 
                 Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
-                ChessPiece destPiece = board[possibleCoord.getY()][possibleCoord.getX()].getChessPiece();
-                if (destPiece != null) {
-                    if (destPiece.getColour() != this.color) {
+                try {
+                    ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
+                    if (!destPiece.getType().equals(EmptyPiece.EMPTY_PIECE)) {
+                        if (destPiece.getColour() != this.color) {
+                            possibleCoordInDirection.add(possibleCoord);
+                        }
+                        isBlocked = true;
+                    } else {
                         possibleCoordInDirection.add(possibleCoord);
                     }
-                    isBlocked = true;
-                } else {
-                    possibleCoordInDirection.add(possibleCoord);
+                } catch  (NullPieceException e) {
+                    e.printStackTrace();
                 }
 
                 multiplier++;
@@ -57,5 +62,10 @@ public class Rook extends ChessPiece {
     @Override
     public String toString() {
         return color == ChessPiece.BLACK ? ROOK_BLACK : ROOK_WHITE;
+    }
+
+    @Override
+    public String getType() {
+        return ROOK_WHITE;
     }
 }

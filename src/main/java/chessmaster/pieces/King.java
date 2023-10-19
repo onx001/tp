@@ -1,5 +1,7 @@
 package chessmaster.pieces;
 
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
@@ -16,7 +18,7 @@ public class King extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -24,31 +26,47 @@ public class King extends ChessPiece {
             int offsetY = DIRECTIONS[dir][1];
             ChessPiece destPiece = null;
 
-            if (position.isOffsetWithinBoard(offsetX, offsetY)){
-                destPiece = board[position.getY() + offsetY][position.getX() + offsetX].getChessPiece();
-            } 
+            try{
+                if (position.isOffsetWithinBoard(offsetX, offsetY)){
+                    destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
+                }
 
-            if (position.isOffsetWithinBoard(offsetX, offsetY) && hasMoved && dir<8 &&
-                    (destPiece == null || destPiece.getColour() != this.color)) {
-                result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
-            } else if (position.isOffsetWithinBoard(offsetX, offsetY) && !hasMoved && dir>=8){
-                if (dir == 8){
-                    if (board[position.getY()][position.getX()-1].getChessPiece() == null &&
-                            board[position.getY()][position.getX()-2].getChessPiece() == null &&
-                            board[position.getY()][position.getX()-3].getChessPiece() == null &&
-                            board[position.getY()][position.getX()-4].getChessPiece() != null &&
-                            board[position.getY()][position.getX()-4].getChessPiece().hasMoved == false){
-                        result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
-                    }
-                } else if (dir == 9){
-                    if (board[position.getY()][position.getX()+1].getChessPiece() == null &&
-                            board[position.getY()][position.getX()+2].getChessPiece() == null &&
-                            board[position.getY()][position.getX()+3].getChessPiece() != null &&
-                            board[position.getY()][position.getX()+3].getChessPiece().hasMoved == false){
-                        result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                if (position.isOffsetWithinBoard(offsetX, offsetY) && hasMoved && dir<8 &&
+                        (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
+                                || destPiece.getColour() != this.color)) {
+                    result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                } else if (position.isOffsetWithinBoard(offsetX, offsetY) && !hasMoved && dir>=8){
+
+                    if (dir == 8) {
+                        Coordinate pos1 = position.addOffsetToCoordinate(-1, 0);
+                        Coordinate pos2 = position.addOffsetToCoordinate(-2, 0);
+                        Coordinate pos3 = position.addOffsetToCoordinate(-3, 0);
+                        Coordinate pos4 = position.addOffsetToCoordinate(-4, 0);
+
+                        if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                board.getPieceAtCoor(pos4).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                !board.getPieceAtCoor(pos4).hasMoved) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
+                        }
+                    } else if (dir == 9) {
+                        Coordinate pos1 = position.addOffsetToCoordinate(+1, 0);
+                        Coordinate pos2 = position.addOffsetToCoordinate(+2, 0);
+                        Coordinate pos3 = position.addOffsetToCoordinate(+3, 0);
+
+                        if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                !board.getPieceAtCoor(pos3).hasMoved) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
+                        }
                     }
                 }
+            } catch (NullPieceException e){
+                e.printStackTrace();
             }
+
             
         }
 
@@ -59,5 +77,10 @@ public class King extends ChessPiece {
     public String toString() {
         return color == ChessPiece.BLACK ? KING_BLACK : KING_WHITE;
     }
+
+    @Override
+   public String getType() {
+        return KING_WHITE;
+   }
 
 }

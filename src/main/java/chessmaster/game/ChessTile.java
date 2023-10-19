@@ -1,6 +1,7 @@
 package chessmaster.game;
 
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.EmptyPiece;
 
 public class ChessTile {
     public static final String TILE_DIVIDER = "|";
@@ -9,8 +10,8 @@ public class ChessTile {
     /** Nullable ChessPiece object. Null signifies that this tile is empty */
     private ChessPiece chessPiece;
 
-    public ChessTile() {
-        chessPiece = null;
+    public ChessTile(Coordinate coor) {
+        chessPiece = new EmptyPiece(coor.getX(),coor.getY(), ChessPiece.BLACK);
     }
 
     public ChessTile(ChessPiece piece) {
@@ -18,11 +19,11 @@ public class ChessTile {
     }
 
     public boolean isEmpty() {
-        return chessPiece == null;
+        return chessPiece.getType().equals(EmptyPiece.EMPTY_PIECE);
     }
 
-    public void setTileEmpty() {
-        chessPiece = null;
+    public void setTileEmpty(Coordinate coor) {
+        chessPiece = new EmptyPiece(coor.getX(),coor.getY(), ChessPiece.BLACK);
     }
 
     public void updateTileChessPiece(ChessPiece piece) {
