@@ -13,6 +13,7 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
 
+
 public class Parser {
 
     private static final String ABORT_COMMAND = "abort";
@@ -33,7 +34,7 @@ public class Parser {
         int colour = promoteFrom.getColour();
         Coordinate position = promoteFrom.getPosition();
 
-        switch (promoteTo.toLowerCase()){
+        switch (promoteTo){
         case Bishop.BISHOP_BLACK:
             return new Bishop(position.getX(), position.getY(), colour);
         case Queen.QUEEN_BLACK:
@@ -58,7 +59,6 @@ public class Parser {
      * @throws ParseCoordinateException If the string entered is not in the algebraic coordinate notation.
      * @throws NullPieceException If there is no piece at the 'from' coordinate.
      */
-
     public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
         String[] parseArray = in.toLowerCase().split("\\s+", 2);
         if (parseArray.length < 2) {
