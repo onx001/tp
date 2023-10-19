@@ -1,5 +1,8 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.LoadBoardException;
+import chessmaster.storage.Storage;
+import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 
@@ -13,8 +16,8 @@ public class Game {
     // private Player player2;
     private Human human;
     private CPU cpu;
-
     private ChessBoard board;
+    private Storage storage;
 
     private final String logo =
         "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
@@ -30,8 +33,15 @@ public class Game {
         "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
         + System.lineSeparator();
 
-    public Game(String mode, int player1Colour) {
+    public Game(String mode, int player1Colour, String filePath) {
         board = new ChessBoard();
+        storage = new Storage(filePath);
+
+        try {
+            board = storage.loadBoard();
+        } catch (LoadBoardException e) {
+            TextUI.printErrorMessage(e);
+        }
 
         switch (mode) {
         case "multi":

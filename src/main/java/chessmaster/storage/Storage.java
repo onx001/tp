@@ -15,18 +15,22 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Storage {
+    private static String filePath;
 
+    public Storage(String filePath){
+        Storage.filePath = filePath;
+    }
     /**
      * Method to save board to file
      *
      * @param board takes in current board that is in play
      */
     public static void saveBoard(ChessBoard board) throws SaveBoardException {
-        try (FileWriter fileWriter = new FileWriter("/tp/data/saved-game.txt")){
+        try (FileWriter fileWriter = new FileWriter(filePath)){
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     try {
-                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(row, col));
+                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                         fileWriter.write(piece.toString());
                     } catch (Exception e) {
                         fileWriter.write(" ");
@@ -44,7 +48,7 @@ public class Storage {
      *
      */
     public static ChessBoard loadBoard() throws LoadBoardException {
-        File file = new File("/tp/data/saved-game.txt");
+        File file = new File(filePath);
         ChessBoard chessBoard = new ChessBoard();
         ChessTile[][] boardTiles;
 
