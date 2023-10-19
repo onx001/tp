@@ -7,6 +7,9 @@ public class Move {
     private Coordinate to;
     private ChessPiece piece;
 
+    public Move() {
+    }
+
     public Move(Coordinate from, Coordinate to, ChessPiece piece) {
         this.from = from;
         this.to = to;
@@ -23,5 +26,32 @@ public class Move {
 
     public ChessPiece getPiece() {
         return piece;
+    }
+
+    public void setFrom(Coordinate from) {
+        this.from = from;
+    }
+
+    public void setTo(Coordinate to) {
+        this.to = to;
+    }
+
+    public void setPiece(ChessPiece piece) {
+        this.piece = piece;
+    }
+
+    public boolean isEmpty() {
+        return (from == null && to == null && piece == null);
+    }
+
+    public boolean isValid(Coordinate[][] possibleCoordinates) {
+        for (Coordinate[] direction : possibleCoordinates) {
+            for (Coordinate coor : direction) {
+                if (coor.equals(to)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

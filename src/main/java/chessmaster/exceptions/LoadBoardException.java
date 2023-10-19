@@ -1,6 +1,6 @@
 package chessmaster.exceptions;
 
-public class LoadBoardException extends Exception {
+public class LoadBoardException extends ChessMasterException {
 
     public LoadBoardException() {
         super(ExceptionMessages.MESSAGE_LOAD_BOARD_EXCEPTION);

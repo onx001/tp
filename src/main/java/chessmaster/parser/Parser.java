@@ -1,5 +1,6 @@
 package chessmaster.parser;
 
+import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
@@ -12,26 +13,13 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
 
-public class Parser {
-    /**
-     * Parses the user's typed input into the UI and executes actions accordingly.
-     *
-     * @param in    Command entered by the user.
-     * @param board Chessboard the user is currently playing on.
-     */
-    public void parseAndExecuteCommand(String in, ChessBoard board) {
-        String commandWord = in.split(" ")[0].toLowerCase();
 
-        switch(commandWord) {
-            case "abort":
-            default:
-                try {
-                    Move move = parseMove(in, board);
-                    board.executeMove(move);
-                } catch (Exception E) {
-                    //TODO add function to display error message
-                }
-        }
+public class Parser {
+
+    private static final String ABORT_COMMAND = "abort";
+
+    public static boolean isUserInputAbort(String userInput) {
+        return userInput.trim().toLowerCase().equals(ABORT_COMMAND);
     }
 
     /**
@@ -46,38 +34,44 @@ public class Parser {
         int colour = promoteFrom.getColour();
         Coordinate position = promoteFrom.getPosition();
 
-        switch (promoteTo.toLowerCase()){
-            case Bishop.BISHOP_BLACK:
-                return new Bishop(position.getX(), position.getY(), colour);
-            case Queen.QUEEN_BLACK:
-                return new Queen(position.getX(), position.getY(), colour);
-            case Knight.KNIGHT_BLACK:
-                return new Knight(position.getX(), position.getY(), colour);
-            case Rook.ROOK_BLACK:
-                return new Rook(position.getX(), position.getY(), colour);
-            default:
-                return null;
+        switch (promoteTo){
+        case Bishop.BISHOP_BLACK:
+            return new Bishop(position.getX(), position.getY(), colour);
+        case Queen.QUEEN_BLACK:
+            return new Queen(position.getX(), position.getY(), colour);
+        case Knight.KNIGHT_BLACK:
+            return new Knight(position.getX(), position.getY(), colour);
+        case Rook.ROOK_BLACK:
+            return new Rook(position.getX(), position.getY(), colour);
+        default:
+            return null;
         }
     }
+
     /**
-     * Parses an input string and returns the move indicated by the string.
+     * Parses a chess move from user input and creates a Move object.
      * Used to read user inputs during the chess game.
      *
-     * @param in    String containing the user's intended move.
-     * @param board The chessboard the user is currently playing on.
-     * @return Move class containing information about the move to be made.
-     *
-     * @throws ParseCoordinateException If the string entered does not match a coordinate.
+     * @param in The user input string with 2 algebraic coordinate notations (e.g., "e2 e4").
+     * @param board The ChessBoard where the move is taking place.
+     * @return Move object containing information about the move to be made.
+     * 
+     * @throws ParseCoordinateException If the string entered is not in the algebraic coordinate notation.
+     * @throws NullPieceException If there is no piece at the 'from' coordinate.
      */
-    public Move parseMove(String in, ChessBoard board) throws ParseCoordinateException {
-        String[] parseArray = in.split(" ", 2);
+    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
+        String[] parseArray = in.toLowerCase().split("\\s+", 2);
+        if (parseArray.length < 2) {
+            throw new ParseCoordinateException();
+        }
 
-        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0].toLowerCase());
-        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1].toLowerCase());
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
 
         return new Move(from, to, relevantPiece);
     }
+
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
      * and column.
