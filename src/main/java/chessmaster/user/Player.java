@@ -11,6 +11,7 @@ import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
+import chessmaster.commands.Command;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ public abstract class Player {
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
     protected int colour;
+    protected Parser parser;
 
     /**
      * A player is a dependency of the Game class. This class stores all move history, all current pieces, and colour
@@ -54,7 +56,6 @@ public abstract class Player {
 
         for (int row_temp = row; row < row_temp + 2; row++) {
             for (col = 0; col < ChessBoard.SIZE; col++) {
-
                 try {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                     this.pieces.add(piece);
@@ -90,16 +91,18 @@ public abstract class Player {
     public Move getNextMove(ChessBoard board) {
         // Get user input
         String input = TextUI.getUserInput();
-        if (Parser.isUserInputAbort(input)) {
-            return null;
-        }
-
-        // Parse input into a Move object
         try {
-            return Parser.parseMove(input, board);
+            Parser parser = new Parser();
+            Command command = parser.parseCommand(input, board);
+            if (command.execute()){
+                return null;
+            } else {
+                return command.getMove();
+            }
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }
+
 
         return new Move();
     }

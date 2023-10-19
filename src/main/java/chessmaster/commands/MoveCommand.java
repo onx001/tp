@@ -33,4 +33,15 @@ public class MoveCommand extends Command {
         return false;
     }
 
+    @Override
+    public Move getMove() {
+        try{
+            ChessPiece relevantPiece = board.getPieceAtCoor(from);
+            Move move = new Move(from, to, relevantPiece);
+            return move;
+        } catch (NullPieceException e){
+            return new Move();
+        }
+    }
+
 }
