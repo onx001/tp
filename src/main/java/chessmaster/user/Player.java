@@ -20,16 +20,30 @@ public abstract class Player {
     protected ArrayList<ChessPiece> pieces;
     protected int colour;
 
+    /**
+     * A player is a dependency of the Game class. This class stores all move history, all current pieces, and colour
+     * of each player. It also contains functions to request input from the user for the next move and to execute
+     * that move.
+     * @param colour The ChessPiece.Colour desired for this player.
+     */
     public Player(int colour) {
         this.moves = new ArrayList<>();
         this.pieces = new ArrayList<>();
         this.colour = colour;
     }
 
+    /**
+     * Adds a given move into the Player's move history.
+     * @param move The given move to be added to history.
+     */
     public void addMove(Move move) {
         this.moves.add(move);
     }
 
+    /**
+     * Adds all the player's pieces to their Piece array. Run once during setup of the game.
+     * @param board The new ChessBoard containing all 32 chess pieces.
+     */
     public void initialisePieces(ChessBoard board) {
         int row, col;
         if (this.colour == ChessPiece.BLACK) {
@@ -51,6 +65,10 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Prints out all the player's pieces including whether it has been captured or not.
+     * Used for debugging purposes only.
+     */
     public void printAllPieces() {
         for (ChessPiece p : pieces) {
             System.out.println("Piece: " + p);
@@ -63,6 +81,12 @@ public abstract class Player {
         return this.colour;
     }
 
+    /**
+     * High-level function which calls necessary APIs to request user input and parse it into a Move object.
+     * @param board The board which to make the move on.
+     * @return null if the user inputs "abort", an empty Move if an error occurred during parsing, otherwise returns
+     * the requested Move object.
+     */
     public Move getNextMove(ChessBoard board) {
         // Get user input
         String input = TextUI.getUserInput();
@@ -80,6 +104,12 @@ public abstract class Player {
         return new Move();
     }
 
+    /**
+     * Allows a player to execute a move and add it to their history.
+     * @param move The move to be executed.
+     * @param board The board the move is to be executed on.
+     * @return true on success, false on InvalidMoveException
+     */
     public boolean move(Move move, ChessBoard board) {
         try {
             board.executeMove(move);
