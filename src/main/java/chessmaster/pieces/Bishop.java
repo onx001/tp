@@ -57,6 +57,4 @@ public class Bishop extends ChessPiece {
     public String toString() {
         return color == ChessPiece.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
     }
-    
-
 }

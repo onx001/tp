@@ -6,10 +6,10 @@ import chessmaster.game.ChessTile;
 public class Pawn extends ChessPiece {
     public static final String PAWN_WHITE = "p"; // ♙
     public static final String PAWN_BLACK = "P"; // ♟
-    public static final int[][] DIRECTIONS_UP = {
+    public static final int[][] DIRECTIONSUP = {
         UP_LEFT, UP_RIGHT, UP, UP_UP,
     };
-    public static final int[][] DIRECTIONS_DOWN = {
+    public static final int[][] DIRECTIONSDOWN = {
         DOWN_LEFT, DOWN_RIGHT, DOWN, DOWN_DOWN,
     };
     protected boolean enPassed = false;
@@ -28,10 +28,10 @@ public class Pawn extends ChessPiece {
 
         
         if (this.color == ChessPiece.WHITE){
-            DIRECTIONS = DIRECTIONS_DOWN;
+            DIRECTIONS = DIRECTIONSDOWN;
             checkBlockDir = -1;
         } else {
-            DIRECTIONS = DIRECTIONS_UP;
+            DIRECTIONS = DIRECTIONSUP;
             checkBlockDir = 1;
         } 
 

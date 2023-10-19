@@ -96,8 +96,8 @@ public class Coordinate {
                 throw new ParseCoordinateException();
             }
 
-            int indexX = (rowInt - 8) * -1;
-            int indexY = BOARD_COLUMNS.indexOf(colString);
+            int indexX = BOARD_COLUMNS.indexOf(colString); 
+            int indexY = (rowInt - 8) * -1;
 
             return new Coordinate(indexX, indexY);
 

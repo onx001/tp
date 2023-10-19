@@ -1,6 +1,6 @@
 package chessmaster.exceptions;
 
-public class ParseCoordinateException extends Exception {
+public class ParseCoordinateException extends ChessMasterException {
 
     public ParseCoordinateException() {
         super(ExceptionMessages.MESSAGE_PARSE_COORDINATE_EXCEPTION);
