@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
+import chessmaster.game.Coordinate;
 
 public final class TextUI {
 
@@ -49,6 +50,15 @@ public final class TextUI {
     private static boolean shouldIgnore(String rawInputLine) {
         boolean isCommentLine = rawInputLine.trim().matches(COMMENT_LINE_FORMAT_REGEX);
         return rawInputLine.trim().isEmpty() || isCommentLine;
+    }
+
+    public static void printPromotePrompt(Coordinate coord){
+        String message = String.format(UiMessages.PROMPT_PROMOTE_MESSAGE, coord.toString());
+        out.println(message);
+    }
+
+    public static void printPromoteInvalidMessage(){
+        out.println(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
     public static void printChessBoardDivider() {
