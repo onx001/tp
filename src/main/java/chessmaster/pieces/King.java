@@ -26,6 +26,7 @@ public class King extends ChessPiece {
             int offsetY = DIRECTIONS[dir][1];
             ChessPiece destPiece = null;
 
+
             try{
                 if (position.isOffsetWithinBoard(offsetX, offsetY)){
                     destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
@@ -46,9 +47,10 @@ public class King extends ChessPiece {
                         if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                board.getPieceAtCoor(pos4).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                !board.getPieceAtCoor(pos4).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 !board.getPieceAtCoor(pos4).hasMoved) {
                             result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
+                          this.setIsLeftCastling(true);
                         }
                     } else if (dir == 9) {
                         Coordinate pos1 = position.addOffsetToCoordinate(+1, 0);
@@ -57,10 +59,12 @@ public class King extends ChessPiece {
 
                         if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
+                                !board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 !board.getPieceAtCoor(pos3).hasMoved) {
                             result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
+                          this.setIsRightCastling(true);
                         }
+
                     }
                 }
             } catch (NullPieceException e){

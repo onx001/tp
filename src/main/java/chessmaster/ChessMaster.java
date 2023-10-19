@@ -1,11 +1,5 @@
 package chessmaster;
 
-import chessmaster.exceptions.ChessMasterException;
-import chessmaster.game.ChessBoard;
-import chessmaster.game.Move;
-import chessmaster.parser.Parser;
-import chessmaster.ui.TextUI;
-import chessmaster.commands.Command;
 import chessmaster.game.Game;
 import chessmaster.pieces.ChessPiece;
 
