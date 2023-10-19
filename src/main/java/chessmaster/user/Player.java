@@ -1,6 +1,5 @@
 package chessmaster.user;
 
-import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseCoordinateException;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 
 public class Player {
 
-    private ArrayList<Move> moves;
-    private ArrayList<ChessPiece> pieces;
-    private int colour;
+    protected ArrayList<Move> moves;
+    protected ArrayList<ChessPiece> pieces;
+    protected int colour;
 
     public Player(int colour) {
         this.moves = new ArrayList<>();

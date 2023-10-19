@@ -18,7 +18,6 @@ public class Game {
     private Human human;
     private CPU cpu;
 
-    private TextUI ui;
     private ChessBoard board;
 
     private final String logo = "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
@@ -35,7 +34,6 @@ public class Game {
      + System.lineSeparator();
 
     public Game(String mode, int player1Colour) {
-        ui = new TextUI();
         board = new ChessBoard();
 
         switch (mode) {
@@ -57,13 +55,14 @@ public class Game {
         while (true) {
 
             // 1. Show the chessboard at every move.
-            board.showChessBoard(ui);
+            board.showChessBoard();
 
             // 2. Get the next move.
             // In v1.0 the human is always white, so they will always go first
             // But this needs to be changed in future versions
             Move move = human.getNextMove(board);
             if (move == null) {
+                // user has entered "abort"
                 break;
             } else if (move.isEmpty()) {
                 // if the move was not correctly parsed, move to the next iteration of the game
@@ -78,7 +77,7 @@ public class Game {
             }
 
             // 4. CPU plays
-            // Move randomMove = cpu.getRandomMove();
+            // Move randomMove = cpu.getRandomMove(board);
             // cpu.move(randomMove, board);
 
             // Todo: Check game state
