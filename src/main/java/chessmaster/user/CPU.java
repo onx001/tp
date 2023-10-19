@@ -41,10 +41,6 @@ public class CPU extends Player {
         return getRandomMoveFromPiece(randomPiece, board);
     }
 
-    /**
-     * Returns a random integer from the CPUs Piece array.
-     * @return
-     */
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
     }
