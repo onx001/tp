@@ -37,8 +37,9 @@ public class Storage {
         }
     }
 
-    public static ChessBoard loadBoard() throws LoadBoardException {
-        File file = new File("/tp/data/saved-game.txt");
+    public static ChessBoard loadBoard(String filePath) throws LoadBoardException {
+//        File file = new File("/tp/data/saved-game.txt");
+        File file = new File(filePath);
         ChessBoard chessBoard = new ChessBoard();
         ChessTile[][] boardTiles;
 
