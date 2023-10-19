@@ -80,7 +80,17 @@ public class Game {
             Move randomMove = cpu.getRandomMove(board);
             cpu.move(randomMove, board);
 
-            // Todo: Check game state
+            // Check game state
+            boolean gameOver = board.isEndGame();
+            if (gameOver) {
+                // if the game is over
+                // determine the winning colour
+                board.announceWinningColour();
+                break;
+            } else {
+                //game is not over
+                continue;
+            }
         }
     }
 

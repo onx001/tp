@@ -5,6 +5,7 @@ import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
+import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
@@ -12,6 +13,8 @@ import chessmaster.ui.TextUI;
 public class ChessBoard {
 
     public static final int SIZE = 8;
+    private boolean whiteKing = false;
+    private boolean blackKing = false;
 
     private static final String[][] STARTING_CHESSBOARD_STRING = {
             {"r", "n", "b", "q", "k", "b", "n", "r"},
@@ -152,4 +155,30 @@ public class ChessBoard {
         return this.board;
     }
 
+    public boolean isEndGame() {
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                try {
+                    Coordinate coor = new Coordinate(col, row);
+                    ChessPiece piece = getPieceAtCoor(coor);
+                    if (piece.getType().equals(King.KING_WHITE)) {
+                        whiteKing = true;
+                    } else if (piece.getType().equals(King.KING_BLACK)) {
+                        blackKing = true;
+                    }
+                } catch (NullPieceException e) {
+                    TextUI.printErrorMessage(e);
+                }
+            }
+        }
+
+        return !blackKing || !whiteKing;
+    }
+    public void announceWinningColour() {
+        if (!whiteKing) {
+            TextUI.printWinnerMessage(0);
+        } else {
+            TextUI.printWinnerMessage(1);
+        }
+    }
 }

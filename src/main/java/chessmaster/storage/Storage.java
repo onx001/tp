@@ -18,6 +18,8 @@ public class Storage {
 
     /**
      * Method to save board to file
+     *
+     * @param board takes in current board that is in play
      */
     public static void saveBoard(ChessBoard board) throws SaveBoardException {
         try (FileWriter fileWriter = new FileWriter("/tp/data/saved-game.txt")){
@@ -37,6 +39,10 @@ public class Storage {
         }
     }
 
+    /**
+     * Method to load board from file
+     *
+     */
     public static ChessBoard loadBoard() throws LoadBoardException {
         File file = new File("/tp/data/saved-game.txt");
         ChessBoard chessBoard = new ChessBoard();
