@@ -16,16 +16,16 @@ import java.util.Scanner;
 
 public class Storage {
 
-    private static String filePath;
+    private String filePath;
 
     public Storage (String filePath){
-        Storage.filePath = filePath;
+        this.filePath = filePath;
     }
 
     /**
      * Method to save board to file
      */
-    public static void saveBoard(ChessBoard board) throws SaveBoardException {
+    public void saveBoard(ChessBoard board) throws SaveBoardException {
         try (FileWriter fileWriter = new FileWriter(filePath)){
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
@@ -43,7 +43,7 @@ public class Storage {
         }
     }
 
-    public static ChessBoard loadBoard() throws LoadBoardException {
+    public ChessBoard loadBoard() throws LoadBoardException {
 //        File file = new File("/tp/data/saved-game.txt");
         File file = new File(filePath);
         ChessBoard chessBoard = new ChessBoard();
