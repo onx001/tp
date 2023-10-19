@@ -8,7 +8,8 @@ import chessmaster.game.Move;
 import chessmaster.parser.Parser;
 import chessmaster.ui.TextUI;
 import chessmaster.storage.Storage;
-
+import chessmaster.game.Game;
+import chessmaster.pieces.ChessPiece;
 
 /**
  * Main entry-point for ChessMaster application.
@@ -20,14 +21,14 @@ public class ChessMaster {
     private Storage storage;
 
     public ChessMaster(String filePath) {
-        ui = new TextUI();
+//        ui = new TextUI();
         board = new ChessBoard();
         storage = new Storage(filePath);
 
         try {
             board = storage.loadBoard();
         } catch (LoadBoardException e) {
-            ui.printErorMessage(e);
+            TextUI.printErrorMessage(e);
         }
     }
 
@@ -35,8 +36,8 @@ public class ChessMaster {
         boolean end = false;
 
         while (!end) {
-            board.showChessBoard(ui);
-            String userInputString = ui.getUserInput();
+            board.showChessBoard();
+            String userInputString = TextUI.getUserInput();
             if (Parser.isUserInputAbort(userInputString)) {
                 break; // End the game if user aborts
             }
@@ -44,7 +45,7 @@ public class ChessMaster {
                 try {
                     storage.saveBoard(board);
                 } catch (SaveBoardException e) {
-                    ui.printErorMessage(e);
+                    TextUI.printErrorMessage(e);
                 }
                 end = true;
             }
@@ -59,14 +60,14 @@ public class ChessMaster {
                 //board.checkEndState(); in chessboard
 
             } catch (ChessMasterException e) {
-                ui.printErorMessage(e);
+                TextUI.printErrorMessage(e);
             }
         }
 
 
     }
 
-    public static void main(String[] args) throws SaveBoardException, LoadBoardException {
+    public static void main(String[] args) {
 
         // String logo = "░█████╗░██╗░░██╗███████╗░██████╗░██████╗
         // ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
@@ -90,5 +91,7 @@ public class ChessMaster {
         // System.out.println(logo);
 
         new ChessMaster("/data/game.txt").run();
+        Game game = new Game("single", ChessPiece.WHITE);
+        game.run();
     }
 }

@@ -3,6 +3,8 @@ package chessmaster.pieces;
 import chessmaster.game.Coordinate;
 import chessmaster.game.ChessTile;
 
+import java.util.ArrayList;
+
 public abstract class ChessPiece {
 
     public static final int BLACK = 0;
@@ -36,6 +38,7 @@ public abstract class ChessPiece {
     protected int color;
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
+    protected boolean captured = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -50,6 +53,21 @@ public abstract class ChessPiece {
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
     public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
+
+    public Coordinate[] getFlattenedCoordinates(ChessTile[][] board) {
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
+
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (this.isMoveValid(possibleCoord, board)){
+                    flattenedCoordinates.add(possibleCoord);
+                }
+            }
+        }
+
+        return flattenedCoordinates.toArray(new Coordinate[0]);
+    }
 
     /**
      * Returns the validity of the move to the destination coordinate.
@@ -90,6 +108,7 @@ public abstract class ChessPiece {
         System.out.println();
     }
 
+
     public int getColour() {
         return color == BLACK ? ChessPiece.BLACK : ChessPiece.WHITE;
     }
@@ -109,5 +128,9 @@ public abstract class ChessPiece {
 
     protected int getColor(){
         return color;
+    }
+
+    public boolean getCaptured() {
+        return this.captured;
     }
 }
