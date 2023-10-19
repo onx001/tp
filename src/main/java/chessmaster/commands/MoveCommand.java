@@ -31,9 +31,6 @@ public class MoveCommand extends Command {
         }
 
         return false;
-
-
     }
 
-    
 }
