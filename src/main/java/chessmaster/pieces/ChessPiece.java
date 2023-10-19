@@ -36,6 +36,7 @@ public abstract class ChessPiece {
     protected int color;
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
+    protected boolean captured = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -105,5 +106,9 @@ public abstract class ChessPiece {
 
     protected int getColor(){
         return color;
+    }
+
+    protected boolean getCaptured() {
+        return this.captured;
     }
 }

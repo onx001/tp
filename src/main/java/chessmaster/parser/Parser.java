@@ -19,10 +19,10 @@ public class Parser {
      * @param in    Command entered by the user.
      * @param board Chessboard the user is currently playing on.
      */
-    public void parseCommand(String in, ChessBoard board) {
+    public void parseAndExecuteCommand(String in, ChessBoard board) {
         String commandWord = in.split(" ")[0].toLowerCase();
 
-        switch(commandWord){
+        switch(commandWord) {
             case "abort":
             default:
                 try {
