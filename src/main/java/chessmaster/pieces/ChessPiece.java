@@ -54,6 +54,21 @@ public abstract class ChessPiece {
      */
     public abstract Coordinate[][] getAvailableCoordinates(ChessTile[][] board);
 
+    public Coordinate[] getFlattenedCoordinates(ChessTile[][] board) {
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
+
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (this.isMoveValid(possibleCoord, board)){
+                    flattenedCoordinates.add(possibleCoord);
+                }
+            }
+        }
+
+        return flattenedCoordinates.toArray(new Coordinate[0]);
+    }
+
     /**
      * Returns the validity of the move to the destination coordinate.
      * @param destination
@@ -93,20 +108,6 @@ public abstract class ChessPiece {
         System.out.println();
     }
 
-    public Coordinate[] getFlattenedCoordinates(ChessTile[][] board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
-
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)){
-                    flattenedCoordinates.add(possibleCoord);
-                }
-            }
-        }
-
-        return flattenedCoordinates.toArray(new Coordinate[0]);
-    }
 
     public int getColour() {
         return color == BLACK ? ChessPiece.BLACK : ChessPiece.WHITE;
