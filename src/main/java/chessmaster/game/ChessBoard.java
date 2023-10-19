@@ -76,7 +76,7 @@ public class ChessBoard {
     }
 
     public void setTile(int row, int col, ChessTile tile) {
-        board[row][col] = tile;
+        board[col][row] = tile;
     }
 
     /**

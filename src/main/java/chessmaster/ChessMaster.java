@@ -89,6 +89,6 @@ public class ChessMaster {
 
         // System.out.println(logo);
 
-        new ChessMaster("/data/saved-game.txt").run();
+        new ChessMaster("/data/game.txt").run();
     }
 }

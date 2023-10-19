@@ -30,7 +30,7 @@ public class Storage {
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
                     try {
-                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(row, col));
+                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                         fileWriter.write(piece.toString());
                     } catch (Exception e) {
                         fileWriter.write(" ");
@@ -44,7 +44,6 @@ public class Storage {
     }
 
     public ChessBoard loadBoard() throws LoadBoardException {
-//        File file = new File("/tp/data/saved-game.txt");
         File file = new File(filePath);
         ChessBoard chessBoard = new ChessBoard();
         ChessTile[][] boardTiles;
@@ -74,10 +73,10 @@ public class Storage {
                     for (int col = 0; col < ChessBoard.SIZE; col++) {
                         String pieceString = tileRow.substring(col, col + 1);
                         if (pieceString.equals(" ")) {
-                            boardTiles[row][col] = new ChessTile();
+                            boardTiles[col][row] = new ChessTile();
                         } else {
                             ChessPiece piece = Parser.parseChessPiece(pieceString, row + 1, col + 1);
-                            boardTiles[row][col] = new ChessTile(piece);
+                            boardTiles[col][row] = new ChessTile(piece);
                         }
                     }
                 }
@@ -89,7 +88,7 @@ public class Storage {
         }
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
-                chessBoard.setTile(row, col, boardTiles[row][col]);
+                chessBoard.setTile(col, row, boardTiles[col][row]);
             }
         }
         return chessBoard;
