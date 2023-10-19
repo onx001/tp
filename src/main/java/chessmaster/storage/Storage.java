@@ -19,6 +19,7 @@ public class Storage {
 
     public Storage(String filePath){
         Storage.filePath = filePath;
+        assert filePath != null : "File path cannot be null";
     }
     /**
      * Method to save board to file
@@ -26,6 +27,7 @@ public class Storage {
      * @param board takes in current board that is in play
      */
     public static void saveBoard(ChessBoard board) throws SaveBoardException {
+
         try (FileWriter fileWriter = new FileWriter(filePath)){
             for (int row = 0; row < 8; row++) {
                 for (int col = 0; col < 8; col++) {
@@ -51,6 +53,7 @@ public class Storage {
         File file = new File(filePath);
         ChessBoard chessBoard = new ChessBoard();
         ChessTile[][] boardTiles;
+        assert filePath != null : "File path cannot be null";
 
         if (!file.exists()) {
             try {
