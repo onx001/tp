@@ -4,6 +4,7 @@ import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
 
@@ -22,7 +23,7 @@ public class ChessBoard {
             {"R", "N", "B", "Q", "K", "B", "N", "R"},
     };
 
-    private ChessTile[][] board = new ChessTile[SIZE][SIZE];
+    private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     public ChessBoard() {
         for (int row = 0; row < SIZE; row++) {
@@ -47,9 +48,10 @@ public class ChessBoard {
         }
     }
 
-    public void showChessBoard(TextUI ui) {
-        ui.printChessBoardHeader();
-        ui.printChessBoardDivider();
+    public void showChessBoard() {
+        System.out.println();
+        TextUI.printChessBoardHeader();
+        TextUI.printChessBoardDivider();
         for (int i = 0; i < board.length; i++) {
             ChessTile[] row = board[i];
             StringBuilder rowString = new StringBuilder();
@@ -59,8 +61,9 @@ public class ChessBoard {
             }
 
             int rowNum = (i - 8) * -1;
-            ui.printChessBoardRow(rowNum, rowString.toString());
+            TextUI.printChessBoardRow(rowNum, rowString.toString());
         }
+        System.out.println();
     }
 
     private ChessTile getTileAtCoor(Coordinate coor) {
@@ -76,7 +79,7 @@ public class ChessBoard {
     }
 
     public void setTile(int row, int col, ChessTile tile) {
-        board[row][col] = tile;
+        board[col][row] = tile;
     }
 
     /**
@@ -86,6 +89,10 @@ public class ChessBoard {
      * @throws InvalidMoveException If the move is not valid according to the game rules.
      */
     public void executeMove(Move move) throws InvalidMoveException {
+        if (move.isEmpty()) {
+            throw new InvalidMoveException();
+        }
+
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
@@ -98,6 +105,31 @@ public class ChessBoard {
         chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty();
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
+    }
+
+    public boolean canPromote(Move move) {
+        ChessPiece piece = move.getPiece();
+        int colour = piece.getColour();
+        Coordinate endCoord = move.getTo();
+        boolean isPawn = piece.toString().equalsIgnoreCase(Pawn.PAWN_WHITE);
+
+        if(!isPawn){
+            return false;
+        }
+
+        if(colour == ChessPiece.WHITE){
+            return endCoord.getY() == 7;
+        }
+
+        if(colour == ChessPiece.BLACK){
+            return endCoord.getY() == 0;
+        }
+
+        return false;
+    }
+
+    public ChessTile[][] getBoard() {
+        return this.board;
     }
 
 }
