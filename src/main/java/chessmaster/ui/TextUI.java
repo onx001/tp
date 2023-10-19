@@ -85,4 +85,12 @@ public final class TextUI {
         out.println(e.getMessage());
     }
 
+    public static void printWinnerMessage(int colour){
+        if (colour == 0) {
+            out.println("Black Wins!");
+        }else {
+            out.println("Black Wins!");
+        }
+    }
+
 }
