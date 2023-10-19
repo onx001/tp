@@ -102,9 +102,28 @@ public class ChessBoard {
             throw new InvalidMoveException();
         }
 
+        chessPiece.setHasMoved(true);
         chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty();
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
+
+        if (move.isLeftCastling()) {
+            Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
+            Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
+            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+            rook.setHasMoved(true);
+            rook.updatePosition(rookDestCoor);
+            getTileAtCoor(rookStartCoor).setTileEmpty();
+            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+        } else if (move.isRightCastling()) {
+            Coordinate rookStartCoor = new Coordinate(startCoor.getX() + 3, startCoor.getY());
+            Coordinate rookDestCoor = new Coordinate(startCoor.getX() + 1, startCoor.getY());
+            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+            rook.setHasMoved(true);
+            rook.updatePosition(rookDestCoor);
+            getTileAtCoor(rookStartCoor).setTileEmpty();
+            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+        }
     }
 
     public boolean canPromote(Move move) {

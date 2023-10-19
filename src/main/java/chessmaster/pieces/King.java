@@ -39,6 +39,7 @@ public class King extends ChessPiece {
                             board[position.getY()][position.getX()-4].getChessPiece() != null &&
                             board[position.getY()][position.getX()-4].getChessPiece().hasMoved == false){
                         result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        this.setIsLeftCastling(true);
                     }
                 } else if (dir == 9){
                     if (board[position.getY()][position.getX()+1].getChessPiece() == null &&
@@ -46,6 +47,7 @@ public class King extends ChessPiece {
                             board[position.getY()][position.getX()+3].getChessPiece() != null &&
                             board[position.getY()][position.getX()+3].getChessPiece().hasMoved == false){
                         result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
+                        this.setIsRightCastling(true);
                     }
                 }
             }
