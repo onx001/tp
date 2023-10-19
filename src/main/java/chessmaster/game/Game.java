@@ -1,12 +1,8 @@
 package chessmaster.game;
 
-import chessmaster.exceptions.ChessMasterException;
-import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.parser.Parser;
-import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-import chessmaster.user.Player;
+
 
 public class Game {
 
@@ -20,18 +16,19 @@ public class Game {
 
     private ChessBoard board;
 
-    private final String logo = "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-     + System.lineSeparator() +
-     "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-     + System.lineSeparator() +
-     "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-     + System.lineSeparator() +
-     "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-     + System.lineSeparator() +
-     "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-     + System.lineSeparator() +
-     "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-     + System.lineSeparator();
+    private final String logo =
+        "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
+        + System.lineSeparator() +
+        "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
+        + System.lineSeparator() +
+        "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
+        + System.lineSeparator() +
+        "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
+        + System.lineSeparator() +
+        "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
+        + System.lineSeparator() +
+        "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+        + System.lineSeparator();
 
     public Game(String mode, int player1Colour) {
         board = new ChessBoard();
@@ -67,6 +64,9 @@ public class Game {
             } else if (move.isEmpty()) {
                 // if the move was not correctly parsed, move to the next iteration of the game
                 continue;
+            } else if (move.getPiece().getColour() != this.human.getColour()) {
+                System.out.println("You're moving for the wrong side! Try moving one of your pieces instead." );
+                continue;
             }
 
             // 3. Execute the next move.
@@ -77,8 +77,8 @@ public class Game {
             }
 
             // 4. CPU plays
-            // Move randomMove = cpu.getRandomMove(board);
-            // cpu.move(randomMove, board);
+            Move randomMove = cpu.getRandomMove(board);
+            cpu.move(randomMove, board);
 
             // Todo: Check game state
         }

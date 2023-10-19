@@ -4,6 +4,7 @@ import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
 
@@ -48,6 +49,7 @@ public class ChessBoard {
     }
 
     public void showChessBoard() {
+        System.out.println();
         TextUI.printChessBoardHeader();
         TextUI.printChessBoardDivider();
         for (int i = 0; i < board.length; i++) {
@@ -61,6 +63,7 @@ public class ChessBoard {
             int rowNum = (i - 8) * -1;
             TextUI.printChessBoardRow(rowNum, rowString.toString());
         }
+        System.out.println();
     }
 
     private ChessTile getTileAtCoor(Coordinate coor) {
@@ -102,6 +105,27 @@ public class ChessBoard {
         chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty();
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
+    }
+
+    public boolean canPromote(Move move) {
+        ChessPiece piece = move.getPiece();
+        int colour = piece.getColour();
+        Coordinate endCoord = move.getTo();
+        boolean isPawn = piece.toString().equalsIgnoreCase(Pawn.PAWN_WHITE);
+
+        if(!isPawn){
+            return false;
+        }
+
+        if(colour == ChessPiece.WHITE){
+            return endCoord.getY() == 7;
+        }
+
+        if(colour == ChessPiece.BLACK){
+            return endCoord.getY() == 0;
+        }
+
+        return false;
     }
 
     public ChessTile[][] getBoard() {
