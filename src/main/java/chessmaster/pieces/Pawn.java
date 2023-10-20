@@ -3,7 +3,6 @@ package chessmaster.pieces;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
-import chessmaster.game.ChessTile;
 
 public class Pawn extends ChessPiece {
     public static final String PAWN_WHITE = "p"; // ♙
