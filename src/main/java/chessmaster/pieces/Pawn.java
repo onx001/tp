@@ -38,60 +38,58 @@ public class Pawn extends ChessPiece {
 
         Coordinate[][] result = new Coordinate[directions.length][0];
 
-        
-
         for (int dir = 0; dir < directions.length; dir++) {
             int offsetX = directions[dir][0];
             int offsetY = directions[dir][1];
 
             try {
                 switch (dir) {
-                    case 0:
-                        if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                            ChessPiece destPiece = board.getPieceAtCoor(position
-                                    .addOffsetToCoordinate(offsetX,offsetY));
-                            if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
-                                    && destPiece.getColour() != this.color) {
-                                result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
-                            }
+                case 0:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board.getPieceAtCoor(position
+                                .addOffsetToCoordinate(offsetX,offsetY));
+                        if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
+                                && destPiece.getColour() != this.color) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
                         }
-                        break;
-                    case 1:
-                        if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                            ChessPiece destPiece = board.getPieceAtCoor(position
-                                    .addOffsetToCoordinate(offsetX,offsetY));
-                            if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
-                                    && destPiece.getColour() != this.color) {
-                                result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
-                            }
+                    }
+                    break;
+                case 1:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board.getPieceAtCoor(position
+                                .addOffsetToCoordinate(offsetX,offsetY));
+                        if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
+                                && destPiece.getColour() != this.color) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
                         }
-                        break;
-                    case 2:
-                        if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                            ChessPiece destPiece = board.getPieceAtCoor(position
-                                    .addOffsetToCoordinate(offsetX,offsetY));
-                            if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
-                                    && destPiece.getColour() != this.color) {
-                                result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
-                            }
+                    }
+                    break;
+                case 2:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board.getPieceAtCoor(position
+                                .addOffsetToCoordinate(offsetX,offsetY));
+                        if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
+                                && destPiece.getColour() != this.color) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
                         }
-                        break;
-                    case 3:
-                        if (position.isOffsetWithinBoard(offsetX, offsetY)) {;
-                            ChessPiece destPiece = board.getPieceAtCoor(position
-                                    .addOffsetToCoordinate(offsetX,offsetY));
-                            Coordinate blockPos = position.addOffsetToCoordinate(0, checkBlockDir * -1);
-                            ChessPiece blockPiece = board.getPieceAtCoor(blockPos);
-                            if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
-                                    && !hasMoved
-                                    && blockPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)) {
-                                result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
-                            }
+                    }
+                    break;
+                case 3:
+                    if (position.isOffsetWithinBoard(offsetX, offsetY)) {
+                        ChessPiece destPiece = board.getPieceAtCoor(position
+                                .addOffsetToCoordinate(offsetX,offsetY));
+                        Coordinate blockPos = position.addOffsetToCoordinate(0, checkBlockDir * -1);
+                        ChessPiece blockPiece = board.getPieceAtCoor(blockPos);
+                        if (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
+                                && !hasMoved
+                                && blockPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)) {
+                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX,offsetY)};
                         }
-                        break;
+                    }
+                    break;
 
-                    default:
-                        break;
+                default:
+                    break;
                 }
             } catch (NullPieceException e) {
                 e.printStackTrace();

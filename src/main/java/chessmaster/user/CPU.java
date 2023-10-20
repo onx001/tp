@@ -9,6 +9,8 @@ import java.util.Random;
 
 public class CPU extends Player {
 
+    private static final int MAX_LOOP_ITERATIONS = 16;
+
     private static final int RANDOM_SEED = 100;
     private final Random rand = new Random(RANDOM_SEED);
 
@@ -30,7 +32,6 @@ public class CPU extends Player {
 
         // Need a cap on the number of pieces it checks to prevent an infinite loop when no moves are possible
         // on the CPUs side.
-        int MAX_LOOP_ITERATIONS = 16;
         int iter = 0;
         while (iter < MAX_LOOP_ITERATIONS
                 && (randomPiece.getCaptured()

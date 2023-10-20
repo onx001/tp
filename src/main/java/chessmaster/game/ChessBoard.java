@@ -13,8 +13,6 @@ import chessmaster.ui.TextUI;
 public class ChessBoard {
 
     public static final int SIZE = 8;
-    private boolean whiteKing = false;
-    private boolean blackKing = false;
 
     private static final String[][] STARTING_CHESSBOARD_STRING = {
             {"r", "n", "b", "q", "k", "b", "n", "r"},
@@ -26,6 +24,9 @@ public class ChessBoard {
             {"P", "P", "P", "P", "P", "P", "P", "P"},
             {"R", "N", "B", "Q", "K", "B", "N", "R"},
     };
+
+    private boolean whiteKing = false;
+    private boolean blackKing = false;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 

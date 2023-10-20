@@ -23,9 +23,12 @@ public abstract class Player {
     protected Parser parser;
 
     /**
-     * A player is a dependency of the Game class. This class stores all move history, all current pieces, and colour
-     * of each player. It also contains functions to request input from the user for the next move and to execute
+     * A player is a dependency of the Game class. This class stores all move
+     * history, all current pieces, and colour
+     * of each player. It also contains functions to request input from the user for
+     * the next move and to execute
      * that move.
+     * 
      * @param colour The ChessPiece.Colour desired for this player.
      */
     public Player(int colour) {
@@ -36,6 +39,7 @@ public abstract class Player {
 
     /**
      * Adds a given move into the Player's move history.
+     * 
      * @param move The given move to be added to history.
      */
     public void addMove(Move move) {
@@ -43,18 +47,22 @@ public abstract class Player {
     }
 
     /**
-     * Adds all the player's pieces to their Piece array. Run once during setup of the game.
+     * Adds all the player's pieces to their Piece array. Run once during setup of
+     * the game.
+     * 
      * @param board The new ChessBoard containing all 32 chess pieces.
      */
     public void initialisePieces(ChessBoard board) {
-        int row, col;
+        int row;
+        int col;
+
         if (this.colour == ChessPiece.BLACK) {
             row = 6;
         } else {
             row = 0;
         }
 
-        for (int row_temp = row; row < row_temp + 2; row++) {
+        for (int tempRow = row; row < tempRow + 2; row++) {
             for (col = 0; col < ChessBoard.SIZE; col++) {
                 try {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
@@ -67,7 +75,8 @@ public abstract class Player {
     }
 
     /**
-     * Prints out all the player's pieces including whether it has been captured or not.
+     * Prints out all the player's pieces including whether it has been captured or
+     * not.
      * Used for debugging purposes only.
      */
     public void printAllPieces() {
@@ -83,18 +92,20 @@ public abstract class Player {
     }
 
     /**
-     * High-level function which calls necessary APIs to request user input and parse it into a Move object.
+     * High-level function which calls necessary APIs to request user input and
+     * parse it into a Move object.
+     * 
      * @param board The board which to make the move on.
-     * @return null if the user inputs "abort", an empty Move if an error occurred during parsing, otherwise returns
-     * the requested Move object.
+     * @return null if the user inputs "abort", an empty Move if an error occurred
+     *         during parsing,
+     *         otherwise return the requested Move object.
      */
     public Move getNextMove(ChessBoard board) {
-        // Get user input
-        String input = TextUI.getUserInput();
+        String input = TextUI.getUserInput(); // Get user input
         try {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
-            if (command.execute()){
+            if (command.execute()) {
                 return null;
             } else {
                 return command.getMove();
@@ -102,14 +113,13 @@ public abstract class Player {
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }
-
-
         return new Move();
     }
 
     /**
      * Allows a player to execute a move and add it to their history.
-     * @param move The move to be executed.
+     * 
+     * @param move  The move to be executed.
      * @param board The board the move is to be executed on.
      * @return true on success, false on InvalidMoveException
      */
@@ -131,10 +141,12 @@ public abstract class Player {
     }
 
     /**
-     * Prompts the user to enter a type of piece to promote a pawn to. If the promotion is not successful,
-     * the user is prompted again. If successful, the pawn is replaced with the new piece.
+     * Prompts the user to enter a type of piece to promote a pawn to. If the
+     * promotion is not successful,
+     * the user is prompted again. If successful, the pawn is replaced with the new
+     * piece.
      *
-     * @param board Chessboard that the game is being played on.
+     * @param board       Chessboard that the game is being played on.
      * @param promoteFrom The piece being promoted.
      */
     private void promote(ChessBoard board, ChessPiece promoteFrom) {
@@ -152,9 +164,9 @@ public abstract class Player {
             board.setTile(coord.getY(), coord.getX(), promoted);
 
             promoteFailure = promoteTo.toString().equalsIgnoreCase(Pawn.PAWN_WHITE);
-            if(promoteFailure){
+            if (promoteFailure) {
                 TextUI.printPromoteInvalidMessage();
             }
-        } while(promoteFailure);
+        } while (promoteFailure);
     }
 }
