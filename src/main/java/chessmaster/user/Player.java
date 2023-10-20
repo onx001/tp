@@ -94,11 +94,11 @@ public abstract class Player {
         try {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
-            if (command.execute()){
-                return null;
-            } else {
+            //if (command.execute()){
+                //return null;
+            //} else {
                 return command.getMove();
-            }
+            //}
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }

@@ -161,9 +161,9 @@ public class ChessBoard {
                 try {
                     Coordinate coor = new Coordinate(col, row);
                     ChessPiece piece = getPieceAtCoor(coor);
-                    if (piece.getType().equals(King.KING_WHITE)) {
+                    if (piece.toString().equals(King.KING_WHITE)) {
                         whiteKing = true;
-                    } else if (piece.getType().equals(King.KING_BLACK)) {
+                    } else if (piece.toString().equals(King.KING_BLACK)) {
                         blackKing = true;
                     }
                 } catch (NullPieceException e) {
