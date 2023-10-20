@@ -24,7 +24,7 @@ public class ChessBoard {
             {"P", "P", "P", "P", "P", "P", "P", "P"},
             {"R", "N", "B", "Q", "K", "B", "N", "R"},
     };
-
+    
     private boolean whiteKing = false;
     private boolean blackKing = false;
 
@@ -36,6 +36,7 @@ public class ChessBoard {
                 String chessPieceString = STARTING_CHESSBOARD_STRING[row][col];
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);
                 board[row][col] = new ChessTile(initialPiece);
+                assert(board[row][col] != null);
             }
         }
     }
@@ -162,9 +163,9 @@ public class ChessBoard {
                 try {
                     Coordinate coor = new Coordinate(col, row);
                     ChessPiece piece = getPieceAtCoor(coor);
-                    if (piece.getType().equals(King.KING_WHITE)) {
+                    if (piece.toString().equals(King.KING_WHITE)) {
                         whiteKing = true;
-                    } else if (piece.getType().equals(King.KING_BLACK)) {
+                    } else if (piece.toString().equals(King.KING_BLACK)) {
                         blackKing = true;
                     }
                 } catch (NullPieceException e) {

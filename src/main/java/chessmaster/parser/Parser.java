@@ -18,6 +18,7 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Rook;
 
+
 public class Parser {
 
     private static final String ABORT_COMMAND = "abort";
@@ -121,7 +122,7 @@ public class Parser {
         case Rook.ROOK_WHITE:
             return new Rook(row, col, ChessPiece.WHITE);
         default:
-            return new EmptyPiece(row, col, ChessPiece.BLACK);
+            return new EmptyPiece(row, col, ChessPiece.WHITE);
         }
     }
 

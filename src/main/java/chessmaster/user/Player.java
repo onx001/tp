@@ -20,7 +20,6 @@ public abstract class Player {
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
     protected int colour;
-    protected Parser parser;
 
     /**
      * A player is a dependency of the Game class. This class stores all move
@@ -97,19 +96,14 @@ public abstract class Player {
      * 
      * @param board The board which to make the move on.
      * @return null if the user inputs "abort", an empty Move if an error occurred
-     *         during parsing,
-     *         otherwise return the requested Move object.
+     *         during parsing, otherwise return the requested Move object.
      */
     public Move getNextMove(ChessBoard board) {
         String input = TextUI.getUserInput(); // Get user input
         try {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
-            if (command.execute()) {
-                return null;
-            } else {
-                return command.getMove();
-            }
+            return command.getMove();
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }
