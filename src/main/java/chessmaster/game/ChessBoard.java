@@ -34,6 +34,7 @@ public class ChessBoard {
                 String chessPieceString = STARTING_CHESSBOARD_STRING[row][col];
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);
                 board[row][col] = new ChessTile(initialPiece);
+                assert(board[row][col] != null);
             }
         }
     }
