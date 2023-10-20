@@ -2,7 +2,6 @@ package chessmaster.pieces;
 
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class King extends ChessPiece {
@@ -50,7 +49,7 @@ public class King extends ChessPiece {
                                 !board.getPieceAtCoor(pos4).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 !board.getPieceAtCoor(pos4).hasMoved) {
                             result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
-                          this.setIsLeftCastling(true);
+                            this.setIsLeftCastling(true);
                         }
                     } else if (dir == 9) {
                         Coordinate pos1 = position.addOffsetToCoordinate(+1, 0);
@@ -62,7 +61,7 @@ public class King extends ChessPiece {
                                 !board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
                                 !board.getPieceAtCoor(pos3).hasMoved) {
                             result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
-                          this.setIsRightCastling(true);
+                            this.setIsRightCastling(true);
                         }
 
                     }
@@ -83,8 +82,8 @@ public class King extends ChessPiece {
     }
 
     @Override
-   public String getType() {
+    public String getType() {
         return KING_WHITE;
-   }
+    }
 
 }

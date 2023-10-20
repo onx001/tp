@@ -1,7 +1,6 @@
 package chessmaster.pieces;
 
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class EmptyPiece extends ChessPiece{

@@ -2,7 +2,6 @@ package chessmaster.pieces;
 
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class Knight extends ChessPiece {

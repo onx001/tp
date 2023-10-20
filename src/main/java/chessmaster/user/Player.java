@@ -20,7 +20,6 @@ public abstract class Player {
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
     protected int colour;
-    protected Parser parser;
 
     /**
      * A player is a dependency of the Game class. This class stores all move history, all current pieces, and colour
@@ -47,14 +46,15 @@ public abstract class Player {
      * @param board The new ChessBoard containing all 32 chess pieces.
      */
     public void initialisePieces(ChessBoard board) {
-        int row, col;
+        int row;
+        int col;
         if (this.colour == ChessPiece.BLACK) {
             row = 6;
         } else {
             row = 0;
         }
 
-        for (int row_temp = row; row < row_temp + 2; row++) {
+        for (int rowTemp = row; row < rowTemp + 2; row++) {
             for (col = 0; col < ChessBoard.SIZE; col++) {
                 try {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
@@ -86,7 +86,7 @@ public abstract class Player {
      * High-level function which calls necessary APIs to request user input and parse it into a Move object.
      * @param board The board which to make the move on.
      * @return null if the user inputs "abort", an empty Move if an error occurred during parsing, otherwise returns
-     * the requested Move object.
+     *         the requested Move object.
      */
     public Move getNextMove(ChessBoard board) {
         // Get user input
@@ -94,11 +94,7 @@ public abstract class Player {
         try {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
-            if (command.execute()){
-                return null;
-            } else {
-                return command.getMove();
-            }
+            return command.getMove();
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }
