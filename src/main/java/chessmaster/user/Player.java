@@ -11,6 +11,7 @@ import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
+import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
 
 import java.util.ArrayList;
@@ -103,6 +104,9 @@ public abstract class Player {
         try {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
+            if (command instanceof AbortCommand) {
+                return null;
+            }
             return command.getMove();
         
         } catch (ParseCoordinateException | NullPieceException e) {
