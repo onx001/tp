@@ -121,7 +121,7 @@ public class Parser {
         case Rook.ROOK_WHITE:
             return new Rook(row, col, ChessPiece.WHITE);
         default:
-            return new EmptyPiece(row, col, ChessPiece.BLACK);
+            return new EmptyPiece(row, col, ChessPiece.WHITE);
         }
     }
 
