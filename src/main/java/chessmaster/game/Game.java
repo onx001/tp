@@ -1,8 +1,8 @@
 package chessmaster.game;
 
-import chessmaster.exceptions.LoadBoardException;
-import chessmaster.storage.Storage;
-import chessmaster.ui.TextUI;
+// import chessmaster.exceptions.LoadBoardException;
+// import chessmaster.storage.Storage;
+// import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 
@@ -17,31 +17,31 @@ public class Game {
     private Human human;
     private CPU cpu;
     private ChessBoard board;
-    private Storage storage;
+    // private Storage storage;
 
-    private final String logo =
-        "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-        + System.lineSeparator() +
-        "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-        + System.lineSeparator() +
-        "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-        + System.lineSeparator() +
-        "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-        + System.lineSeparator() +
-        "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-        + System.lineSeparator() +
-        "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-        + System.lineSeparator();
+    // private final String logo =
+    //     "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
+    //     + System.lineSeparator() +
+    //     "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
+    //     + System.lineSeparator() +
+    //     "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
+    //     + System.lineSeparator() +
+    //     "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
+    //     + System.lineSeparator() +
+    //     "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
+    //     + System.lineSeparator() +
+    //     "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+    //     + System.lineSeparator();
 
     public Game(String mode, int player1Colour, String filePath) {
         board = new ChessBoard();
-        storage = new Storage(filePath);
+        // storage = new Storage(filePath);
 
-        try {
-            board = storage.loadBoard();
-        } catch (LoadBoardException e) {
-            TextUI.printErrorMessage(e);
-        }
+        // try {
+        //     board = storage.loadBoard();
+        // } catch (LoadBoardException e) {
+        //     TextUI.printErrorMessage(e);
+        // }
 
         switch (mode) {
         case "multi":
@@ -57,7 +57,7 @@ public class Game {
     }
 
     public void run() {
-        System.out.println(logo);
+        // System.out.println(logo);
 
         while (true) {
 

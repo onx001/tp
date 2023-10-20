@@ -38,8 +38,6 @@ public class Pawn extends ChessPiece {
 
         Coordinate[][] result = new Coordinate[directions.length][0];
 
-        
-
         for (int dir = 0; dir < directions.length; dir++) {
             int offsetX = directions[dir][0];
             int offsetY = directions[dir][1];

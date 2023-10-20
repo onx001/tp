@@ -18,7 +18,6 @@ import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Rook;
 
-
 public class Parser {
 
     private static final String ABORT_COMMAND = "abort";

@@ -69,8 +69,6 @@ public class King extends ChessPiece {
             } catch (NullPieceException e){
                 e.printStackTrace();
             }
-
-            
         }
 
         return result;

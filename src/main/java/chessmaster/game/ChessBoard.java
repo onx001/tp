@@ -23,6 +23,7 @@ public class ChessBoard {
             {"P", "P", "P", "P", "P", "P", "P", "P"},
             {"R", "N", "B", "Q", "K", "B", "N", "R"},
     };
+    
     private boolean whiteKing = false;
     private boolean blackKing = false;
 

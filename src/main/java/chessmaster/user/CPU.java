@@ -9,7 +9,10 @@ import java.util.Random;
 
 public class CPU extends Player {
 
-    private final Random rand = new Random();
+    private static final int MAX_LOOP_ITERATIONS = 16;
+
+    private static final int RANDOM_SEED = 100;
+    private final Random rand = new Random(RANDOM_SEED);
 
     public CPU(int colour) {
         super(colour);
@@ -29,9 +32,8 @@ public class CPU extends Player {
 
         // Need a cap on the number of pieces it checks to prevent an infinite loop when no moves are possible
         // on the CPUs side.
-        int maxLoopIterations = 16;
         int iter = 0;
-        while (iter < maxLoopIterations
+        while (iter < MAX_LOOP_ITERATIONS
                 && (randomPiece.getCaptured()
                 || randomPiece.getFlattenedCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
@@ -53,8 +55,8 @@ public class CPU extends Player {
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
         Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
-
-        Coordinate randomDestination = allPossibleMoves[rand.nextInt(allPossibleMoves.length)];
+        int randIndex = rand.nextInt(allPossibleMoves.length);
+        Coordinate randomDestination = allPossibleMoves[randIndex];
         return new Move(piece.getPosition(), randomDestination, piece);
     }
 
