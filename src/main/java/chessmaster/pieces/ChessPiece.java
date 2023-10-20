@@ -3,7 +3,6 @@ package chessmaster.pieces;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
-import chessmaster.game.ChessTile;
 
 import java.util.ArrayList;
 

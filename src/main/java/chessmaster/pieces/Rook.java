@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 
 public class Rook extends ChessPiece {

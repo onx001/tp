@@ -29,9 +29,9 @@ public class CPU extends Player {
 
         // Need a cap on the number of pieces it checks to prevent an infinite loop when no moves are possible
         // on the CPUs side.
-        int MAX_LOOP_ITERATIONS = 16;
+        int maxLoopIterations = 16;
         int iter = 0;
-        while (iter < MAX_LOOP_ITERATIONS
+        while (iter < maxLoopIterations
                 && (randomPiece.getCaptured()
                 || randomPiece.getFlattenedCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
