@@ -1,15 +1,12 @@
 package chessmaster.parser;
 
+import chessmaster.commands.*;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.pieces.*;
 import chessmaster.game.Move;
-import chessmaster.commands.Command;
-import chessmaster.commands.MoveCommand;
-import chessmaster.commands.AbortCommand;
-import chessmaster.commands.HelpCommand;
 
 
 public class Parser {
