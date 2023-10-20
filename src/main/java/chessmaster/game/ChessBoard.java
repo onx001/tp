@@ -13,7 +13,6 @@ import chessmaster.ui.TextUI;
 public class ChessBoard {
 
     public static final int SIZE = 8;
-
     private static final String[][] STARTING_CHESSBOARD_STRING = {
             {"r", "n", "b", "q", "k", "b", "n", "r"},
             {"p", "p", "p", "p", "p", "p", "p", "p"},

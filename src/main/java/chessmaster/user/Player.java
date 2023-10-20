@@ -54,7 +54,7 @@ public abstract class Player {
     public void initialisePieces(ChessBoard board) {
         int row;
         int col;
-
+        
         if (this.colour == ChessPiece.BLACK) {
             row = 6;
         } else {
@@ -104,6 +104,7 @@ public abstract class Player {
             Parser parser = new Parser();
             Command command = parser.parseCommand(input, board);
             return command.getMove();
+        
         } catch (ParseCoordinateException | NullPieceException e) {
             TextUI.printErrorMessage(e);
         }
