@@ -9,7 +9,8 @@ import java.util.Random;
 
 public class CPU extends Player {
 
-    private final Random rand = new Random();
+    private static final int RANDOM_SEED = 100;
+    private final Random rand = new Random(RANDOM_SEED);
 
     public CPU(int colour) {
         super(colour);
@@ -53,8 +54,8 @@ public class CPU extends Player {
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
         Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
-
-        Coordinate randomDestination = allPossibleMoves[rand.nextInt(allPossibleMoves.length)];
+        int randIndex = rand.nextInt(allPossibleMoves.length);
+        Coordinate randomDestination = allPossibleMoves[randIndex];
         return new Move(piece.getPosition(), randomDestination, piece);
     }
 
