@@ -19,15 +19,15 @@ public class MoveCommand extends Command {
         this.to = to;
     }
     @Override
-    public boolean execute() {
+    public boolean execute() throws InvalidMoveException, NullPieceException{
         try{
             ChessPiece relevantPiece = board.getPieceAtCoor(from);
             Move move = new Move(from, to, relevantPiece);
             board.executeMove(move);
         } catch (InvalidMoveException e){
-            System.out.println(e.getMessage());
+            throw new InvalidMoveException(e.getMessage());
         } catch (NullPieceException e){
-            System.out.println("No piece at the coordinate");
+            throw new NullPieceException(e.getMessage());
         }
 
         return false;
