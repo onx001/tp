@@ -99,7 +99,7 @@ public abstract class Player {
      * @return null if the user inputs "abort", an empty Move if an error occurred
      *         during parsing, otherwise return the requested Move object.
      */
-    public Move getNextMove(ChessBoard board) {
+    public Move getNextMove(ChessBoard board) throws InvalidMoveException, NullPieceException, ParseCoordinateException{
         String input = TextUI.getUserInput(); // Get user input
         try {
             Parser parser = new Parser();

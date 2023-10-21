@@ -6,6 +6,11 @@ package chessmaster.game;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 
+import chessmaster.ui.TextUI;
+import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.NullPieceException;
+import chessmaster.exceptions.ParseCoordinateException;
+
 
 public class Game {
 
@@ -67,7 +72,13 @@ public class Game {
             // 2. Get the next move.
             // In v1.0 the human is always white, so they will always go first
             // But this needs to be changed in future versions
-            Move move = human.getNextMove(board);
+            Move move = null;
+            try {
+                move = human.getNextMove(board);
+            } catch (InvalidMoveException | NullPieceException | ParseCoordinateException e) {
+                TextUI.printErrorMessage(e);
+            }
+
             if (move == null) {
                 // user has entered "abort"
                 break;
