@@ -1,20 +1,16 @@
 package chessmaster.commands;
 
-import chessmaster.game.Move;
+public class HelpCommand extends Command {
 
-public class HelpCommand extends Command{
+    public static final String HELP_COMAMND_STRING = "help";
 
-    public HelpCommand() {
-    }
-
-    @Override
-    public boolean execute() {
-        return false;
-    }
+    private static final String[] HELP_STRINGS = { 
+        "Seems like you need some help, here are the following commands to play: "
+    };
 
     @Override
-    public Move getMove() {
-        return new Move();
+    public CommandResult execute() {
+        return new CommandResult(HELP_STRINGS);
     }
-    
+
 }

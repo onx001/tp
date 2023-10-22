@@ -14,8 +14,8 @@ public class CPU extends Player {
     private static final int RANDOM_SEED = 100;
     private final Random rand = new Random(RANDOM_SEED);
 
-    public CPU(int colour) {
-        super(colour);
+    public CPU(int colour, ChessBoard board) {
+        super(colour, board);
     }
 
     /**
@@ -34,7 +34,7 @@ public class CPU extends Player {
         // on the CPUs side.
         int iter = 0;
         while (iter < MAX_LOOP_ITERATIONS
-                && (randomPiece.getCaptured()
+                && (randomPiece.getIsCaptured()
                 || randomPiece.getFlattenedCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
             iter++;

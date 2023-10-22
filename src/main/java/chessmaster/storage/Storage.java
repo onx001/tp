@@ -51,7 +51,7 @@ public class Storage {
      */
     public static ChessBoard loadBoard() throws LoadBoardException {
         File file = new File(filePath);
-        ChessBoard chessBoard = new ChessBoard();
+        ChessBoard chessBoard = new ChessBoard(ChessPiece.WHITE);
         ChessTile[][] boardTiles;
         assert filePath != null : "File path cannot be null";
 

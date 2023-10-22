@@ -3,9 +3,11 @@ package chessmaster.ui;
 import java.io.PrintStream;
 import java.util.Scanner;
 
+import chessmaster.commands.CommandResult;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
+import chessmaster.pieces.ChessPiece;
 
 public final class TextUI {
 
@@ -26,7 +28,7 @@ public final class TextUI {
      * Prompts for the command and reads the text entered by the user.
      * Ignores empty, pure whitespace, and comment lines.
      * 
-     * @return command (full line) entered by the user
+     * @return user input string in LOWER case
      */
     public static String getUserInput() {
         String fullInputLine = scanner.nextLine().trim();
@@ -36,7 +38,7 @@ public final class TextUI {
             fullInputLine = scanner.nextLine();
         }
 
-        return fullInputLine;
+        return fullInputLine.toLowerCase();
     }
 
     /**
@@ -81,15 +83,22 @@ public final class TextUI {
         out.println("");
     }
 
+    public static void printCommandResult(CommandResult result) {
+        String[] messages = result.getMessageStrings();
+        for (String message : messages) {
+            out.println(message);
+        }
+    }
+
     public static void printErrorMessage(Exception e) {
         out.println(e.getMessage());
     }
 
     public static void printWinnerMessage(int colour){
-        if (colour == 0) {
-            out.println("Black Wins!");
-        }else {
-            out.println("Black Wins!");
+        if (colour == ChessPiece.BLACK) {
+            out.println("BLACK Wins!");
+        } else {
+            out.println("WHITE Wins!");
         }
     }
 

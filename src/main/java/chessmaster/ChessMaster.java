@@ -9,7 +9,7 @@ import chessmaster.pieces.ChessPiece;
 public class ChessMaster {
 
     public static void main(String[] args) {
-        Game game = new Game("single", ChessPiece.WHITE, "/data/newGame.txt");
+        Game game = new Game(ChessPiece.WHITE, "/data/newGame.txt");
         game.run();
     }
 }
