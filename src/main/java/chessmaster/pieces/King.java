@@ -1,6 +1,5 @@
 package chessmaster.pieces;
 
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 
@@ -23,51 +22,46 @@ public class King extends ChessPiece {
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
             int offsetX = DIRECTIONS[dir][0];
             int offsetY = DIRECTIONS[dir][1];
-            ChessPiece destPiece = null;
 
+            if (!position.isOffsetWithinBoard(offsetX, offsetY)) {
+                continue; // Possible coordinate out of board
+            }
 
-            try{
-                if (position.isOffsetWithinBoard(offsetX, offsetY)){
-                    destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
+            Coordinate newCoor = position.addOffsetToCoordinate(offsetX, offsetY);
+            ChessPiece destPiece = board.getPieceAtCoor(newCoor);
+
+            if (DIRECTIONS[dir] == CASTLE_LEFT) {
+                Coordinate pos1 = position.addOffsetToCoordinate(-1, 0);
+                Coordinate pos2 = position.addOffsetToCoordinate(-2, 0);
+                Coordinate pos3 = position.addOffsetToCoordinate(-3, 0);
+                Coordinate rookPos = position.addOffsetToCoordinate(-4, 0);
+
+                boolean hasRookMoved = board.getPieceAtCoor(rookPos).hasMoved;
+                boolean isSidesEmpty = board.getPieceAtCoor(pos1).isEmptyPiece() 
+                    && board.getPieceAtCoor(pos2).isEmptyPiece() 
+                    && board.getPieceAtCoor(pos3).isEmptyPiece();
+
+                if (isSidesEmpty && !hasRookMoved && !hasMoved) {
+                    result[dir] = new Coordinate[]{ newCoor };
                 }
 
-                if (position.isOffsetWithinBoard(offsetX, offsetY) && hasMoved && dir<8 &&
-                        (destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)
-                                || destPiece.getColour() != this.color)) {
+            } else if (DIRECTIONS[dir] == CASTLE_RIGHT) {
+                Coordinate pos1 = position.addOffsetToCoordinate(+1, 0);
+                Coordinate pos2 = position.addOffsetToCoordinate(+2, 0);
+                Coordinate rookPos = position.addOffsetToCoordinate(+3, 0);
+
+                boolean hasRookMoved = board.getPieceAtCoor(rookPos).hasMoved;
+                boolean isSidesEmpty = board.getPieceAtCoor(pos1).isEmptyPiece() 
+                    && board.getPieceAtCoor(pos2).isEmptyPiece();
+
+                if (isSidesEmpty && !hasRookMoved  && !hasMoved) {
+                    result[dir] = new Coordinate[]{ newCoor };
+                }
+                
+            } else { // Normal or capture move
+                if (destPiece.isEmptyPiece() || isOpponent(destPiece)) {
                     result[dir] = new Coordinate[] { position.addOffsetToCoordinate(offsetX, offsetY) };
-                } else if (position.isOffsetWithinBoard(offsetX, offsetY) && !hasMoved && dir>=8){
-
-                    if (dir == 8) {
-                        Coordinate pos1 = position.addOffsetToCoordinate(-1, 0);
-                        Coordinate pos2 = position.addOffsetToCoordinate(-2, 0);
-                        Coordinate pos3 = position.addOffsetToCoordinate(-3, 0);
-                        Coordinate pos4 = position.addOffsetToCoordinate(-4, 0);
-
-                        if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                !board.getPieceAtCoor(pos4).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                !board.getPieceAtCoor(pos4).hasMoved) {
-                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
-                            this.setIsLeftCastling(true);
-                        }
-                    } else if (dir == 9) {
-                        Coordinate pos1 = position.addOffsetToCoordinate(+1, 0);
-                        Coordinate pos2 = position.addOffsetToCoordinate(+2, 0);
-                        Coordinate pos3 = position.addOffsetToCoordinate(+3, 0);
-
-                        if (board.getPieceAtCoor(pos1).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                board.getPieceAtCoor(pos2).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                !board.getPieceAtCoor(pos3).getType().equals(EmptyPiece.EMPTY_PIECE) &&
-                                !board.getPieceAtCoor(pos3).hasMoved) {
-                            result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
-                            this.setIsRightCastling(true);
-                        }
-
-                    }
                 }
-            } catch (NullPieceException e){
-                e.printStackTrace();
             }
         }
 
@@ -77,11 +71,6 @@ public class King extends ChessPiece {
     @Override
     public String toString() {
         return color == ChessPiece.BLACK ? KING_BLACK : KING_WHITE;
-    }
-
-    @Override
-    public String getType() {
-        return KING_WHITE;
     }
 
 }

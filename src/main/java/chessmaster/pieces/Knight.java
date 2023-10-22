@@ -1,6 +1,5 @@
 package chessmaster.pieces;
 
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 
@@ -31,24 +30,19 @@ public class Knight extends ChessPiece {
             int offsetX = DIRECTIONS[dir][0];
             int offsetY = DIRECTIONS[dir][1];
 
-            try {
-                if (position.isOffsetWithinBoard(offsetX, offsetY)) {
-                    ChessPiece destPiece = board.getPieceAtCoor(position.addOffsetToCoordinate(offsetX, offsetY));
-                    if (destPiece.getType().equals(EmptyPiece.EMPTY_PIECE)
-                            || destPiece.getColour() != this.color) {
-                        result[dir] = new Coordinate[]{position.addOffsetToCoordinate(offsetX, offsetY)};
-                    }
-                }
-            } catch (NullPieceException e) {
-                e.printStackTrace();
+            if (!position.isOffsetWithinBoard(offsetX, offsetY)) {
+                continue; // Possible coordinate out of board
+            }
+
+            Coordinate newCoor = position.addOffsetToCoordinate(offsetX, offsetY);
+            ChessPiece destPiece = board.getPieceAtCoor(newCoor);
+
+            if (destPiece.isEmptyPiece() || isOpponent(destPiece)) {
+                result[dir] = new Coordinate[]{ newCoor };
             }
         }
 
         return result;
     }
-
-    @Override
-    public String getType() {
-        return KNIGHT_WHITE;
-    }
+    
 }

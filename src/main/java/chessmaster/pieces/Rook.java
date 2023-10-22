@@ -2,7 +2,6 @@ package chessmaster.pieces;
 
 import java.util.ArrayList;
 
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 
@@ -29,22 +28,16 @@ public class Rook extends ChessPiece {
             int multiplier = 1;
             boolean isBlocked = false;
             ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
-            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY) && !isBlocked) {
+
+            while (!isBlocked && multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY)) {
 
                 Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
-                try {
-                    ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
-                    if (!destPiece.getType().equals(EmptyPiece.EMPTY_PIECE)) {
-                        if (destPiece.getColour() != this.color) {
-                            possibleCoordInDirection.add(possibleCoord);
-                        }
-                        isBlocked = true;
-                    } else {
-                        possibleCoordInDirection.add(possibleCoord);
-                    }
-                } catch  (NullPieceException e) {
-                    e.printStackTrace();
-                }
+                ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
+                
+                isBlocked = !destPiece.isEmptyPiece();
+                if (destPiece.isEmptyPiece() || isOpponent(destPiece)) {
+                    possibleCoordInDirection.add(possibleCoord);
+                } 
 
                 multiplier++;
                 offsetX = DIRECTIONS[dir][0] * multiplier;
@@ -61,10 +54,5 @@ public class Rook extends ChessPiece {
     @Override
     public String toString() {
         return color == ChessPiece.BLACK ? ROOK_BLACK : ROOK_WHITE;
-    }
-
-    @Override
-    public String getType() {
-        return ROOK_WHITE;
     }
 }
