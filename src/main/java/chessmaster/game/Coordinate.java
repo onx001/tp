@@ -106,6 +106,12 @@ public class Coordinate {
         }
     }
 
+    public int[] calculateOffsetFrom(Coordinate otherCoordinate) {
+        int offsetX = this.x - otherCoordinate.getX();
+        int offsetY = this.y - otherCoordinate.getY();
+        return new int[]{ offsetX, offsetY };
+    }
+
     @Override
     public String toString() {
         return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
