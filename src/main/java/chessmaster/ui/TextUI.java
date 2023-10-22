@@ -6,8 +6,8 @@ import java.util.Scanner;
 import chessmaster.commands.CommandResult;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.pieces.ChessPiece.Color;
 
 public final class TextUI {
 
@@ -54,6 +54,20 @@ public final class TextUI {
         return rawInputLine.trim().isEmpty() || isCommentLine;
     }
 
+    public static void printWelcomeMessage() {
+        for (String line : UiMessages.WELCOME_MESSAGE) {
+            out.println(line);
+        }
+    }
+
+    public static void promptPrevGame() {
+        out.print(UiMessages.EXIST_PREV_GAME_MESSAGE);
+    }
+
+    public static void promptStartingColor() {
+        out.print(UiMessages.CHOOSE_PLAYER_COLOR_MESSAGE);
+    }
+
     public static void printPromotePrompt(Coordinate coord){
         String message = String.format(UiMessages.PROMPT_PROMOTE_MESSAGE, coord.toString());
         out.println(message);
@@ -95,9 +109,9 @@ public final class TextUI {
     }
 
     public static void printWinnerMessage(Color colour){
-        if (colour == Color.BLACK) {
+        if (colour.isBlack()) {
             out.println("BLACK Wins!");
-        } else {
+        } else if (colour.isWhite()) {
             out.println("WHITE Wins!");
         }
     }
