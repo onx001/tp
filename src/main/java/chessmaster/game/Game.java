@@ -7,6 +7,7 @@ import chessmaster.commands.MoveCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
@@ -18,14 +19,17 @@ public class Game {
 
     private Human human;
     private CPU cpu;
+
     private ChessBoard board;
+    private Storage storage;
 
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, String filePath) {
+    public Game(Color playerColour, ChessBoard board, Storage storage) {
+        this.board = board;
+        this.storage = storage;
         Game.playerColor = playerColour;
-        this.board = new ChessBoard(playerColour);
 
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
@@ -71,6 +75,7 @@ public class Game {
     private boolean processMove(Move move, Player player) throws ChessMasterException {
         board.executeMove(move);
         player.addMove(move);
+        storage.saveBoard(board, playerColor);
 
         boolean end = board.isEndGame();
         if (end) {
