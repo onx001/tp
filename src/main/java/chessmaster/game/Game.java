@@ -7,6 +7,7 @@ import chessmaster.commands.MoveCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
@@ -14,7 +15,7 @@ import chessmaster.user.Player;
 
 public class Game {
 
-    private static int playerColor; 
+    private static Color playerColor; 
 
     private Human human;
     private CPU cpu;
@@ -23,12 +24,12 @@ public class Game {
     private Command command;
     private boolean hasEnded;
 
-    public Game(int playerColour, String filePath) {
+    public Game(Color playerColour, String filePath) {
         Game.playerColor = playerColour;
         this.board = new ChessBoard(playerColour);
 
         this.human = new Human(playerColour, board);
-        int cpuColor = ChessPiece.getOppositeColour(playerColour);
+        Color cpuColor = ChessPiece.getOppositeColour(playerColour);
         this.cpu = new CPU(cpuColor, board);
     }
 
@@ -74,7 +75,7 @@ public class Game {
 
         boolean end = board.isEndGame();
         if (end) {
-            int winningColor = board.getWinningColor();
+            Color winningColor = board.getWinningColor();
             TextUI.printWinnerMessage(winningColor);
         }
 
@@ -82,11 +83,11 @@ public class Game {
     }
 
     public static boolean isPieceFriendly(ChessPiece otherPiece) {
-        return Game.playerColor == otherPiece.getColour();
+        return Game.playerColor == otherPiece.getColor();
     }
 
     public static boolean isPieceOpponent(ChessPiece otherPiece) {
-        return Game.playerColor != otherPiece.getColour();
+        return Game.playerColor != otherPiece.getColor();
     }
 
 }

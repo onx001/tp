@@ -12,7 +12,7 @@ public class ChessTile {
     private ChessPiece chessPiece;
 
     public ChessTile(Coordinate coor) {
-        chessPiece = new EmptyPiece(coor.getX(),coor.getY(), ChessPiece.BLACK);
+        chessPiece = new EmptyPiece(coor.getX(),coor.getY());
     }
 
     public ChessTile(ChessPiece piece) {
@@ -24,7 +24,7 @@ public class ChessTile {
     }
 
     public void setTileEmpty(Coordinate coor) {
-        chessPiece = new EmptyPiece(coor.getX(),coor.getY(), ChessPiece.BLACK);
+        chessPiece = new EmptyPiece(coor.getX(),coor.getY());
     }
 
     /**
