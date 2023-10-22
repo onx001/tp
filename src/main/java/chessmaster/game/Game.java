@@ -1,107 +1,92 @@
 package chessmaster.game;
 
-// import chessmaster.exceptions.LoadBoardException;
-// import chessmaster.storage.Storage;
-// import chessmaster.ui.TextUI;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.MoveCommand;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.parser.Parser;
+import chessmaster.pieces.ChessPiece;
+import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
+import chessmaster.user.Player;
 
 public class Game {
 
-    // In v1.0 we will only have player1 = human (white)
-    // and player2 = CPU (black).
-    // However in the future these will be modifiable.
-    // private Player player1;
-    // private Player player2;
+    private static int playerColor; 
+
     private Human human;
     private CPU cpu;
     private ChessBoard board;
-    // private Storage storage;
 
-    // private final String logo =
-    //     "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-    //     + System.lineSeparator() +
-    //     "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-    //     + System.lineSeparator() +
-    //     "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-    //     + System.lineSeparator() +
-    //     "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-    //     + System.lineSeparator() +
-    //     "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-    //     + System.lineSeparator() +
-    //     "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-    //     + System.lineSeparator();
+    private Command command;
+    private boolean hasEnded;
 
-    public Game(String mode, int player1Colour, String filePath) {
-        board = new ChessBoard();
-        // storage = new Storage(filePath);
+    public Game(int playerColour, String filePath) {
+        Game.playerColor = playerColour;
+        this.board = new ChessBoard(playerColour);
 
-        // try {
-        //     board = storage.loadBoard();
-        // } catch (LoadBoardException e) {
-        //     TextUI.printErrorMessage(e);
-        // }
-
-        switch (mode) {
-        case "multi":
-            // here for future expansion
-        case "single":
-        default:
-            this.human = new Human(player1Colour);
-            this.cpu = new CPU(1 - player1Colour);
-        }
-
-        this.human.initialisePieces(board);
-        this.cpu.initialisePieces(board);
+        this.human = new Human(playerColour, board);
+        int cpuColor = ChessPiece.getOppositeColour(playerColour);
+        this.cpu = new CPU(cpuColor, board);
     }
 
     public void run() {
-        // System.out.println(logo);
+        board.showChessBoard();
 
-        while (true) {
+        while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
 
-            // 1. Show the chessboard at every move.
-            board.showChessBoard();
+            try {
+                String userInputString = TextUI.getUserInput();
+                command = Parser.parseCommand(userInputString);
+                CommandResult result = command.execute();
+                TextUI.printCommandResult(result);
 
-            // 2. Get the next move.
-            // In v1.0 the human is always white, so they will always go first
-            // But this needs to be changed in future versions
-            Move move = human.getNextMove(board);
-            if (move == null) {
-                // user has entered "abort"
-                break;
-            } else if (move.isEmpty()) {
-                // if the move was not correctly parsed, move to the next iteration of the game
-                continue;
-            } else if (move.getPiece().getColour() != this.human.getColour()) {
-                System.out.println("You're moving for the wrong side! Try moving one of your pieces instead." );
-                continue;
+                if (!(command instanceof MoveCommand)) {
+                    continue; // Take new user command
+                }
+
+                // Input string contains 2 valid coordinates
+                Move humanMove = Parser.parseMove(userInputString, board);
+                hasEnded = processMove(humanMove, human);
+
+                if (!hasEnded) {
+                    if (board.canPromote(humanMove)) {
+                        human.handlePromote(board, humanMove);
+                    }
+
+                    Move cpuMove = cpu.getRandomMove(board);
+                    processMove(cpuMove, cpu);
+                }
+
+                board.showChessBoard();
+            } catch (ChessMasterException e) {
+                TextUI.printErrorMessage(e);
             }
-
-            // 3. Execute the next move.
-            boolean success = human.move(move, board);
-            if (!success) {
-                // if the move was Invalid, go to next iteration
-                continue;
-            }
-
-            // 4. CPU plays
-            Move randomMove = cpu.getRandomMove(board);
-            cpu.move(randomMove, board);
-
-            // Check game state
-            boolean gameOver = board.isEndGame();
-            if (gameOver) {
-                // if the game is over
-                // determine the winning colour
-                board.announceWinningColour();
-                break;
-            } else {
-                //game is not over
-                continue;
-            }
+            
         }
+    }
+
+    private boolean processMove(Move move, Player player) throws ChessMasterException {
+        board.executeMove(move);
+        player.addMove(move);
+
+        boolean end = board.isEndGame();
+        if (end) {
+            int winningColor = board.getWinningColor();
+            TextUI.printWinnerMessage(winningColor);
+        }
+
+        return end;
+    }
+
+    public static boolean isPieceFriendly(ChessPiece otherPiece) {
+        return Game.playerColor == otherPiece.getColour();
+    }
+
+    public static boolean isPieceOpponent(ChessPiece otherPiece) {
+        return Game.playerColor != otherPiece.getColour();
     }
 
 }

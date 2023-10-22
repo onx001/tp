@@ -4,10 +4,13 @@ import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
+import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
+import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
+import chessmaster.game.Game;
 import chessmaster.game.Move;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.ChessPiece;
@@ -30,8 +33,8 @@ public class Parser {
     }
 
     /**
-     * Parses a string telling which chess piece the user wants to promote his piece to,
-     * and promotes the relevant piece
+     * Parses a string telling which chess piece the user wants to promote his piece
+     * to, and promotes the relevant piece
      *
      * @param promoteFrom Chess piece to be promoted.
      * @param promoteTo   String representing the type of piece to be promoted to.
@@ -41,7 +44,7 @@ public class Parser {
         int colour = promoteFrom.getColour();
         Coordinate position = promoteFrom.getPosition();
 
-        switch (promoteTo.toLowerCase()){
+        switch (promoteTo) {
         case Bishop.BISHOP_WHITE:
             return new Bishop(position.getY(), position.getX(), colour);
         case Queen.QUEEN_WHITE:
@@ -56,36 +59,44 @@ public class Parser {
     }
 
     /**
-     * Parses a chess move from user input and creates a Move object.
-     * Used to read user inputs during the chess game.
+     * Parses a chess move from user input and creates a Move object. Used to read
+     * user inputs during the chess game.
      *
-     * @param in The user input string with 2 algebraic coordinate notations (e.g., "e2 e4").
+     * @param in    The user input string with 2 algebraic coordinate notations
+     *              (e.g., "e2 e4").
      * @param board The ChessBoard where the move is taking place.
      * @return Move object containing information about the move to be made.
      * 
-     * @throws ParseCoordinateException If the string entered is not in the algebraic coordinate notation.
-     * @throws NullPieceException If there is no piece at the 'from' coordinate.
+     * @throws ParseCoordinateException If the string entered is not in the
+     *                                  algebraic coordinate notation.
+     * @throws NullPieceException       If there is no piece at the 'from'
+     *                                  coordinate.
+     * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
-        String[] parseArray = in.toLowerCase().split("\\s+", 2);
+    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, 
+            NullPieceException, MoveOpponentPieceException {
+                
+        String[] parseArray = in.split("\\s+", 2);
         if (parseArray.length < 2) {
             throw new ParseCoordinateException();
         }
 
         Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
+
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
+        if (Game.isPieceOpponent(relevantPiece)) {
+            throw new MoveOpponentPieceException();
+        }
 
         return new Move(from, to, relevantPiece);
     }
 
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
-     * and column.
-     * Used for loading ChessPiece(s) from storage file or loading starting
-     * ChessBoard.
-     * Returns null for recognised input string to signify that piece is empty (for
-     * ChessTile)
+     * and column. Used for loading ChessPiece(s) from storage file or loading
+     * starting ChessBoard. Returns null for recognised input string to signify that
+     * piece is empty (for ChessTile)
      *
      * @param pieceString The string representation of the chess piece, e.g., "bB"
      *                    for black bishop.
@@ -125,22 +136,25 @@ public class Parser {
         }
     }
 
-    public Command parseCommand(String in, ChessBoard board) throws ParseCoordinateException, NullPieceException {
-        String[] parseArray = in.toLowerCase().split("\\s+", 2);
-        if (parseArray.length < 2) {
-            assert parseArray.length == 1;
-            switch (parseArray[0]) {
-            case "help":
-                return new HelpCommand();
-            case "abort":
-                return new AbortCommand();
-            default:
-                throw new ParseCoordinateException();
-            }
-        }
+    public static Command parseCommand(String in) {
+        String[] splitInputStrings = in.split("\\s+", 2);
+        String commandString = splitInputStrings[0];
 
-        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
-        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
-        return new MoveCommand(board, from, to);
+        switch (commandString) {
+        case HelpCommand.HELP_COMAMND_STRING:
+            return new HelpCommand();
+        case AbortCommand.ABORT_COMAMND_STRING:
+            return new AbortCommand();
+        default:
+            return new MoveCommand(in);
+        }
+    }
+
+    public static int parsePlayerColor(String inputColorString) throws ParseColorException {
+        try {
+            return Integer.parseInt(inputColorString);
+        } catch (NumberFormatException e) {
+            throw new ParseColorException();
+        }
     }
 }
