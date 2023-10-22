@@ -4,6 +4,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 
 import java.util.Random;
 
@@ -14,7 +15,7 @@ public class CPU extends Player {
     private static final int RANDOM_SEED = 100;
     private final Random rand = new Random(RANDOM_SEED);
 
-    public CPU(int colour, ChessBoard board) {
+    public CPU(Color colour, ChessBoard board) {
         super(colour, board);
     }
 

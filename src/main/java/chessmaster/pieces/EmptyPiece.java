@@ -7,8 +7,8 @@ public class EmptyPiece extends ChessPiece{
 
     public static final String EMPTY_PIECE = ".";
 
-    public EmptyPiece(int row, int col, int color){
-        super(row, col, color);
+    public EmptyPiece(int row, int col){
+        super(row, col, Color.EMPTY);
     }
 
     @Override

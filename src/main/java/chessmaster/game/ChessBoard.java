@@ -3,6 +3,7 @@ package chessmaster.game;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
@@ -40,10 +41,10 @@ public class ChessBoard {
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
-    public ChessBoard(int playerColor) {
+    public ChessBoard(Color playerColor) {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
-                String chessPieceString = (playerColor == ChessPiece.BLACK) 
+                String chessPieceString = ChessPiece.isColorBlack(playerColor)
                     ? STARTING_CHESSBOARD_BLACK[row][col]
                     : STARTING_CHESSBOARD_WHITE[row][col];
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);
@@ -212,16 +213,16 @@ public class ChessBoard {
         return !isBlackKingAlive || !isWhiteKingAlive;
     }
 
-    public int getWinningColor() {
+    public Color getWinningColor() {
         boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
         boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
 
         if (whiteWin) {
-            return ChessPiece.WHITE;
+            return Color.WHITE;
         } else if (blackWin) {
-            return ChessPiece.BLACK;
+            return Color.BLACK;
         } else {
-            return -1;
+            return Color.EMPTY;
         }
     }
 }

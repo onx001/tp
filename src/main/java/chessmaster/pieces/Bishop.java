@@ -13,7 +13,7 @@ public class Bishop extends ChessPiece {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
 
-    public Bishop(int row, int col, int color) {
+    public Bishop(int row, int col, Color color) {
         super(row, col, color);
     }
 
@@ -52,6 +52,6 @@ public class Bishop extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
+        return color == Color.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
     }
 }

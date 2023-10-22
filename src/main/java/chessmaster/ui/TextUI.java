@@ -7,7 +7,7 @@ import chessmaster.commands.CommandResult;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
-import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 
 public final class TextUI {
 
@@ -94,8 +94,8 @@ public final class TextUI {
         out.println(e.getMessage());
     }
 
-    public static void printWinnerMessage(int colour){
-        if (colour == ChessPiece.BLACK) {
+    public static void printWinnerMessage(Color colour){
+        if (colour == Color.BLACK) {
             out.println("BLACK Wins!");
         } else {
             out.println("WHITE Wins!");

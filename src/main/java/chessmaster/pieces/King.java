@@ -11,7 +11,7 @@ public class King extends ChessPiece {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, CASTLE_LEFT, CASTLE_RIGHT
     };
 
-    public King(int row, int col, int color) {
+    public King(int row, int col, Color color) {
         super(row, col, color);
     }
 
@@ -70,7 +70,7 @@ public class King extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? KING_BLACK : KING_WHITE;
+        return color == Color.BLACK ? KING_BLACK : KING_WHITE;
     }
 
 }
