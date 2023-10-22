@@ -1,10 +1,7 @@
 package chessmaster;
 
 import chessmaster.exceptions.ChessMasterException;
-import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
-import chessmaster.game.Color;
-import chessmaster.game.Game;
+import chessmaster.game.*;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 
@@ -18,6 +15,7 @@ public class ChessMaster {
     private ChessBoard board;
     private Storage storage;
     private Color playerColor;
+    private Game game;
 
     private ChessMaster() {
         TextUI.printWelcomeMessage();
@@ -63,6 +61,11 @@ public class ChessMaster {
         
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
         board = new ChessBoard(playerColor);
+        game = new Game(playerColor, board, storage);
+
+        if (playerColor.isBlack()){
+            game.CPUFirstMove();
+        }
     }
 
     private void run() {   

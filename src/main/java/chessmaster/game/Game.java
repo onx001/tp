@@ -86,6 +86,15 @@ public class Game {
         return end;
     }
 
+    public void CPUFirstMove(){
+        try {
+            Move cpuMove = cpu.getRandomMove(board);
+            processMove(cpuMove, cpu);
+        } catch (ChessMasterException e){
+            TextUI.printErrorMessage(e);
+        }
+    }
+
     public static boolean isPieceFriendly(ChessPiece otherPiece) {
         return Game.playerColor == otherPiece.getColor();
     }
