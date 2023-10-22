@@ -73,7 +73,6 @@ public class ChessBoard {
     }
 
     public void showChessBoard() {
-        System.out.println();
         TextUI.printChessBoardHeader();
         TextUI.printChessBoardDivider();
         for (int i = 0; i < board.length; i++) {
@@ -87,7 +86,8 @@ public class ChessBoard {
             int rowNum = (i - 8) * -1;
             TextUI.printChessBoardRow(rowNum, rowString.toString());
         }
-        System.out.println();
+        TextUI.printChessBoardHeader();
+        System.out.println("");
     }
 
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {

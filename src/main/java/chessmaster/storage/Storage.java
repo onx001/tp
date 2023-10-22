@@ -2,7 +2,6 @@ package chessmaster.storage;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
-import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
@@ -146,7 +145,7 @@ public class Storage {
         }
 
         fileScanner.close();
-        throw new ParseColorException();
+        throw new LoadBoardException();
     }
 }
 
