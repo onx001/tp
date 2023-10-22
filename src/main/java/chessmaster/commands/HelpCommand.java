@@ -10,7 +10,9 @@ public class HelpCommand extends Command {
         "   Format: [column][row] [column][row] \n" +
         "   E.g. a2 a3 \n" +
         "Abort game - Exit programme \n" +
-        "   Format: abort \n"
+        "   Format: abort \n" +
+        "Obtain rules - Obtain a quick refresher on the rules of chess \n" +
+        "   Format: rules \n"
     };
 
     @Override
