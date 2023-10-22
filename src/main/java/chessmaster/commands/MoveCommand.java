@@ -1,47 +1,41 @@
 package chessmaster.commands;
 
-import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.exceptions.NullPieceException;
-import chessmaster.game.ChessBoard;
+import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.Coordinate;
-import chessmaster.pieces.ChessPiece;
-import chessmaster.game.Move;
 
 public class MoveCommand extends Command {
 
-    private ChessBoard board;
-    private Coordinate from;
-    private Coordinate to;
+    public static final String MOVE_COMAMND_STRING = "move";
+    private static final String MOVE_PIECE_MESSAGE = "Moving %s to %s";
 
-    public MoveCommand(ChessBoard board, Coordinate from, Coordinate to) {
-        this.board = board;
-        this.from = from;
-        this.to = to;
-    }
-    @Override
-    public boolean execute() {
-        try{
-            ChessPiece relevantPiece = board.getPieceAtCoor(from);
-            Move move = new Move(from, to, relevantPiece);
-            board.executeMove(move);
-        } catch (InvalidMoveException e){
-            System.out.println(e.getMessage());
-        } catch (NullPieceException e){
-            System.out.println("No piece at the coordinate");
-        }
+    private String userInput;
 
-        return false;
+    public MoveCommand(String inputString) {
+        this.userInput = inputString;
     }
 
+    /**
+     * Executes the command based on user input, which is expected to consist of two algebraic 
+     * coordinate strings separated by whitespace.
+     *
+     * @return A CommandResult object containing the result of the command.
+     * @throws ParseCoordinateException If the user input cannot be parsed into two coordinate objects.
+     */
     @Override
-    public Move getMove() {
-        try{
-            ChessPiece relevantPiece = board.getPieceAtCoor(from);
-            Move move = new Move(from, to, relevantPiece);
-            return move;
-        } catch (NullPieceException e){
-            return new Move();
+    public CommandResult execute() throws ParseCoordinateException {
+
+        String[] coordinateStrings = userInput.split("\\s+", 2);
+        if (coordinateStrings.length != 2) {
+            throw new ParseCoordinateException();
         }
+
+        String fromString = coordinateStrings[0];
+        String toString = coordinateStrings[1];
+
+        Coordinate from = Coordinate.parseAlgebraicCoor(fromString);
+        Coordinate to = Coordinate.parseAlgebraicCoor(toString);
+
+        return new CommandResult(String.format(MOVE_PIECE_MESSAGE, from, to));
     }
 
 }
