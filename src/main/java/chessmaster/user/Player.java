@@ -4,6 +4,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public abstract class Player {
 
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
-    protected int colour;
+    protected Color colour;
 
     /**
      * A player is a dependency of the Game class. This class stores all move
@@ -21,7 +22,7 @@ public abstract class Player {
      * 
      * @param colour The ChessPiece.Colour desired for this player.
      */
-    public Player(int colour, ChessBoard board) {
+    public Player(Color colour, ChessBoard board) {
         this.moves = new ArrayList<Move>();
         this.pieces = new ArrayList<ChessPiece>();
         this.colour = colour;
@@ -37,7 +38,7 @@ public abstract class Player {
         this.moves.add(move);
     }
 
-    public int getColour() {
+    public Color getColour() {
         return this.colour;
     }
 
@@ -66,7 +67,7 @@ public abstract class Player {
     public void printAllPieces() {
         for (ChessPiece p : pieces) {
             System.out.println("Piece: " + p);
-            System.out.println("Colour: " + p.getColour());
+            System.out.println("Colour: " + p.getColor().toString());
             System.out.println("Is captured: " + p.getIsCaptured());
         }
     }

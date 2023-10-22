@@ -13,7 +13,7 @@ public class Rook extends ChessPiece {
         UP, DOWN, LEFT, RIGHT,
     };
 
-    public Rook(int row, int col, int color) {
+    public Rook(int row, int col, Color color) {
         super(row, col, color);
     }
 
@@ -53,6 +53,6 @@ public class Rook extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? ROOK_BLACK : ROOK_WHITE;
+        return color == Color.BLACK ? ROOK_BLACK : ROOK_WHITE;
     }
 }

@@ -7,6 +7,7 @@ import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,7 +52,7 @@ public class Storage {
      */
     public static ChessBoard loadBoard() throws LoadBoardException {
         File file = new File(filePath);
-        ChessBoard chessBoard = new ChessBoard(ChessPiece.WHITE);
+        ChessBoard chessBoard = new ChessBoard(Color.WHITE);
         ChessTile[][] boardTiles;
         assert filePath != null : "File path cannot be null";
 

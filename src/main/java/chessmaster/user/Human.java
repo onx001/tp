@@ -5,12 +5,13 @@ import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
 public class Human extends Player {
 
-    public Human(int colour, ChessBoard board) {
+    public Human(Color colour, ChessBoard board) {
         super(colour, board);
     }
 

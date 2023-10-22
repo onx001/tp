@@ -7,8 +7,9 @@ import java.util.ArrayList;
 
 public abstract class ChessPiece {
 
-    public static final int BLACK = 0;
-    public static final int WHITE = 1;
+    public enum Color {
+        WHITE, BLACK, EMPTY
+    }
 
     public static final int[] CASTLE_LEFT = {-2, 0};
     public static final int[] CASTLE_RIGHT = {2, 0};
@@ -34,13 +35,13 @@ public abstract class ChessPiece {
     protected static final int[] DOWN_LEFT = {1, 1}; 
     protected static final int[] DOWN_RIGHT = {-1, 1}; 
 
-    protected int color;
+    protected Color color;
     protected Coordinate position;
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
 
-    public ChessPiece(int row, int col, int color) {
+    public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
         this.color = color;
     }
@@ -54,13 +55,20 @@ public abstract class ChessPiece {
      */
     public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
 
+    /**
+     * Get a flattened array of valid coordinates for the chess piece's moves based on its available coordinates 
+     * and the current state of the ChessBoard.
+     *
+     * @param board The ChessBoard representing the current game state.
+     * @return A 1D array of valid coordinates for the piece's legal moves.
+     */
     public Coordinate[] getFlattenedCoordinates(ChessBoard board) {
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)){
+                if (this.isMoveValid(possibleCoord, board)) {
                     flattenedCoordinates.add(possibleCoord);
                 }
             }
@@ -75,7 +83,7 @@ public abstract class ChessPiece {
      * @param board
      * @return
      */
-    public boolean isMoveValid(Coordinate destination, ChessBoard board){
+    public boolean isMoveValid(Coordinate destination, ChessBoard board) {
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
@@ -83,7 +91,7 @@ public abstract class ChessPiece {
                     ChessPiece destPiece = board.getPieceAtCoor(destination);
                     if (destPiece.isEmptyPiece()) {
                         return true;
-                    } else if (destPiece.getColour() != this.color) {
+                    } else if (destPiece.isSameColorAs(this.color)) {
                         return true;
                     }
                 }
@@ -107,16 +115,11 @@ public abstract class ChessPiece {
         System.out.println();
     }
 
-
-    public int getColour() {
-        return color == BLACK ? ChessPiece.BLACK : ChessPiece.WHITE;
-    }
-
     public Coordinate getPosition() {
         return this.position;
     }
 
-    public void updatePosition(Coordinate newCoordinate){
+    public void updatePosition(Coordinate newCoordinate) {
         this.position = newCoordinate;
     }
 
@@ -133,7 +136,7 @@ public abstract class ChessPiece {
         return "ChessPiece [color=" + color + ", position=" + position + "]";
     }
 
-    protected int getColor(){
+    public Color getColor() {
         return color;
     }
 
@@ -145,35 +148,86 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    public static int getOppositeColour(int playerColour) {
-        if (playerColour == ChessPiece.WHITE) {
-            return ChessPiece.BLACK;
-        } else {
-            return ChessPiece.WHITE;
-        }
-    }
-
-    public boolean isSameColorAs(int color) {
+    /**
+     * Checks if the ChessPiece object has the same color as a given color.
+     *
+     * @param color The color to compare with the ChessPiece's color.
+     * @return true if the ChessPiece has the same color as the provided color; false otherwise.
+     */
+    public boolean isSameColorAs(Color color) {
         if (isEmptyPiece()) {
             return false;
         }
         return this.color == color;
     }
 
+    /**
+     * Checks if the ChessPiece object is WHTIE.
+     *
+     * @return true if the ChessPiece is white; false otherwise.
+     */
     public boolean isWhite() {
         if (isEmptyPiece()) {
             return false;
         }
-        return this.color == ChessPiece.WHITE;
+        return this.color == Color.WHITE;
     }
 
+    /**
+     * Checks if the ChessPiece object is BLACK.
+     *
+     * @return true if the ChessPiece is white; false otherwise.
+     */
     public boolean isBlack() {
         if (isEmptyPiece()) {
             return false;
         }
-        return this.color == ChessPiece.BLACK;
+        return this.color == Color.BLACK;
+    }
+
+    /**
+     * Get the opposite color given the player's color.
+     * Used to identify the color for CPU player.
+     *
+     * @param playerColour The color of the player.
+     * @return The opposite color.
+     */
+    public static Color getOppositeColour(Color playerColour) {
+        if (playerColour == Color.WHITE) {
+            return Color.BLACK;
+        } else {
+            return Color.WHITE;
+        }
+    }
+
+    /**
+     * Checks if a given color is white. 
+     * Static method to check if any color is white.
+     *
+     * @param color The color to check.
+     * @return true if the color is white; false otherwise.
+     */
+    public static boolean isColorWhite(Color color) {
+        return color == Color.WHITE;
+    }
+
+    /**
+     * Checks if a given color is black. 
+     * Static method to check if any color is black.
+     *
+     * @param color The color to check.
+     * @return true if the color is black; false otherwise.
+     */
+    public static boolean isColorBlack(Color color) {
+        return color == Color.BLACK;
     }
     
+    /**
+     * Checks if the provided ChessPiece object is friendly (has the same color) as the current ChessPiece.
+     *
+     * @param chessPiece The ChessPiece to compare with.
+     * @return true if the provided ChessPiece is friendly; false otherwise.
+     */
     public boolean isFriendly(ChessPiece chessPiece) {
         if (isEmptyPiece()) {
             return false;
@@ -181,6 +235,12 @@ public abstract class ChessPiece {
         return chessPiece.color == this.color;
     }
 
+    /**
+     * Checks if the provided ChessPiece is an opponent (has a different color) compared to the current ChessPiece.
+     *
+     * @param chessPiece The ChessPiece to compare with.
+     * @return true if the provided ChessPiece is an opponent; false otherwise.
+     */
     public boolean isOpponent(ChessPiece chessPiece) {
         if (isEmptyPiece()) {
             return false;
