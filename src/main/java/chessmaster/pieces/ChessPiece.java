@@ -1,15 +1,12 @@
 package chessmaster.pieces;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 import java.util.ArrayList;
 
 public abstract class ChessPiece {
-
-    public enum Color {
-        WHITE, BLACK, EMPTY
-    }
 
     public static final int[] CASTLE_LEFT = {-2, 0};
     public static final int[] CASTLE_RIGHT = {2, 0};
@@ -183,43 +180,6 @@ public abstract class ChessPiece {
             return false;
         }
         return this.color == Color.BLACK;
-    }
-
-    /**
-     * Get the opposite color given the player's color.
-     * Used to identify the color for CPU player.
-     *
-     * @param playerColour The color of the player.
-     * @return The opposite color.
-     */
-    public static Color getOppositeColour(Color playerColour) {
-        if (playerColour == Color.WHITE) {
-            return Color.BLACK;
-        } else {
-            return Color.WHITE;
-        }
-    }
-
-    /**
-     * Checks if a given color is white. 
-     * Static method to check if any color is white.
-     *
-     * @param color The color to check.
-     * @return true if the color is white; false otherwise.
-     */
-    public static boolean isColorWhite(Color color) {
-        return color == Color.WHITE;
-    }
-
-    /**
-     * Checks if a given color is black. 
-     * Static method to check if any color is black.
-     *
-     * @param color The color to check.
-     * @return true if the color is black; false otherwise.
-     */
-    public static boolean isColorBlack(Color color) {
-        return color == Color.BLACK;
     }
     
     /**

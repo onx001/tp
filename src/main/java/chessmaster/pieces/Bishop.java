@@ -3,6 +3,7 @@ package chessmaster.pieces;
 import java.util.ArrayList;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class Bishop extends ChessPiece {

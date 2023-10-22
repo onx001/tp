@@ -7,7 +7,6 @@ import chessmaster.commands.MoveCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
@@ -29,7 +28,7 @@ public class Game {
         this.board = new ChessBoard(playerColour);
 
         this.human = new Human(playerColour, board);
-        Color cpuColor = ChessPiece.getOppositeColour(playerColour);
+        Color cpuColor = playerColour.getOppositeColour();
         this.cpu = new CPU(cpuColor, board);
     }
 
