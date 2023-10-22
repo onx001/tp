@@ -33,20 +33,22 @@ public class ChessMaster {
             }
 
         } catch (ChessMasterException e) {
-            TextUI.printErrorMessage(e);
+            TextUI.printLoadBoardError();
             loadNewGame();
         }
     }
 
     private boolean shouldStartNewGame() {
-        String input = "";
-        do {
-            TextUI.promptPrevGame();
-            input = TextUI.getUserInput();
+        TextUI.promptContinuePrevGame(false);
+        String input = TextUI.getUserInput();
 
-        } while (!input.equals("y") && !input.equals("n"));
+        while (!input.equals("y") && !input.equals("n")) {
+            TextUI.promptContinuePrevGame(true);
+            input = TextUI.getUserInput();
+        }
         
         if (input.equals("y")) {
+            TextUI.printContinuePrevGame(playerColor.name());
             return false;
         } else {
             return true;
@@ -54,15 +56,17 @@ public class ChessMaster {
     }
 
     private void loadNewGame() {
-        String input = "";
-        do {
-            TextUI.promptStartingColor();
+        TextUI.promptStartingColor(false);
+        String input = TextUI.getUserInput();
+
+        while (!input.equals("b") && !input.equals("w")) {
+            TextUI.promptStartingColor(true);
             input = TextUI.getUserInput();
-            
-        } while (!input.equals("b") && !input.equals("w"));
+        }
         
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
         board = new ChessBoard(playerColor);
+        TextUI.printStartNewGame(playerColor.name());
     }
 
     private void run() {   
