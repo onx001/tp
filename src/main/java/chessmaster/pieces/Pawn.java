@@ -17,7 +17,7 @@ public class Pawn extends ChessPiece {
 
     protected boolean enPassed = false;
 
-    public Pawn(int row, int col, int color) {
+    public Pawn(int row, int col, Color color) {
         super(row, col, color);
     }
 
@@ -68,7 +68,7 @@ public class Pawn extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? PAWN_BLACK : PAWN_WHITE;
+        return color == Color.BLACK ? PAWN_BLACK : PAWN_WHITE;
     }
 
 }

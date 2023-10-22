@@ -12,14 +12,13 @@ public class Knight extends ChessPiece {
         LEFT_UP_LEFT, LEFT_DOWN_LEFT, RIGHT_UP_RIGHT, RIGHT_DOWN_RIGHT,
     };
 
-    public Knight(int row, int col, int color) {
+    public Knight(int row, int col, Color color) {
         super(row, col, color);
     }
 
-
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? KNIGHT_BLACK : KNIGHT_WHITE;
+        return color == Color.BLACK ? KNIGHT_BLACK : KNIGHT_WHITE;
     }
 
     @Override

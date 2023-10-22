@@ -13,7 +13,7 @@ public class Queen extends ChessPiece {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
 
-    public Queen(int row, int col, int color) {
+    public Queen(int row, int col, Color color) {
         super(row, col, color);
     }
 
@@ -53,6 +53,6 @@ public class Queen extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? QUEEN_BLACK : QUEEN_WHITE;
+        return color == Color.BLACK ? QUEEN_BLACK : QUEEN_WHITE;
     }
 }
