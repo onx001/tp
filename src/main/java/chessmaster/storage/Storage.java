@@ -1,5 +1,6 @@
 package chessmaster.storage;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
@@ -15,31 +16,50 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Storage {
-    private static String filePath;
+
+    private String filePathString;
+    private File storageFile;
 
     public Storage(String filePath){
-        Storage.filePath = filePath;
-        assert filePath != null : "File path cannot be null";
+        filePathString = filePath;
+        storageFile = new File(filePath);
+        assert !filePathString.isEmpty() && filePath != null : "File path cannot be empty or null";
     }
+
+    private void createChessMasterFile() throws ChessMasterException {
+        // Create the necessary parent directories for new file
+        if (!storageFile.exists()) {
+            storageFile.getParentFile().mkdirs();
+        }
+
+        // Create file if it does not exist
+        try {
+            storageFile.createNewFile();
+        } catch (IOException e) {
+            throw new ChessMasterException("Fatal: Error creating file: " + filePathString + " Exiting ChessMaster");
+        }
+    }
+
     /**
      * Method to save board to file
      *
      * @param board takes in current board that is in play
      */
-    public static void saveBoard(ChessBoard board) throws SaveBoardException {
+    public void saveBoard(ChessBoard board, int playerColor) throws ChessMasterException {
+        createChessMasterFile();
 
-        try (FileWriter fileWriter = new FileWriter(filePath)){
-            for (int row = 0; row < 8; row++) {
-                for (int col = 0; col < 8; col++) {
-                    try {
-                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
-                        fileWriter.write(piece.toString());
-                    } catch (Exception e) {
-                        fileWriter.write(" ");
-                    }
+        try {
+            FileWriter fileWriter = new FileWriter(storageFile);
+            fileWriter.write(playerColor);
+
+            for (int row = 0; row < ChessBoard.SIZE; row++) {
+                for (int col = 0; col < ChessBoard.SIZE; col++) {
+                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
+                    fileWriter.write(piece.toString());
                 }
-                fileWriter.write("\n");
             }
+
+            fileWriter.close();
         } catch (IOException e) {
             throw new SaveBoardException();
         }
@@ -49,56 +69,41 @@ public class Storage {
      * Method to load board from file
      *
      */
-    public static ChessBoard loadBoard() throws LoadBoardException {
-        File file = new File(filePath);
-        ChessBoard chessBoard = new ChessBoard(ChessPiece.WHITE);
-        ChessTile[][] boardTiles;
-        assert filePath != null : "File path cannot be null";
+    public ChessBoard loadBoard() throws ChessMasterException {
+        createChessMasterFile();
 
-        if (!file.exists()) {
-            try {
-                File directory = file.getParentFile();
-                if (!directory.exists() && !directory.mkdirs()) {
-                    throw new LoadBoardException("Failed to create directory structure.");
-                }
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
 
-                if (!file.exists() && !file.createNewFile()) {
-                    throw new LoadBoardException("Failed to create the file.");
-                }
-            } catch (IOException e) {
+        int playerColor = -1;
+        if (fileScanner.hasNext()) {
+            String colorLine = fileScanner.nextLine();
+            playerColor = Parser.parsePlayerColor(colorLine);
+        }
+
+        int rowIndex = 0;
+        ChessTile[][] boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
+        while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
+            String chessRowLine = fileScanner.nextLine();
+            if (chessRowLine.length() != ChessBoard.SIZE) {
+                fileScanner.close();
                 throw new LoadBoardException();
             }
-            return chessBoard;
-        }
-        try {
-            Scanner fileScanner = new Scanner(file);
-            boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
 
-            while (fileScanner.hasNext()) {
-                for (int row = 0; row < ChessBoard.SIZE; row++) {
-                    String tileRow = fileScanner.nextLine();
-                    for (int col = 0; col < ChessBoard.SIZE; col++) {
-                        String pieceString = tileRow.substring(col, col + 1);
-                        if (pieceString.equals(" ")) {
-                            boardTiles[row][col] = new ChessTile(new Coordinate(col, row));
-                        } else {
-                            ChessPiece piece = Parser.parseChessPiece(pieceString, row + 1, col + 1);
-                            boardTiles[row][col] = new ChessTile(piece);
-                        }
-                    }
-                }
-            }
-
-            fileScanner.close();
-        } catch (FileNotFoundException e) {
-            throw new LoadBoardException();
-        }
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
-                chessBoard.setTile(row, col, boardTiles[row][col]);
+                String chessPieceString = String.valueOf(chessRowLine.charAt(col));
+                ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
+                boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
+            rowIndex++;
         }
-        return chessBoard;
+
+        fileScanner.close();
+        return new ChessBoard(boardTiles);
     }
 }
 
