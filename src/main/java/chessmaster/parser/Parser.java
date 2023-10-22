@@ -9,6 +9,7 @@ import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Game;
 import chessmaster.game.Move;
@@ -20,7 +21,6 @@ import chessmaster.pieces.Knight;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Rook;
-import chessmaster.pieces.ChessPiece.Color;
 
 public class Parser {
 
@@ -151,10 +151,10 @@ public class Parser {
         }
     }
 
-    public static int parsePlayerColor(String inputColorString) throws ParseColorException {
+    public static Color parsePlayerColor(String inputColorString) throws ParseColorException {
         try {
-            return Integer.parseInt(inputColorString);
-        } catch (NumberFormatException e) {
+            return Color.valueOf(inputColorString);
+        } catch (IllegalArgumentException e) {
             throw new ParseColorException();
         }
     }
