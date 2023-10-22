@@ -3,7 +3,6 @@ package chessmaster.game;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
@@ -44,7 +43,7 @@ public class ChessBoard {
     public ChessBoard(Color playerColor) {
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
-                String chessPieceString = ChessPiece.isColorBlack(playerColor)
+                String chessPieceString = playerColor.isBlack()
                     ? STARTING_CHESSBOARD_BLACK[row][col]
                     : STARTING_CHESSBOARD_WHITE[row][col];
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, row, col);

@@ -1,11 +1,11 @@
 package chessmaster.user;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 

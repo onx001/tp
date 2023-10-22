@@ -1,7 +1,7 @@
 package chessmaster.parser;
 
+import chessmaster.game.Color;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.ChessPiece.Color;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import org.junit.jupiter.api.Test;

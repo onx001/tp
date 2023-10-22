@@ -1,13 +1,15 @@
 package chessmaster.storage;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
+import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.ChessPiece.Color;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,90 +18,135 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Storage {
-    private static String filePath;
 
-    public Storage(String filePath){
-        Storage.filePath = filePath;
-        assert filePath != null : "File path cannot be null";
+    private String filePathString;
+    private File storageFile;
+
+    public Storage(String filePath) {
+        filePathString = filePath;
+        storageFile = new File(filePath);
+        assert !filePathString.isEmpty() && filePath != null : "File path cannot be empty or null";
     }
-    /**
-     * Method to save board to file
-     *
-     * @param board takes in current board that is in play
-     */
-    public static void saveBoard(ChessBoard board) throws SaveBoardException {
 
-        try (FileWriter fileWriter = new FileWriter(filePath)){
-            for (int row = 0; row < 8; row++) {
-                for (int col = 0; col < 8; col++) {
-                    try {
-                        ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
-                        fileWriter.write(piece.toString());
-                    } catch (Exception e) {
-                        fileWriter.write(" ");
-                    }
+    /**
+     * Creates a ChessMaster program file to store game state, including necessary parent directories.
+     *
+     * @throws ChessMasterException If there is an error creating the file or parent directories.
+     */
+    private void createChessMasterFile() throws ChessMasterException {
+        // Create the necessary parent directories for new file
+        if (!storageFile.exists()) {
+            storageFile.getParentFile().mkdirs();
+        }
+
+        // Create file if it does not exist
+        try {
+            storageFile.createNewFile();
+        } catch (IOException e) {
+            throw new ChessMasterException("Fatal: Error creating file: " + filePathString + " Exiting ChessMaster");
+        }
+    }
+
+    /**
+     * Saves the state of the ChessBoard to a file. Writes the player's color to the first line 
+     * and subsequently chess pieces in a 8 x 8 format.
+     *
+     * @param board The ChessBoard to save.
+     * @param playerColor The color of the current player.
+     * @throws ChessMasterException If there is an error saving the board to a file.
+     */
+    public void saveBoard(ChessBoard board, Color playerColor) throws ChessMasterException {
+        createChessMasterFile();
+
+        try {
+            FileWriter fileWriter = new FileWriter(storageFile);
+            fileWriter.write(playerColor.name());
+            fileWriter.write(System.lineSeparator());
+
+            for (int row = 0; row < ChessBoard.SIZE; row++) {
+                for (int col = 0; col < ChessBoard.SIZE; col++) {
+                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
+                    fileWriter.write(piece.toString());
                 }
-                fileWriter.write("\n");
+                fileWriter.write(System.lineSeparator());
             }
+
+            fileWriter.close();
         } catch (IOException e) {
             throw new SaveBoardException();
         }
     }
 
     /**
-     * Method to load board from file
+     * Loads the state of the chessboard from a file. 
+     * Ignores the first line player color information as it can be retrieved with loadPlayerColor() method
      *
+     * @return A 2D array of ChessTile objects representing the loaded chessboard.
+     * @throws ChessMasterException If there is an error loading the board from the file.
      */
-    public static ChessBoard loadBoard() throws LoadBoardException {
-        File file = new File(filePath);
-        ChessBoard chessBoard = new ChessBoard(Color.WHITE);
-        ChessTile[][] boardTiles;
-        assert filePath != null : "File path cannot be null";
+    public ChessTile[][] loadBoard() throws ChessMasterException {
+        createChessMasterFile();
 
-        if (!file.exists()) {
-            try {
-                File directory = file.getParentFile();
-                if (!directory.exists() && !directory.mkdirs()) {
-                    throw new LoadBoardException("Failed to create directory structure.");
-                }
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
 
-                if (!file.exists() && !file.createNewFile()) {
-                    throw new LoadBoardException("Failed to create the file.");
-                }
-            } catch (IOException e) {
+        // Skip player color on first line
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        int rowIndex = 0;
+        ChessTile[][] boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
+        while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
+            String chessRowLine = fileScanner.nextLine();
+            if (chessRowLine.length() != ChessBoard.SIZE) {
+                fileScanner.close();
                 throw new LoadBoardException();
             }
-            return chessBoard;
-        }
-        try {
-            Scanner fileScanner = new Scanner(file);
-            boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
 
-            while (fileScanner.hasNext()) {
-                for (int row = 0; row < ChessBoard.SIZE; row++) {
-                    String tileRow = fileScanner.nextLine();
-                    for (int col = 0; col < ChessBoard.SIZE; col++) {
-                        String pieceString = tileRow.substring(col, col + 1);
-                        if (pieceString.equals(" ")) {
-                            boardTiles[row][col] = new ChessTile(new Coordinate(col, row));
-                        } else {
-                            ChessPiece piece = Parser.parseChessPiece(pieceString, row + 1, col + 1);
-                            boardTiles[row][col] = new ChessTile(piece);
-                        }
-                    }
-                }
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                String chessPieceString = String.valueOf(chessRowLine.charAt(col));
+                ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
+                boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
+            rowIndex++;
+        }
+
+        fileScanner.close();
+        return boardTiles;
+    }
+
+    /**
+     * Loads the player's color from a file. 
+     * Expects the player color information on the first line of text file.
+     *
+     * @return The player's color as a Color enumeration.
+     * @throws ChessMasterException If there is an error loading the player's color from the file.
+     */
+    public Color loadPlayerColor() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        if (fileScanner.hasNext()) {
+            String colorLine = fileScanner.nextLine();
+            Color playerColor = Parser.parsePlayerColor(colorLine);
 
             fileScanner.close();
-        } catch (FileNotFoundException e) {
-            throw new LoadBoardException();
+            return playerColor;
         }
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
-            for (int col = 0; col < ChessBoard.SIZE; col++) {
-                chessBoard.setTile(row, col, boardTiles[row][col]);
-            }
-        }
-        return chessBoard;
+
+        fileScanner.close();
+        throw new ParseColorException();
     }
 }
 

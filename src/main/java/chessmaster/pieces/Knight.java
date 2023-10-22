@@ -1,6 +1,7 @@
 package chessmaster.pieces;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class Knight extends ChessPiece {

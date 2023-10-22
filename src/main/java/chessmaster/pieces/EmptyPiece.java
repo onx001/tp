@@ -1,6 +1,7 @@
 package chessmaster.pieces;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class EmptyPiece extends ChessPiece{
@@ -14,6 +15,11 @@ public class EmptyPiece extends ChessPiece{
     @Override
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         return new Coordinate[0][];
+    }
+
+    @Override
+    public String toString() {
+        return EMPTY_PIECE;
     }
     
 }
