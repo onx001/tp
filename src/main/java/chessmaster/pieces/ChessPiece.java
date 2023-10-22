@@ -1,6 +1,5 @@
 package chessmaster.pieces;
 
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 
@@ -10,6 +9,9 @@ public abstract class ChessPiece {
 
     public static final int BLACK = 0;
     public static final int WHITE = 1;
+
+    public static final int[] CASTLE_LEFT = {-2, 0};
+    public static final int[] CASTLE_RIGHT = {2, 0};
     
     protected static final int[] UP_UP_LEFT = {1, -2}; 
     protected static final int[] UP_UP_RIGHT = {-1, -2}; 
@@ -32,16 +34,11 @@ public abstract class ChessPiece {
     protected static final int[] DOWN_LEFT = {1, 1}; 
     protected static final int[] DOWN_RIGHT = {-1, 1}; 
 
-    protected static final int[] CASTLE_LEFT = {-2, 0};
-    protected static final int[] CASTLE_RIGHT = {2, 0};
-
-    protected Coordinate position;
     protected int color;
+    protected Coordinate position;
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
-    protected boolean captured = false;
-    protected boolean isLeftCastling = false;
-    protected boolean isRightCastling = false;
+    protected boolean isCaptured = false;
 
     public ChessPiece(int row, int col, int color) {
         this.position = new Coordinate(col, row);
@@ -83,15 +80,11 @@ public abstract class ChessPiece {
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
                 if (possibleCoord.equals(destination)) {
-                    try {
-                        ChessPiece destPiece = board.getPieceAtCoor(destination);
-                        if (destPiece.getType().equalsIgnoreCase(" ")) {
-                            return true;
-                        } else if (destPiece.getColour() != this.color) {
-                            return true;
-                        }
-                    } catch (NullPieceException e) {
-                        e.printStackTrace();
+                    ChessPiece destPiece = board.getPieceAtCoor(destination);
+                    if (destPiece.isEmptyPiece()) {
+                        return true;
+                    } else if (destPiece.getColour() != this.color) {
+                        return true;
                     }
                 }
             }
@@ -103,7 +96,6 @@ public abstract class ChessPiece {
 
         System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
@@ -128,32 +120,12 @@ public abstract class ChessPiece {
         this.position = newCoordinate;
     }
 
-    public void setHasMoved(boolean hasMoved) {
-        this.hasMoved = hasMoved;
+    public void setHasMoved() {
+        this.hasMoved = true;
     }
 
     public boolean getHasMoved() {
         return this.hasMoved;
-    }
-
-    public void setIsLeftCastling(boolean isLeftCastling) {
-        this.isLeftCastling = isLeftCastling;
-    }
-
-    public void setIsRightCastling(boolean isRightCastling) {
-        this.isRightCastling = isRightCastling;
-    }
-
-    public boolean getIsLeftCastling() {
-        boolean toReturn = this.isLeftCastling;
-        this.isLeftCastling = false;
-        return toReturn;
-    }
-
-    public boolean getIsRightCastling() {
-        boolean toReturn = this.isRightCastling;
-        this.isRightCastling = false;
-        return toReturn;
     }
 
     @Override
@@ -165,11 +137,63 @@ public abstract class ChessPiece {
         return color;
     }
 
-    public boolean getCaptured() {
-        return this.captured;
+    public boolean getIsCaptured() {
+        return this.isCaptured;
     }
 
-    public String getType(){
-        return EmptyPiece.EMPTY_PIECE;
-    };
+    public void setIsCaptured() {
+        this.isCaptured = true;
+    }
+
+    public static int getOppositeColour(int playerColour) {
+        if (playerColour == ChessPiece.WHITE) {
+            return ChessPiece.BLACK;
+        } else {
+            return ChessPiece.WHITE;
+        }
+    }
+
+    public boolean isSameColorAs(int color) {
+        if (isEmptyPiece()) {
+            return false;
+        }
+        return this.color == color;
+    }
+
+    public boolean isWhite() {
+        if (isEmptyPiece()) {
+            return false;
+        }
+        return this.color == ChessPiece.WHITE;
+    }
+
+    public boolean isBlack() {
+        if (isEmptyPiece()) {
+            return false;
+        }
+        return this.color == ChessPiece.BLACK;
+    }
+    
+    public boolean isFriendly(ChessPiece chessPiece) {
+        if (isEmptyPiece()) {
+            return false;
+        }
+        return chessPiece.color == this.color;
+    }
+
+    public boolean isOpponent(ChessPiece chessPiece) {
+        if (isEmptyPiece()) {
+            return false;
+        }
+        return chessPiece.color != this.color;
+    }
+
+    public boolean isEmptyPiece() {
+        return this instanceof EmptyPiece;
+    }
+
+    public boolean isPromotionPiece() {
+        return this instanceof Queen || this instanceof Rook 
+            || this instanceof Bishop || this instanceof Knight;
+    }
 }
