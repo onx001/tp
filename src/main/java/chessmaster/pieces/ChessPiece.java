@@ -223,6 +223,8 @@ public abstract class ChessPiece {
             || this instanceof Bishop || this instanceof Knight;
     }
 
+
+
     protected void setPoints(int points) {
         this.points = points;
     }

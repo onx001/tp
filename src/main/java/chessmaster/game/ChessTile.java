@@ -27,6 +27,7 @@ public class ChessTile {
         chessPiece = new EmptyPiece(coor.getX(),coor.getY());
     }
 
+
     /**
      * Updates the ChessTile with a new ChessPiece, considering piece interactions. <BR>
      * 1. Replace the new piece on an EMPTY tile. <BR>
@@ -60,6 +61,9 @@ public class ChessTile {
     public ChessPiece getChessPiece() {
         return chessPiece;
     }
+
+    
+
 
     @Override
     public String toString() {
