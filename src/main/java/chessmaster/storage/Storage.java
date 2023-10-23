@@ -28,9 +28,11 @@ public class Storage {
     }
 
     /**
-     * Creates a ChessMaster program file to store game state, including necessary parent directories.
+     * Creates a ChessMaster program file to store game state, including necessary
+     * parent directories.
      *
-     * @throws ChessMasterException If there is an error creating the file or parent directories.
+     * @throws ChessMasterException If there is an error creating the file or parent
+     *                              directories.
      */
     private void createChessMasterFile() throws ChessMasterException {
         // Create the necessary parent directories for new file
@@ -47,10 +49,11 @@ public class Storage {
     }
 
     /**
-     * Saves the state of the ChessBoard to a file. Writes the player's color to the first line 
+     * Saves the state of the ChessBoard to a file. Writes the player's color to the
+     * first line
      * and subsequently chess pieces in a 8 x 8 format.
      *
-     * @param board The ChessBoard to save.
+     * @param board       The ChessBoard to save.
      * @param playerColor The color of the current player.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
@@ -76,12 +79,26 @@ public class Storage {
         }
     }
 
+    public void resetBoard() throws ChessMasterException {
+        createChessMasterFile();
+        try {
+            FileWriter fileWriter = new FileWriter(storageFile);
+            fileWriter.write("");
+            fileWriter.close();
+
+        } catch (IOException e) {
+            throw new SaveBoardException();
+        }
+    }
+
     /**
-     * Loads the state of the chessboard from a file. 
-     * Ignores the first line player color information as it can be retrieved with loadPlayerColor() method
+     * Loads the state of the chessboard from a file.
+     * Ignores the first line player color information as it can be retrieved with
+     * loadPlayerColor() method
      *
      * @return A 2D array of ChessTile objects representing the loaded chessboard.
-     * @throws ChessMasterException If there is an error loading the board from the file.
+     * @throws ChessMasterException If there is an error loading the board from the
+     *                              file.
      */
     public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
@@ -120,11 +137,12 @@ public class Storage {
     }
 
     /**
-     * Loads the player's color from a file. 
+     * Loads the player's color from a file.
      * Expects the player color information on the first line of text file.
      *
      * @return The player's color as a Color enumeration.
-     * @throws ChessMasterException If there is an error loading the player's color from the file.
+     * @throws ChessMasterException If there is an error loading the player's color
+     *                              from the file.
      */
     public Color loadPlayerColor() throws ChessMasterException {
         createChessMasterFile();
@@ -148,4 +166,3 @@ public class Storage {
         throw new LoadBoardException();
     }
 }
-
