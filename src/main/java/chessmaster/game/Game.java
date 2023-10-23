@@ -17,8 +17,9 @@ public class Game {
 
     private static Color playerColor;
 
-    private Human human;
     private CPU cpu;
+    private Human human;
+    private Player currentPlayer;
 
     private ChessBoard board;
     private Storage storage;
@@ -34,58 +35,72 @@ public class Game {
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
         this.cpu = new CPU(cpuColor, board);
+        currentPlayer = human; // Human goes first
     }
 
     public void run() {
         board.showChessBoard();
 
         while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
-
             try {
-                String userInputString = TextUI.getUserInput();
-                command = Parser.parseCommand(userInputString);
-                CommandResult result = command.execute(board);
-                TextUI.printCommandResult(result);
-
-                if (!(command instanceof MoveCommand)) {
-                    continue; // Take new user command
-                }
-
-                Move humanMove = ((MoveCommand) command).getMove();
-                hasEnded = processMove(humanMove, human);
-
-                if (!hasEnded) {
-                    if (board.canPromote(humanMove)) {
-                        human.handlePromote(board, humanMove);
+                if (currentPlayer.isHuman()) {
+                    command = getUserCommand();
+                    if (!command.isMoveCommand()) {
+                        continue; // Get next command
                     }
-
-                    Move cpuMove = cpu.getRandomMove(board);
-                    TextUI.printCPUMove(cpuMove);
-                    processMove(cpuMove, cpu);
+                    handleHumanMove();
+                    
+                } else if (currentPlayer.isCPU()) {
+                    handleCPUMove();
                 }
-
-                // int points = board.getPoints(playerColor);
-                // System.out.println("Your points: " + points);
                 board.showChessBoard();
+                storage.saveBoard(board, playerColor);
+
+                hasEnded = checkEndState();
+                currentPlayer = togglePlayerTurn();
+
             } catch (ChessMasterException e) {
                 TextUI.printErrorMessage(e);
             }
-
         }
     }
 
-    private boolean processMove(Move move, Player player) throws ChessMasterException {
-        board.executeMove(move);
-        player.addMove(move);
-        storage.saveBoard(board, playerColor);
+    private Command getUserCommand() throws ChessMasterException {
+        String userInputString = TextUI.getUserInput();
+        command = Parser.parseCommand(userInputString);
 
+        CommandResult result = command.execute(board);
+        TextUI.printCommandResult(result);
+        return command;
+    }
+
+    private void handleHumanMove() throws ChessMasterException {
+        Move humanMove = ((MoveCommand) command).getMove();
+        board.executeMove(humanMove);
+        human.addMove(humanMove);
+        
+        // Handle human promotion
+        if (!board.isEndGame()) {
+            if (board.canPromote(humanMove)) {
+                human.handlePromote(board, humanMove);
+            }
+        }
+    }
+
+    private void handleCPUMove() throws ChessMasterException {
+        Move cpuMove = cpu.getRandomMove(board);
+        TextUI.printCPUMove(cpuMove);
+        board.executeMove(cpuMove);
+        cpu.addMove(cpuMove);
+    }
+
+    private boolean checkEndState() throws ChessMasterException {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
             TextUI.printWinnerMessage(winningColor);
             storage.resetBoard();
         }
-
         return end;
     }
 
@@ -93,10 +108,16 @@ public class Game {
         try {
             Move cpuMove = cpu.getRandomMove(board);
             TextUI.printCPUMove(cpuMove);
-            processMove(cpuMove, cpu);
+            board.executeMove(cpuMove);
+            cpu.addMove(cpuMove);
+
         } catch (ChessMasterException e){
             TextUI.printErrorMessage(e);
         }
+    }
+
+    private Player togglePlayerTurn() {
+        return currentPlayer.isHuman() ? cpu : human;
     }
 
     public static boolean isPieceFriendly(ChessPiece otherPiece) {

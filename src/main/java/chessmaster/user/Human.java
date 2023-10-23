@@ -34,15 +34,15 @@ public class Human extends Player {
         Coordinate coord = pawnPiece.getPosition();
         boolean promoteFailure = true;
 
+        TextUI.printPromotePrompt(coord);
+        String in = TextUI.getUserInput();
         do {
-            TextUI.printPromotePrompt(coord);
-            String in = TextUI.getUserInput();
-
             ChessPiece promotedPiece = Parser.parsePromote(pawnPiece, in);
             promoteFailure = promotedPiece instanceof Pawn;
 
             if (promoteFailure) {
                 TextUI.printPromoteInvalidMessage();
+                in = TextUI.getUserInput();
             } else {
                 promotedPiece.setHasMoved();
                 this.pieces.add(promotedPiece);
