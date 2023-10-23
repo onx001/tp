@@ -8,6 +8,7 @@ import chessmaster.game.Game;
 public class Pawn extends ChessPiece {
     public static final String PAWN_WHITE = "p"; // ♙
     public static final String PAWN_BLACK = "P"; // ♟
+    protected static int points = 1;
 
     public static final int[][] DIRECTIONS_UP = {
         UP_LEFT, UP_RIGHT, UP, UP_UP,
@@ -20,6 +21,7 @@ public class Pawn extends ChessPiece {
 
     public Pawn(int row, int col, Color color) {
         super(row, col, color);
+        this.setPoints(points);
     }
 
     @Override

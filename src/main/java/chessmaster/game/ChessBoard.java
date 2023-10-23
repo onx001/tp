@@ -224,4 +224,21 @@ public class ChessBoard {
             return Color.EMPTY;
         }
     }
+
+    public int getPoints(Color color) {
+        int points = 0;
+
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = this.getPieceAtCoor(coor);
+
+                if (piece.isSameColorAs(color)) {
+                    points += piece.getPoints();
+                }
+            }
+        }
+
+        return points;
+    }
 }

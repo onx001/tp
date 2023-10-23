@@ -64,6 +64,8 @@ public class Game {
                     processMove(cpuMove, cpu);
                 }
 
+                int points = board.getPoints(playerColor);
+                System.out.println("Your points: " + points);
                 board.showChessBoard();
             } catch (ChessMasterException e) {
                 TextUI.printErrorMessage(e);
@@ -85,6 +87,15 @@ public class Game {
         }
 
         return end;
+    }
+
+    public void CPUFirstMove(){
+        try {
+            Move cpuMove = cpu.getRandomMove(board);
+            processMove(cpuMove, cpu);
+        } catch (ChessMasterException e){
+            TextUI.printErrorMessage(e);
+        }
     }
 
     public static boolean isPieceFriendly(ChessPiece otherPiece) {

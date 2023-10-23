@@ -9,6 +9,7 @@ import chessmaster.game.Coordinate;
 public class Bishop extends ChessPiece {
     public static final String BISHOP_WHITE = "b"; // ♗
     public static final String BISHOP_BLACK = "B"; // ♝
+    protected static int points = 3;
 
     public static final int[][] DIRECTIONS = {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
@@ -16,6 +17,7 @@ public class Bishop extends ChessPiece {
 
     public Bishop(int row, int col, Color color) {
         super(row, col, color);
+        this.setPoints(points);
     }
 
     @Override
