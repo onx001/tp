@@ -37,6 +37,8 @@ public abstract class ChessPiece {
     protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
+    protected int points = 0;
+
 
     public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
@@ -145,6 +147,10 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
+    public int getPoints() {
+        return this.points;
+    }
+
     /**
      * Checks if the ChessPiece object has the same color as a given color.
      *
@@ -215,5 +221,9 @@ public abstract class ChessPiece {
     public boolean isPromotionPiece() {
         return this instanceof Queen || this instanceof Rook 
             || this instanceof Bishop || this instanceof Knight;
+    }
+
+    protected void setPoints(int points) {
+        this.points = points;
     }
 }
