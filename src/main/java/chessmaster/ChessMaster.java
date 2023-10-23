@@ -18,7 +18,8 @@ public class ChessMaster {
     private ChessBoard board;
     private Storage storage;
     private Color playerColor;
-    private Game game;
+
+    private boolean shouldCPUStart = false;
 
     private ChessMaster() {
         TextUI.printWelcomeMessage();
@@ -68,15 +69,18 @@ public class ChessMaster {
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
         board = new ChessBoard(playerColor);
         TextUI.printStartNewGame(playerColor.name());
-        game = new Game(playerColor, board, storage);
 
-        if (playerColor.isBlack()){
-            game.CPUFirstMove();
+        if (playerColor.isBlack()) {
+            shouldCPUStart = true;
         }
     }
 
     private void run() {   
-        new Game(playerColor, board, storage).run();
+        Game game = new Game(playerColor, board, storage);
+        if (shouldCPUStart) {
+            game.cpuFirstMove();
+        }
+        game.run();
     }
 
     public static void main(String[] args) {

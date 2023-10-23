@@ -64,8 +64,8 @@ public class Game {
                     processMove(cpuMove, cpu);
                 }
 
-                int points = board.getPoints(playerColor);
-                System.out.println("Your points: " + points);
+                // int points = board.getPoints(playerColor);
+                // System.out.println("Your points: " + points);
                 board.showChessBoard();
             } catch (ChessMasterException e) {
                 TextUI.printErrorMessage(e);
@@ -89,9 +89,10 @@ public class Game {
         return end;
     }
 
-    public void CPUFirstMove(){
+    public void cpuFirstMove() {
         try {
             Move cpuMove = cpu.getRandomMove(board);
+            TextUI.printCPUMove(cpuMove);
             processMove(cpuMove, cpu);
         } catch (ChessMasterException e){
             TextUI.printErrorMessage(e);
