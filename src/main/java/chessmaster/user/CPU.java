@@ -44,6 +44,8 @@ public class CPU extends Player {
         return getRandomMoveFromPiece(randomPiece, board);
     }
 
+
+
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
     }

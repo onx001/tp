@@ -1,5 +1,7 @@
 package chessmaster.game;
 
+import java.util.ArrayList;
+
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
@@ -37,6 +39,9 @@ public class ChessBoard {
 
     private boolean isWhiteKingAlive = true;
     private boolean isBlackKingAlive = true;
+
+    private int whitePoints = 0;
+    private int blackPoints = 0;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
@@ -88,6 +93,31 @@ public class ChessBoard {
             TextUI.printChessBoardRow(rowNum, rowString.toString());
         }
         System.out.println();
+    }
+
+
+
+    public Move[] getAllMoves(Color color) {
+        //Declare arraylist of moves as allMoves
+        ArrayList<Move> allMoves = new ArrayList<>();
+
+
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+
+                if (piece.isSameColorAs(color)) {
+                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
+                    for (Coordinate possible: possibleCoordinates){
+                        Move move = new Move(coor, possible, piece);
+                        allMoves.add(move);
+                    }
+                }
+            }
+        }
+
+        return allMoves.toArray(new Move[0]);
     }
 
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {
@@ -165,6 +195,9 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
+
+        this.setWhitePoints(this.getPoints(Color.WHITE));
+        this.setBlackPoints(this.getPoints(Color.BLACK));
     }
 
     public boolean canPromote(Move move) {
@@ -241,4 +274,47 @@ public class ChessBoard {
 
         return points;
     }
+
+    public ChessBoard clone(){
+        String stringRep = this.toString();
+        return toBoard(stringRep);
+    }
+
+    public ChessBoard toBoard(String board){
+        ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
+        int row = 0;
+        int col = 0;
+        for (int i = 0; i < board.length(); i++) {
+            String pieceString = board.substring(i, i + 1);
+            ChessPiece piece = Parser.parseChessPiece(pieceString, row, col);
+            boardTiles[row][col] = new ChessTile(piece);
+            col++;
+            if (col == SIZE) {
+                col = 0;
+                row++;
+            }
+        }
+        return new ChessBoard(boardTiles);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder boardString = new StringBuilder();
+        for (ChessTile[] row : board) {
+            for (ChessTile tile : row) {
+                boardString.append(tile.toString());
+            }
+        }
+        return boardString.toString();
+    }
+
+    private void setWhitePoints(int points) {
+        this.whitePoints = points;
+    }
+
+    private void setBlackPoints(int points) {
+        this.blackPoints = points;
+    }
+
+
 }
