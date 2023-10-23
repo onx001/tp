@@ -15,7 +15,7 @@ import chessmaster.user.Player;
 
 public class Game {
 
-    private static Color playerColor; 
+    private static Color playerColor;
 
     private Human human;
     private CPU cpu;
@@ -44,15 +44,14 @@ public class Game {
             try {
                 String userInputString = TextUI.getUserInput();
                 command = Parser.parseCommand(userInputString);
-                CommandResult result = command.execute();
+                CommandResult result = command.execute(board);
                 TextUI.printCommandResult(result);
 
                 if (!(command instanceof MoveCommand)) {
                     continue; // Take new user command
                 }
 
-                // Input string contains 2 valid coordinates
-                Move humanMove = Parser.parseMove(userInputString, board);
+                Move humanMove = ((MoveCommand) command).getMove();
                 hasEnded = processMove(humanMove, human);
 
                 if (!hasEnded) {
@@ -61,6 +60,7 @@ public class Game {
                     }
 
                     Move cpuMove = cpu.getRandomMove(board);
+                    TextUI.printCPUMove(cpuMove);
                     processMove(cpuMove, cpu);
                 }
 
@@ -68,7 +68,7 @@ public class Game {
             } catch (ChessMasterException e) {
                 TextUI.printErrorMessage(e);
             }
-            
+
         }
     }
 
@@ -81,6 +81,7 @@ public class Game {
         if (end) {
             Color winningColor = board.getWinningColor();
             TextUI.printWinnerMessage(winningColor);
+            storage.resetBoard();
         }
 
         return end;
