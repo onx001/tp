@@ -72,51 +72,11 @@ public abstract class Player {
         }
     }
 
-    // /**
-    //  * High-level function which calls necessary APIs to request user input and
-    //  * parse it into a Move object.
-    //  * 
-    //  * @param board The board which to make the move on.
-    //  * @return null if the user inputs "abort", an empty Move if an error occurred
-    //  *         during parsing, otherwise return the requested Move object.
-    //  */
-    // public Move getNextMove(ChessBoard board) {
-    //     String input = TextUI.getUserInput(); // Get user input
-    //     try {
-    //         Parser parser = new Parser();
-    //         Command command = parser.parseCommand(input, board);
-    //         if (command instanceof AbortCommand) {
-    //             return null;
-    //         }
-    //         return command.getMove();
-        
-    //     } catch (ParseCoordinateException | NullPieceException e) {
-    //         TextUI.printErrorMessage(e);
-    //     }
-    //     return new Move();
-    // }
+    public boolean isHuman() {
+        return this instanceof Human;
+    }
 
-    // /**
-    //  * Allows a player to execute a move and add it to their history.
-    //  * 
-    //  * @param move  The move to be executed.
-    //  * @param board The board the move is to be executed on.
-    //  * @return true on success, false on InvalidMoveException
-    //  */
-    // public boolean move(Move move, ChessBoard board) {
-    //     try {
-    //         board.executeMove(move);
-    //         this.addMove(move);
-    //         if (board.canPromote(move)) {
-    //             promote(board, board.getPieceAtCoor(move.getTo()));
-    //         }
-    //     } catch (InvalidMoveException e) {
-    //         e.printStackTrace();
-    //         return false;
-    //     } catch (NullPieceException e) {
-    //         return false;
-    //     }
-
-    //     return true;
-    // }
+    public boolean isCPU() {
+        return this instanceof CPU;
+    }
 }
