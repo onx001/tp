@@ -9,11 +9,12 @@ import chessmaster.game.Coordinate;
 public class Rook extends ChessPiece {
     public static final String ROOK_WHITE = "r"; // ♖
     public static final String ROOK_BLACK = "R"; // ♜
-    protected static int points = 5;
 
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT,
     };
+
+    protected static int points = 5;
 
     public Rook(int row, int col, Color color) {
         super(row, col, color);

@@ -7,12 +7,13 @@ import chessmaster.game.Coordinate;
 public class Knight extends ChessPiece {
     public static final String KNIGHT_WHITE = "n"; // ♘
     public static final String KNIGHT_BLACK = "N"; // ♞
-    protected static int points = 3;
 
     public static final int[][] DIRECTIONS = {
         UP_UP_LEFT, UP_UP_RIGHT, DOWN_DOWN_LEFT, DOWN_DOWN_RIGHT,
         LEFT_UP_LEFT, LEFT_DOWN_LEFT, RIGHT_UP_RIGHT, RIGHT_DOWN_RIGHT,
     };
+    
+    protected static int points = 3;
 
     public Knight(int row, int col, Color color) {
         super(row, col, color);
