@@ -64,6 +64,8 @@ public class Game {
                     processMove(cpuMove, cpu);
                 }
 
+                int points = board.getPoints(playerColor);
+                System.out.println("Your points: " + points);
                 board.showChessBoard();
             } catch (ChessMasterException e) {
                 TextUI.printErrorMessage(e);
