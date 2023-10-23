@@ -8,10 +8,14 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
+import chessmaster.game.Move;
 
 public final class TextUI {
 
-    public static final String CHESS_BOARD_DIVIDER = " ".repeat(4) + "_".repeat(4 * ChessBoard.SIZE + 1);
+    private static final String CHESS_BOARD_TAB = " ".repeat(4);
+    private static final String CHESS_BOARD_PADDING = CHESS_BOARD_TAB.repeat(3);
+    public static final String CHESS_BOARD_DIVIDER = CHESS_BOARD_PADDING + CHESS_BOARD_TAB +
+            "_".repeat(4 * ChessBoard.SIZE + 1);
 
     private static final String COLUMN_HEADER = "abcdefgh";
 
@@ -58,7 +62,8 @@ public final class TextUI {
     }
 
     /**
-     * Prints one or more lines of text, surrounded by a divider, to the user console.
+     * Prints one or more lines of text, surrounded by a divider, to the user
+     * console.
      *
      * @param texts The lines of text to be printed.
      */
@@ -68,7 +73,7 @@ public final class TextUI {
         for (String text : texts) {
             out.println(text);
         }
-        
+
         out.println(DIVIDER);
     }
 
@@ -115,12 +120,19 @@ public final class TextUI {
         out.println(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
+    public static void printCPUMove(Move cpuMove) {
+        String pieceString = cpuMove.getPiece().getClass().getSimpleName();
+        String displayString = String.format(UiMessages.CPU_MOVE_MESSAGE, pieceString,
+                cpuMove.getFrom(), cpuMove.getTo());
+        printText(displayString);
+    }
+
     public static void printChessBoardDivider() {
         out.println(CHESS_BOARD_DIVIDER);
     }
 
     public static void printChessBoardHeader() {
-        out.print(" ".repeat(4));
+        out.print(CHESS_BOARD_PADDING + CHESS_BOARD_TAB);
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
             out.printf(" (%s)", col);
@@ -129,6 +141,7 @@ public final class TextUI {
     }
 
     public static void printChessBoardRow(int rowNum, String chessBoardRow) {
+        out.print(CHESS_BOARD_PADDING);
         out.print(String.format("(%d) ", rowNum));
         out.print(chessBoardRow);
         out.print(ChessTile.TILE_DIVIDER);
@@ -145,7 +158,7 @@ public final class TextUI {
         printText(e.getMessage());
     }
 
-    public static void printWinnerMessage(Color colour){
+    public static void printWinnerMessage(Color colour) {
         if (colour.isBlack()) {
             out.println("BLACK Wins!");
         } else if (colour.isWhite()) {
