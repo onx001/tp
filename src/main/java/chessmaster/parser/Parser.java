@@ -4,6 +4,7 @@ import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
+import chessmaster.exceptions.MoveEmptyPieceException;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -46,16 +47,16 @@ public class Parser {
         Coordinate position = promoteFrom.getPosition();
 
         switch (promoteTo) {
-        case Bishop.BISHOP_WHITE:
-            return new Bishop(position.getY(), position.getX(), color);
-        case Queen.QUEEN_WHITE:
-            return new Queen(position.getY(), position.getX(), color);
-        case Knight.KNIGHT_WHITE:
-            return new Knight(position.getY(), position.getX(), color);
-        case Rook.ROOK_WHITE:
-            return new Rook(position.getY(), position.getX(), color);
-        default:
-            return promoteFrom;
+            case Bishop.BISHOP_WHITE:
+                return new Bishop(position.getY(), position.getX(), color);
+            case Queen.QUEEN_WHITE:
+                return new Queen(position.getY(), position.getX(), color);
+            case Knight.KNIGHT_WHITE:
+                return new Knight(position.getY(), position.getX(), color);
+            case Rook.ROOK_WHITE:
+                return new Rook(position.getY(), position.getX(), color);
+            default:
+                return promoteFrom;
         }
     }
 
@@ -68,15 +69,16 @@ public class Parser {
      * @param board The ChessBoard where the move is taking place.
      * @return Move object containing information about the move to be made.
      * 
-     * @throws ParseCoordinateException If the string entered is not in the
-     *                                  algebraic coordinate notation.
-     * @throws NullPieceException       If there is no piece at the 'from'
-     *                                  coordinate.
+     * @throws ParseCoordinateException   If the string entered is not in the
+     *                                    algebraic coordinate notation.
+     * @throws NullPieceException         If there is no piece at the 'from'
+     *                                    coordinate.
+     * @throws MoveEmptyPieceException
      * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, 
-            NullPieceException, MoveOpponentPieceException {
-                
+    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException,
+            NullPieceException, MoveEmptyPieceException, MoveOpponentPieceException {
+
         String[] parseArray = in.split("\\s+", 2);
         if (parseArray.length < 2) {
             throw new ParseCoordinateException();
@@ -86,7 +88,9 @@ public class Parser {
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
 
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
-        if (Game.isPieceOpponent(relevantPiece)) {
+        if (relevantPiece.isEmptyPiece()) {
+            throw new MoveEmptyPieceException();
+        } else if (Game.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
 
@@ -108,32 +112,32 @@ public class Parser {
      */
     public static ChessPiece parseChessPiece(String pieceString, int row, int col) {
         switch (pieceString) {
-        case Bishop.BISHOP_BLACK:
-            return new Bishop(row, col, Color.BLACK);
-        case Bishop.BISHOP_WHITE:
-            return new Bishop(row, col, Color.WHITE);
-        case King.KING_BLACK:
-            return new King(row, col, Color.BLACK);
-        case King.KING_WHITE:
-            return new King(row, col, Color.WHITE);
-        case Queen.QUEEN_BLACK:
-            return new Queen(row, col, Color.BLACK);
-        case Queen.QUEEN_WHITE:
-            return new Queen(row, col, Color.WHITE);
-        case Knight.KNIGHT_BLACK:
-            return new Knight(row, col, Color.BLACK);
-        case Knight.KNIGHT_WHITE:
-            return new Knight(row, col, Color.WHITE);
-        case Pawn.PAWN_BLACK:
-            return new Pawn(row, col, Color.BLACK);
-        case Pawn.PAWN_WHITE:
-            return new Pawn(row, col, Color.WHITE);
-        case Rook.ROOK_BLACK:
-            return new Rook(row, col, Color.BLACK);
-        case Rook.ROOK_WHITE:
-            return new Rook(row, col, Color.WHITE);
-        default:
-            return new EmptyPiece(row, col);
+            case Bishop.BISHOP_BLACK:
+                return new Bishop(row, col, Color.BLACK);
+            case Bishop.BISHOP_WHITE:
+                return new Bishop(row, col, Color.WHITE);
+            case King.KING_BLACK:
+                return new King(row, col, Color.BLACK);
+            case King.KING_WHITE:
+                return new King(row, col, Color.WHITE);
+            case Queen.QUEEN_BLACK:
+                return new Queen(row, col, Color.BLACK);
+            case Queen.QUEEN_WHITE:
+                return new Queen(row, col, Color.WHITE);
+            case Knight.KNIGHT_BLACK:
+                return new Knight(row, col, Color.BLACK);
+            case Knight.KNIGHT_WHITE:
+                return new Knight(row, col, Color.WHITE);
+            case Pawn.PAWN_BLACK:
+                return new Pawn(row, col, Color.BLACK);
+            case Pawn.PAWN_WHITE:
+                return new Pawn(row, col, Color.WHITE);
+            case Rook.ROOK_BLACK:
+                return new Rook(row, col, Color.BLACK);
+            case Rook.ROOK_WHITE:
+                return new Rook(row, col, Color.WHITE);
+            default:
+                return new EmptyPiece(row, col);
         }
     }
 
@@ -142,12 +146,12 @@ public class Parser {
         String commandString = splitInputStrings[0];
 
         switch (commandString) {
-        case HelpCommand.HELP_COMAMND_STRING:
-            return new HelpCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
-            return new AbortCommand();
-        default:
-            return new MoveCommand(in);
+            case HelpCommand.HELP_COMAMND_STRING:
+                return new HelpCommand();
+            case AbortCommand.ABORT_COMAMND_STRING:
+                return new AbortCommand();
+            default:
+                return new MoveCommand(in);
         }
     }
 
