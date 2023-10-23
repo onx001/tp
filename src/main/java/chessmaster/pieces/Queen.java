@@ -9,11 +9,12 @@ import chessmaster.game.Coordinate;
 public class Queen extends ChessPiece {
     public static final String QUEEN_WHITE = "q"; // ♕
     public static final String QUEEN_BLACK = "Q"; // ♛
-    protected static int points = 9;
 
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
+    
+    protected static int points = 9;
 
     public Queen(int row, int col, Color color) {
         super(row, col, color);
