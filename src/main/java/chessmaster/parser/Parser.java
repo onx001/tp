@@ -1,6 +1,11 @@
 package chessmaster.parser;
 
-import chessmaster.commands.*;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.HelpCommand;
+import chessmaster.commands.MoveCommand;
+import chessmaster.commands.RulesCommand;
+import chessmaster.exceptions.MoveEmptyPieceException;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -65,15 +70,16 @@ public class Parser {
      * @param board The ChessBoard where the move is taking place.
      * @return Move object containing information about the move to be made.
      * 
-     * @throws ParseCoordinateException If the string entered is not in the
-     *                                  algebraic coordinate notation.
-     * @throws NullPieceException       If there is no piece at the 'from'
-     *                                  coordinate.
+     * @throws ParseCoordinateException   If the string entered is not in the
+     *                                    algebraic coordinate notation.
+     * @throws NullPieceException         If there is no piece at the 'from'
+     *                                    coordinate.
+     * @throws MoveEmptyPieceException
      * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException, 
-            NullPieceException, MoveOpponentPieceException {
-                
+    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException,
+            NullPieceException, MoveEmptyPieceException, MoveOpponentPieceException {
+
         String[] parseArray = in.split("\\s+", 2);
         if (parseArray.length < 2) {
             throw new ParseCoordinateException();
@@ -83,7 +89,9 @@ public class Parser {
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
 
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
-        if (Game.isPieceOpponent(relevantPiece)) {
+        if (relevantPiece.isEmptyPiece()) {
+            throw new MoveEmptyPieceException();
+        } else if (Game.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
 

@@ -1,7 +1,10 @@
 package chessmaster;
 
 import chessmaster.exceptions.ChessMasterException;
-import chessmaster.game.*;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.ChessTile;
+import chessmaster.game.Color;
+import chessmaster.game.Game;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 
@@ -15,7 +18,8 @@ public class ChessMaster {
     private ChessBoard board;
     private Storage storage;
     private Color playerColor;
-    private Game game;
+
+    private boolean shouldCPUStart = false;
 
     private ChessMaster() {
         TextUI.printWelcomeMessage();
@@ -31,20 +35,22 @@ public class ChessMaster {
             }
 
         } catch (ChessMasterException e) {
-            TextUI.printErrorMessage(e);
+            TextUI.printLoadBoardError();
             loadNewGame();
         }
     }
 
     private boolean shouldStartNewGame() {
-        String input = "";
-        do {
-            TextUI.promptPrevGame();
-            input = TextUI.getUserInput();
+        TextUI.promptContinuePrevGame(false);
+        String input = TextUI.getUserInput();
 
-        } while (!input.equals("y") && !input.equals("n"));
+        while (!input.equals("y") && !input.equals("n")) {
+            TextUI.promptContinuePrevGame(true);
+            input = TextUI.getUserInput();
+        }
         
         if (input.equals("y")) {
+            TextUI.printContinuePrevGame(playerColor.name());
             return false;
         } else {
             return true;
@@ -52,24 +58,29 @@ public class ChessMaster {
     }
 
     private void loadNewGame() {
-        String input = "";
-        do {
-            TextUI.promptStartingColor();
+        TextUI.promptStartingColor(false);
+        String input = TextUI.getUserInput();
+
+        while (!input.equals("b") && !input.equals("w")) {
+            TextUI.promptStartingColor(true);
             input = TextUI.getUserInput();
-            
-        } while (!input.equals("b") && !input.equals("w"));
+        }
         
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
         board = new ChessBoard(playerColor);
-        game = new Game(playerColor, board, storage);
+        TextUI.printStartNewGame(playerColor.name());
 
-        if (playerColor.isBlack()){
-            game.CPUFirstMove();
+        if (playerColor.isBlack()) {
+            shouldCPUStart = true;
         }
     }
 
     private void run() {   
-        new Game(playerColor, board, storage).run();
+        Game game = new Game(playerColor, board, storage);
+        if (shouldCPUStart) {
+            game.cpuFirstMove();
+        }
+        game.run();
     }
 
     public static void main(String[] args) {

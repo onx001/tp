@@ -1,22 +1,24 @@
 package chessmaster.commands;
 
+import chessmaster.game.ChessBoard;
+
 public class HelpCommand extends Command {
 
     public static final String HELP_COMAMND_STRING = "help";
 
     private static final String[] HELP_STRINGS = { 
-        "Seems like you need some help, here are the following commands to play: \n" +
-        "Move piece - Input coordinate of piece, followed by coordinate to move to \n" +
-        "   Format: [column][row] [column][row] \n" +
-        "   E.g. a2 a3 \n" +
-        "Abort game - Exit programme \n" +
-        "   Format: abort \n" +
-        "Obtain rules - Obtain a quick refresher on the rules of chess \n" +
-        "   Format: rules \n"
+        "Seems like you need some help, here are the following commands to play:",
+        "Move piece - Input coordinate of piece, followed by coordinate to move to",
+        "   Format: [column][row] [column][row]",
+        "   E.g. a2 a3",
+        "Abort game - Exit programme",
+        "   Format: abort",
+        "Obtain rules - Obtain a quick refresher on the rules of chess",
+        "   Format: rules"
     };
 
     @Override
-    public CommandResult execute() {
+    public CommandResult execute(ChessBoard board) {
         return new CommandResult(HELP_STRINGS);
     }
 

@@ -14,8 +14,5 @@ public class ChessBoardTest {
         int points = board.getPoints(Color.WHITE);
         assertEquals(39, points);
     }
-    
-    
-
-    
+        
 }
