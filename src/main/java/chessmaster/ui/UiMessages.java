@@ -25,7 +25,8 @@ public class UiMessages {
     public static final String LOAD_BOARD_ERROR_MESSAGE = "No valid previous game found. Starting new chess game...";
     public static final String CPU_MOVE_MESSAGE = "ChessMaster moved %s from %s to %s";
 
-    public static final String PROMPT_PROMOTE_MESSAGE = "You can promote the pawn at %s! \n"
-            + "Please choose what to promote it to: ";
-    public static final String PROMPT_PROMOTE_INVALID_MESSAGE = "Oops, we couldn't promote your piece! ";
+    public static final String PROMPT_PROMOTE_MESSAGE = 
+        "Promote the pawn at %s! Choose piece to promote to [b/q/r/n]: ";
+    public static final String PROMPT_PROMOTE_INVALID_MESSAGE = 
+        "Invalid piece! Enter b(Bishop), q(Queen), r(Rook) or n(Knight): ";
 }

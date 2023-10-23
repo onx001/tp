@@ -113,11 +113,11 @@ public final class TextUI {
 
     public static void printPromotePrompt(Coordinate coord) {
         String message = String.format(UiMessages.PROMPT_PROMOTE_MESSAGE, coord.toString());
-        out.println(message);
+        out.print(message);
     }
 
     public static void printPromoteInvalidMessage() {
-        out.println(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
+        out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
     public static void printCPUMove(Move cpuMove) {
