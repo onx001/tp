@@ -1,10 +1,6 @@
 package chessmaster.parser;
 
-import chessmaster.commands.AbortCommand;
-import chessmaster.commands.Command;
-import chessmaster.commands.HelpCommand;
-import chessmaster.commands.MoveCommand;
-import chessmaster.commands.RulesCommand;
+import chessmaster.commands.*;
 import chessmaster.exceptions.MoveEmptyPieceException;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
@@ -153,6 +149,8 @@ public class Parser {
             return new RulesCommand();
         case AbortCommand.ABORT_COMAMND_STRING:
             return new AbortCommand();
+        case ShowCommand.SHOW_COMAMND_STRING:
+                return new ShowCommand();
         default:
             return new MoveCommand(in);
         }
