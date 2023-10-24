@@ -5,6 +5,7 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.game.MiniMax;
 
 import java.util.Random;
 
@@ -42,6 +43,13 @@ public class CPU extends Player {
         }
 
         return getRandomMoveFromPiece(randomPiece, board);
+    }
+
+    public Move getBestMove(ChessBoard board) {
+        MiniMax miniMax = new MiniMax(board, this.colour, 2, 0);
+        Move bestMove = miniMax.getBestMove();
+        System.out.println("Best move: " + bestMove);
+        return bestMove;
     }
 
 

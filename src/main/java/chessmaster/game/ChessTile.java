@@ -70,4 +70,8 @@ public class ChessTile {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
         return String.format("%s %s ", TILE_DIVIDER, tileContent);
     }
+
+    public String toFileString(){
+        return chessPiece.toString();
+    }
 }
