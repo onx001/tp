@@ -8,8 +8,8 @@ public class ChessTile {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
     private static final String AVAILABLE_TILE_STRING = "x";
-    public static final String BACKGROUND_RESET = "\u001B[0m";
-    public static final String CAPTURABLE_BACKGROUND = "\u001B[43m";
+    private static final String BACKGROUND_RESET = "\u001B[0m";
+    private static final String CAPTURABLE_BACKGROUND = "\u001B[43m";
 
     /** Nullable ChessPiece object. Null signifies that this tile is empty */
     private ChessPiece chessPiece;

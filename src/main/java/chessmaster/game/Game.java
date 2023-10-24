@@ -1,6 +1,10 @@
 package chessmaster.game;
 
-import chessmaster.commands.*;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.MoveCommand;
+import chessmaster.commands.ShowMovesCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
