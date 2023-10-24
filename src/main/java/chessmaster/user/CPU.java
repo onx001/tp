@@ -46,8 +46,11 @@ public class CPU extends Player {
     }
 
     public Move getBestMove(ChessBoard board) {
-        MiniMax miniMax = new MiniMax(board, this.colour, 4, 0);
+        MiniMax miniMax = new MiniMax(board, this.colour, 2, 0);
         Move bestMove = miniMax.getBestMove();
+        Coordinate from = bestMove.getFrom();
+        ChessPiece piece = board.getPieceAt(from);
+        bestMove.setPiece(piece);
         System.out.println("Best move: " + bestMove);
         return bestMove;
     }
