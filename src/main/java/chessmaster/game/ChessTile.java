@@ -7,6 +7,9 @@ import chessmaster.pieces.Pawn;
 public class ChessTile {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
+    private static final String AVAILABLE_TILE_STRING = "x";
+    public static final String BACKGROUND_RESET = "\u001B[0m";
+    public static final String CAPTURABLE_BACKGROUND = "\u001B[43m";
 
     /** Nullable ChessPiece object. Null signifies that this tile is empty */
     private ChessPiece chessPiece;
@@ -68,6 +71,12 @@ public class ChessTile {
     @Override
     public String toString() {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        return String.format("%s %s ", TILE_DIVIDER, tileContent);
+    }
+
+    public String toStringAvailable() {
+        String tileContent = isEmpty() ? AVAILABLE_TILE_STRING :
+                (CAPTURABLE_BACKGROUND + chessPiece.toString() + BACKGROUND_RESET);
         return String.format("%s %s ", TILE_DIVIDER, tileContent);
     }
 }
