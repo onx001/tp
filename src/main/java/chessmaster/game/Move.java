@@ -43,7 +43,6 @@ public class Move {
     public boolean isValid(Coordinate[][] possibleCoordinates) {
         for (Coordinate[] direction : possibleCoordinates) {
             for (Coordinate coor : direction) {
-                System.out.println(coor);
                 if (coor.equals(to)) {
                     return true;
                 }
