@@ -1,13 +1,15 @@
 package chessmaster.game;
 
-public class BoardScoreTuple {
+public class BoardScoreTuple implements Comparable<BoardScoreTuple>{
 
     private ChessBoard board;
     private int score;
+    private Move move;
 
-    public BoardScoreTuple(ChessBoard board, int score) {
+    public BoardScoreTuple(ChessBoard board, int score, Move move) {
         this.board = board;
         this.score = score;
+        this.move = move;
     }
 
     public ChessBoard getBoard() {
@@ -16,5 +18,20 @@ public class BoardScoreTuple {
 
     public int getScore() {
         return score;
+    }
+
+    public Move getMove() {
+        return move;
+    }
+
+    @Override
+    public int compareTo(BoardScoreTuple tuple) {
+        if (this.score > tuple.getScore()) {
+            return 1;
+        } else if (this.score < tuple.getScore()) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
