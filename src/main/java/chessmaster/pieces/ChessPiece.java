@@ -90,7 +90,7 @@ public abstract class ChessPiece {
                     ChessPiece destPiece = board.getPieceAtCoor(destination);
                     if (destPiece.isEmptyPiece()) {
                         return true;
-                    } else if (destPiece.isSameColorAs(this.color)) {
+                    } else if (!destPiece.isSameColorAs(this.color)) {
                         return true;
                     }
                 }

@@ -200,6 +200,7 @@ public class ChessBoard {
         this.setBlackPoints(this.getPoints(Color.BLACK));
     }
 
+
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
