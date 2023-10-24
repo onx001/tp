@@ -8,6 +8,7 @@ public class King extends ChessPiece {
     public static final String KING_WHITE = "k"; // ♔
     public static final String KING_BLACK = "K"; // ♚
 
+    protected static int points = 1000;
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, CASTLE_LEFT, CASTLE_RIGHT
     };

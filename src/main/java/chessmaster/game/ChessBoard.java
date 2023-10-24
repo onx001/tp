@@ -261,6 +261,7 @@ public class ChessBoard {
 
     public int getPoints(Color color) {
         int points = 0;
+        int enemyPoints = 0;
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -269,11 +270,13 @@ public class ChessBoard {
 
                 if (piece.isSameColorAs(color)) {
                     points += piece.getPoints();
+                } else {
+                    enemyPoints += piece.getPoints();
                 }
             }
         }
 
-        return points;
+        return points - enemyPoints;
     }
 
     public ChessBoard clone(){

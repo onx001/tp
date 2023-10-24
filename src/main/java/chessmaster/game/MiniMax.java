@@ -29,7 +29,8 @@ public class MiniMax {
         BoardScoreTuple bestTuple = null;
 
         if(depth == maxDepth){
-            return new BoardScoreTuple(board,score, null);
+            int newscore = board.getPoints(color);
+            return new BoardScoreTuple(board,newscore, null);
         }
         
         for(int i = 0; i < moves.length; i++){
@@ -72,9 +73,15 @@ public class MiniMax {
             BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
             int newScore = iterTuple.getScore();
             if(isMax){
-                bestScore = Math.max(bestScore, newScore);
+                if (newScore > bestScore) {
+                    System.out.println("New max best found" + newScore + " " + bestScore);
+                    bestScore = newScore;
+                }
             }else{
-                bestScore = Math.min(bestScore, newScore);
+                if (newScore < bestScore) {
+                    bestScore = newScore;
+                    System.out.println("New min best found" + newScore + " " + bestScore);
+                }
             }
             bestTuple = bestScore == newScore ? iterTuple : tuple1;
         }
@@ -84,7 +91,8 @@ public class MiniMax {
     }
 
     public Move getBestMove() {
-        Move bestMove = MiniMax.mostPoints(tuple, color, 0, score, true, maxDepth).getMove();
+        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
+        Move bestMove = bestTuple.getMove();
         return bestMove;
     }
 
