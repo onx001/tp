@@ -1,4 +1,5 @@
 package chessmaster.game;
+import chessmaster.pieces.ChessPiece;
 
 public class MiniMax {
     protected int depth;
@@ -35,39 +36,40 @@ public class MiniMax {
         
         for(int i = 0; i < moves.length; i++){
             ChessBoard newBoard = board.clone();
-            Move[] newMoves = newBoard.getAllMoves(color);
-            Move move = newMoves[i];
+            Move move = moves[i];
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAt(from);
+            move.setPiece(piece);
             try {
                 newBoard.executeMove(move);
                 int newScore = newBoard.getPoints(color);
+                if (newScore != 0){
+                }
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
+                if (boards[i].getScore() != 0){
+                }
             } catch (Exception e) {
-                System.out.println("Move " + move + " is invalid");
             }
         }
         
+        
 
-        for(BoardScoreTuple iterTuple : boards){
+        for(int i = 0; i < boards.length; i++){
+            BoardScoreTuple iterTuple = boards[i];
             assert iterTuple != null : "iterTuple is null";
             assert iterTuple.getMove() != null : "iterTuple move is null";
             BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
-            int newScore = iterTuple.getScore();
+            int newScore = tuple1.getScore();
             if(isMax){
                 if (newScore > bestScore) {
-                    if (newScore != 0){
-                        System.out.println("New max best found" + newScore + " " + bestScore);
-                    }
                     bestScore = newScore;
                 }
             }else{
                 if (newScore < bestScore) {
-                    if (newScore != 0){
-                        System.out.println("New min best found" + newScore + " " + bestScore);
-                    }
                     bestScore = newScore;
                 }
             }
-            bestTuple = bestScore == newScore ? iterTuple : tuple1;
+            bestTuple = bestScore == newScore ? iterTuple : bestTuple;
         }
 
         return bestTuple;
