@@ -1,107 +1,131 @@
 package chessmaster.game;
 
-import chessmaster.exceptions.LoadBoardException;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.MoveCommand;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.parser.Parser;
+import chessmaster.pieces.ChessPiece;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
+import chessmaster.user.Player;
 
 public class Game {
 
-    // In v1.0 we will only have player1 = human (white)
-    // and player2 = CPU (black).
-    // However in the future these will be modifiable.
-    // private Player player1;
-    // private Player player2;
-    private Human human;
+    private static Color playerColor;
+
     private CPU cpu;
+    private Human human;
+    private Player currentPlayer;
+
     private ChessBoard board;
     private Storage storage;
 
-    private final String logo =
-        "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-        + System.lineSeparator() +
-        "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-        + System.lineSeparator() +
-        "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-        + System.lineSeparator() +
-        "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-        + System.lineSeparator() +
-        "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-        + System.lineSeparator() +
-        "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-        + System.lineSeparator();
+    private Command command;
+    private boolean hasEnded;
 
-    public Game(String mode, int player1Colour, String filePath) {
-        board = new ChessBoard();
-        storage = new Storage(filePath);
+    public Game(Color playerColour, ChessBoard board, Storage storage) {
+        this.board = board;
+        this.storage = storage;
+        Game.playerColor = playerColour;
 
-        try {
-            board = storage.loadBoard();
-        } catch (LoadBoardException e) {
-            TextUI.printErrorMessage(e);
-        }
-
-        switch (mode) {
-        case "multi":
-            // here for future expansion
-        case "single":
-        default:
-            this.human = new Human(player1Colour);
-            this.cpu = new CPU(1 - player1Colour);
-        }
-
-        this.human.initialisePieces(board);
-        this.cpu.initialisePieces(board);
+        this.human = new Human(playerColour, board);
+        Color cpuColor = playerColour.getOppositeColour();
+        this.cpu = new CPU(cpuColor, board);
+        currentPlayer = human; // Human goes first
     }
 
     public void run() {
-        System.out.println(logo);
+        board.showChessBoard();
 
-        while (true) {
+        while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
+            try {
+                if (currentPlayer.isHuman()) {
+                    command = getUserCommand();
+                    if (!command.isMoveCommand()) {
+                        continue; // Get next command
+                    }
+                    handleHumanMove();
+                    
+                } else if (currentPlayer.isCPU()) {
+                    handleCPUMove();
+                }
+                board.showChessBoard();
+                storage.saveBoard(board, playerColor);
 
-            // 1. Show the chessboard at every move.
-            board.showChessBoard();
+                hasEnded = checkEndState();
+                currentPlayer = togglePlayerTurn();
 
-            // 2. Get the next move.
-            // In v1.0 the human is always white, so they will always go first
-            // But this needs to be changed in future versions
-            Move move = human.getNextMove(board);
-            if (move == null) {
-                // user has entered "abort"
-                break;
-            } else if (move.isEmpty()) {
-                // if the move was not correctly parsed, move to the next iteration of the game
-                continue;
-            } else if (move.getPiece().getColour() != this.human.getColour()) {
-                System.out.println("You're moving for the wrong side! Try moving one of your pieces instead." );
-                continue;
-            }
-
-            // 3. Execute the next move.
-            boolean success = human.move(move, board);
-            if (!success) {
-                // if the move was Invalid, go to next iteration
-                continue;
-            }
-
-            // 4. CPU plays
-            Move randomMove = cpu.getRandomMove(board);
-            cpu.move(randomMove, board);
-
-            // Check game state
-            boolean gameOver = board.isEndGame();
-            if (gameOver) {
-                // if the game is over
-                // determine the winning colour
-                board.announceWinningColour();
-                break;
-            } else {
-                //game is not over
-                continue;
+            } catch (ChessMasterException e) {
+                TextUI.printErrorMessage(e);
             }
         }
+    }
+
+    private Command getUserCommand() throws ChessMasterException {
+        String userInputString = TextUI.getUserInput();
+        command = Parser.parseCommand(userInputString);
+
+        CommandResult result = command.execute(board);
+        TextUI.printCommandResult(result);
+        return command;
+    }
+
+    private void handleHumanMove() throws ChessMasterException {
+        Move humanMove = ((MoveCommand) command).getMove();
+        board.executeMove(humanMove);
+        human.addMove(humanMove);
+        
+        // Handle human promotion
+        if (!board.isEndGame()) {
+            if (board.canPromote(humanMove)) {
+                human.handlePromote(board, humanMove);
+            }
+        }
+    }
+
+    private void handleCPUMove() throws ChessMasterException {
+        Move cpuMove = cpu.getRandomMove(board);
+        TextUI.printCPUMove(cpuMove);
+        board.executeMove(cpuMove);
+        cpu.addMove(cpuMove);
+    }
+
+    private boolean checkEndState() throws ChessMasterException {
+        boolean end = board.isEndGame();
+        if (end) {
+            Color winningColor = board.getWinningColor();
+            TextUI.printWinnerMessage(winningColor);
+            storage.resetBoard();
+        }
+        return end;
+    }
+
+    public void cpuFirstMove() {
+        try {
+            Move cpuMove = cpu.getRandomMove(board);
+            TextUI.printCPUMove(cpuMove);
+            board.executeMove(cpuMove);
+            cpu.addMove(cpuMove);
+
+        } catch (ChessMasterException e){
+            TextUI.printErrorMessage(e);
+        }
+    }
+
+    private Player togglePlayerTurn() {
+        return currentPlayer.isHuman() ? cpu : human;
+    }
+
+    public static boolean isPieceFriendly(ChessPiece otherPiece) {
+        return Game.playerColor == otherPiece.getColor();
+    }
+
+    public static boolean isPieceOpponent(ChessPiece otherPiece) {
+        return Game.playerColor != otherPiece.getColor();
     }
 
 }

@@ -1,8 +1,12 @@
 package chessmaster.commands;
 
-import chessmaster.game.Move;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.game.ChessBoard;
 
 public abstract class Command {
-    public abstract boolean execute();
-    public abstract Move getMove();
+    public abstract CommandResult execute(ChessBoard board) throws ChessMasterException;
+
+    public boolean isMoveCommand() {
+        return this instanceof MoveCommand;
+    }
 }

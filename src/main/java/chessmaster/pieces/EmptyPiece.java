@@ -1,14 +1,15 @@
 package chessmaster.pieces;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class EmptyPiece extends ChessPiece{
 
-    public static final String EMPTY_PIECE = " ";
+    public static final String EMPTY_PIECE = ".";
 
-    public EmptyPiece(int row, int col, int color){
-        super(row, col, color);
+    public EmptyPiece(int row, int col){
+        super(row, col, Color.EMPTY);
     }
 
     @Override
@@ -17,7 +18,8 @@ public class EmptyPiece extends ChessPiece{
     }
 
     @Override
-    public String getType(){
+    public String toString() {
         return EMPTY_PIECE;
     }
+    
 }

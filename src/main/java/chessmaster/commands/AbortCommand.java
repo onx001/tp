@@ -1,20 +1,20 @@
 package chessmaster.commands;
 
-import chessmaster.game.Move;
+import chessmaster.game.ChessBoard;
 
-public class AbortCommand extends Command{
+public class AbortCommand extends Command {
 
-    public AbortCommand() {
-    }
+    public static final String ABORT_COMAMND_STRING = "abort";
 
-    @Override
-    public boolean execute() {
-        return true;
-    }
+    private static final String ABORT_MESSAGE = "Exiting program... Thanks for playing!";
 
     @Override
-    public Move getMove() {
-        return new Move();
+    public CommandResult execute(ChessBoard board) {
+        return new CommandResult(ABORT_MESSAGE);
     }
-    
+
+    public static boolean isAbortCommand(Command command) {
+        return command instanceof AbortCommand;
+    }
+
 }

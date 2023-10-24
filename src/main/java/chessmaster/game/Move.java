@@ -1,14 +1,14 @@
 package chessmaster.game;
 
+import java.util.Arrays;
+
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.King;
 
 public class Move {
     private Coordinate from;
     private Coordinate to;
     private ChessPiece piece;
-
-    public Move() {
-    }
 
     public Move(Coordinate from, Coordinate to, ChessPiece piece) {
         this.from = from;
@@ -40,10 +40,6 @@ public class Move {
         this.piece = piece;
     }
 
-    public boolean isEmpty() {
-        return (from == null && to == null && piece == null);
-    }
-
     public boolean isValid(Coordinate[][] possibleCoordinates) {
         for (Coordinate[] direction : possibleCoordinates) {
             for (Coordinate coor : direction) {
@@ -56,10 +52,20 @@ public class Move {
     }
 
     public boolean isLeftCastling() {
-        return piece.getIsLeftCastling();
+        if (!(piece instanceof King)) {
+            return false;
+        }
+
+        int[] offset = to.calculateOffsetFrom(from);
+        return Arrays.equals(offset, ChessPiece.CASTLE_LEFT);
     }
 
     public boolean isRightCastling() {
-        return piece.getIsRightCastling();
+        if (!(piece instanceof King)) {
+            return false;
+        }
+
+        int[] offset = to.calculateOffsetFrom(from);
+        return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
     }
 }

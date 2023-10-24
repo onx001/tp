@@ -2,8 +2,8 @@ package chessmaster.pieces;
 
 import java.util.ArrayList;
 
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class Bishop extends ChessPiece {
@@ -13,9 +13,12 @@ public class Bishop extends ChessPiece {
     public static final int[][] DIRECTIONS = {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
+    
+    protected static int points = 3;
 
-    public Bishop(int row, int col, int color) {
+    public Bishop(int row, int col, Color color) {
         super(row, col, color);
+        this.setPoints(points);
     }
 
     @Override
@@ -27,24 +30,18 @@ public class Bishop extends ChessPiece {
             int offsetY = DIRECTIONS[dir][1];
 
             int multiplier = 1;
-            ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
             boolean isBlocked = false;
-            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY) && !isBlocked) {
-
+            ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
+            
+            while (!isBlocked && multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY)) {
                 Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
-                try {
-                    ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
-                    if (!destPiece.getType().equalsIgnoreCase(EmptyPiece.EMPTY_PIECE)) {
-                        if (destPiece.getColour() != this.color) {
-                            possibleCoordInDirection.add(possibleCoord);
-                        }
-                        isBlocked = true;
-                    } else {
-                        possibleCoordInDirection.add(possibleCoord);
-                    }
-                } catch (NullPieceException e) {
-                    e.printStackTrace();
-                }
+                ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
+
+                isBlocked = !destPiece.isEmptyPiece();
+                if (destPiece.isEmptyPiece() || isOpponent(destPiece)) {
+                    possibleCoordInDirection.add(possibleCoord);
+                } 
+
                 multiplier++;
                 offsetX = DIRECTIONS[dir][0] * multiplier;
                 offsetY = DIRECTIONS[dir][1] * multiplier;
@@ -59,11 +56,6 @@ public class Bishop extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
-    }
-
-    @Override
-    public String getType() {
-        return BISHOP_WHITE;
+        return color == Color.BLACK ? BISHOP_BLACK : BISHOP_WHITE;
     }
 }

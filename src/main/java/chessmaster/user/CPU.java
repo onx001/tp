@@ -1,6 +1,7 @@
 package chessmaster.user;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.pieces.ChessPiece;
@@ -9,10 +10,13 @@ import java.util.Random;
 
 public class CPU extends Player {
 
-    private final Random rand = new Random();
+    private static final int MAX_LOOP_ITERATIONS = 16;
 
-    public CPU(int colour) {
-        super(colour);
+    private static final int RANDOM_SEED = 100;
+    private final Random rand = new Random(RANDOM_SEED);
+
+    public CPU(Color colour, ChessBoard board) {
+        super(colour, board);
     }
 
     /**
@@ -29,10 +33,9 @@ public class CPU extends Player {
 
         // Need a cap on the number of pieces it checks to prevent an infinite loop when no moves are possible
         // on the CPUs side.
-        int maxLoopIterations = 16;
         int iter = 0;
-        while (iter < maxLoopIterations
-                && (randomPiece.getCaptured()
+        while (iter < MAX_LOOP_ITERATIONS
+                && (randomPiece.getIsCaptured()
                 || randomPiece.getFlattenedCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
             iter++;
@@ -40,6 +43,8 @@ public class CPU extends Player {
 
         return getRandomMoveFromPiece(randomPiece, board);
     }
+
+
 
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
@@ -53,8 +58,8 @@ public class CPU extends Player {
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
         Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
-
-        Coordinate randomDestination = allPossibleMoves[rand.nextInt(allPossibleMoves.length)];
+        int randIndex = rand.nextInt(allPossibleMoves.length);
+        Coordinate randomDestination = allPossibleMoves[randIndex];
         return new Move(piece.getPosition(), randomDestination, piece);
     }
 
