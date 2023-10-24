@@ -35,52 +35,36 @@ public class MiniMax {
         
         for(int i = 0; i < moves.length; i++){
             ChessBoard newBoard = board.clone();
-            Move move = moves[i];
+            Move[] newMoves = newBoard.getAllMoves(color);
+            Move move = newMoves[i];
             try {
                 newBoard.executeMove(move);
                 int newScore = newBoard.getPoints(color);
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
             } catch (Exception e) {
+                System.out.println("Move " + move + " is invalid");
             }
         }
         
-        //clear nulls from boards
-        int nullCount = 0;
-        for(BoardScoreTuple iterTuple : boards){
-            if(iterTuple == null){
-                nullCount++;
-            }
-        }
-        BoardScoreTuple[] newBoards = new BoardScoreTuple[boards.length - nullCount];
-        int index = 0;
-        for(BoardScoreTuple iterTuple : boards){
-            if(iterTuple != null){
-                newBoards[index] = iterTuple;
-                index++;
-            }
-        }
 
-        nullCount = 0;
-        for(BoardScoreTuple iterTuple : newBoards){
-            if(iterTuple == null){
-                nullCount++;
-            }
-        }
-        assert nullCount == 0 : "Nulls still exist in newBoards";
-
-        for(BoardScoreTuple iterTuple : newBoards){
+        for(BoardScoreTuple iterTuple : boards){
             assert iterTuple != null : "iterTuple is null";
+            assert iterTuple.getMove() != null : "iterTuple move is null";
             BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
             int newScore = iterTuple.getScore();
             if(isMax){
                 if (newScore > bestScore) {
-                    System.out.println("New max best found" + newScore + " " + bestScore);
+                    if (newScore != 0){
+                        System.out.println("New max best found" + newScore + " " + bestScore);
+                    }
                     bestScore = newScore;
                 }
             }else{
                 if (newScore < bestScore) {
+                    if (newScore != 0){
+                        System.out.println("New min best found" + newScore + " " + bestScore);
+                    }
                     bestScore = newScore;
-                    System.out.println("New min best found" + newScore + " " + bestScore);
                 }
             }
             bestTuple = bestScore == newScore ? iterTuple : tuple1;
