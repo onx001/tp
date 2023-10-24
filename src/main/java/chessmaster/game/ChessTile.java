@@ -78,5 +78,9 @@ public class ChessTile {
         String tileContent = isEmpty() ? AVAILABLE_TILE_STRING :
                 (CAPTURABLE_BACKGROUND + chessPiece.toString() + BACKGROUND_RESET);
         return String.format("%s %s ", TILE_DIVIDER, tileContent);
+
+    public String toFileString(){
+        return chessPiece.toString();
+
     }
 }

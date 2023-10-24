@@ -197,6 +197,7 @@ public class ChessBoard {
 
         Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
         if (!move.isValid(possibleCoordinates)) {
+            System.out.println("Invalid move: " + move.toString());
             throw new InvalidMoveException();
         }
 
@@ -316,14 +317,20 @@ public class ChessBoard {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;
+        assert (board.length() == SIZE * SIZE);
         for (int i = 0; i < board.length(); i++) {
             String pieceString = board.substring(i, i + 1);
             ChessPiece piece = Parser.parseChessPiece(pieceString, row, col);
+            assert (row < SIZE);
+            assert (col < SIZE);
             boardTiles[row][col] = new ChessTile(piece);
             col++;
             if (col == SIZE) {
                 col = 0;
                 row++;
+            }
+            if (row == SIZE) {
+                break;
             }
         }
         return new ChessBoard(boardTiles);
@@ -334,7 +341,7 @@ public class ChessBoard {
         StringBuilder boardString = new StringBuilder();
         for (ChessTile[] row : board) {
             for (ChessTile tile : row) {
-                boardString.append(tile.toString());
+                boardString.append(tile.toFileString());
             }
         }
         return boardString.toString();

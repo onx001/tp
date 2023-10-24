@@ -43,6 +43,7 @@ public class Move {
     public boolean isValid(Coordinate[][] possibleCoordinates) {
         for (Coordinate[] direction : possibleCoordinates) {
             for (Coordinate coor : direction) {
+                System.out.println(coor);
                 if (coor.equals(to)) {
                     return true;
                 }
@@ -67,5 +68,10 @@ public class Move {
 
         int[] offset = to.calculateOffsetFrom(from);
         return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
+    }
+
+    @Override
+    public String toString() {
+        return "Move [from=" + from + ", to=" + to + ", piece=" + piece + "]";
     }
 }
