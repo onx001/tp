@@ -1,7 +1,6 @@
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 
 public class ShowCommand extends Command {
 
