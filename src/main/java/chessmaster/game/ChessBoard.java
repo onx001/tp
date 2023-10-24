@@ -165,6 +165,7 @@ public class ChessBoard {
 
         Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
         if (!move.isValid(possibleCoordinates)) {
+            System.out.println("Invalid move: " + move.toString());
             throw new InvalidMoveException();
         }
 

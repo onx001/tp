@@ -88,7 +88,7 @@ public class Game {
     }
 
     private void handleCPUMove() throws ChessMasterException {
-        Move cpuMove = cpu.getBestMove(board);
+        Move cpuMove = cpu.getRandomMove(board);
         TextUI.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
         cpu.addMove(cpuMove);
