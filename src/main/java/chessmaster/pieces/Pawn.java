@@ -22,6 +22,7 @@ public class Pawn extends ChessPiece {
     public Pawn(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
     }
 
     @Override

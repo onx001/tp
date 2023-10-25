@@ -19,6 +19,7 @@ public class Queen extends ChessPiece {
     public Queen(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
     }
 
     @Override
