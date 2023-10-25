@@ -16,10 +16,4 @@ public class EmptyPiece extends ChessPiece{
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         return new Coordinate[0][];
     }
-
-    @Override
-    public String toString() {
-        return EMPTY_PIECE;
-    }
-    
 }

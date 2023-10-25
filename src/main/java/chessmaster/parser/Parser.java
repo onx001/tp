@@ -5,6 +5,7 @@ import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RulesCommand;
+import chessmaster.commands.ShowMovesCommand;
 import chessmaster.commands.ShowCommand;
 import chessmaster.exceptions.MoveEmptyPieceException;
 import chessmaster.exceptions.MoveOpponentPieceException;
@@ -154,6 +155,8 @@ public class Parser {
             return new RulesCommand();
         case AbortCommand.ABORT_COMAMND_STRING:
             return new AbortCommand();
+        case ShowMovesCommand.SHOW_MOVE_COMMAND_STRING:
+            return new ShowMovesCommand(splitInputStrings[1]);
         case ShowCommand.SHOW_COMAMND_STRING:
             return new ShowCommand();
         default:

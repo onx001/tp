@@ -73,5 +73,4 @@ public class Pawn extends ChessPiece {
     public String toString() {
         return color == Color.BLACK ? PAWN_BLACK : PAWN_WHITE;
     }
-
 }
