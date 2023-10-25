@@ -114,6 +114,21 @@ public abstract class ChessPiece {
         System.out.println();
     }
 
+    public String getAvailableCoordinatesString(ChessBoard board) {
+
+        String out = "Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n";
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (this.isMoveValid(possibleCoord, board)){
+                    out = out + (possibleCoord + " ");
+                }
+            }
+        }
+        return out;
+    }
+
     public Coordinate getPosition() {
         return this.position;
     }

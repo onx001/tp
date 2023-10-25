@@ -20,10 +20,7 @@ public class ShowMovesCommand extends Command{
         Coordinate coord = Coordinate.parseAlgebraicCoor(userInput);
         piece = board.getPieceAtCoor(coord);
         board.showAvailableMoves(piece);
-        piece.displayAvailableCoordinates(board);
-        String displayString = String.format(SHOW_MOVE_MESSAGE,
-                piece.getClass().getSimpleName(),
-                piece.getPosition().toString());
+        String displayString = piece.getAvailableCoordinatesString(board);
         return new CommandResult(displayString);
     }
 
