@@ -46,10 +46,6 @@ public class Game {
             try {
                 if (currentPlayer.isHuman()) {
                     command = getUserCommand();
-                    if (command.isShowMovesCommand()) {
-                        handleShowMoves();
-                        continue; // Get next command
-                    }
                     if (!command.isMoveCommand()) {
                         continue; // Get next command
                     }
@@ -77,11 +73,6 @@ public class Game {
         CommandResult result = command.execute(board);
         TextUI.printCommandResult(result);
         return command;
-    }
-
-    private void handleShowMoves() throws ChessMasterException {
-        ChessPiece piece = ((ShowMovesCommand) command).getPiece();
-        board.showAvailableMoves(piece);
     }
 
     private void handleHumanMove() throws ChessMasterException {

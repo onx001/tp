@@ -83,7 +83,7 @@ public class ChessBoard {
         if (piece.isEmptyPiece()) {
             throw new NullPieceException();
         }
-
+        piece.displayAvailableCoordinates(this);
         Coordinate[] coordArray = piece.getFlattenedCoordinates(this);
 
         TextUI.printChessBoardHeader();
@@ -96,9 +96,11 @@ public class ChessBoard {
                 Coordinate coord = new Coordinate(j, i);
 
                 if (Arrays.asList(coordArray).contains(coord)){
-                    rowString.append(row[j].toStringAvailable());
+                    String pieceString = row[j].toStringAvailableDest();
+                    rowString.append(pieceString);
                 } else {
-                    rowString.append(row[j].toString());
+                    String pieceString = row[j].toString();
+                    rowString.append(pieceString);
                 }
             }
 

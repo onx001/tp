@@ -9,8 +9,4 @@ public abstract class Command {
     public boolean isMoveCommand() {
         return this instanceof MoveCommand;
     }
-
-    public boolean isShowMovesCommand() {
-        return this instanceof ShowMovesCommand;
-    }
 }

@@ -7,7 +7,7 @@ import chessmaster.pieces.ChessPiece;
 
 public class ShowMovesCommand extends Command{
     public static final String SHOW_MOVE_COMMAND_STRING = "moves";
-    private static final String SHOW_MOVE_MESSAGE = "These are the moves available for the piece at %s.";
+    private static final String SHOW_MOVE_MESSAGE = "These are the moves the %s at %s can make as seen on the board";
     private String userInput;
     private ChessPiece piece;
 
@@ -19,7 +19,10 @@ public class ShowMovesCommand extends Command{
     public CommandResult execute(ChessBoard board) throws ChessMasterException {
         Coordinate coord = Coordinate.parseAlgebraicCoor(userInput);
         piece = board.getPieceAtCoor(coord);
-        String displayString = String.format(SHOW_MOVE_MESSAGE, piece.getPosition().toString());
+        board.showAvailableMoves(piece);
+        String displayString = String.format(SHOW_MOVE_MESSAGE,
+                piece.getClass().getSimpleName(),
+                piece.getPosition().toString());
         return new CommandResult(displayString);
     }
 
