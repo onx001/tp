@@ -1,8 +1,10 @@
 package chessmaster.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
@@ -75,6 +77,38 @@ public class ChessBoard {
                 }
             }
         }
+    }
+
+    public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
+        if (piece.isEmptyPiece()) {
+            throw new NullPieceException();
+        }
+
+        Coordinate[] coordArray = piece.getFlattenedCoordinates(this);
+
+        TextUI.printChessBoardHeader();
+        TextUI.printChessBoardDivider();
+        for (int i = 0; i < board.length; i++) {
+            ChessTile[] row = board[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < board.length; j++) {
+                Coordinate coord = new Coordinate(j, i);
+
+                if (Arrays.asList(coordArray).contains(coord)){
+                    String pieceString = row[j].toStringAvailableDest();
+                    rowString.append(pieceString);
+                } else {
+                    String pieceString = row[j].toString();
+                    rowString.append(pieceString);
+                }
+            }
+
+            int rowNum = (i - 8) * -1;
+            TextUI.printChessBoardRow(rowNum, rowString.toString());
+        }
+        TextUI.printChessBoardHeader();
+        System.out.println("");
     }
 
     public void showChessBoard() {

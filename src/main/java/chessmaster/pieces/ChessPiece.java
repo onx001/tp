@@ -104,7 +104,7 @@ public abstract class ChessPiece {
                     ChessPiece destPiece = board.getPieceAtCoor(destination);
                     if (destPiece.isEmptyPiece()) {
                         return true;
-                    } else if (!destPiece.isSameColorAs(this.color)) {
+                    } else if (destPiece.isOpponent(this)) {
                         return true;
                     }
                 }
@@ -126,6 +126,21 @@ public abstract class ChessPiece {
             }
         }
         System.out.println();
+    }
+
+    public String getAvailableCoordinatesString(ChessBoard board) {
+
+        String out = "Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n";
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+
+        for (Coordinate[] direction : availableCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                if (this.isMoveValid(possibleCoord, board)){
+                    out = out + (possibleCoord + " ");
+                }
+            }
+        }
+        return out;
     }
 
     public Coordinate getPosition() {

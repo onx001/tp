@@ -1,6 +1,8 @@
 package chessmaster.game;
 import chessmaster.pieces.ChessPiece;
 
+import chessmaster.exceptions.ChessMasterException;
+
 public class MiniMax {
     protected int depth;
     protected int maxDepth;
@@ -21,13 +23,11 @@ public class MiniMax {
         this.tuple = new BoardScoreTuple(board, score, null);
     }
     
-<<<<<<< Updated upstream
-    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
-=======
+
     //returns the best move tuple for the current player
-    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, 
-            Color color, int depth, int score, boolean isMax, int maxDepth){
->>>>>>> Stashed changes
+    public static BoardScoreTuple mostPoints(
+            BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
+
         
         //gets all the moves for the current player
         ChessBoard board = tuple.getBoard();
@@ -54,17 +54,9 @@ public class MiniMax {
                 newBoard.executeMove(move);
                 //get the score of the board after the move
                 int newScore = newBoard.getPoints(color);
-                if (newScore != 0){
-                }
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
-                if (boards[i].getScore() != 0){
-                }
-            } catch (Exception e) {
-<<<<<<< Updated upstream
-=======
-                //do nothing
+            } catch(ChessMasterException e){
                 continue;
->>>>>>> Stashed changes
             }
         }
         
@@ -75,14 +67,13 @@ public class MiniMax {
             BoardScoreTuple iterTuple = boards[i];
             assert iterTuple != null : "iterTuple is null";
             assert iterTuple.getMove() != null : "iterTuple move is null";
-<<<<<<< Updated upstream
-            BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
-=======
+
             //recursively call mostPoints to find the best move for current board
-            BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), 
-                    depth + 1, score, !isMax, maxDepth);
->>>>>>> Stashed changes
+            BoardScoreTuple tuple1 = mostPoints(
+                    iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
+          
             int newScore = tuple1.getScore();
+
             if(isMax){
                 //maximises score if CPU turn
                 if (newScore > bestScore) {
