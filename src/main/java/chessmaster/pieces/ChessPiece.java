@@ -39,8 +39,6 @@ public abstract class ChessPiece {
     protected boolean isCaptured = false;
     protected int points = 0;
 
-<<<<<<< Updated upstream
-=======
     //initialise empty boardweights of 0 for parent class to be used for the AI
     private int[][] boardWeight = 
         {{0,0,0,0,0,0,0,0},
@@ -52,7 +50,6 @@ public abstract class ChessPiece {
         {0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0}};
 
->>>>>>> Stashed changes
 
     public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
