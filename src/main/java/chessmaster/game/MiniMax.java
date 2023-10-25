@@ -20,7 +20,8 @@ public class MiniMax {
         this.tuple = new BoardScoreTuple(board, score, null);
     }
     
-    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
+    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, 
+            Color color, int depth, int score, boolean isMax, int maxDepth){
         
         ChessBoard board = tuple.getBoard();
         Move[] moves = board.getAllMoves(color);
@@ -49,6 +50,9 @@ public class MiniMax {
                 if (boards[i].getScore() != 0){
                 }
             } catch (Exception e) {
+                //do nothing
+                assert false : "Exception caught";
+                newBoard = newBoard.clone();
             }
         }
         
@@ -58,7 +62,8 @@ public class MiniMax {
             BoardScoreTuple iterTuple = boards[i];
             assert iterTuple != null : "iterTuple is null";
             assert iterTuple.getMove() != null : "iterTuple move is null";
-            BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
+            BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), 
+                    depth + 1, score, !isMax, maxDepth);
             int newScore = tuple1.getScore();
             if(isMax){
                 if (newScore > bestScore) {
@@ -77,7 +82,7 @@ public class MiniMax {
     }
 
     public Move getBestMove() {
-        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
+        BoardScoreTuple bestTuple = mostPoints(tuple, color, 3, score, false, maxDepth);
         Move bestMove = bestTuple.getMove();
         return bestMove;
     }

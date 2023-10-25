@@ -39,6 +39,17 @@ public abstract class ChessPiece {
     protected boolean isCaptured = false;
     protected int points = 0;
 
+    //initialise empty boardweights of 0 to be used for the AI
+    private int[][] boardWeight = 
+        {{0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0}};
+
 
     public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
@@ -147,8 +158,15 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    public int getPoints() {
-        return this.points;
+    public int getPoints(boolean isUpright) {
+        int boardPoints;
+        if (isUpright) {
+            boardPoints = boardWeight[position.getX()][position.getY()];
+        } else {
+            boardPoints = boardWeight[7-position.getX()][position.getY()];
+        }
+        int points = this.points + boardPoints;
+        return points;
     }
 
     /**

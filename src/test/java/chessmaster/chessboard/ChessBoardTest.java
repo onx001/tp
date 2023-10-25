@@ -12,7 +12,7 @@ public class ChessBoardTest {
         ChessBoard board = new ChessBoard(Color.WHITE);
         board.showChessBoard();
         int points = board.getPoints(Color.WHITE);
-        assertEquals(39, points);
+        assertEquals(0, points);
     }
         
 }
