@@ -199,7 +199,6 @@ public class ChessBoard {
 
         Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
         if (!move.isValid(possibleCoordinates)) {
-            System.out.println("Invalid move: " + move.toString());
             throw new InvalidMoveException();
         }
 
@@ -234,6 +233,7 @@ public class ChessBoard {
         this.setWhitePoints(this.getPoints(Color.WHITE));
         this.setBlackPoints(this.getPoints(Color.BLACK));
     }
+
 
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
@@ -280,6 +280,10 @@ public class ChessBoard {
         return !isBlackKingAlive || !isWhiteKingAlive;
     }
 
+    public ChessPiece getPieceAt(Coordinate coor) {
+        return getTileAtCoor(coor).getChessPiece();
+    }
+
     public Color getWinningColor() {
         boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
         boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
@@ -295,6 +299,7 @@ public class ChessBoard {
 
     public int getPoints(Color color) {
         int points = 0;
+        int enemyPoints = 0;
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -303,11 +308,13 @@ public class ChessBoard {
 
                 if (piece.isSameColorAs(color)) {
                     points += piece.getPoints();
+                } else {
+                    enemyPoints += piece.getPoints();
                 }
             }
         }
 
-        return points;
+        return points - enemyPoints;
     }
 
     public ChessBoard clone(){

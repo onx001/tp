@@ -1,4 +1,5 @@
 package chessmaster.game;
+import chessmaster.pieces.ChessPiece;
 
 import chessmaster.exceptions.ChessMasterException;
 
@@ -32,56 +33,49 @@ public class MiniMax {
         BoardScoreTuple bestTuple = null;
 
         if(depth == maxDepth){
-            return new BoardScoreTuple(board,score, null);
+            int newscore = board.getPoints(color);
+            return new BoardScoreTuple(board,newscore, null);
         }
         
         for(int i = 0; i < moves.length; i++){
             ChessBoard newBoard = board.clone();
             Move move = moves[i];
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAt(from);
+            move.setPiece(piece);
             try {
                 newBoard.executeMove(move);
                 int newScore = newBoard.getPoints(color);
+                if (newScore != 0){
+                }
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
+                if (boards[i].getScore() != 0){
+                }
             } catch(ChessMasterException e){
                 continue;
             }
         }
         
-        //clear nulls from boards
-        int nullCount = 0;
-        for(BoardScoreTuple iterTuple : boards){
-            if(iterTuple == null){
-                nullCount++;
-            }
-        }
-        BoardScoreTuple[] newBoards = new BoardScoreTuple[boards.length - nullCount];
-        int index = 0;
-        for(BoardScoreTuple iterTuple : boards){
-            if(iterTuple != null){
-                newBoards[index] = iterTuple;
-                index++;
-            }
-        }
+        
 
-        nullCount = 0;
-        for(BoardScoreTuple iterTuple : newBoards){
-            if(iterTuple == null){
-                nullCount++;
-            }
-        }
-        assert nullCount == 0 : "Nulls still exist in newBoards";
-
-        for(BoardScoreTuple iterTuple : newBoards){
+        for(int i = 0; i < boards.length; i++){
+            BoardScoreTuple iterTuple = boards[i];
             assert iterTuple != null : "iterTuple is null";
+            assert iterTuple.getMove() != null : "iterTuple move is null";
             BoardScoreTuple tuple1 = mostPoints(
                     iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
-            int newScore = iterTuple.getScore();
+            int newScore = tuple1.getScore();
+
             if(isMax){
-                bestScore = Math.max(bestScore, newScore);
+                if (newScore > bestScore) {
+                    bestScore = newScore;
+                }
             }else{
-                bestScore = Math.min(bestScore, newScore);
+                if (newScore < bestScore) {
+                    bestScore = newScore;
+                }
             }
-            bestTuple = bestScore == newScore ? iterTuple : tuple1;
+            bestTuple = bestScore == newScore ? iterTuple : bestTuple;
         }
 
         return bestTuple;
@@ -89,7 +83,8 @@ public class MiniMax {
     }
 
     public Move getBestMove() {
-        Move bestMove = MiniMax.mostPoints(tuple, color, 0, score, true, maxDepth).getMove();
+        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
+        Move bestMove = bestTuple.getMove();
         return bestMove;
     }
 
