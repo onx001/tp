@@ -14,7 +14,16 @@ public class Bishop extends ChessPiece {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
     
-    protected static int points = 3;
+    protected static int points = 30;
+    protected static int[][] boardWeight = 
+        {{-2,-1,-1,-1,-1,-1,-1,-2},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-2,-1,-1,-1,-1,-1,-1,-2}};
 
     public Bishop(int row, int col, Color color) {
         super(row, col, color);

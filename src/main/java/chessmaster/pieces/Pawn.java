@@ -16,7 +16,16 @@ public class Pawn extends ChessPiece {
         DOWN_LEFT, DOWN_RIGHT, DOWN, DOWN_DOWN,
     };
 
-    protected static int points = 1;
+    protected static int points = 10;
+    protected static int[][] boardWeight = 
+        {{0,0,0,0,0,0,0,0},
+        {5,5,5,5,5,5,5,5},
+        {1,1,2,3,3,2,1,1},
+        {1,1,1,4,4,1,1,1},
+        {0,0,0,3,3,0,0,0},
+        {1,-1,-1,0,0,-1,-1,1},
+        {1,1,1,-2,-2,1,1,1},
+        {0,0,0,0,0,0,0,0}};
     protected boolean enPassed = false;
 
     public Pawn(int row, int col, Color color) {
