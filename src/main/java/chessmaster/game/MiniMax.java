@@ -42,9 +42,11 @@ public class MiniMax {
             int newscore = board.getPoints(color);
             return new BoardScoreTuple(board,newscore, null);
         }
+
         
         //for each move, clone the board and execute the move as a possibility
         for(int i = 0; i < moves.length; i++){
+            assert moves[i] != null : "moves[i] is null";
             ChessBoard newBoard = board.clone();
             Move move = moves[i];
             Coordinate from = move.getFrom();

@@ -173,8 +173,15 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    public int getPoints() {
-        return this.points;
+    public int getPoints(boolean isUpright) {
+        int boardPoints;
+        if (isUpright) {
+            boardPoints = boardWeight[position.getX()][position.getY()];
+        } else {
+            boardPoints = boardWeight[7-position.getX()][position.getY()];
+        }
+        int points = this.points + boardPoints;
+        return points;
     }
 
     /**
