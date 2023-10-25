@@ -1,5 +1,7 @@
 package chessmaster.game;
 
+import chessmaster.exceptions.ChessMasterException;
+
 public class MiniMax {
     protected int depth;
     protected int maxDepth;
@@ -19,7 +21,8 @@ public class MiniMax {
         this.tuple = new BoardScoreTuple(board, score, null);
     }
     
-    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
+    public static BoardScoreTuple mostPoints(
+            BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
         
         ChessBoard board = tuple.getBoard();
         Move[] moves = board.getAllMoves(color);
@@ -39,7 +42,8 @@ public class MiniMax {
                 newBoard.executeMove(move);
                 int newScore = newBoard.getPoints(color);
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
-            } catch (Exception e) {
+            } catch(ChessMasterException e){
+                continue;
             }
         }
         
@@ -69,7 +73,8 @@ public class MiniMax {
 
         for(BoardScoreTuple iterTuple : newBoards){
             assert iterTuple != null : "iterTuple is null";
-            BoardScoreTuple tuple1 = mostPoints(iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
+            BoardScoreTuple tuple1 = mostPoints(
+                    iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
             int newScore = iterTuple.getScore();
             if(isMax){
                 bestScore = Math.max(bestScore, newScore);
