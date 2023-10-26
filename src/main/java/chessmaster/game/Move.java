@@ -40,10 +40,10 @@ public class Move {
         this.piece = piece;
     }
 
+    //@@author onx001
     /**
      * Checks if the move is valid by checking if the to coordinate is in the
      * possibleCoordinates 2d array
-     * @author onx001
      * @param possibleCoordinates
      * @return
      */

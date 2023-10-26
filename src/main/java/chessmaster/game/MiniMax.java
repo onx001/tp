@@ -82,7 +82,10 @@ public class MiniMax {
 
             //recursively call mostPoints to find the best move for current board
             BoardScoreTuple tuple1 = mostPoints(
-                    iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
+                    iterTuple, color, depth + 1, score, !isMax, maxDepth);
+
+            //prints score as branch
+            //System.out.println("|" + "---".repeat(depth) + " " + tuple1.getScore() + tuple.getMove());
           
             //Sets new score to current child score
             int newScore = tuple1.getScore();
@@ -111,7 +114,7 @@ public class MiniMax {
      * Kicks off minimax algorithm and returns the best move for the current player
      */
     public Move getBestMove() {
-        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
+        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, true, maxDepth);
         Move bestMove = bestTuple.getMove();
         return bestMove;
     }
