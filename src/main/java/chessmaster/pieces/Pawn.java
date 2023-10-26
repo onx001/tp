@@ -31,6 +31,7 @@ public class Pawn extends ChessPiece {
         super(row, col, color);
         this.setPoints(points);
         this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Pawn piece should have either black or white color";
     }
 
     @Override

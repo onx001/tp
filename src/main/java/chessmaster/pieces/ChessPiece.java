@@ -34,7 +34,6 @@ public abstract class ChessPiece {
 
     protected Color color;
     protected Coordinate position;
-    protected Coordinate[][] availableCoordinates;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
     protected int points = 0;
@@ -265,8 +264,6 @@ public abstract class ChessPiece {
         return this instanceof Queen || this instanceof Rook 
             || this instanceof Bishop || this instanceof Knight;
     }
-
-
 
     protected void setPoints(int points) {
         this.points = points;

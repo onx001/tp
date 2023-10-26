@@ -14,6 +14,9 @@ public class Move {
         this.from = from;
         this.to = to;
         this.piece = piece;
+
+        assert from != null && to != null : "Coordinates in Move should not be null!";
+        assert piece != null && !piece.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
     }
 
     public Coordinate getFrom() {
@@ -79,5 +82,15 @@ public class Move {
     @Override
     public String toString() {
         return "Move [from=" + from + ", to=" + to + ", piece=" + piece + "]";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof Move) {
+            final Move other = (Move) obj;
+            return from.equals(other.getFrom()) && to.equals(other.getTo()) && piece.equals(other.getPiece());
+        }
+
+        return false;
     }
 }

@@ -29,6 +29,7 @@ public class Rook extends ChessPiece {
         super(row, col, color);
         this.setPoints(points);
         this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Rook piece should have either black or white color";
     }
 
     @Override
