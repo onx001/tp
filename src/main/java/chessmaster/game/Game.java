@@ -6,7 +6,6 @@ import chessmaster.commands.CommandResult;
 import chessmaster.commands.MoveCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
-import chessmaster.pieces.ChessPiece;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
@@ -14,8 +13,6 @@ import chessmaster.user.Human;
 import chessmaster.user.Player;
 
 public class Game {
-
-    private static Color playerColor;
 
     private CPU cpu;
     private Human human;
@@ -30,12 +27,15 @@ public class Game {
     public Game(Color playerColour, ChessBoard board, Storage storage) {
         this.board = board;
         this.storage = storage;
-        Game.playerColor = playerColour;
 
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
         this.cpu = new CPU(cpuColor, board);
         currentPlayer = human; // Human goes first
+
+        assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
+        assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
+        assert currentPlayer != null : "A player should always exist in a game!";
     }
 
     public void run() {
@@ -54,7 +54,7 @@ public class Game {
                     handleCPUMove();
                 }
                 board.showChessBoard();
-                storage.saveBoard(board, playerColor);
+                storage.saveBoard(board);
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
@@ -111,21 +111,13 @@ public class Game {
             board.executeMove(cpuMove);
             cpu.addMove(cpuMove);
 
-        } catch (ChessMasterException e){
+        } catch (ChessMasterException e) {
             TextUI.printErrorMessage(e);
         }
     }
 
     private Player togglePlayerTurn() {
         return currentPlayer.isHuman() ? cpu : human;
-    }
-
-    public static boolean isPieceFriendly(ChessPiece otherPiece) {
-        return Game.playerColor == otherPiece.getColor();
-    }
-
-    public static boolean isPieceOpponent(ChessPiece otherPiece) {
-        return Game.playerColor != otherPiece.getColor();
     }
 
 }

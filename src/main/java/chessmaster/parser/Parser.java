@@ -80,7 +80,7 @@ public class Parser {
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
         if (relevantPiece.isEmptyPiece()) {
             throw new NullPieceException();
-        } else if (Game.isPieceOpponent(relevantPiece)) {
+        } else if (board.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
 

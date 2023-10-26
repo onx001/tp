@@ -39,14 +39,15 @@ public class ChessBoard {
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
     };
 
-    private boolean isWhiteKingAlive = true;
-    private boolean isBlackKingAlive = true;
     private Color playerColor;
 
+    private boolean isWhiteKingAlive = true;
+    private boolean isBlackKingAlive = true;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     public ChessBoard(Color playerColor) {
+        this.playerColor = playerColor;
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 String chessPieceString = playerColor.isBlack()
@@ -60,7 +61,8 @@ public class ChessBoard {
         this.playerColor = playerColor;
     }
 
-    public ChessBoard(ChessTile[][] boardTiles) {
+    public ChessBoard(Color playerColor, ChessTile[][] boardTiles) {
+        this.playerColor = playerColor;
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 board[row][col] = boardTiles[row][col];
@@ -241,11 +243,11 @@ public class ChessBoard {
             return false;
         }
 
-        if (Game.isPieceFriendly(piece)) {
+        if (isPieceFriendly(piece)) {
             return endCoord.getY() == TOP_ROW_INDEX;
         }
 
-        if (Game.isPieceOpponent(piece)) {
+        if (isPieceOpponent(piece)) {
             return endCoord.getY() == BOTTOM_ROW_INDEX;
         }
 
@@ -347,7 +349,7 @@ public class ChessBoard {
                 break;
             }
         }
-        return new ChessBoard(boardTiles);
+        return new ChessBoard(this.playerColor, boardTiles);
     }
 
     @Override
@@ -362,5 +364,15 @@ public class ChessBoard {
     }
 
 
+    public boolean isPieceFriendly(ChessPiece otherPiece) {
+        return this.playerColor == otherPiece.getColor();
+    }
 
+    public boolean isPieceOpponent(ChessPiece otherPiece) {
+        return this.playerColor != otherPiece.getColor();
+    }
+
+    public Color getPlayerColor() {
+        return this.playerColor;
+    }
 }
