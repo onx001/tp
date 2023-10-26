@@ -18,14 +18,18 @@ public class King extends ChessPiece {
         {-1,-2,-2,-2,-2,-2,-2,-1},
         {2,2,0,0,0,0,2,2},
         {2,3,1,0,0,1,3,2}};
+        
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, CASTLE_LEFT, CASTLE_RIGHT
     };
+
+    protected static int points = 1000;
 
     public King(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
         this.setBoardWeight(BOARDWEIGHT);
+        assert color != Color.EMPTY : "King piece should have either black or white color";
     }
     
     @Override

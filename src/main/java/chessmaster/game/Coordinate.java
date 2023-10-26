@@ -10,14 +10,9 @@ public class Coordinate {
     private int y;
 
     public Coordinate(int x, int y) {
-        if (isCoorOutofBoard(x, y)) {
-            this.x = 0;
-            this.y = 0;
-            return;
-        }
-
         this.x = x;
         this.y = y;
+        assert !isCoorOutofBoard(x, y) : "Coordinates (x,y) should NOT be out of chessboard (8x8 size)!";
     }
 
     public int getX() {
@@ -123,7 +118,6 @@ public class Coordinate {
             Coordinate other = (Coordinate) obj;
             return x == other.x && y == other.y;
         }
-
         return false;
     }
 

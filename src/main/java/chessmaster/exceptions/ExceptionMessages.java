@@ -6,9 +6,8 @@ public class ExceptionMessages {
     public static final String MESSAGE_SAVE_BOARD_EXCEPTION = "Unable to save board!";
     public static final String MESSAGE_LOAD_BOARD_EXCEPTION = "Unable to load board!";
     public static final String MESSAGE_INVALID_MOVE_EXCEPTION = "Oops, that move isn't valid!";
-    public static final String MESSAGE_NULL_PIECE_EXCEPTION = "No piece found at coordinate!";
+    public static final String MESSAGE_NULL_PIECE_EXCEPTION = "No chess piece found at coordinate!";
     public static final String MESSAGE_MOVE_OPPONENT_EXCEPTION = "You have chosen an opponent piece!"
             + "Please choose your color!";
-    public static final String MESSAGE_MOVE_EMPTY_EXCEPTION = "You have chosen an empty piece!";
     public static final String MESSAGE_PARSE_COLOR_EXCEPTION = "Unable to parse color!";
 }

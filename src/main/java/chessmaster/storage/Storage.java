@@ -54,15 +54,14 @@ public class Storage {
      * and subsequently chess pieces in a 8 x 8 format.
      *
      * @param board       The ChessBoard to save.
-     * @param playerColor The color of the current player.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board, Color playerColor) throws ChessMasterException {
+    public void saveBoard(ChessBoard board) throws ChessMasterException {
         createChessMasterFile();
 
         try {
             FileWriter fileWriter = new FileWriter(storageFile);
-            fileWriter.write(playerColor.name());
+            fileWriter.write(board.getPlayerColor().name());
             fileWriter.write(System.lineSeparator());
 
             for (int row = 0; row < ChessBoard.SIZE; row++) {

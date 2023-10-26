@@ -1,12 +1,11 @@
-package chessmaster.chessboard;
+package chessmaster.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import chessmaster.game.ChessBoard;
-import chessmaster.game.Color;
 
 public class ChessBoardTest {
 
+    // @@author onx001
     @Test
     public void pointTest(){
         ChessBoard board = new ChessBoard(Color.WHITE);
@@ -14,5 +13,6 @@ public class ChessBoardTest {
         int points = board.getPoints(Color.WHITE);
         assertEquals(0, points);
     }
+    // @@author
         
 }
