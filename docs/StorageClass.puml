@@ -1,27 +1,27 @@
 @startuml
-'https://plantuml.com/class-diagram
+class Storage {
+  - filePathString: String
+  - storageFile: File
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
+  + Storage(filePath: String)
+  + saveBoard(board: ChessBoard, playerColor: Color): void
+  + resetBoard(): void
+  + loadBoard(): ChessTile[][]
+  + loadPlayerColor(): Color
 
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+  - createChessMasterFile(): void
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class ChessBoard {
+  - SIZE: int
 }
 
+class ChessTile
+
+class Color
+
+Storage -[hidden]-> File
+Storage --|> ChessBoard
+Storage --|> ChessTile
+Storage --|> Color
 @enduml

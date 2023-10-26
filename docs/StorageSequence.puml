@@ -1,11 +1,117 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+actor User
+participant ":Storage" as Storage
+participant ":File" as File
+participant ":FileWriter" as FileWriter
+participant ":Scanner" as Scanner
+participant ":ChessTile" as ChessTile
+participant ":String" as String
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+create Storage
+User -> Storage++ : new Storage(): String
+create File
+Storage -> File++ : new File()
+File --> Storage-- : storageFile:File
+Storage --> User--
+
+
+User -> Storage++ : createChessMasterFile()
+Storage -> File++ : exists()
+File --> Storage-- : boolean
+alt File: !exists()
+    File -> File++ : createParentDirectories()
+    File --> File--
+    File -> File++ : createNewFile()
+    File --> File--
+end
+Storage --> User--
+
+
+User -> Storage++ : saveBoard(): ChessBoard
+Storage -> Storage++ : createChessMasterFile()
+Storage --> Storage--
+create FileWriter
+Storage -> FileWriter++ : new FileWriter(): File
+FileWriter --> Storage-- : fileWriter: FileWriter
+Storage -> FileWriter++: fileWriter.write(): playerColor.name()
+FileWriter -> ChessBoard++ : getPlayerColor()
+ChessBoard --> FileWriter-- : Color
+FileWriter -> FileWriter++ : write(): Color
+FileWriter --> FileWriter--
+FileWriter --> Storage--
+FileWriter -> FileWriter++ : fileWriter.write(): System.lineSeparator()
+FileWriter --> FileWriter--
+
+loop for row from 0 to ChessBoard.SIZE-1
+    alt row loop
+        FileWriter -> FileWriter++ : .write(): System.lineSeparator()
+        FileWriter --> FileWriter--
+        loop for col from 0 to ChessBoard.SIZE-1
+            Storage -> ChessBoard++ : getPieceAtCoor(): Coordinate
+            create Coordinate
+            ChessBoard -> Coordinate++
+            Coordinate --> ChessBoard-- : Coordinate
+            ChessBoard --> Storage--  : piece
+            FileWriter -> FileWriter++ : write(): ChessPiece
+            FileWriter --> FileWriter--
+        end
+    end
+end
+FileWriter -> FileWriter++ : close()
+FileWriter --> FileWriter--
+Storage --> User--
+
+
+User -> Storage++ : resetBoard(): ChessBoard
+Storage -> Storage++ : createChessMasterFile()
+Storage --> Storage--
+create FileWriter
+Storage -> FileWriter++ : new FileWriter(): File
+FileWriter --> Storage-- : fileWriter: FileWriter
+Storage -> FileWriter++: .write(): String
+FileWriter --> Storage--
+Storage -> FileWriter++: .close()
+FileWriter --> Storage--
+Storage --> User--
+
+
+User -> Storage++ : loadBoard(): ChessBoard
+Storage -> Storage++ : createChessMasterFile()
+Storage --> Storage--
+create Scanner
+Storage -> Scanner++ : new Scanner(): File
+Scanner --> Storage-- : fileScanner: Scanner
+alt FileScanner: hasNext()
+    Storage -> Scanner++: nextLine()
+    Scanner --> Storage --
+end
+Storage -> Storage: Initialize rowIndex, boardTiles
+
+create ChessTile
+Storage -> ChessTile++
+ChessTile --> Storage-- : boardTiles: ChessTile[][]
+loop (rowIndex < ChessBoard.SIZE && fileScanner.hasNext())
+    Storage -> Scanner++ : nextLine()
+    Scanner --> Storage-- : chessRowLine: String
+    alt chessRowLine.length() != ChessBoard.SIZE
+        Storage -> Scanner++: close()
+        Scanner --> Storage--
+    end alt
+    loop for col from 0 to ChessBoard.SIZE-1
+        create String
+        Storage -> String++ : valueOf(): chessRowLine.charAt(col)
+        String --> Storage-- : chessPieceString: String
+        Storage -> Parser++ : chessPieceString
+        Parser --> Storage -- : initialPiece: ChessPiece
+
+        create ChessTile
+        Storage -> ChessTile++
+        ChessTile --> Storage-- : boardTiles: ChessTile[][]
+    end loop
+end
+Storage -> Scanner++: close
+Scanner --> Storage--
+Storage --> User: boardTiles
 @enduml
