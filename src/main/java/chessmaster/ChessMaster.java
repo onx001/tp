@@ -28,7 +28,7 @@ public class ChessMaster {
         try {
             playerColor = storage.loadPlayerColor();
             ChessTile[][] existingBoard = storage.loadBoard();
-            board = new ChessBoard(existingBoard);
+            board = new ChessBoard(playerColor, existingBoard);
 
             if (shouldStartNewGame()) {
                 loadNewGame();

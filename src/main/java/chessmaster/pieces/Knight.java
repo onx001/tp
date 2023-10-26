@@ -13,11 +13,22 @@ public class Knight extends ChessPiece {
         LEFT_UP_LEFT, LEFT_DOWN_LEFT, RIGHT_UP_RIGHT, RIGHT_DOWN_RIGHT,
     };
     
-    protected static int points = 3;
+    protected static int points = 30;
+    protected static int[][] boardWeight = 
+        {{-5,-4,-3,-3,-3,-3,-4,-5},
+        {-4,-2,0,0,0,0,-2,-4},
+        {-3,0,1,2,2,1,0,-3},
+        {-3,1,2,3,3,2,1,-3},
+        {-3,0,2,3,3,2,0,-3},
+        {-3,1,1,2,2,1,1,-3},
+        {-4,-2,0,1,1,0,-2,-4},
+        {-5,-4,-3,-3,-3,-3,-4,-5}};
 
     public Knight(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Knight piece should have either black or white color";
     }
 
     @Override
@@ -47,5 +58,5 @@ public class Knight extends ChessPiece {
 
         return result;
     }
-    
+
 }

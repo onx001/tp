@@ -39,15 +39,15 @@ public class ChessBoard {
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
     };
 
+    private Color playerColor;
+
     private boolean isWhiteKingAlive = true;
     private boolean isBlackKingAlive = true;
-
-    private int whitePoints = 0;
-    private int blackPoints = 0;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     public ChessBoard(Color playerColor) {
+        this.playerColor = playerColor;
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 String chessPieceString = playerColor.isBlack()
@@ -58,9 +58,11 @@ public class ChessBoard {
                 assert (board[row][col] != null);
             }
         }
+        this.playerColor = playerColor;
     }
 
-    public ChessBoard(ChessTile[][] boardTiles) {
+    public ChessBoard(Color playerColor, ChessTile[][] boardTiles) {
+        this.playerColor = playerColor;
         for (int row = 0; row < SIZE; row++) {
             for (int col = 0; col < SIZE; col++) {
                 board[row][col] = boardTiles[row][col];
@@ -230,8 +232,6 @@ public class ChessBoard {
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
 
-        this.setWhitePoints(this.getPoints(Color.WHITE));
-        this.setBlackPoints(this.getPoints(Color.BLACK));
     }
 
 
@@ -243,11 +243,11 @@ public class ChessBoard {
             return false;
         }
 
-        if (Game.isPieceFriendly(piece)) {
+        if (isPieceFriendly(piece)) {
             return endCoord.getY() == TOP_ROW_INDEX;
         }
 
-        if (Game.isPieceOpponent(piece)) {
+        if (isPieceOpponent(piece)) {
             return endCoord.getY() == BOTTOM_ROW_INDEX;
         }
 
@@ -300,6 +300,14 @@ public class ChessBoard {
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
+        boolean isUpright;
+
+        if(this.playerColor == color){
+            isUpright = true;
+        } else {
+            isUpright = false;
+        }
+        
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -307,9 +315,9 @@ public class ChessBoard {
                 ChessPiece piece = this.getPieceAtCoor(coor);
 
                 if (piece.isSameColorAs(color)) {
-                    points += piece.getPoints();
+                    points += piece.getPoints(isUpright);
                 } else {
-                    enemyPoints += piece.getPoints();
+                    enemyPoints += piece.getPoints(isUpright);
                 }
             }
         }
@@ -326,7 +334,6 @@ public class ChessBoard {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;
-        assert (board.length() == SIZE * SIZE);
         for (int i = 0; i < board.length(); i++) {
             String pieceString = board.substring(i, i + 1);
             ChessPiece piece = Parser.parseChessPiece(pieceString, row, col);
@@ -342,7 +349,7 @@ public class ChessBoard {
                 break;
             }
         }
-        return new ChessBoard(boardTiles);
+        return new ChessBoard(this.playerColor, boardTiles);
     }
 
     @Override
@@ -356,13 +363,16 @@ public class ChessBoard {
         return boardString.toString();
     }
 
-    private void setWhitePoints(int points) {
-        this.whitePoints = points;
+
+    public boolean isPieceFriendly(ChessPiece otherPiece) {
+        return this.playerColor == otherPiece.getColor();
     }
 
-    private void setBlackPoints(int points) {
-        this.blackPoints = points;
+    public boolean isPieceOpponent(ChessPiece otherPiece) {
+        return this.playerColor != otherPiece.getColor();
     }
 
-
+    public Color getPlayerColor() {
+        return this.playerColor;
+    }
 }
