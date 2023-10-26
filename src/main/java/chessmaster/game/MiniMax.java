@@ -1,4 +1,7 @@
 package chessmaster.game;
+import chessmaster.pieces.ChessPiece;
+
+import chessmaster.exceptions.ChessMasterException;
 
 public class MiniMax {
     protected int depth;
@@ -8,6 +11,7 @@ public class MiniMax {
     protected ChessBoard board;
     protected Color color;
     protected Color opponentColor;
+    protected BoardScoreTuple tuple;
 
     public MiniMax(ChessBoard board, Color color, int maxDepth, int score) {
         this.board = board;
@@ -15,39 +19,75 @@ public class MiniMax {
         this.opponentColor = color == Color.WHITE ? Color.BLACK : Color.WHITE;
         this.maxDepth = maxDepth;
         this.score = score;
+        this.tuple = new BoardScoreTuple(board, score, null);
     }
     
-    public BoardScoreTuple mostPoints(ChessBoard board, Color color, int depth, int score, boolean isMax){
+    public static BoardScoreTuple mostPoints(
+            BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
+        
+        ChessBoard board = tuple.getBoard();
         Move[] moves = board.getAllMoves(color);
-        ChessBoard[] boards = new ChessBoard[moves.length];
+        assert moves.length > 0 : "No moves available for " + color + " at depth " + depth;
+        BoardScoreTuple[] boards = new BoardScoreTuple[moves.length];
         int bestScore = isMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        BoardScoreTuple bestTuple = null;
 
         if(depth == maxDepth){
-            return new BoardScoreTuple(board,score);
+            int newscore = board.getPoints(color);
+            return new BoardScoreTuple(board,newscore, null);
         }
         
-        for(Move move:moves){
+        for(int i = 0; i < moves.length; i++){
             ChessBoard newBoard = board.clone();
+            Move move = moves[i];
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAt(from);
+            move.setPiece(piece);
             try {
                 newBoard.executeMove(move);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                int newScore = newBoard.getPoints(color);
+                if (newScore != 0){
+                }
+                boards[i] = new BoardScoreTuple(newBoard, newScore, move);
+                if (boards[i].getScore() != 0){
+                }
+            } catch(ChessMasterException e){
+                continue;
             }
         }
         
-        for(ChessBoard newBoard:boards){
-            BoardScoreTuple tuple = mostPoints(newBoard, color, depth + 1, score, !isMax);
-            int newScore = tuple.getScore();
+        
+
+        for(int i = 0; i < boards.length; i++){
+            BoardScoreTuple iterTuple = boards[i];
+            assert iterTuple != null : "iterTuple is null";
+            assert iterTuple.getMove() != null : "iterTuple move is null";
+            BoardScoreTuple tuple1 = mostPoints(
+                    iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
+            int newScore = tuple1.getScore();
+
             if(isMax){
-                bestScore = Math.max(bestScore, newScore);
+                if (newScore > bestScore) {
+                    bestScore = newScore;
+                }
             }else{
-                bestScore = Math.min(bestScore, newScore);
+                if (newScore < bestScore) {
+                    bestScore = newScore;
+                }
             }
+            bestTuple = bestScore == newScore ? iterTuple : bestTuple;
         }
-        return new BoardScoreTuple(board, bestScore);
+
+        return bestTuple;
 
     }
+
+    public Move getBestMove() {
+        BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
+        Move bestMove = bestTuple.getMove();
+        return bestMove;
+    }
+
 
 
 }

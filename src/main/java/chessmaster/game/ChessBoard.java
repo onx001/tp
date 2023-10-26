@@ -1,8 +1,10 @@
 package chessmaster.game;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
@@ -75,6 +77,38 @@ public class ChessBoard {
                 }
             }
         }
+    }
+
+    public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
+        if (piece.isEmptyPiece()) {
+            throw new NullPieceException();
+        }
+
+        Coordinate[] coordArray = piece.getFlattenedCoordinates(this);
+
+        TextUI.printChessBoardHeader();
+        TextUI.printChessBoardDivider();
+        for (int i = 0; i < board.length; i++) {
+            ChessTile[] row = board[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < board.length; j++) {
+                Coordinate coord = new Coordinate(j, i);
+
+                if (Arrays.asList(coordArray).contains(coord)){
+                    String pieceString = row[j].toStringAvailableDest();
+                    rowString.append(pieceString);
+                } else {
+                    String pieceString = row[j].toString();
+                    rowString.append(pieceString);
+                }
+            }
+
+            int rowNum = (i - 8) * -1;
+            TextUI.printChessBoardRow(rowNum, rowString.toString());
+        }
+        TextUI.printChessBoardHeader();
+        System.out.println("");
     }
 
     public void showChessBoard() {
@@ -200,6 +234,7 @@ public class ChessBoard {
         this.setBlackPoints(this.getPoints(Color.BLACK));
     }
 
+
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
@@ -245,6 +280,10 @@ public class ChessBoard {
         return !isBlackKingAlive || !isWhiteKingAlive;
     }
 
+    public ChessPiece getPieceAt(Coordinate coor) {
+        return getTileAtCoor(coor).getChessPiece();
+    }
+
     public Color getWinningColor() {
         boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
         boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
@@ -260,6 +299,7 @@ public class ChessBoard {
 
     public int getPoints(Color color) {
         int points = 0;
+        int enemyPoints = 0;
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -268,11 +308,13 @@ public class ChessBoard {
 
                 if (piece.isSameColorAs(color)) {
                     points += piece.getPoints();
+                } else {
+                    enemyPoints += piece.getPoints();
                 }
             }
         }
 
-        return points;
+        return points - enemyPoints;
     }
 
     public ChessBoard clone(){
@@ -284,14 +326,20 @@ public class ChessBoard {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;
+        assert (board.length() == SIZE * SIZE);
         for (int i = 0; i < board.length(); i++) {
             String pieceString = board.substring(i, i + 1);
             ChessPiece piece = Parser.parseChessPiece(pieceString, row, col);
+            assert (row < SIZE);
+            assert (col < SIZE);
             boardTiles[row][col] = new ChessTile(piece);
             col++;
             if (col == SIZE) {
                 col = 0;
                 row++;
+            }
+            if (row == SIZE) {
+                break;
             }
         }
         return new ChessBoard(boardTiles);
@@ -302,7 +350,7 @@ public class ChessBoard {
         StringBuilder boardString = new StringBuilder();
         for (ChessTile[] row : board) {
             for (ChessTile tile : row) {
-                boardString.append(tile.toString());
+                boardString.append(tile.toFileString());
             }
         }
         return boardString.toString();
