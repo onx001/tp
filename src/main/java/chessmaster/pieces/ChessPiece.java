@@ -39,6 +39,17 @@ public abstract class ChessPiece {
     protected boolean isCaptured = false;
     protected int points = 0;
 
+    //initialise empty boardweights of 0 for parent class to be used for the AI
+    private int[][] boardWeight = 
+        {{0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0},
+        {0,0,0,0,0,0,0,0}};
+
 
     public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
@@ -162,8 +173,25 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    public int getPoints() {
-        return this.points;
+    /**
+     * Returns the points of the ChessPiece object. 
+     * The points are calculated based on the ChessPiece's position
+     * @author onx001
+     * @param isUpright Whether the chess board is aligned to the player it is processed for.
+     * @return The points of the ChessPiece object.
+     */
+    public int getPoints(boolean isUpright) {
+        int boardPoints;
+        if (isUpright) {
+            //finds board weight points of a friendly piece
+            boardPoints = boardWeight[position.getX()][position.getY()];
+        } else {
+            //finds board weight points of an opponent piece
+            boardPoints = boardWeight[7-position.getX()][position.getY()];
+        }
+        //adds the board weight points to the piece's points
+        int points = this.points + boardPoints;
+        return points;
     }
 
     /**
@@ -242,5 +270,9 @@ public abstract class ChessPiece {
 
     protected void setPoints(int points) {
         this.points = points;
+    }
+
+    protected void setBoardWeight(int[][] boardWeight) {
+        this.boardWeight = boardWeight;
     }
 }

@@ -41,9 +41,8 @@ public class ChessBoard {
 
     private boolean isWhiteKingAlive = true;
     private boolean isBlackKingAlive = true;
+    private Color playerColor;
 
-    private int whitePoints = 0;
-    private int blackPoints = 0;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
@@ -58,6 +57,7 @@ public class ChessBoard {
                 assert (board[row][col] != null);
             }
         }
+        this.playerColor = playerColor;
     }
 
     public ChessBoard(ChessTile[][] boardTiles) {
@@ -230,8 +230,6 @@ public class ChessBoard {
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
 
-        this.setWhitePoints(this.getPoints(Color.WHITE));
-        this.setBlackPoints(this.getPoints(Color.BLACK));
     }
 
 
@@ -300,6 +298,14 @@ public class ChessBoard {
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
+        boolean isUpright;
+
+        if(this.playerColor == color){
+            isUpright = true;
+        } else {
+            isUpright = false;
+        }
+        
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -307,9 +313,9 @@ public class ChessBoard {
                 ChessPiece piece = this.getPieceAtCoor(coor);
 
                 if (piece.isSameColorAs(color)) {
-                    points += piece.getPoints();
+                    points += piece.getPoints(isUpright);
                 } else {
-                    enemyPoints += piece.getPoints();
+                    enemyPoints += piece.getPoints(isUpright);
                 }
             }
         }
@@ -326,7 +332,6 @@ public class ChessBoard {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;
-        assert (board.length() == SIZE * SIZE);
         for (int i = 0; i < board.length(); i++) {
             String pieceString = board.substring(i, i + 1);
             ChessPiece piece = Parser.parseChessPiece(pieceString, row, col);
@@ -356,13 +361,6 @@ public class ChessBoard {
         return boardString.toString();
     }
 
-    private void setWhitePoints(int points) {
-        this.whitePoints = points;
-    }
-
-    private void setBlackPoints(int points) {
-        this.blackPoints = points;
-    }
 
 
 }

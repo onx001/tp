@@ -1,7 +1,5 @@
+n
 w
-h2 h4
-h1 h3
-h3 e3
-e3 e7
-e7 d7
-d7 d8
+d2 d4
+abort
+

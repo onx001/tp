@@ -14,13 +14,29 @@ public class Bishop extends ChessPiece {
         UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
     
-    protected static int points = 3;
+    protected static int points = 30;
+    protected static int[][] boardWeight = 
+        {{-2,-1,-1,-1,-1,-1,-1,-2},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-2,-1,-1,-1,-1,-1,-1,-2}};
 
     public Bishop(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
     }
 
+    /**
+     * Returns available coordinates in multiple diagonal directions from the current position. 
+     * @param board the current board
+     * @return available coordinates in a 2D array. The first index is of the direction and the second
+     *     is of the coordinates in that direction.
+     */
     @Override
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
