@@ -8,8 +8,8 @@ public class King extends ChessPiece {
     public static final String KING_WHITE = "k"; // ♔
     public static final String KING_BLACK = "K"; // ♚
 
-    public static final int points = 1000;
-    public static final int[][] boardWeight = 
+    public static final int POINTS = 1000;
+    public static final int[][] BOARDWEIGHT = 
         {{-3,-4,-4,-5,-5,-4,-4,-3},
         {-3,-4,-4,-5,-5,-4,-4,-3},
         {-3,-4,-4,-5,-5,-4,-4,-3},
@@ -25,9 +25,9 @@ public class King extends ChessPiece {
     public King(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
-        this.setBoardWeight(boardWeight);
+        this.setBoardWeight(BOARDWEIGHT);
     }
-
+    
     @Override
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];

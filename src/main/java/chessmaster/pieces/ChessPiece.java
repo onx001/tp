@@ -173,13 +173,23 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
+    /**
+     * Returns the points of the ChessPiece object. 
+     * The points are calculated based on the ChessPiece's position
+     * @author onx001
+     * @param isUpright Whether the chess board is aligned to the player it is processed for.
+     * @return The points of the ChessPiece object.
+     */
     public int getPoints(boolean isUpright) {
         int boardPoints;
         if (isUpright) {
+            //finds board weight points of a friendly piece
             boardPoints = boardWeight[position.getX()][position.getY()];
         } else {
+            //finds board weight points of an opponent piece
             boardPoints = boardWeight[7-position.getX()][position.getY()];
         }
+        //adds the board weight points to the piece's points
         int points = this.points + boardPoints;
         return points;
     }

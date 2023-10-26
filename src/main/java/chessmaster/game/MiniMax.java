@@ -17,14 +17,24 @@ public class MiniMax {
     public MiniMax(ChessBoard board, Color color, int maxDepth, int score) {
         this.board = board;
         this.color = color;
-        this.opponentColor = color == Color.WHITE ? Color.BLACK : Color.WHITE;
+        this.opponentColor = color.getOppositeColour();
         this.maxDepth = maxDepth;
         this.score = score;
         this.tuple = new BoardScoreTuple(board, score, null);
     }
     
 
-    //returns the best move tuple for the current player
+    /**
+     * returns the best move tuple for the current player
+     * @author onx001
+     * @param tuple the BoardScoreTuple to be weighed
+     * @param color the color of the current player
+     * @param depth the current depth of the minimax algorithm
+     * @param score the score of the current board
+     * @param isMax whether the current player is the CPU or the player
+     * @param maxDepth the maximum depth of the minimax algorithm
+     * @return the best move tuple for the current player
+     */
     public static BoardScoreTuple mostPoints(
             BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
 
@@ -74,19 +84,22 @@ public class MiniMax {
             BoardScoreTuple tuple1 = mostPoints(
                     iterTuple, color.getOppositeColour(), depth + 1, score, !isMax, maxDepth);
           
+            //Sets new score to current child score
             int newScore = tuple1.getScore();
 
             if(isMax){
-                //maximises score if CPU turn
+                //maximises child score if CPU turn
                 if (newScore > bestScore) {
                     bestScore = newScore;
                 }
             }else{
-                //minimises score if player turn
+                //minimises child score if player turn
                 if (newScore < bestScore) {
                     bestScore = newScore;
                 }
             }
+
+            //set current tuple based on best child score
             bestTuple = bestScore == newScore ? iterTuple : bestTuple;
         }
 
@@ -94,6 +107,9 @@ public class MiniMax {
 
     }
 
+    /** 
+     * Kicks off minimax algorithm and returns the best move for the current player
+     */
     public Move getBestMove() {
         BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, false, maxDepth);
         Move bestMove = bestTuple.getMove();
