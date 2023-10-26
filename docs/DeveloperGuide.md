@@ -8,10 +8,45 @@
 
 {Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
 
+### User Input Handling - `Parser` and `Command`
+Below is a class diagram representing the Command and Parser classes.
+![](diagrams/ParserCommandDiagram.png)
+
+In order to handle user input into the program during the game, the `Parser` class was implemented.
+Below is a sequence diagram describing the process of handling user input passed from `Game`:
+
+![](diagrams/ParseCommandSequence.png)
+
+`Parser` works to resolve a player's input in the following manner:
+
+1. When `Parser` is called to parse a command, it returns the relevant `Command` object (More precisely,
+one of its subclasses e.g. `MoveCommand`), which is then executed by `Game`.
+2. Depending on the type of `Command` returned, the following may occur: 
+   1.  If it is a `MoveCommand`, the Command calls `parseMove` to instantiate the `Move`,
+   which is passed back to `Game` to be executed in the main logic.
+   2. If it is a `ShowMovesCommand`, `parseAlgebraicCoor` is called to obtain the position of the piece as a 
+   `Coordinate` object. The available coordinates are printed using `showAvailableCoordinates`, then stored as a String
+   by `getAvailableCoordinatesString()`.
+3. The result is then encapsulated in a `CommandResult` and returned to `Game` to be handled.
+4. If the player made a move resulting in a promotion, `parsePromote` is called.
+5. `Parser` calls `getColor` and `getPosition` to retrieve relevant data from the `ChessPiece` 
+the player wants to promote.
+6. The user's input is parsed and a new `ChessPiece` is returned.
+
+`Parser` also contains methods to fulfil parsing needs in other parts of the program, for instance `parseChessPiece`, 
+which is called while loading the .txt file containing save data, called for each character representing a 
+singular chess piece. Using a Case statement, it returns the relevant `ChessPiece` object depending on the character
+(representing the type of piece), and whether it is capitalised (representing colour).
+
+How the parsing works:
+- When called upon to parse a user command, the `Parser` class returns a relevant subclass of the `Command` class
+  (i.e. entering a valid command "XYZ" will cause `Parser` to return an `XYZCommand` object)
+- Each `Command` subclass contains the relevant methods to execute the specified command
+(AbortCommand, ShowCommand, etc.) and inherit from the abstract `Command` class.
+
 ### Minimax algorithm
 
 The minimax algorithm is used to determine the best move for the AI to make. It is a recursive algorithm that works by alternatingly minimising opponent scores and maximising CPU scores. The algorithm is implemented in the `Minimax` class.
-
 
 
 

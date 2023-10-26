@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/class-diagram
+package command{
+    abstract class Command {
+    +execute()
+    +isMoveCommand()
+    }
+    class MoveCommand {
+    -userInput: String
+    -move: Move
+    +getMove(): Move
+    }
+    class ShowMovesCommand {
+    -userInput: String
+    -piece: ChessPiece
+    +getPiece(): ChessPiece
+    }
+    class XYZCommand
+    note top: Includes subclasses AbortCommand, HelpCommand, etc.
+
+    XYZCommand -|> Command
+    ShowMovesCommand --|> Command
+    MoveCommand --|> Command
+}
+package parser{
+    class Parser {
+    +{static} parsePromote(): ChessPiece
+    +{static} parseMove(): Move
+    +{static} parseChessPiece(): ChessPiece
+    +{static} parseCommand(): Command
+    +{static} parsePlayerColor(): Color
+    }
+}
+class Storage
+class Game
+class Human
+
+command.MoveCommand ..> parser.Parser
+command.ShowMovesCommand ..> parser.Parser
+command.XYZCommand ..> parser.Parser
+
+Game <... parser.Parser
+Storage <... parser.Parser
+Human <... parser.Parser
+ChessBoard <... parser.Parser
+
+@enduml
