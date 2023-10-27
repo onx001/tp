@@ -22,6 +22,10 @@ public class ChessTile {
         chessPiece = piece;
     }
 
+    public ChessPiece getChessPiece() {
+        return chessPiece;
+    }
+
     public boolean isEmpty() {
         return chessPiece.isEmptyPiece();
     }
@@ -29,7 +33,6 @@ public class ChessTile {
     public void setTileEmpty(Coordinate coor) {
         chessPiece = new EmptyPiece(coor.getX(),coor.getY());
     }
-
 
     /**
      * Updates the ChessTile with a new ChessPiece, considering piece interactions. <BR>
@@ -61,13 +64,6 @@ public class ChessTile {
         }
     }
 
-    public ChessPiece getChessPiece() {
-        return chessPiece;
-    }
-
-    
-
-
     @Override
     public String toString() {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
@@ -82,6 +78,5 @@ public class ChessTile {
 
     public String toFileString(){
         return chessPiece.toString();
-
     }
 }

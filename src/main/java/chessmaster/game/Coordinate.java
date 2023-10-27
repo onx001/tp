@@ -65,6 +65,7 @@ public class Coordinate {
         return new Coordinate(newX, newY);
     }
 
+    // @author TongZhengHong
     /**
      * Parses an algebraic chess coordinate notation (e.g., "a1") and returns a
      * Coordinate object.
@@ -106,6 +107,7 @@ public class Coordinate {
         int offsetY = this.y - otherCoordinate.getY();
         return new int[]{ offsetX, offsetY };
     }
+    // @author
 
     @Override
     public String toString() {

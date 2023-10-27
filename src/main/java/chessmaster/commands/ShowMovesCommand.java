@@ -1,3 +1,4 @@
+// @author ken-ruster
 package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;
@@ -7,7 +8,6 @@ import chessmaster.pieces.ChessPiece;
 
 public class ShowMovesCommand extends Command{
     public static final String SHOW_MOVE_COMMAND_STRING = "moves";
-    //private static final String SHOW_MOVE_MESSAGE = "These are the moves the %s at %s can make as seen on the board";
     private String userInput;
     private ChessPiece piece;
 
@@ -20,7 +20,7 @@ public class ShowMovesCommand extends Command{
         Coordinate coord = Coordinate.parseAlgebraicCoor(userInput);
         piece = board.getPieceAtCoor(coord);
         board.showAvailableMoves(piece);
-        String displayString = piece.getAvailableCoordinatesString(board);
+        String[] displayString = piece.getAvailableCoordinatesString(board);
         return new CommandResult(displayString);
     }
 
