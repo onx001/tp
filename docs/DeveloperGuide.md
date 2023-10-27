@@ -6,16 +6,63 @@
 
 ## Design & implementation
 
-{Describe the design and implementation of the product. Use UML diagrams and short code snippets where applicable.}
+![](images/OverallArchitecture.png)
+
+### Architecture
+
+The Architecture Diagram given above explains the high-level design of the application. Given below is a quick overview of main components and how they interact with each other.
+
+#### Main components of the architecture
+
+`ChessMaster` is the main invocation of the application. It handles the loading of previous chess games from the storage file and running of the chess `Game` instance.  
+
+The remaining logic is handled by the following components:
+- **UI**: The User Interface of the application
+- **Game**: Executes user commands in game and CPU moves
+- **Storage**: Reads and write chess game information to the hard disk
+- **ChessBoard**: Holds the current chess board state in memory
+- **Parser**: Parses string representations into relevant classes (`Command`, `Move`, `ChessPiece`, etc)
+
+Our application also uses other classes to store information about the chess game and provide utility functions for the main components to function. This include: `Command`, `Move`, `Coordinate`, `Color`,  `Player`, `ChessTile` and `ChessPiece(s).`
+
+### ChessMaster component
+
+<!-- Here is a partial class diagram of ChessMaster.  -->
+
+The sequence diagram below illustrates the interactions within the ChessMaster component, when they launch the program. 
+
+![](images/ChessMasterSequence.png)
+
+How does ChessMaster component work:
+
+1. Attempts to load previously stored game in storage
+2. If previous game exists, asks the user if a new game or the previous game should be loaded. 
+3. If a new game is selected, the user will be prompted for the color to start. 
+4. Start running the new or previous game instance. 
+
+### Game component
+
+The sequence diagram below illustrates the interactions within the Game component, taking a move of "a2 a3" as example.
+
+![](images/GameSequence.png)
+
+How does the Game component work:
+1. Solicits input from user. Users can provide game commands, if not recognised, it will parsed as a `MoveCommand`.
+2. The returned command will be executed.
+3. If user entered a game command (not MoveCommand), the next user input will be solicited.
+4. If a MoveCommand is identified, the user's input will be parsed as a Move object with checks to ensure it is a valid move on the chessboard.
+5. The user's validated Move will be executed on the chess board. This move will then be saved in the storage file.
+6. Next, it will be the CPU's turn to play. The best move will be calculated by the CPU object and it will be executed on the chess board. This move will also be saved in the storage file.
+7. Once both the user and CPU has made their moves, the game state will be checked where the number of kings on the board and the winner will be determined.
 
 ### User Input Handling - `Parser` and `Command`
 Below is a class diagram representing the Command and Parser classes.
-![](diagrams/ParserCommandDiagram.png)
+![](images/ParserCommandDiagram.png)
 
 In order to handle user input into the program during the game, the `Parser` class was implemented.
 Below is a sequence diagram describing the process of handling user input passed from `Game`:
 
-![](diagrams/ParseCommandSequence.png)
+![](images/ParseCommandSequence.png)
 
 `Parser` works to resolve a player's input in the following manner:
 
