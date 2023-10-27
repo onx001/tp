@@ -1,7 +1,6 @@
 @startuml
 class Storage {
   - filePathString: String
-  - storageFile: File
 
   + Storage(filePath: String)
   + saveBoard(board: ChessBoard, playerColor: Color): void
@@ -20,7 +19,7 @@ class ChessTile
 
 class Color
 
-Storage -[hidden]-> File
+Storage --|> File
 Storage --|> ChessBoard
 Storage --|> ChessTile
 Storage --|> Color
