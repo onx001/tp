@@ -1,0 +1,56 @@
+@startuml ChessMasterSequence
+
+actor User as user #BlanchedAlmond
+participant ":UI" as ui #IndianRed
+participant ":ChessMaster" as chessMaster #LightPink
+participant ":Game" as game #Orange
+participant ":Storage" as storage #DeepSkyBlue
+
+user -> chessMaster : start
+activate chessMaster
+
+chessMaster -> storage : loadBoard()
+activate storage
+
+storage --> chessMaster : prevBoard:ChessBoard
+deactivate storage
+
+alt [. Previous board exists]
+
+    chessMaster -> ui : shouldStartNewGame()
+    activate ui
+    user -> ui : "yes/no"
+    ui --> chessMaster : :boolean
+    deactivate ui
+
+    opt [startNewGame]
+
+        chessMaster -> ui : chooseColor
+        activate ui
+        user -> ui : "black/white"
+        ui --> chessMaster : playerColor:Color
+        deactivate ui
+
+    end
+
+else [. No previous board]
+
+    chessMaster -> ui : chooseColor
+    activate ui
+    user -> ui : "black/white"
+    ui --> chessMaster : playerColor:Color
+    deactivate ui
+
+end
+
+create game
+chessMaster -> game
+activate game
+chessMaster -> game : run()
+game --> chessMaster
+destroy game
+
+chessMaster --> user
+deactivate chessMaster
+
+@enduml
