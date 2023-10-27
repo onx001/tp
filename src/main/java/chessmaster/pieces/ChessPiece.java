@@ -49,7 +49,6 @@ public abstract class ChessPiece {
         {0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0}};
 
-
     public ChessPiece(int row, int col, Color color) {
         this.position = new Coordinate(col, row);
         this.color = color;
@@ -109,34 +108,20 @@ public abstract class ChessPiece {
         return false;
     }
 
-    public void displayAvailableCoordinates(ChessBoard board) {
-
-        System.out.println("Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n");
+    public String[] getAvailableCoordinatesString(ChessBoard board) {
+        StringBuilder out = new StringBuilder();
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)){
-                    System.out.print(possibleCoord + " ");
-                }
+                out.append(possibleCoord + " ");
             }
         }
-        System.out.println();
-    }
 
-    public String getAvailableCoordinatesString(ChessBoard board) {
-
-        String out = "Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n";
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)){
-                    out = out + (possibleCoord + " ");
-                }
-            }
-        }
-        return out;
+        return new String[] {
+            String.format("Available coordinates for %s at %s: ", getPieceName(), this.position),
+            out.toString()
+        };
     }
 
     public Coordinate getPosition() {
@@ -263,6 +248,10 @@ public abstract class ChessPiece {
     public boolean isPromotionPiece() {
         return this instanceof Queen || this instanceof Rook 
             || this instanceof Bishop || this instanceof Knight;
+    }
+
+    public String getPieceName() {
+        return this.getClass().getSimpleName();
     }
 
     protected void setPoints(int points) {
