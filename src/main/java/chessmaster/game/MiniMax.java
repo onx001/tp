@@ -1,3 +1,4 @@
+//@@author onx001
 package chessmaster.game;
 import chessmaster.pieces.ChessPiece;
 

@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
 import chessmaster.exceptions.ParseCoordinateException;
@@ -65,7 +66,6 @@ public class Coordinate {
         return new Coordinate(newX, newY);
     }
 
-    // @author TongZhengHong
     /**
      * Parses an algebraic chess coordinate notation (e.g., "a1") and returns a
      * Coordinate object.
@@ -107,13 +107,13 @@ public class Coordinate {
         int offsetY = this.y - otherCoordinate.getY();
         return new int[]{ offsetX, offsetY };
     }
-    // @author
 
     @Override
     public String toString() {
         return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
     }
 
+    //@@author onx001
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coordinate) {

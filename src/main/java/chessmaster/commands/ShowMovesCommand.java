@@ -1,4 +1,4 @@
-// @author ken-ruster
+//@@author ken-ruster
 package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;

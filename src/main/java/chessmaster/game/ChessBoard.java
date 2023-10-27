@@ -78,7 +78,7 @@ public class ChessBoard {
         return this.playerColor;
     }
 
-    // @author ken-ruster
+    //@@author ken-ruster
     public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
         if (piece.isEmptyPiece()) {
             throw new NullPieceException();
@@ -110,8 +110,8 @@ public class ChessBoard {
         TextUI.printChessBoardHeader();
         System.out.println("");
     }
-    // @author
 
+    //@@author TongZhengHong
     public void showChessBoard() {
         TextUI.printChessBoardHeader();
         TextUI.printChessBoardDivider();
@@ -130,6 +130,7 @@ public class ChessBoard {
         System.out.println("");
     }
 
+    //@@author onx001
     public Move[] getAllMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
@@ -151,6 +152,7 @@ public class ChessBoard {
         return allMoves.toArray(new Move[0]);
     }
 
+    //@@author TongZhengHong
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {
         getTileAtCoor(coord).updateTileChessPiece(promotedPiece);
     }
@@ -204,7 +206,7 @@ public class ChessBoard {
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
-        // @author onx001
+        //@@author onx001
         if (move.isLeftCastling()) {
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
             Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
@@ -227,10 +229,9 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
-        // @author
     }
 
-    // @author ken-ruster
+    //@@author ken-ruster
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
@@ -249,9 +250,8 @@ public class ChessBoard {
 
         return false;
     }
-    // @author
 
-    // @author TriciaBK
+    //@@author TriciaBK
     public boolean isEndGame() {
         isWhiteKingAlive = false; 
         isBlackKingAlive = false;
@@ -286,8 +286,8 @@ public class ChessBoard {
             return Color.EMPTY;
         }
     }
-    // @author
-
+    
+    //@@author onx001
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
@@ -353,7 +353,7 @@ public class ChessBoard {
         return boardString.toString();
     }
 
-
+    //@@author TongZhengHong
     public boolean isPieceFriendly(ChessPiece otherPiece) {
         return this.playerColor == otherPiece.getColor();
     }

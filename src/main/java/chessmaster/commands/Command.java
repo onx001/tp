@@ -1,4 +1,4 @@
-// @author TongZhengHong
+//@@author TongZhengHong
 package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;

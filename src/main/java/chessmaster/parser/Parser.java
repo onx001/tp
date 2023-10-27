@@ -26,7 +26,7 @@ import chessmaster.pieces.Rook;
 
 public class Parser {
 
-    // @author ken-ruster
+    //@@author ken-ruster
     /**
      * Parses a string telling which chess piece the user wants to promote his piece
      * to, and promotes the relevant piece
@@ -52,9 +52,8 @@ public class Parser {
             return promoteFrom;
         }
     }
-    // @author
 
-    // @author TongZhengHong
+    //@@author TongZhengHong
     /**
      * Parses a chess move from user input and creates a Move object. Used to read
      * user inputs during the chess game.
@@ -89,9 +88,7 @@ public class Parser {
 
         return new Move(from, to, relevantPiece);
     }
-    // @author
 
-    // @author TongZhengHong
     /**
      * Parses an input string and creates a ChessPiece object at the specified row
      * and column. Used for loading ChessPiece(s) from storage file or loading
@@ -135,7 +132,7 @@ public class Parser {
             return new EmptyPiece(row, col);
         }
     }
-    // @author
+    //@@author
 
     public static Command parseCommand(String in) {
         String[] splitInputStrings = in.split("\\s+", 2);
@@ -157,7 +154,7 @@ public class Parser {
         }
     }
 
-    // @author TongZhengHong
+    //@@author TongZhengHong
     public static Color parsePlayerColor(String inputColorString) throws ParseColorException {
         try {
             return Color.valueOf(inputColorString);
@@ -165,5 +162,4 @@ public class Parser {
             throw new ParseColorException();
         }
     }
-    // @author
 }
