@@ -1,6 +1,8 @@
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
+
 
 public class ShowCommand extends Command {
 
@@ -10,8 +12,9 @@ public class ShowCommand extends Command {
 
     @Override
     public CommandResult execute(ChessBoard board) {
+        TextUI.printText(SHOW_STRINGS);
         board.showChessBoard();
-        return new CommandResult(SHOW_STRINGS);
+        return new CommandResult("Board state has been displayed.");
     }
 
 
