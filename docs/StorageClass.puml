@@ -1,0 +1,26 @@
+@startuml
+class Storage {
+  - filePathString: String
+
+  + Storage(filePath: String)
+  + saveBoard(board: ChessBoard, playerColor: Color): void
+  + resetBoard(): void
+  + loadBoard(): ChessTile[][]
+  + loadPlayerColor(): Color
+
+  - createChessMasterFile(): void
+}
+
+class ChessBoard {
+  - SIZE: int
+}
+
+class ChessTile
+
+class Color
+
+Storage --|> File
+Storage --|> ChessBoard
+Storage --|> ChessTile
+Storage --|> Color
+@enduml
