@@ -14,11 +14,22 @@ public class Queen extends ChessPiece {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
     
-    protected static int points = 9;
+    protected static int points = 90;
+    protected static int[][] boardWeight = 
+        {{-2,-1,-1,-1,-1,-1,-1,-2},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-2,-1,-1,-1,-1,-1,-1,-2}};
 
     public Queen(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Queen piece should have either black or white color";
     }
 
     @Override

@@ -16,4 +16,11 @@ public class EmptyPiece extends ChessPiece{
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         return new Coordinate[0][];
     }
+
+    //returns the string representation of the empty piece for cloning
+    @Override
+    public String toString() {
+        return EMPTY_PIECE;
+    }
 }
+

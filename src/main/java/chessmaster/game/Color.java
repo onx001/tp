@@ -12,8 +12,10 @@ public enum Color {
     public Color getOppositeColour() {
         if (this == Color.WHITE) {
             return Color.BLACK;
-        } else {
+        } else if (this == Color.BLACK) {
             return Color.WHITE;
+        } else {
+            return Color.EMPTY;
         }
     }
 

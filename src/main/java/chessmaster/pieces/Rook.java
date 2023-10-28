@@ -14,11 +14,22 @@ public class Rook extends ChessPiece {
         UP, DOWN, LEFT, RIGHT,
     };
 
-    protected static int points = 5;
+    protected static int points = 50;
+    protected static int[][] boardWeight =
+        {{0,0,0,0,0,0,0,0},
+        {1,2,2,2,2,2,2,1},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {0,0,0,1,1,0,0,0}};
 
     public Rook(int row, int col, Color color) {
         super(row, col, color);
         this.setPoints(points);
+        this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Rook piece should have either black or white color";
     }
 
     @Override
