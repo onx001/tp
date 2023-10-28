@@ -5,6 +5,7 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class ChessPiece {
 
@@ -30,7 +31,9 @@ public abstract class ChessPiece {
     protected static final int[] UP_LEFT = {1, -1}; 
     protected static final int[] UP_RIGHT = {-1, -1}; 
     protected static final int[] DOWN_LEFT = {1, 1}; 
-    protected static final int[] DOWN_RIGHT = {-1, 1}; 
+    protected static final int[] DOWN_RIGHT = {-1, 1};
+
+    protected static final String NO_AVAILABLE_MOVES_STRING = "There aren't any moves available for this piece!";
 
     protected Color color;
     protected Coordinate position;
@@ -115,9 +118,16 @@ public abstract class ChessPiece {
     }
 
     public String getAvailableCoordinatesString(ChessBoard board) {
+        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+
+        // Message if there are no moves available
+        if(Arrays.stream(availableCoordinates).allMatch(
+                x -> x.length == 0
+        )){
+            return NO_AVAILABLE_MOVES_STRING;
+        }
 
         String out = "Available coordinates for " + this.getClass().getSimpleName() + " at " + position + ":\n";
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
