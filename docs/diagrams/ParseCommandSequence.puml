@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+participant ":Game" as Game
+participant ":Parser" as Parser
+participant ":Command" as Command
+participant ":CommandResult" as CommandResult
+participant "coord:Coordinate" as Coordinate
+participant "board:ChessBoard" as ChessBoard
+participant "promoteFrom: ChessPiece" as ChessPiece
+
+Game -> Parser: parseCommand
+activate Parser
+create Command
+Parser -> Command ++
+Command --> Parser --: Command
+Game <-- Parser --: Command
+
+Game -> Command ++: execute
+alt MoveCommand
+    Command -> Parser ++: parseMove
+    Parser --> Command --: Move
+else ShowMoveCommand
+    create Coordinate
+    Command -> Coordinate ++: parseAlgebraicCoor
+    Coordinate --> Command --: coord
+    Command -> ChessBoard ++: showAvailableCoordinates
+    ChessBoard --
+    Command -> ChessBoard ++: getAvailableCoordinatesString
+    ChessBoard --> Command --: String
+    destroy Coordinate
+end
+Command -> CommandResult**
+activate CommandResult
+CommandResult --> Command--
+Game <-- Command --: CommandResult
+
+opt canPromote
+Game -> Parser ++: parsePromote
+Parser -> ChessPiece ++: getColour
+ChessPiece --> Parser --: Color
+Parser -> ChessPiece ++: getPosition
+ChessPiece --> Parser --: Coordinate
+Game <-- Parser --: ChessPiece
+end
+
+
+@enduml
