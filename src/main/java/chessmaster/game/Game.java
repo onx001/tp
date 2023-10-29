@@ -14,6 +14,21 @@ import chessmaster.user.Player;
 
 public class Game {
 
+    private static final String[] START_HELP_STRINGS = {
+        "Thank you for choosing ChessMaster! Here are the commands that you can use:",
+        "Move piece - Input coordinate of piece, followed by coordinate to move to",
+        "   Format: [column][row] [column][row]",
+        "   E.g. a2 a3",
+        "Show board - Shows the current state of the chess board",
+        "   Format: show",
+        "Abort game - Exit programme",
+        "   Format: abort",
+        "Obtain rules - Obtain a quick refresher on the rules of chess",
+        "   Format: rules",
+        "Obtain help - Show a list of commands and what they do",
+        "   Format: help"
+    };
+
     private CPU cpu;
     private Human human;
     private Player currentPlayer;
@@ -39,6 +54,7 @@ public class Game {
     }
 
     public void run() {
+        TextUI.printText(START_HELP_STRINGS);
         board.showChessBoard();
 
         while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
