@@ -1,4 +1,4 @@
-package chessmaster.exceptions;
+package chessmaster.ui;
 
 public class ExceptionMessages {
     public static final String MESSAGE_PARSE_CHESS_PIECE_EXCEPTION = "Unable to parse chess piece!";

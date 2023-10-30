@@ -1,5 +1,7 @@
 package chessmaster.exceptions;
 
+import chessmaster.ui.ExceptionMessages;
+
 public class LoadBoardException extends ChessMasterException {
 
     public LoadBoardException() {

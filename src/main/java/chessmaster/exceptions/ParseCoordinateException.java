@@ -1,5 +1,7 @@
 package chessmaster.exceptions;
 
+import chessmaster.ui.ExceptionMessages;
+
 public class ParseCoordinateException extends ChessMasterException {
 
     public ParseCoordinateException() {
