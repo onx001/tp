@@ -196,8 +196,7 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
-        if (!move.isValid(possibleCoordinates)) {
+        if (!move.isValid(this)) {
             throw new InvalidMoveException();
         }
 

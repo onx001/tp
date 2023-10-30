@@ -47,11 +47,12 @@ public class Move {
     /**
      * Checks if the move is valid by checking if the to coordinate is in the
      * possibleCoordinates 2d array
-     * @param possibleCoordinates
+     * @param board
      * @return
      */
-    public boolean isValid(Coordinate[][] possibleCoordinates) {
-        for (Coordinate[] direction : possibleCoordinates) {
+    public boolean isValid(ChessBoard board) {
+        Coordinate[][] coordinates = piece.getAvailableCoordinates(board);
+        for (Coordinate[] direction : coordinates) {
             for (Coordinate coor : direction) {
                 if (coor.equals(to)) {
                     return true;
