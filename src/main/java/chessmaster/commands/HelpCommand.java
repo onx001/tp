@@ -2,6 +2,7 @@
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
 
 public class HelpCommand extends Command {
 
@@ -24,7 +25,7 @@ public class HelpCommand extends Command {
     };
 
     @Override
-    public CommandResult execute(ChessBoard board) {
+    public CommandResult execute(ChessBoard board, TextUI ui) {
         return new CommandResult(HELP_STRINGS);
     }
 

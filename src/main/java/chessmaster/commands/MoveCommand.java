@@ -3,9 +3,11 @@ package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
+import chessmaster.ui.TextUI;
 
 public class MoveCommand extends Command {
 
@@ -29,7 +31,7 @@ public class MoveCommand extends Command {
      *                                  coordinate objects.
      */
     @Override
-    public CommandResult execute(ChessBoard board) throws ChessMasterException {
+    public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
         move = Parser.parseMove(userInput, board);
         String pieceString = move.getPiece().getClass().getSimpleName();
         String displayString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
