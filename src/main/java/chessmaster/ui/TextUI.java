@@ -99,6 +99,50 @@ public final class TextUI {
         out.println("");
     }
 
+    //@@author ken-ruster
+    /**
+     * Prints the chessboard along with highlighted moves for a specific chess piece.
+     *
+     * This method displays the chessboard, emphasizing available destination squares for a
+     * selected piece and marking the selected piece itself.
+     *
+     * @param tiles The 2D array of ChessTile objects representing the chessboard.
+     * @param piece The chess piece for which moves are highlighted.
+     * @param coordinates An array of coordinates representing available destination squares.
+     */
+    public void printChessBoardWithMoves(ChessTile[][] tiles, ChessPiece piece, Coordinate[] coordinates) {
+        printChessBoardHeader();
+        printChessBoardDivider();
+
+        for (int i = 0; i < tiles.length; i++) {
+            ChessTile[] row = tiles[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < tiles.length; j++) {
+                rowString.append(ChessTile.TILE_DIVIDER);
+
+                ChessTile tile = row[j];
+                Coordinate coord = new Coordinate(j, i);
+
+                String pieceString;
+                if (Arrays.asList(coordinates).contains(coord)) {
+                    pieceString = tile.toStringAvailableDest();
+                } else if (piece.getPosition().equals(coord)) {
+                    pieceString = tile.toStringSelected();
+                } else {
+                    pieceString = tile.toString();
+                }
+                rowString.append(pieceString);
+            }
+
+            int rowNum = (i - 8) * -1;
+            printChessBoardRow(rowNum, rowString.toString());
+        }
+        printChessBoardHeader();
+        out.println("");
+    }
+    //@@author
+
     public void printWelcomeMessage() {
         printText(UiMessages.WELCOME_MESSAGE);
     }
