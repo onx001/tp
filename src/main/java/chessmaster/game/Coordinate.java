@@ -9,7 +9,7 @@ public class Coordinate {
     private int x;
     private int y;
 
-    public Coordinate(int x, int y) {
+    public Coordinate(int x, int y){
         this.x = x;
         this.y = y;
         assert !isCoorOutofBoard(x, y) : "Coordinates (x,y) should NOT be out of chessboard (8x8 size)!";
@@ -105,6 +105,10 @@ public class Coordinate {
         int offsetX = this.x - otherCoordinate.getX();
         int offsetY = this.y - otherCoordinate.getY();
         return new int[]{ offsetX, offsetY };
+    }
+
+    public boolean isInBoard() {
+        return !isCoorOutofBoard(x, y);
     }
 
     @Override

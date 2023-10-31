@@ -1,3 +1,4 @@
+//@@author onx001
 package chessmaster.game;
 import chessmaster.pieces.ChessPiece;
 
@@ -26,7 +27,6 @@ public class MiniMax {
 
     /**
      * returns the best move tuple for the current player
-     * @author onx001
      * @param tuple the BoardScoreTuple to be weighed
      * @param color the color of the current player
      * @param depth the current depth of the minimax algorithm
@@ -56,7 +56,7 @@ public class MiniMax {
         
         //for each move, clone the board and execute the move as a possibility
         for(int i = 0; i < moves.length; i++){
-            assert moves[i] != null : "moves[i] is null";
+            assert moves[i] != null : "move is null";
             ChessBoard newBoard = board.clone();
             Move move = moves[i];
             Coordinate from = move.getFrom();

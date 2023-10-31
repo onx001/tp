@@ -147,7 +147,9 @@ public class ChessBoard {
                     Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
                     for (Coordinate possible: possibleCoordinates){
                         Move move = new Move(coor, possible, piece);
-                        allMoves.add(move);
+                        if (possible.isInBoard() && coor.isInBoard()){
+                            allMoves.add(move);
+                        }
                     }
                 }
             }
@@ -209,7 +211,7 @@ public class ChessBoard {
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
-        if (move.isLeftCastling()) {
+        if (move.isLeftCastling() && (startCoor.getX() - 4)>=0) {
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
             Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
@@ -220,7 +222,7 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
 
-        } else if (move.isRightCastling()) {
+        } else if (move.isRightCastling() && (startCoor.getX() + 3) < SIZE) {
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() + 3, startCoor.getY());
             Coordinate rookDestCoor = new Coordinate(startCoor.getX() + 1, startCoor.getY());
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
@@ -231,7 +233,6 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
-
     }
 
 
