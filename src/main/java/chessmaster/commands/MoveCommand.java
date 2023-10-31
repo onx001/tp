@@ -6,6 +6,7 @@ import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
+import chessmaster.ui.TextUI;
 
 public class MoveCommand extends Command {
 
@@ -28,7 +29,7 @@ public class MoveCommand extends Command {
      *                                  coordinate objects.
      */
     @Override
-    public CommandResult execute(ChessBoard board) throws ChessMasterException {
+    public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
         move = Parser.parseMove(userInput, board);
         if (!move.isValid(board)) {
             throw new InvalidMoveException();

@@ -1,4 +1,7 @@
+//@@author TongZhengHong
 package chessmaster.exceptions;
+
+import chessmaster.ui.ExceptionMessages;
 
 public class MoveOpponentPieceException extends ChessMasterException {
     public MoveOpponentPieceException() {

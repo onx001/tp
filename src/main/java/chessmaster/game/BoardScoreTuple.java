@@ -1,6 +1,6 @@
 package chessmaster.game;
 
-public class BoardScoreTuple implements Comparable<BoardScoreTuple>{
+public class BoardScoreTuple implements Comparable<BoardScoreTuple> {
 
     private ChessBoard board;
     private int score;

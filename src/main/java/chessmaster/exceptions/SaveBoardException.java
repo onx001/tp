@@ -1,4 +1,7 @@
+//@@author TriciaBK
 package chessmaster.exceptions;
+
+import chessmaster.ui.ExceptionMessages;
 
 public class SaveBoardException extends ChessMasterException {
 
