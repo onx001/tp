@@ -1,6 +1,8 @@
+//@@author TriciaBK
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
 
 public class HelpCommand extends Command {
 
@@ -13,6 +15,9 @@ public class HelpCommand extends Command {
         "   E.g. a2 a3",
         "Show board - Shows the current state of the chess board",
         "   Format: show",
+        "Show available moves - Lists all the available moves for a piece at a coordinate",
+        "   Format: moves [column][row]",
+        "   E.g. moves a2",
         "Abort game - Exit programme",
         "   Format: abort",
         "Obtain rules - Obtain a quick refresher on the rules of chess",
@@ -20,7 +25,7 @@ public class HelpCommand extends Command {
     };
 
     @Override
-    public CommandResult execute(ChessBoard board) {
+    public CommandResult execute(ChessBoard board, TextUI ui) {
         return new CommandResult(HELP_STRINGS);
     }
 

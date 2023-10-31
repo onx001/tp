@@ -18,6 +18,7 @@ import java.util.Scanner;
 
 public class Storage {
 
+    //@@author TriciaBK
     private String filePathString;
     private File storageFile;
 
@@ -27,6 +28,7 @@ public class Storage {
         assert !filePathString.isEmpty() && filePath != null : "File path cannot be empty or null";
     }
 
+    //@@author TongZhengHong
     /**
      * Creates a ChessMaster program file to store game state, including necessary
      * parent directories.
@@ -48,6 +50,7 @@ public class Storage {
         }
     }
 
+    //@@author TricaBK
     /**
      * Saves the state of the ChessBoard to a file. Writes the player's color to the
      * first line
@@ -77,7 +80,8 @@ public class Storage {
             throw new SaveBoardException();
         }
     }
-
+    
+    //@@author TongZhengHong
     public void resetBoard() throws ChessMasterException {
         createChessMasterFile();
         try {
@@ -90,6 +94,7 @@ public class Storage {
         }
     }
 
+    //@@author TriciaBK
     /**
      * Loads the state of the chessboard from a file.
      * Ignores the first line player color information as it can be retrieved with
@@ -135,6 +140,7 @@ public class Storage {
         return boardTiles;
     }
 
+    //@@author TongZhengHong
     /**
      * Loads the player's color from a file.
      * Expects the player color information on the first line of text file.

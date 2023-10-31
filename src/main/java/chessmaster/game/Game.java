@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
 import chessmaster.commands.AbortCommand;
@@ -14,17 +15,37 @@ import chessmaster.user.Player;
 
 public class Game {
 
+    private static final String[] START_HELP_STRINGS = {
+        "Thank you for choosing ChessMaster! Here are the commands that you can use:",
+        "Move piece - Input coordinate of piece, followed by coordinate to move to",
+        "   Format: [column][row] [column][row]",
+        "   E.g. a2 a3",
+        "Show board - Shows the current state of the chess board",
+        "   Format: show",
+        "Show available moves - Lists all the available moves for a piece at a coordinate",
+        "   Format: moves [column][row]",
+        "   E.g. moves a2",
+        "Abort game - Exit programme",
+        "   Format: abort",
+        "Obtain rules - Obtain a quick refresher on the rules of chess",
+        "   Format: rules",
+        "Obtain help - Show a list of commands and what they do",
+        "   Format: help"
+    };
+
     private CPU cpu;
     private Human human;
     private Player currentPlayer;
 
+    private TextUI ui;
     private ChessBoard board;
     private Storage storage;
 
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, ChessBoard board, Storage storage) {
+    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui) {
+        this.ui = ui;
         this.board = board;
         this.storage = storage;
 
@@ -39,7 +60,8 @@ public class Game {
     }
 
     public void run() {
-        board.showChessBoard();
+        ui.printText(START_HELP_STRINGS);
+        ui.printChessBoard(board.getBoard());
 
         while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
             try {
@@ -53,24 +75,24 @@ public class Game {
                 } else if (currentPlayer.isCPU()) {
                     handleCPUMove();
                 }
-                board.showChessBoard();
+                ui.printChessBoard(board.getBoard());
                 storage.saveBoard(board);
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
 
             } catch (ChessMasterException e) {
-                TextUI.printErrorMessage(e);
+                ui.printErrorMessage(e);
             }
         }
     }
 
     private Command getUserCommand() throws ChessMasterException {
-        String userInputString = TextUI.getUserInput();
+        String userInputString = ui.getUserInput();
         command = Parser.parseCommand(userInputString);
 
-        CommandResult result = command.execute(board);
-        TextUI.printCommandResult(result);
+        CommandResult result = command.execute(board, ui);
+        ui.printCommandResult(result);
         return command;
     }
 
@@ -82,14 +104,14 @@ public class Game {
         // Handle human promotion
         if (!board.isEndGame()) {
             if (board.canPromote(humanMove)) {
-                human.handlePromote(board, humanMove);
+                human.handlePromote(board, ui, humanMove);
             }
         }
     }
 
     private void handleCPUMove() throws ChessMasterException {
         Move cpuMove = cpu.getBestMove(board);
-        TextUI.printCPUMove(cpuMove);
+        ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
         cpu.addMove(cpuMove);
     }
@@ -98,7 +120,7 @@ public class Game {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
-            TextUI.printWinnerMessage(winningColor);
+            ui.printWinnerMessage(winningColor);
             storage.resetBoard();
         }
         return end;
@@ -107,12 +129,12 @@ public class Game {
     public void cpuFirstMove() {
         try {
             Move cpuMove = cpu.getRandomMove(board);
-            TextUI.printCPUMove(cpuMove);
+            ui.printCPUMove(cpuMove);
             board.executeMove(cpuMove);
             cpu.addMove(cpuMove);
 
         } catch (ChessMasterException e) {
-            TextUI.printErrorMessage(e);
+            ui.printErrorMessage(e);
         }
     }
 
