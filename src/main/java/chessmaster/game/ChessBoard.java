@@ -76,7 +76,7 @@ public class ChessBoard {
      */
     public ChessTile[][] getBoard() {
         ChessTile[][] copy = new ChessTile[SIZE][SIZE];
-        for(int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < SIZE; i++) {
             copy[i] = board[i].clone();
         }
         return copy;
@@ -98,7 +98,7 @@ public class ChessBoard {
 
                 if (piece.isSameColorAs(color)) {
                     Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
-                    for (Coordinate possible: possibleCoordinates){
+                    for (Coordinate possible: possibleCoordinates) {
                         Move move = new Move(coor, possible, piece);
                         allMoves.add(move);
                     }
@@ -271,12 +271,12 @@ public class ChessBoard {
         return points - enemyPoints;
     }
 
-    public ChessBoard clone(){
+    public ChessBoard clone() {
         String stringRep = this.toString();
         return toBoard(stringRep);
     }
 
-    public ChessBoard toBoard(String board){
+    public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;

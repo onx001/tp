@@ -160,10 +160,10 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
+    //@@author onx001
     /**
      * Returns the points of the ChessPiece object. 
      * The points are calculated based on the ChessPiece's position
-     * @author onx001
      * @param isUpright Whether the chess board is aligned to the player it is processed for.
      * @return The points of the ChessPiece object.
      */
@@ -174,12 +174,13 @@ public abstract class ChessPiece {
             boardPoints = boardWeight[position.getX()][position.getY()];
         } else {
             //finds board weight points of an opponent piece
-            boardPoints = boardWeight[7-position.getX()][position.getY()];
+            boardPoints = boardWeight[7 - position.getX()][position.getY()];
         }
         //adds the board weight points to the piece's points
         int points = this.points + boardPoints;
         return points;
     }
+    //@@author
 
     /**
      * Checks if the ChessPiece object has the same color as a given color.

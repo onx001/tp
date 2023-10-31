@@ -24,7 +24,6 @@ public class MiniMax {
         this.tuple = new BoardScoreTuple(board, score, null);
     }
     
-
     /**
      * returns the best move tuple for the current player
      * @author onx001
@@ -36,10 +35,9 @@ public class MiniMax {
      * @param maxDepth the maximum depth of the minimax algorithm
      * @return the best move tuple for the current player
      */
-    public static BoardScoreTuple mostPoints(
-            BoardScoreTuple tuple, Color color, int depth, int score, boolean isMax, int maxDepth){
+    public static BoardScoreTuple mostPoints(BoardScoreTuple tuple, Color color, int depth, 
+        int score, boolean isMax, int maxDepth) {
 
-        
         //gets all the moves for the current player
         ChessBoard board = tuple.getBoard();
         Move[] moves = board.getAllMoves(color);
@@ -49,14 +47,13 @@ public class MiniMax {
         BoardScoreTuple bestTuple = null;
 
         //if the depth is the max depth, return the score of the board as base case
-        if(depth == maxDepth){
+        if (depth == maxDepth) {
             int newscore = board.getPoints(color);
             return new BoardScoreTuple(board,newscore, null);
         }
 
-        
         //for each move, clone the board and execute the move as a possibility
-        for(int i = 0; i < moves.length; i++){
+        for (int i = 0; i < moves.length; i++) {
             assert moves[i] != null : "moves[i] is null";
             ChessBoard newBoard = board.clone();
             Move move = moves[i];
@@ -68,22 +65,19 @@ public class MiniMax {
                 //get the score of the board after the move
                 int newScore = newBoard.getPoints(color);
                 boards[i] = new BoardScoreTuple(newBoard, newScore, move);
-            } catch(ChessMasterException e){
+            } catch (ChessMasterException e) {
                 continue;
             }
         }
         
-        
-
         //go through boards and find one with best points
-        for(int i = 0; i < boards.length; i++){
+        for (int i = 0; i < boards.length; i++) {
             BoardScoreTuple iterTuple = boards[i];
             assert iterTuple != null : "iterTuple is null";
             assert iterTuple.getMove() != null : "iterTuple move is null";
 
             //recursively call mostPoints to find the best move for current board
-            BoardScoreTuple tuple1 = mostPoints(
-                    iterTuple, color, depth + 1, score, !isMax, maxDepth);
+            BoardScoreTuple tuple1 = mostPoints(iterTuple, color, depth + 1, score, !isMax, maxDepth);
 
             //prints score as branch
             //System.out.println("|" + "---".repeat(depth) + " " + tuple1.getScore() + tuple.getMove());
@@ -91,12 +85,12 @@ public class MiniMax {
             //Sets new score to current child score
             int newScore = tuple1.getScore();
 
-            if(isMax){
+            if (isMax) {
                 //maximises child score if CPU turn
                 if (newScore > bestScore) {
                     bestScore = newScore;
                 }
-            }else{
+            } else {
                 //minimises child score if player turn
                 if (newScore < bestScore) {
                     bestScore = newScore;
@@ -108,7 +102,6 @@ public class MiniMax {
         }
 
         return bestTuple;
-
     }
 
     /** 
@@ -119,7 +112,5 @@ public class MiniMax {
         Move bestMove = bestTuple.getMove();
         return bestMove;
     }
-
-
 
 }
