@@ -63,6 +63,7 @@ public abstract class ChessPiece {
      */
     public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
 
+    //@@author onx001
     /**
      * Get a flattened array of valid coordinates for the chess piece's moves based on its available coordinates 
      * and the current state of the ChessBoard.
@@ -108,6 +109,7 @@ public abstract class ChessPiece {
         return false;
     }
 
+    //@@author ken-ruster
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
@@ -123,6 +125,7 @@ public abstract class ChessPiece {
             out.toString()
         };
     }
+    //@@author
 
     public Coordinate getPosition() {
         return this.position;
@@ -243,6 +246,10 @@ public abstract class ChessPiece {
 
     public boolean isEmptyPiece() {
         return this instanceof EmptyPiece;
+    }
+
+    public boolean isPawn() {
+        return this instanceof Pawn;
     }
 
     public boolean isPromotionPiece() {
