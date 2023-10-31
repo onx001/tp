@@ -1,4 +1,7 @@
+//@@author TongZhengHong
 package chessmaster.exceptions;
+
+import chessmaster.ui.ExceptionMessages;
 
 public class ParseColorException extends ChessMasterException {
     public ParseColorException() {

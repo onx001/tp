@@ -1,6 +1,8 @@
+//@@author TriciaBK
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
 
 public class RulesCommand extends Command {
 
@@ -29,7 +31,7 @@ public class RulesCommand extends Command {
 
 
     @Override
-    public CommandResult execute(ChessBoard board) {
+    public CommandResult execute(ChessBoard board, TextUI ui) {
         return new CommandResult(RULES_STRINGS);
     }
 
