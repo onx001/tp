@@ -37,13 +37,15 @@ public class Game {
     private Human human;
     private Player currentPlayer;
 
+    private TextUI ui;
     private ChessBoard board;
     private Storage storage;
 
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, ChessBoard board, Storage storage) {
+    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui) {
+        this.ui = ui;
         this.board = board;
         this.storage = storage;
 
@@ -58,8 +60,8 @@ public class Game {
     }
 
     public void run() {
-        TextUI.printText(START_HELP_STRINGS);
-        board.showChessBoard();
+        ui.printText(START_HELP_STRINGS);
+        ui.printChessBoard(board.getBoard());
 
         while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
             try {
@@ -73,24 +75,24 @@ public class Game {
                 } else if (currentPlayer.isCPU()) {
                     handleCPUMove();
                 }
-                board.showChessBoard();
+                ui.printChessBoard(board.getBoard());
                 storage.saveBoard(board);
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
 
             } catch (ChessMasterException e) {
-                TextUI.printErrorMessage(e);
+                ui.printErrorMessage(e);
             }
         }
     }
 
     private Command getUserCommand() throws ChessMasterException {
-        String userInputString = TextUI.getUserInput();
+        String userInputString = ui.getUserInput();
         command = Parser.parseCommand(userInputString);
 
-        CommandResult result = command.execute(board);
-        TextUI.printCommandResult(result);
+        CommandResult result = command.execute(board, ui);
+        ui.printCommandResult(result);
         return command;
     }
 
@@ -102,14 +104,14 @@ public class Game {
         // Handle human promotion
         if (!board.isEndGame()) {
             if (board.canPromote(humanMove)) {
-                human.handlePromote(board, humanMove);
+                human.handlePromote(board, ui, humanMove);
             }
         }
     }
 
     private void handleCPUMove() throws ChessMasterException {
         Move cpuMove = cpu.getBestMove(board);
-        TextUI.printCPUMove(cpuMove);
+        ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
         cpu.addMove(cpuMove);
     }
@@ -118,7 +120,7 @@ public class Game {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
-            TextUI.printWinnerMessage(winningColor);
+            ui.printWinnerMessage(winningColor);
             storage.resetBoard();
         }
         return end;
@@ -127,12 +129,12 @@ public class Game {
     public void cpuFirstMove() {
         try {
             Move cpuMove = cpu.getRandomMove(board);
-            TextUI.printCPUMove(cpuMove);
+            ui.printCPUMove(cpuMove);
             board.executeMove(cpuMove);
             cpu.addMove(cpuMove);
 
         } catch (ChessMasterException e) {
-            TextUI.printErrorMessage(e);
+            ui.printErrorMessage(e);
         }
     }
 

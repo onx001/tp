@@ -1,15 +1,11 @@
 package chessmaster.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
-import chessmaster.pieces.Pawn;
-import chessmaster.ui.TextUI;
 
 public class ChessBoard {
 
@@ -70,64 +66,24 @@ public class ChessBoard {
         }
     }
 
+    /**
+     * Gets a copy of the current chessboard as a 2D array of ChessTile objects.
+     *
+     * This method creates a deep copy of the chessboard, allowing for the independent
+     * examination of the board's state without modifying the original chessboard.
+     *
+     * @return A 2D array copy of ChessTile objects representing the current state of the chessboard.
+     */
     public ChessTile[][] getBoard() {
-        return this.board;
+        ChessTile[][] copy = new ChessTile[SIZE][SIZE];
+        for(int i = 0; i < SIZE; i++) {
+            copy[i] = board[i].clone();
+        }
+        return copy;
     }
 
     public Color getPlayerColor() {
         return this.playerColor;
-    }
-
-    //@@author ken-ruster
-    public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
-        if (piece.isEmptyPiece()) {
-            throw new NullPieceException();
-        }
-
-        Coordinate[] coordArray = piece.getFlattenedCoordinates(this);
-
-        TextUI.printChessBoardHeader();
-        TextUI.printChessBoardDivider();
-        for (int i = 0; i < board.length; i++) {
-            ChessTile[] row = board[i];
-            StringBuilder rowString = new StringBuilder();
-
-            for (int j = 0; j < board.length; j++) {
-                Coordinate coord = new Coordinate(j, i);
-
-                if (Arrays.asList(coordArray).contains(coord)){
-                    String pieceString = row[j].toStringAvailableDest();
-                    rowString.append(pieceString);
-                } else {
-                    String pieceString = row[j].toString();
-                    rowString.append(pieceString);
-                }
-            }
-
-            int rowNum = (i - 8) * -1;
-            TextUI.printChessBoardRow(rowNum, rowString.toString());
-        }
-        TextUI.printChessBoardHeader();
-        System.out.println("");
-    }
-
-    //@@author TongZhengHong
-    public void showChessBoard() {
-        TextUI.printChessBoardHeader();
-        TextUI.printChessBoardDivider();
-        for (int i = 0; i < board.length; i++) {
-            ChessTile[] row = board[i];
-            StringBuilder rowString = new StringBuilder();
-
-            for (ChessTile tile : row) {
-                rowString.append(tile.toString());
-            }
-
-            int rowNum = (i - 8) * -1;
-            TextUI.printChessBoardRow(rowNum, rowString.toString());
-        }
-        TextUI.printChessBoardHeader();
-        System.out.println("");
     }
 
     //@@author onx001
@@ -236,7 +192,7 @@ public class ChessBoard {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
 
-        if (!(piece instanceof Pawn)) {
+        if (!piece.isPawn()) {
             return false;
         }
 
