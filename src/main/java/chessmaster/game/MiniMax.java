@@ -60,7 +60,7 @@ public class MiniMax {
             ChessBoard newBoard = board.clone();
             Move move = moves[i];
             Coordinate from = move.getFrom();
-            ChessPiece piece = newBoard.getPieceAt(from);
+            ChessPiece piece = newBoard.getPieceAtCoor(from);
             move.setPiece(piece);
             try {
                 newBoard.executeMove(move);

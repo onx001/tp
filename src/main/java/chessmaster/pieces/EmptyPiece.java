@@ -23,4 +23,3 @@ public class EmptyPiece extends ChessPiece{
         return EMPTY_PIECE;
     }
 }
-

@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
 public enum Color {

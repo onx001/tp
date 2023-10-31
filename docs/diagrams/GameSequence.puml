@@ -1,0 +1,70 @@
+@startuml GameSequence
+
+actor User as user #BlanchedAlmond
+participant ":UI" as ui #IndianRed
+participant ":Parser" as parser #LightPink
+participant ":Game" as game #Orchid
+participant ":ChessBoard" as board #Orange
+participant ":CPU" as cpu #SkyBlue
+participant ":Storage" as storage #PaleTurquoise
+
+activate game #AliceBlue
+
+loop [hasGameEnded]
+
+    game -> ui : getUserCommand()
+    activate ui
+    user -> ui : "a2 a3"
+    ui --> game : :String
+    deactivate ui
+
+    game -> parser : parseCommand("a2 a3")
+    activate parser
+    parser --> game : :Command
+    deactivate parser
+
+    opt [isMoveCommand]
+
+        game -> parser : parseMove("a2 a3")
+        activate parser
+        parser --> game : humanMove:Move
+        deactivate parser
+
+        game -> board : executeMove(humanMove)
+        activate board
+        board --> game
+        deactivate board
+
+        game -> storage : saveBoard()
+        activate storage
+        storage --> game
+        deactivate storage
+
+        game -> cpu : getBestMove()
+        activate cpu
+        cpu --> game : cpuMove:Move
+        deactivate cpu
+
+        game -> board : executeMove(cpuMove)
+        activate board
+        board --> game
+        deactivate board
+
+        game -> storage : saveBoard()
+        activate storage
+        storage --> game
+        deactivate storage
+
+        game -> board : checkEndState()
+        activate board
+        board --> game : hasGameEnded:bool
+        deactivate board
+
+    end
+
+end
+
+game --> user
+destroy game
+
+@enduml

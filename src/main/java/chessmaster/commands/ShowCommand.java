@@ -1,3 +1,4 @@
+//@@author TriciaBK
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
@@ -13,7 +14,5 @@ public class ShowCommand extends Command {
         board.showChessBoard();
         return new CommandResult(SHOW_STRINGS);
     }
-
-
 
 }

@@ -1,3 +1,4 @@
+// @author TongZhengHong
 package chessmaster.game;
 
 import java.util.Arrays;
@@ -43,15 +44,15 @@ public class Move {
         this.piece = piece;
     }
 
-    //@@author onx001
     /**
      * Checks if the move is valid by checking if the to coordinate is in the
      * possibleCoordinates 2d array
-     * @param possibleCoordinates
+     * @param board
      * @return
      */
-    public boolean isValid(Coordinate[][] possibleCoordinates) {
-        for (Coordinate[] direction : possibleCoordinates) {
+    public boolean isValid(ChessBoard board) {
+        Coordinate[][] coordinates = piece.getAvailableCoordinates(board);
+        for (Coordinate[] direction : coordinates) {
             for (Coordinate coor : direction) {
                 if (coor.equals(to)) {
                     return true;
@@ -90,7 +91,6 @@ public class Move {
             final Move other = (Move) obj;
             return from.equals(other.getFrom()) && to.equals(other.getTo()) && piece.equals(other.getPiece());
         }
-
         return false;
     }
 }

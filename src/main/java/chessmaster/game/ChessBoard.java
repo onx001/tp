@@ -70,17 +70,15 @@ public class ChessBoard {
         }
     }
 
-    public void displayAvailableMoves() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                ChessPiece piece = board[i][j].getChessPiece();
-                if (piece.isEmptyPiece()) {
-                    piece.displayAvailableCoordinates(this);
-                }
-            }
-        }
+    public ChessTile[][] getBoard() {
+        return this.board;
     }
 
+    public Color getPlayerColor() {
+        return this.playerColor;
+    }
+
+    //@@author ken-ruster
     public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
         if (piece.isEmptyPiece()) {
             throw new NullPieceException();
@@ -113,6 +111,7 @@ public class ChessBoard {
         System.out.println("");
     }
 
+    //@@author TongZhengHong
     public void showChessBoard() {
         TextUI.printChessBoardHeader();
         TextUI.printChessBoardDivider();
@@ -131,12 +130,10 @@ public class ChessBoard {
         System.out.println("");
     }
 
-
-
+    //@@author onx001
     public Move[] getAllMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
-
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -154,10 +151,10 @@ public class ChessBoard {
                 }
             }
         }
-
         return allMoves.toArray(new Move[0]);
     }
 
+    //@@author TongZhengHong
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {
         getTileAtCoor(coord).updateTileChessPiece(promotedPiece);
     }
@@ -201,8 +198,7 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
-        if (!move.isValid(possibleCoordinates)) {
+        if (!move.isValid(this)) {
             throw new InvalidMoveException();
         }
 
@@ -211,7 +207,10 @@ public class ChessBoard {
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
+
+        //@@author onx001
         if (move.isLeftCastling() && (startCoor.getX() - 4)>=0) {
+
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
             Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
@@ -235,7 +234,7 @@ public class ChessBoard {
         }
     }
 
-
+    //@@author ken-ruster
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
@@ -255,10 +254,7 @@ public class ChessBoard {
         return false;
     }
 
-    public ChessTile[][] getBoard() {
-        return this.board;
-    }
-
+    //@@author TriciaBK
     public boolean isEndGame() {
         isWhiteKingAlive = false; 
         isBlackKingAlive = false;
@@ -281,10 +277,6 @@ public class ChessBoard {
         return !isBlackKingAlive || !isWhiteKingAlive;
     }
 
-    public ChessPiece getPieceAt(Coordinate coor) {
-        return getTileAtCoor(coor).getChessPiece();
-    }
-
     public Color getWinningColor() {
         boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
         boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
@@ -297,18 +289,18 @@ public class ChessBoard {
             return Color.EMPTY;
         }
     }
-
+    
+    //@@author onx001
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
         boolean isUpright;
 
-        if(this.playerColor == color){
+        if (this.playerColor == color) {
             isUpright = true;
         } else {
             isUpright = false;
         }
-        
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -364,16 +356,12 @@ public class ChessBoard {
         return boardString.toString();
     }
 
-
+    //@@author TongZhengHong
     public boolean isPieceFriendly(ChessPiece otherPiece) {
         return this.playerColor == otherPiece.getColor();
     }
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
-    }
-
-    public Color getPlayerColor() {
-        return this.playerColor;
     }
 }
