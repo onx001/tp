@@ -22,16 +22,19 @@ public class MoveCommand extends Command {
 
     /**
      * Executes the command based on user input, which is expected to consist of two
-     * algebraic
-     * coordinate strings separated by whitespace.
+     * algebraic coordinate strings separated by whitespace.
      *
      * @return A CommandResult object containing the result of the command.
-     * @throws ParseCoordinateException If the user input cannot be parsed into two
+     * @throws ChessMasterException If the user input cannot be parsed into two
      *                                  coordinate objects.
      */
     @Override
     public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
         move = Parser.parseMove(userInput, board);
+        if (!move.isValid(board)) {
+            throw new InvalidMoveException();
+        }
+
         String pieceString = move.getPiece().getClass().getSimpleName();
         String displayString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
         return new CommandResult(displayString);
