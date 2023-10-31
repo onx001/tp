@@ -1,3 +1,4 @@
+//@@author TriciaBK
 package chessmaster.exceptions;
 
 import chessmaster.ui.ExceptionMessages;
