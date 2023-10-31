@@ -10,13 +10,12 @@ public class ShowCommand extends Command {
 
     private static final String SHOW_STRINGS = "Here is the current board state:";
 
+
     @Override
     public CommandResult execute(ChessBoard board) {
         TextUI.printText(SHOW_STRINGS);
         board.showChessBoard();
         return new CommandResult("Board state has been displayed.");
     }
-
-
 
 }
