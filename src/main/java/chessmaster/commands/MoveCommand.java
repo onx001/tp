@@ -3,7 +3,6 @@ package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Move;
 import chessmaster.parser.Parser;
