@@ -19,10 +19,13 @@ public class HelpCommand extends Command {
         "   E.g. moves a2",
         "Show board - Shows the current state of the chess board",
         "   Format: show",
+        "Obtain rules - Obtain a quick refresher on the rules of chess",
+        "   Format: rules",
+        "View pieces representation - Display a legend that explains the piece representations",
+        "   Format: legend",
         "Abort game - Exit programme",
         "   Format: abort",
-        "Obtain rules - Obtain a quick refresher on the rules of chess",
-        "   Format: rules"
+
     };
 
     @Override
