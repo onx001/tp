@@ -79,6 +79,7 @@ public final class TextUI {
         out.println(DIVIDER);
     }
 
+    //@@author TongZhengHong
     public void printChessBoard(ChessTile[][] tiles) {
         printChessBoardHeader();
         printChessBoardDivider();
@@ -92,7 +93,34 @@ public final class TextUI {
                 rowString.append(tile.toString());
             }
 
-            int rowNum = (i - 8) * -1;
+            int rowNum = 8 - i;
+            printChessBoardRow(rowNum, rowString.toString());
+        }
+        printChessBoardHeader();
+        out.println("");
+    }
+
+    public void printChessBoardWithMove(ChessTile[][] tiles, Move move) {
+        printChessBoardHeader();
+        printChessBoardDivider();
+
+        for (int i = 0; i < tiles.length; i++) {
+            ChessTile[] row = tiles[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < tiles.length; j++) {
+                rowString.append(ChessTile.TILE_DIVIDER);
+
+                ChessTile tile = row[j];
+                Coordinate coord = new Coordinate(j, i);
+                boolean isPrevMove = move.getFrom().equals(coord) || 
+                    move.getTo().equals(coord);
+
+                String pieceString = isPrevMove ? tile.toStringPrevMove() : tile.toString();
+                rowString.append(pieceString);
+            }
+            
+            int rowNum = 8 - i;
             printChessBoardRow(rowNum, rowString.toString());
         }
         printChessBoardHeader();
@@ -110,7 +138,9 @@ public final class TextUI {
      * @param piece The chess piece for which moves are highlighted.
      * @param coordinates An array of coordinates representing available destination squares.
      */
-    public void printChessBoardWithMoves(ChessTile[][] tiles, ChessPiece piece, Coordinate[] coordinates) {
+    public void printChessBoardAvailableMoves(ChessTile[][] tiles, ChessPiece piece, 
+        Coordinate[] coordinates) {
+
         printChessBoardHeader();
         printChessBoardDivider();
 
@@ -135,7 +165,7 @@ public final class TextUI {
                 rowString.append(pieceString);
             }
 
-            int rowNum = (i - 8) * -1;
+            int rowNum = 8 - i;
             printChessBoardRow(rowNum, rowString.toString());
         }
         printChessBoardHeader();
