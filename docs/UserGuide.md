@@ -240,7 +240,18 @@ Format: `abort`
 
 **Q**: How do I transfer my data to another computer? 
 
-**A**: {your answer here}
+**A**: You can navigate to your root folder, and find the file `data/ChessMaster.txt`. Transfer the file to your other computer,
+and find the `data` folder in the ChessMaster install folder in the other computer. Copy the file into the folder. Start ChessMaster,
+and type `y` when prompted to load a saved game.
+
+**Q**: How do I play with another person?
+
+**A**: Currently, ChessMaster does not support multiplayer. 
+
+**Q**: Can we play timed games?
+
+**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
+to simulate timed games.
 
 ## Command Summary
 
