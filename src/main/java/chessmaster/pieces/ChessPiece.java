@@ -33,7 +33,7 @@ public abstract class ChessPiece {
     protected static final int[] DOWN_LEFT = {1, 1}; 
     protected static final int[] DOWN_RIGHT = {-1, 1};
 
-    protected static final String NO_AVAILABLE_MOVES_STRING = "There aren't any moves available for this piece!";
+    protected static final String[] NO_AVAILABLE_MOVES_STRING = {"There aren't any moves available for this piece!"};
 
     protected Color color;
     protected Coordinate position;
@@ -116,6 +116,12 @@ public abstract class ChessPiece {
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+
+        if (Arrays.stream(availableCoordinates).allMatch(
+                x -> x.length == 0
+        )) {
+            return NO_AVAILABLE_MOVES_STRING;
+        }
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
