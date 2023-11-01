@@ -45,14 +45,18 @@ public class CPU extends Player {
         return getRandomMoveFromPiece(randomPiece, board);
     }
 
-    public Move getBestMove(ChessBoard board) {
-        MiniMax miniMax = new MiniMax(board, this.colour, 3, 0);
+    //@@author onx001
+
+    public Move getBestMove(ChessBoard board, int maxDepth) {
+        MiniMax miniMax = new MiniMax(board, this.colour, maxDepth, 0);
         Move bestMove = miniMax.getBestMove();
         Coordinate from = bestMove.getFrom();
         ChessPiece piece = board.getPieceAtCoor(from);
         bestMove.setPiece(piece);
         return bestMove;
     }
+
+    //@@author 
 
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));

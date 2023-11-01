@@ -65,6 +65,12 @@ However, if you prefer to **start a fresh game** or if **no previous game is fou
 Choose your starting color to start new game! [b/w]
 ```
 
+Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
+```
+Choose your difficulty level! [1/2/3/4]
+
+```
+
 Now, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
 
 ## Gameplay
