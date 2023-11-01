@@ -67,6 +67,9 @@ public class Storage {
             fileWriter.write(board.getPlayerColor().name());
             fileWriter.write(System.lineSeparator());
 
+            fileWriter.write(String.valueOf(board.getDifficulty()));
+            fileWriter.write(System.lineSeparator());
+
             for (int row = 0; row < ChessBoard.SIZE; row++) {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
@@ -114,7 +117,12 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
-        // Skip player color on first line
+        // Skip player colour on first line
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        //Skip difficulty on second line
         if (fileScanner.hasNext()) {
             fileScanner.nextLine();
         }
@@ -165,6 +173,42 @@ public class Storage {
 
             fileScanner.close();
             return playerColor;
+        }
+
+        fileScanner.close();
+        throw new LoadBoardException();
+    }
+
+    //@@author onx001
+    /**
+     * Loads the difficulty from a file.
+     * Expects the difficulty information on the second line of text file.
+     * @return The difficulty as an integer.
+     */
+    public int loadDifficulty() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        if (fileScanner.hasNext()) {
+            try {
+                String difficultyLine = fileScanner.nextLine();
+                int difficulty = Parser.parseDifficulty(difficultyLine);
+
+                fileScanner.close();
+                return difficulty;
+            } catch (NumberFormatException e) {
+                throw new LoadBoardException();
+            }
         }
 
         fileScanner.close();

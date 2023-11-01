@@ -162,4 +162,13 @@ public class Parser {
             throw new ParseColorException();
         }
     }
+
+    //@@author onx001
+    public static int parseDifficulty(String inputDifficultyString) throws NumberFormatException {
+        try {
+            return Integer.parseInt(inputDifficultyString);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
+        }
+    }
 }
