@@ -26,7 +26,7 @@ public class ShowMovesCommand extends Command {
         }
 
         Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(board);
-        ui.printChessBoardWithMoves(board.getBoard(), piece, possibleCoordinates);
+        ui.printChessBoardAvailableMoves(board.getBoard(), piece, possibleCoordinates);
     
         String[] displayString = piece.getAvailableCoordinatesString(board);
         return new CommandResult(displayString);

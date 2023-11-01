@@ -73,6 +73,11 @@ public class ChessTile {
         return CAPTURABLE_BACKGROUND + String.format("{%s}", tileContent) + BACKGROUND_RESET;
     }
 
+    public String toStringPrevMove() {
+        String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        return CAPTURABLE_BACKGROUND + String.format("(%s)", tileContent) + BACKGROUND_RESET;
+    }
+
     //@@author ken-ruster
     public String toStringAvailableDest() {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();

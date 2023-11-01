@@ -65,17 +65,21 @@ public class Game {
 
         while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
             try {
+                assert currentPlayer.isCPU() || currentPlayer.isHuman() : 
+                    "Player should only either be human or CPU!";
+
                 if (currentPlayer.isHuman()) {
                     command = getUserCommand();
                     if (!command.isMoveCommand()) {
                         continue; // Get next command
                     }
-                    handleHumanMove();
+                    Move playedMove = handleHumanMove();
+                    ui.printChessBoardWithMove(board.getBoard(), playedMove);
                     
                 } else if (currentPlayer.isCPU()) {
-                    handleCPUMove();
-                }
-                ui.printChessBoard(board.getBoard());
+                    Move playedMove = handleCPUMove();
+                    ui.printChessBoardWithMove(board.getBoard(), playedMove);
+                } 
                 storage.saveBoard(board);
 
                 hasEnded = checkEndState();
@@ -96,7 +100,7 @@ public class Game {
         return command;
     }
 
-    private void handleHumanMove() throws ChessMasterException {
+    private Move handleHumanMove() throws ChessMasterException {
         Move humanMove = ((MoveCommand) command).getMove();
         board.executeMove(humanMove);
         human.addMove(humanMove);
@@ -107,13 +111,16 @@ public class Game {
                 human.handlePromote(board, ui, humanMove);
             }
         }
+
+        return humanMove;
     }
 
-    private void handleCPUMove() throws ChessMasterException {
+    private Move handleCPUMove() throws ChessMasterException {
         Move cpuMove = cpu.getBestMove(board);
         ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
         cpu.addMove(cpuMove);
+        return cpuMove;
     }
 
     private boolean checkEndState() throws ChessMasterException {
