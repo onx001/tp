@@ -113,9 +113,9 @@ How the minimax algorithm works:
 
 Below is a class diagram representing the Storage class.
 The Storage component is responsible for handling the storage and retrieval of chess game state.
-![](StorageClass.png)
+![](images/StorageClass.png)
 
-![](StorageSequence.png)
+![](images/StorageSequence.png)
 
 * Creates the necessary parent directories for the file and the file itself if they don't exist 
 * Saves the current state of the ChessBoard to the file. It includes the player's color information and current player's turn as the first line and the state of the chessboard in an 8x8 format.

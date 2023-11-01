@@ -266,6 +266,7 @@ to simulate timed games.
 | Move       | `[column][row] [column][row]` |
 | Show moves | `moves [column][row]`         |
 | Show board | `show`                        |
+| Rules      | `rules`                       |
 | Help       | `help`                        |
 | Abort      | `abort`                       |
 
