@@ -15,6 +15,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
     - Getting help
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
+        - [Legend: `legend`](#view-pieces-representation-legend-)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
@@ -230,6 +231,12 @@ Show a list of commands and what they do
 
 Format: `help`
 
+### View pieces representation: `legend` 
+
+Display a legend that explains the piece representations
+
+Format: `legend`
+
 ### Saving and loading games
 
 Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
@@ -261,12 +268,13 @@ to simulate timed games.
 
 ## Command Summary
 
-| Action     | Format                        |
-|------------|-------------------------------|
-| Move       | `[column][row] [column][row]` |
-| Show moves | `moves [column][row]`         |
-| Show board | `show`                        |
-| Rules      | `rules`                       |
-| Help       | `help`                        |
-| Abort      | `abort`                       |
+| Action        | Format                        |
+|---------------|-------------------------------|
+| Move          | `[column][row] [column][row]` |
+| Show moves    | `moves [column][row]`         |
+| Show board    | `show`                        |
+| Rules         | `rules`                       |
+| Help          | `help`                        |
+| Pieces legend | `legend`                      |
+| Abort         | `abort`                       |
 
