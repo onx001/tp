@@ -51,11 +51,8 @@ public class CPU extends Player {
         Coordinate from = bestMove.getFrom();
         ChessPiece piece = board.getPieceAtCoor(from);
         bestMove.setPiece(piece);
-        System.out.println("Best move: " + bestMove);
         return bestMove;
     }
-
-
 
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
