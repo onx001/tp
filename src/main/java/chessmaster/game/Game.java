@@ -40,14 +40,16 @@ public class Game {
     private TextUI ui;
     private ChessBoard board;
     private Storage storage;
+    private int difficulty;
 
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui) {
+    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui, int difficulty) {
         this.ui = ui;
         this.board = board;
         this.storage = storage;
+        this.difficulty = difficulty;
 
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
@@ -57,6 +59,7 @@ public class Game {
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
         assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
         assert currentPlayer != null : "A player should always exist in a game!";
+        assert (0 < difficulty) && (difficulty < 5) : "Difficulty should be between 1 and 4!";
     }
 
     public void run() {
@@ -116,7 +119,7 @@ public class Game {
     }
 
     private Move handleCPUMove() throws ChessMasterException {
-        Move cpuMove = cpu.getBestMove(board);
+        Move cpuMove = cpu.getBestMove(board, difficulty);
         ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
         cpu.addMove(cpuMove);

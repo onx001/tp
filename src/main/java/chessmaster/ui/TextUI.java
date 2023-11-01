@@ -189,6 +189,14 @@ public final class TextUI {
         }
     }
 
+    public void promptDifficulty(boolean error) {
+        if (error) {
+            out.print(UiMessages.CHOOSE_DIFFICULTY_ERROR_MESSAGE);
+        } else {
+            out.print(UiMessages.CHOOSE_DIFFICULTY_MESSAGE);
+        }
+    }
+
     public void promptStartingColor(boolean error) {
         if (error) {
             out.print(UiMessages.CHOOSE_PLAYER_COLOR_ERROR_MESSAGE);

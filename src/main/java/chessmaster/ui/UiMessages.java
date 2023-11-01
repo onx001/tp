@@ -29,4 +29,9 @@ public class UiMessages {
         "Promote the pawn at %s! Choose piece to promote to [b/q/r/n]: ";
     public static final String PROMPT_PROMOTE_INVALID_MESSAGE = 
         "Invalid piece! Enter b(Bishop), q(Queen), r(Rook) or n(Knight): ";
+    
+    public static final String CHOOSE_DIFFICULTY_MESSAGE = 
+        "Choose difficulty level [1/2/3/4]: ";
+    public static final String CHOOSE_DIFFICULTY_ERROR_MESSAGE =
+        "Invalid input! Please enter either '1', '2', '3' or '4': ";
 }

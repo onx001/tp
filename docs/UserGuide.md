@@ -65,6 +65,12 @@ However, if you prefer to **start a fresh game** or if **no previous game is fou
 Choose your starting color to start new game! [b/w]
 ```
 
+Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
+```
+Choose your difficulty level! [1/2/3/4]
+
+```
+
 Now, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
 
 ## Gameplay
@@ -147,17 +153,88 @@ _________________________________________________________________
 </tr>
 </table>
 
+## Ending the game
+
+The game will automatically end and a victor be declared when one side has been checkmated (i.e. their king is in check, 
+and there is no possible escape), or if their king has been captured.
+
 ## Features 
 
 ### Make a move
 
+To make a move, simply enter the coordinate of the piece to be moved, followed by the coordinates it is to be moved to.
+
+Format: `[column][row] [column][row]`
+
+Examples: 
+- `a2 a4`
+- `b3 g6`
+
+ChessMaster also automatically checks if the move was valid and legal before it is executed, and shows the following error
+message in the case of an invalid move:
+
+`Oops, that move isn't valid!`
+
+
 ### Show available moves: `moves`
+
+Shows the available moves for a piece on the board. This command can be used for both yours and the enemy's pieces.
+
+Format: `moves [column][row]`
+
+Example: 
+```json
+moves e5
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R | N | B | Q | K | B | N | R | (8)
+                _________________________________
+            (7) | P | P | P |[ ]|   |[P]| P | P | (7)
+                _________________________________
+            (6) |   |   |[ ]| P |   |   |[ ]|   | (6)
+                _________________________________
+            (5) |   |   |   |   |{n}|   |   |   | (5)
+                _________________________________
+            (4) |   |   |[ ]|   |   |   |[ ]|   | (4)
+                _________________________________
+            (3) |   |   |   |[ ]|   |[ ]|   |   | (3)
+                _________________________________
+            (2) | p | p | p | p | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b |   | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+
+_________________________________________________________________
+
+Available coordinates for Knight at e5: 
+f7 d7 f3 d3 g6 g4 c6 c4 
+_________________________________________________________________
+```
 
 ### Show current chess board: `show`
 
+Shows the current state of the chess board.
+
+Format: `show`
+
 ### Show chess rules: `rules`
 
+Obtain a quick refresher on the rules of chess
+
+Format: `rules`
+
 ### Show commands: `help`
+
+Show a list of commands and what they do
+
+Format: `help`
+
+### Saving and loading games
+
+Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
+user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
+saved game, and starting a new one will delete the existing save file.
 
 ### Aborting game: `abort`
 
@@ -165,37 +242,30 @@ Exit the ChessMaster application.
 
 Format: `abort`
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
-
-Format: `todo n/TODO_NAME d/DEADLINE`
-
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
-
-Example of usage: 
-
-`todo n/Write the rest of the User Guide d/next week`
-
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
-
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
 
-**A**: {your answer here}
+**A**: You can navigate to your root folder, and find the file `data/ChessMaster.txt`. Transfer the file to your other computer,
+and find the `data` folder in the ChessMaster install folder in the other computer. Copy the file into the folder. Start ChessMaster,
+and type `y` when prompted to load a saved game.
+
+**Q**: How do I play with another person?
+
+**A**: Currently, ChessMaster does not support multiplayer. 
+
+**Q**: Can we play timed games?
+
+**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
+to simulate timed games.
 
 ## Command Summary
 
-| Action | Format |
-| --- | --- |
-| Todo | `todo DESCRIPTION` |
-| Deadline | `deadline DESCRIPTION /by DUE_DATE_TIME` |
-| Event | `event DESCRIPTION /from START_DATE_TIME /to END_DATE_TIME` |
-| Mark | `mark INDEX` |
-| Unmark | `unmark INDEX` |
-| Delete | `delete INDEX` |
-| Find | `find QUERY` |
-| Date | `date QUERY_DATE` |
-| List | `list` |
-| Abort | `abort` |
+| Action     | Format                        |
+|------------|-------------------------------|
+| Move       | `[column][row] [column][row]` |
+| Show moves | `moves [column][row]`         |
+| Show board | `show`                        |
+| Help       | `help`                        |
+| Abort      | `abort`                       |
+

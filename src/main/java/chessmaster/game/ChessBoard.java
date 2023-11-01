@@ -40,6 +40,8 @@ public class ChessBoard {
     private boolean isWhiteKingAlive = true;
     private boolean isBlackKingAlive = true;
 
+    private int difficulty = 4;
+
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 
     public ChessBoard(Color playerColor) {
@@ -87,6 +89,15 @@ public class ChessBoard {
     }
 
     //@@author onx001
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public int getDifficulty() {
+        return this.difficulty;
+    }
+
+
     public Move[] getAllMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
@@ -162,9 +173,9 @@ public class ChessBoard {
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
         //@@author onx001
-        if (move.isLeftCastling()) {
-            Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
-            Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
+        if (move.isLeftCastling() && startCoor.isOffsetWithinBoard(-4, 0)) {
+            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
+            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
 
             rook.setHasMoved();
@@ -173,9 +184,9 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
 
-        } else if (move.isRightCastling()) {
-            Coordinate rookStartCoor = new Coordinate(startCoor.getX() + 3, startCoor.getY());
-            Coordinate rookDestCoor = new Coordinate(startCoor.getX() + 1, startCoor.getY());
+        } else if (move.isRightCastling() && startCoor.isOffsetWithinBoard(3, 0)) {
+            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
+            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
 
             rook.setHasMoved();
