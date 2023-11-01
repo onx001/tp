@@ -1,6 +1,8 @@
+//@@author TongZhengHong
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
 
 public class AbortCommand extends Command {
 
@@ -9,7 +11,7 @@ public class AbortCommand extends Command {
     private static final String ABORT_MESSAGE = "Exiting program... Thanks for playing!";
 
     @Override
-    public CommandResult execute(ChessBoard board) {
+    public CommandResult execute(ChessBoard board, TextUI ui) {
         return new CommandResult(ABORT_MESSAGE);
     }
 

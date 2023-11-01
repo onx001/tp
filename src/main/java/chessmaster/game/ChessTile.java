@@ -2,12 +2,10 @@ package chessmaster.game;
 
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
-import chessmaster.pieces.Pawn;
 
 public class ChessTile {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
-    private static final String AVAILABLE_TILE_STRING = "x";
     private static final String BACKGROUND_RESET = "\u001B[0m";
     private static final String CAPTURABLE_BACKGROUND = "\u001B[43m";
 
@@ -15,11 +13,15 @@ public class ChessTile {
     private ChessPiece chessPiece;
 
     public ChessTile(Coordinate coor) {
-        chessPiece = new EmptyPiece(coor.getX(),coor.getY());
+        chessPiece = new EmptyPiece(coor.getX(), coor.getY());
     }
 
     public ChessTile(ChessPiece piece) {
         chessPiece = piece;
+    }
+
+    public ChessPiece getChessPiece() {
+        return chessPiece;
     }
 
     public boolean isEmpty() {
@@ -29,7 +31,6 @@ public class ChessTile {
     public void setTileEmpty(Coordinate coor) {
         chessPiece = new EmptyPiece(coor.getX(),coor.getY());
     }
-
 
     /**
      * Updates the ChessTile with a new ChessPiece, considering piece interactions. <BR>
@@ -48,7 +49,7 @@ public class ChessTile {
 
         if (newPiece.isFriendly(chessPiece)) {
             // Only update if friendly pawn piece is promoting
-            if (chessPiece instanceof Pawn && newPiece.isPromotionPiece()) {
+            if (chessPiece.isPawn() && newPiece.isPromotionPiece()) {
                 chessPiece = newPiece;
             }
             return; // Cannot capture friendly piece
@@ -61,27 +62,35 @@ public class ChessTile {
         }
     }
 
-    public ChessPiece getChessPiece() {
-        return chessPiece;
-    }
-
-    
-
-
     @Override
     public String toString() {
         String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
-        return String.format("%s %s ", TILE_DIVIDER, tileContent);
+        return String.format(" %s ", tileContent);
     }
 
+    public String toStringSelected() {
+        String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        return CAPTURABLE_BACKGROUND + String.format("{%s}", tileContent) + BACKGROUND_RESET;
+    }
+
+    public String toStringPrevMove() {
+        String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        return CAPTURABLE_BACKGROUND + String.format("(%s)", tileContent) + BACKGROUND_RESET;
+    }
+
+    //@@author ken-ruster
     public String toStringAvailableDest() {
-        String tileContent = isEmpty() ? AVAILABLE_TILE_STRING :
-                (CAPTURABLE_BACKGROUND + chessPiece.toString() + BACKGROUND_RESET);
-        return String.format("%s %s ", TILE_DIVIDER, tileContent);
+        String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        String addBrackets = String.format("[%s]", tileContent);
+
+        if (!isEmpty()) {
+            return CAPTURABLE_BACKGROUND + addBrackets + BACKGROUND_RESET;
+        }
+        return addBrackets;
     }
 
-    public String toFileString(){
+    //@@author onx001
+    public String toFileString() {
         return chessPiece.toString();
-
     }
 }

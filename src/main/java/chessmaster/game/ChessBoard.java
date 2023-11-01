@@ -1,15 +1,11 @@
 package chessmaster.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
-import chessmaster.pieces.Pawn;
-import chessmaster.ui.TextUI;
 
 public class ChessBoard {
 
@@ -70,73 +66,30 @@ public class ChessBoard {
         }
     }
 
-    public void displayAvailableMoves() {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board.length; j++) {
-                ChessPiece piece = board[i][j].getChessPiece();
-                if (piece.isEmptyPiece()) {
-                    piece.displayAvailableCoordinates(this);
-                }
-            }
+    /**
+     * Gets a copy of the current chessboard as a 2D array of ChessTile objects.
+     *
+     * This method creates a deep copy of the chessboard, allowing for the independent
+     * examination of the board's state without modifying the original chessboard.
+     *
+     * @return A 2D array copy of ChessTile objects representing the current state of the chessboard.
+     */
+    public ChessTile[][] getBoard() {
+        ChessTile[][] copy = new ChessTile[SIZE][SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            copy[i] = board[i].clone();
         }
+        return copy;
     }
 
-    public void showAvailableMoves(ChessPiece piece) throws NullPieceException {
-        if (piece.isEmptyPiece()) {
-            throw new NullPieceException();
-        }
-
-        Coordinate[] coordArray = piece.getFlattenedCoordinates(this);
-
-        TextUI.printChessBoardHeader();
-        TextUI.printChessBoardDivider();
-        for (int i = 0; i < board.length; i++) {
-            ChessTile[] row = board[i];
-            StringBuilder rowString = new StringBuilder();
-
-            for (int j = 0; j < board.length; j++) {
-                Coordinate coord = new Coordinate(j, i);
-
-                if (Arrays.asList(coordArray).contains(coord)){
-                    String pieceString = row[j].toStringAvailableDest();
-                    rowString.append(pieceString);
-                } else {
-                    String pieceString = row[j].toString();
-                    rowString.append(pieceString);
-                }
-            }
-
-            int rowNum = (i - 8) * -1;
-            TextUI.printChessBoardRow(rowNum, rowString.toString());
-        }
-        TextUI.printChessBoardHeader();
-        System.out.println("");
+    public Color getPlayerColor() {
+        return this.playerColor;
     }
 
-    public void showChessBoard() {
-        TextUI.printChessBoardHeader();
-        TextUI.printChessBoardDivider();
-        for (int i = 0; i < board.length; i++) {
-            ChessTile[] row = board[i];
-            StringBuilder rowString = new StringBuilder();
-
-            for (ChessTile tile : row) {
-                rowString.append(tile.toString());
-            }
-
-            int rowNum = (i - 8) * -1;
-            TextUI.printChessBoardRow(rowNum, rowString.toString());
-        }
-        TextUI.printChessBoardHeader();
-        System.out.println("");
-    }
-
-
-
+    //@@author onx001
     public Move[] getAllMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
-
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -145,17 +98,17 @@ public class ChessBoard {
 
                 if (piece.isSameColorAs(color)) {
                     Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
-                    for (Coordinate possible: possibleCoordinates){
+                    for (Coordinate possible: possibleCoordinates) {
                         Move move = new Move(coor, possible, piece);
                         allMoves.add(move);
                     }
                 }
             }
         }
-
         return allMoves.toArray(new Move[0]);
     }
 
+    //@@author TongZhengHong
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {
         getTileAtCoor(coord).updateTileChessPiece(promotedPiece);
     }
@@ -199,8 +152,7 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        Coordinate[][] possibleCoordinates = chessPiece.getAvailableCoordinates(this);
-        if (!move.isValid(possibleCoordinates)) {
+        if (!move.isValid(this)) {
             throw new InvalidMoveException();
         }
 
@@ -209,6 +161,7 @@ public class ChessBoard {
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
+        //@@author onx001
         if (move.isLeftCastling()) {
             Coordinate rookStartCoor = new Coordinate(startCoor.getX() - 4, startCoor.getY());
             Coordinate rookDestCoor = new Coordinate(startCoor.getX() - 1, startCoor.getY());
@@ -231,15 +184,14 @@ public class ChessBoard {
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         }
-
     }
 
-
+    //@@author ken-ruster
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
         Coordinate endCoord = move.getTo();
 
-        if (!(piece instanceof Pawn)) {
+        if (!piece.isPawn()) {
             return false;
         }
 
@@ -254,10 +206,7 @@ public class ChessBoard {
         return false;
     }
 
-    public ChessTile[][] getBoard() {
-        return this.board;
-    }
-
+    //@@author TriciaBK
     public boolean isEndGame() {
         isWhiteKingAlive = false; 
         isBlackKingAlive = false;
@@ -280,10 +229,6 @@ public class ChessBoard {
         return !isBlackKingAlive || !isWhiteKingAlive;
     }
 
-    public ChessPiece getPieceAt(Coordinate coor) {
-        return getTileAtCoor(coor).getChessPiece();
-    }
-
     public Color getWinningColor() {
         boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
         boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
@@ -296,18 +241,18 @@ public class ChessBoard {
             return Color.EMPTY;
         }
     }
-
+    
+    //@@author onx001
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
         boolean isUpright;
 
-        if(this.playerColor == color){
+        if (this.playerColor == color) {
             isUpright = true;
         } else {
             isUpright = false;
         }
-        
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -325,12 +270,12 @@ public class ChessBoard {
         return points - enemyPoints;
     }
 
-    public ChessBoard clone(){
+    public ChessBoard clone() {
         String stringRep = this.toString();
         return toBoard(stringRep);
     }
 
-    public ChessBoard toBoard(String board){
+    public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
         int col = 0;
@@ -363,16 +308,12 @@ public class ChessBoard {
         return boardString.toString();
     }
 
-
+    //@@author TongZhengHong
     public boolean isPieceFriendly(ChessPiece otherPiece) {
         return this.playerColor == otherPiece.getColor();
     }
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
-    }
-
-    public Color getPlayerColor() {
-        return this.playerColor;
     }
 }

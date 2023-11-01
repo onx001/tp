@@ -1,6 +1,7 @@
 package chessmaster.ui;
 
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import chessmaster.commands.CommandResult;
@@ -9,6 +10,7 @@ import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
+import chessmaster.pieces.ChessPiece;
 
 public final class TextUI {
 
@@ -37,7 +39,7 @@ public final class TextUI {
      * 
      * @return user input string in LOWER case
      */
-    public static String getUserInput() {
+    public String getUserInput() {
         String fullInputLine = scanner.nextLine().trim();
 
         // silently consume all ignored lines
@@ -56,7 +58,7 @@ public final class TextUI {
      * @param rawInputLine full raw user input line.
      * @return true if the entire user input line should be ignored.
      */
-    private static boolean shouldIgnore(String rawInputLine) {
+    private boolean shouldIgnore(String rawInputLine) {
         boolean isCommentLine = rawInputLine.trim().matches(COMMENT_LINE_FORMAT_REGEX);
         return rawInputLine.trim().isEmpty() || isCommentLine;
     }
@@ -67,7 +69,7 @@ public final class TextUI {
      *
      * @param texts The lines of text to be printed.
      */
-    public static void printText(String... texts) {
+    public void printText(String... texts) {
         out.println(DIVIDER);
 
         for (String text : texts) {
@@ -77,15 +79,109 @@ public final class TextUI {
         out.println(DIVIDER);
     }
 
-    public static void printWelcomeMessage() {
+    //@@author TongZhengHong
+    public void printChessBoard(ChessTile[][] tiles) {
+        printChessBoardHeader();
+        printChessBoardDivider();
+
+        for (int i = 0; i < tiles.length; i++) {
+            ChessTile[] row = tiles[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (ChessTile tile : row) {
+                rowString.append(ChessTile.TILE_DIVIDER);
+                rowString.append(tile.toString());
+            }
+
+            int rowNum = 8 - i;
+            printChessBoardRow(rowNum, rowString.toString());
+        }
+        printChessBoardHeader();
+        out.println("");
+    }
+
+    public void printChessBoardWithMove(ChessTile[][] tiles, Move move) {
+        printChessBoardHeader();
+        printChessBoardDivider();
+
+        for (int i = 0; i < tiles.length; i++) {
+            ChessTile[] row = tiles[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < tiles.length; j++) {
+                rowString.append(ChessTile.TILE_DIVIDER);
+
+                ChessTile tile = row[j];
+                Coordinate coord = new Coordinate(j, i);
+                boolean isPrevMove = move.getFrom().equals(coord) || 
+                    move.getTo().equals(coord);
+
+                String pieceString = isPrevMove ? tile.toStringPrevMove() : tile.toString();
+                rowString.append(pieceString);
+            }
+            
+            int rowNum = 8 - i;
+            printChessBoardRow(rowNum, rowString.toString());
+        }
+        printChessBoardHeader();
+        out.println("");
+    }
+
+    //@@author ken-ruster
+    /**
+     * Prints the chessboard along with highlighted moves for a specific chess piece.
+     *
+     * This method displays the chessboard, emphasizing available destination squares for a
+     * selected piece and marking the selected piece itself.
+     *
+     * @param tiles The 2D array of ChessTile objects representing the chessboard.
+     * @param piece The chess piece for which moves are highlighted.
+     * @param coordinates An array of coordinates representing available destination squares.
+     */
+    public void printChessBoardAvailableMoves(ChessTile[][] tiles, ChessPiece piece, 
+        Coordinate[] coordinates) {
+
+        printChessBoardHeader();
+        printChessBoardDivider();
+
+        for (int i = 0; i < tiles.length; i++) {
+            ChessTile[] row = tiles[i];
+            StringBuilder rowString = new StringBuilder();
+
+            for (int j = 0; j < tiles.length; j++) {
+                rowString.append(ChessTile.TILE_DIVIDER);
+
+                ChessTile tile = row[j];
+                Coordinate coord = new Coordinate(j, i);
+
+                String pieceString;
+                if (Arrays.asList(coordinates).contains(coord)) {
+                    pieceString = tile.toStringAvailableDest();
+                } else if (piece.getPosition().equals(coord)) {
+                    pieceString = tile.toStringSelected();
+                } else {
+                    pieceString = tile.toString();
+                }
+                rowString.append(pieceString);
+            }
+
+            int rowNum = 8 - i;
+            printChessBoardRow(rowNum, rowString.toString());
+        }
+        printChessBoardHeader();
+        out.println("");
+    }
+    //@@author
+
+    public void printWelcomeMessage() {
         printText(UiMessages.WELCOME_MESSAGE);
     }
 
-    public static void printLoadBoardError() {
+    public void printLoadBoardError() {
         printText(UiMessages.LOAD_BOARD_ERROR_MESSAGE);
     }
 
-    public static void promptContinuePrevGame(boolean error) {
+    public void promptContinuePrevGame(boolean error) {
         if (error) {
             out.print(UiMessages.CONTINUE_PREV_GAME_ERROR_MESSAGE);
         } else {
@@ -93,7 +189,7 @@ public final class TextUI {
         }
     }
 
-    public static void promptStartingColor(boolean error) {
+    public void promptStartingColor(boolean error) {
         if (error) {
             out.print(UiMessages.CHOOSE_PLAYER_COLOR_ERROR_MESSAGE);
         } else {
@@ -101,37 +197,37 @@ public final class TextUI {
         }
     }
 
-    public static void printStartNewGame(String colorString) {
+    public void printStartNewGame(String colorString) {
         String displayText = String.format(UiMessages.START_NEW_GAME_MESSAGE, colorString);
         printText(displayText);
     }
 
-    public static void printContinuePrevGame(String colorString) {
+    public void printContinuePrevGame(String colorString) {
         String displayText = String.format(UiMessages.CONTINUE_PREV_GAME_MESSAGE, colorString);
         printText(displayText);
     }
 
-    public static void printPromotePrompt(Coordinate coord) {
+    public void printPromotePrompt(Coordinate coord) {
         String message = String.format(UiMessages.PROMPT_PROMOTE_MESSAGE, coord.toString());
         out.print(message);
     }
 
-    public static void printPromoteInvalidMessage() {
+    public void printPromoteInvalidMessage() {
         out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
-    public static void printCPUMove(Move cpuMove) {
+    public void printCPUMove(Move cpuMove) {
         String pieceString = cpuMove.getPiece().getClass().getSimpleName();
         String displayString = String.format(UiMessages.CPU_MOVE_MESSAGE, pieceString,
                 cpuMove.getFrom(), cpuMove.getTo());
         printText(displayString);
     }
 
-    public static void printChessBoardDivider() {
+    public void printChessBoardDivider() {
         out.println(CHESS_BOARD_DIVIDER);
     }
 
-    public static void printChessBoardHeader() {
+    public void printChessBoardHeader() {
         out.print(CHESS_BOARD_PADDING + CHESS_BOARD_TAB);
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
@@ -140,7 +236,7 @@ public final class TextUI {
         out.println("");
     }
 
-    public static void printChessBoardRow(int rowNum, String chessBoardRow) {
+    public void printChessBoardRow(int rowNum, String chessBoardRow) {
         out.print(CHESS_BOARD_PADDING);
         out.print(String.format("(%d) ", rowNum));
         out.print(chessBoardRow);
@@ -150,15 +246,18 @@ public final class TextUI {
         out.println("");
     }
 
-    public static void printCommandResult(CommandResult result) {
-        printText(result.getMessageStrings());
+    public void printCommandResult(CommandResult result) {
+        String[] resultStrings = result.getMessageStrings();
+        if (resultStrings != null && resultStrings.length > 0) {
+            printText(resultStrings);
+        }
     }
 
-    public static void printErrorMessage(Exception e) {
+    public void printErrorMessage(Exception e) {
         printText(e.getMessage());
     }
 
-    public static void printWinnerMessage(Color colour) {
+    public void printWinnerMessage(Color colour) {
         if (colour.isBlack()) {
             out.println("BLACK Wins!");
         } else if (colour.isWhite()) {

@@ -7,7 +7,6 @@ import chessmaster.game.Coordinate;
 public class King extends ChessPiece {
     public static final String KING_WHITE = "k"; // ♔
     public static final String KING_BLACK = "K"; // ♚
-
     public static final int POINTS = 1000;
     public static final int[][] BOARDWEIGHT = 
         {{-3,-4,-4,-5,-5,-4,-4,-3},
@@ -19,6 +18,7 @@ public class King extends ChessPiece {
         {2,2,0,0,0,0,2,2},
         {2,3,1,0,0,1,3,2}};
         
+
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT, CASTLE_LEFT, CASTLE_RIGHT
     };

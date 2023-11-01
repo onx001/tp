@@ -1,3 +1,4 @@
+//@@author ken-ruster
 package chessmaster.parser;
 
 import chessmaster.game.Color;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ParserTest {
 
     @Test
-    public void promoteTest(){
+    public void promoteTest() {
         ChessPiece promoted = Parser.parsePromote(new Pawn(0, 0, Color.WHITE), "q");
         assertEquals(promoted.toString(), Queen.QUEEN_WHITE);
     }

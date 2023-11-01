@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
 import chessmaster.exceptions.ParseCoordinateException;
@@ -112,6 +113,7 @@ public class Coordinate {
         return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
     }
 
+    //@@author onx001
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coordinate) {

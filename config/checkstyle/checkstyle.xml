@@ -242,6 +242,12 @@
             <property name="throwsIndent" value="8" />
         </module>
 
+        <module name="WhitespaceAround">
+            <property name="allowEmptyLambdas" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+        </module>
+
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
 
         <!--
