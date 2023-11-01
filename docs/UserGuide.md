@@ -147,6 +147,11 @@ _________________________________________________________________
 </tr>
 </table>
 
+## Ending the game
+
+The game will automatically end and a victor be declared when one side has been checkmated (i.e. their king is in check, 
+and there is no possible escape), or if their king has been captured.
+
 ## Features 
 
 ### Make a move
