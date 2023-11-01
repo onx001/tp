@@ -151,33 +151,85 @@ _________________________________________________________________
 
 ### Make a move
 
+To make a move, simply enter the coordinate of the piece to be moved, followed by the coordinates it is to be moved to.
+
+Format: `[column][row] [column][row]`
+
+Examples: 
+- `a2 a4`
+- `b3 g6`
+
+ChessMaster also automatically checks if the move was valid and legal before it is executed, and shows the following error
+message in the case of an invalid move:
+
+`Oops, that move isn't valid!`
+
+
 ### Show available moves: `moves`
+
+Shows the available moves for a piece on the board. This command can be used for both yours and the enemy's pieces.
+
+Format: `moves [column][row]`
+
+Example: 
+```json
+moves e5
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R | N | B | Q | K | B | N | R | (8)
+                _________________________________
+            (7) | P | P | P |[ ]|   |[P]| P | P | (7)
+                _________________________________
+            (6) |   |   |[ ]| P |   |   |[ ]|   | (6)
+                _________________________________
+            (5) |   |   |   |   |{n}|   |   |   | (5)
+                _________________________________
+            (4) |   |   |[ ]|   |   |   |[ ]|   | (4)
+                _________________________________
+            (3) |   |   |   |[ ]|   |[ ]|   |   | (3)
+                _________________________________
+            (2) | p | p | p | p | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b |   | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+
+_________________________________________________________________
+
+Available coordinates for Knight at e5: 
+f7 d7 f3 d3 g6 g4 c6 c4 
+_________________________________________________________________
+```
 
 ### Show current chess board: `show`
 
+Shows the current state of the chess board.
+
+Format: `show`
+
 ### Show chess rules: `rules`
 
+Obtain a quick refresher on the rules of chess
+
+Format: `rules`
+
 ### Show commands: `help`
+
+Show a list of commands and what they do
+
+Format: `help`
+
+### Saving and loading games
+
+Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
+user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
+saved game, and starting a new one will delete the existing save file.
 
 ### Aborting game: `abort`
 
 Exit the ChessMaster application.
 
 Format: `abort`
-
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
-
-Format: `todo n/TODO_NAME d/DEADLINE`
-
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
-
-Example of usage: 
-
-`todo n/Write the rest of the User Guide d/next week`
-
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
 
 ## FAQ
 
@@ -187,15 +239,11 @@ Example of usage:
 
 ## Command Summary
 
-| Action | Format |
-| --- | --- |
-| Todo | `todo DESCRIPTION` |
-| Deadline | `deadline DESCRIPTION /by DUE_DATE_TIME` |
-| Event | `event DESCRIPTION /from START_DATE_TIME /to END_DATE_TIME` |
-| Mark | `mark INDEX` |
-| Unmark | `unmark INDEX` |
-| Delete | `delete INDEX` |
-| Find | `find QUERY` |
-| Date | `date QUERY_DATE` |
-| List | `list` |
-| Abort | `abort` |
+| Action     | Format                        |
+|------------|-------------------------------|
+| Move       | `[column][row] [column][row]` |
+| Show moves | `moves [column][row]`         |
+| Show board | `show`                        |
+| Help       | `help`                        |
+| Abort      | `abort`                       |
+
