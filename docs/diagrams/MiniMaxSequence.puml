@@ -44,10 +44,12 @@ loop ["depth < maxDepth"]
     deactivate CB
     CB -> MM : Continue loop
     deactivate CB
-
-    MM -> MM : Recursively call mostPoints()
-    MM -> MM : Update bestScore
-    MM -> MM : Update bestTuple
+    activate MM
+    MM -> MM : Recursively call mostPoints() while incrementing depth
+    MM --> MM : bestTuple
+    deactivate MM
+    MM -> MM : Update bestScore based on player turn
+    MM -> MM : Update bestTuple with bestScore and bestMove
 
 end
 
