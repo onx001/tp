@@ -62,7 +62,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board, Player currentPlayer) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Color currentColor) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -73,10 +73,10 @@ public class Storage {
             fileWriter.write(String.valueOf(board.getDifficulty()));
             fileWriter.write(System.lineSeparator());
 
-            if (currentPlayer.isHuman()) {
-                fileWriter.write("Human");
+            if (currentColor.isBlack()) {
+                fileWriter.write("black");
             } else {
-                fileWriter.write("CPU");
+                fileWriter.write("white");
             }
             fileWriter.write(System.lineSeparator());
 
@@ -235,7 +235,7 @@ public class Storage {
      * Loads the current turn player's
      * @return The difficulty as an integer.
      */
-    public Player loadCurrentPlayer() throws ChessMasterException {
+    public Color loadCurrentColor() throws ChessMasterException {
         createChessMasterFile();
 
         Scanner fileScanner;
@@ -254,10 +254,13 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String currentPlayerString = fileScanner.nextLine();
-            ChessBoard board = new ChessBoard(loadPlayerColor(), loadBoard());
-            boolean isCPU = currentPlayerString.equals("CPU");
-            return isCPU ? new CPU(loadPlayerColor().getOppositeColour(), board) : new Human(loadPlayerColor(), board);
+            try {
+                String currentColorString = fileScanner.nextLine();
+                boolean isBlack = currentColorString.equals("black");
+                return isBlack ? Color.BLACK : Color.WHITE;
+            } catch (Exception e) {
+                throw new LoadBoardException();
+            }
         }
 
         fileScanner.close();

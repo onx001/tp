@@ -41,6 +41,7 @@ public class Game {
     private ChessBoard board;
     private Storage storage;
     private int difficulty;
+    private Color currentColor;
 
     private Command command;
     private boolean hasEnded;
@@ -83,10 +84,12 @@ public class Game {
                     Move playedMove = handleCPUMove();
                     ui.printChessBoardWithMove(board.getBoard(), playedMove);
                 } 
-                storage.saveBoard(board, currentPlayer);
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
+                currentColor = currentPlayer.getColour();
+
+                storage.saveBoard(board, currentColor);
 
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);

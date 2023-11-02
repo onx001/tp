@@ -21,8 +21,9 @@ public class ChessMaster {
     private Storage storage;
     private Color playerColor;
     private int difficulty;
+    private Color currentColor = Color.WHITE;
 
-    private boolean shouldCPUStart = false;
+    private boolean shouldCPUMove = false;
 
     private ChessMaster() {
         ui = new TextUI();
@@ -35,6 +36,7 @@ public class ChessMaster {
             ChessTile[][] existingBoard = storage.loadBoard();
             board = new ChessBoard(playerColor, existingBoard);
             board.setDifficulty(difficulty);
+            currentColor = storage.loadCurrentColor();
 
             if (shouldStartNewGame()) {
                 loadNewGame();
@@ -88,17 +90,14 @@ public class ChessMaster {
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
 
-        //@@author TongZhengHong
-
-
-        if (playerColor.isBlack()) {
-            shouldCPUStart = true;
+        if (!playerColor.equals(currentColor)){
+            shouldCPUMove = true;
         }
     }
 
     private void run() {   
         Game game = new Game(playerColor, board, storage, ui, difficulty);
-        if (shouldCPUStart) {
+        if (shouldCPUMove) {
             game.cpuFirstMove();
         }
         game.run();
