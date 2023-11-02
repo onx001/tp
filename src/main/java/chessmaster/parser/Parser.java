@@ -7,7 +7,7 @@ import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RulesCommand;
 import chessmaster.commands.ShowCommand;
 import chessmaster.commands.ShowMovesCommand;
-import chessmaster.commands.ViewLegendCommand;
+import chessmaster.commands.LegendCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -148,8 +148,8 @@ public class Parser {
             return new RulesCommand();
         case HelpCommand.HELP_COMAMND_STRING:
             return new HelpCommand();
-        case ViewLegendCommand.VIEW_LEGEND_COMMAND_STRING:
-            return new ViewLegendCommand();
+        case LegendCommand.LEGEND_COMMAND_STRING:
+            return new LegendCommand();
         case AbortCommand.ABORT_COMAMND_STRING:
             return new AbortCommand();
 
