@@ -2,6 +2,7 @@ package chessmaster.storage;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
+import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
@@ -70,11 +71,8 @@ public class Storage {
             fileWriter.write(String.valueOf(board.getDifficulty()));
             fileWriter.write(System.lineSeparator());
 
-            if (currentColor.isBlack()) {
-                fileWriter.write("black");
-            } else {
-                fileWriter.write("white");
-            }
+
+            fileWriter.write(currentColor.name());
             fileWriter.write(System.lineSeparator());
 
             for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -253,10 +251,13 @@ public class Storage {
         if (fileScanner.hasNext()) {
             try {
                 String currentColorString = fileScanner.nextLine();
-                boolean isBlack = currentColorString.equals("black");
-                return isBlack ? Color.BLACK : Color.WHITE;
-            } catch (Exception e) {
-                throw new LoadBoardException();
+                Color color = Color.valueOf(currentColorString);
+                if (color.isEmpty()) {
+                    throw new ParseColorException();
+                }
+                return color;
+            } catch (IllegalArgumentException e) {
+                throw new ParseColorException();
             }
         }
 

@@ -21,7 +21,7 @@ public class ChessMaster {
     private Storage storage;
     private Color playerColor;
     private int difficulty;
-    private Color currentColor = Color.WHITE;
+    private Color currentTurnColor = Color.WHITE;
 
     private boolean shouldCPUMove = false;
 
@@ -36,7 +36,7 @@ public class ChessMaster {
             ChessTile[][] existingBoard = storage.loadBoard();
             board = new ChessBoard(playerColor, existingBoard);
             board.setDifficulty(difficulty);
-            currentColor = storage.loadCurrentColor();
+            currentTurnColor = storage.loadCurrentColor();
 
             if (shouldStartNewGame()) {
                 loadNewGame();
@@ -90,7 +90,7 @@ public class ChessMaster {
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
 
-        if (!playerColor.equals(currentColor)) {
+        if (!playerColor.equals(currentTurnColor)) {
             shouldCPUMove = true;
         }
     }
