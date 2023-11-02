@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
 import chessmaster.exceptions.ParseCoordinateException;
@@ -10,14 +11,9 @@ public class Coordinate {
     private int y;
 
     public Coordinate(int x, int y) {
-        if (isCoorOutofBoard(x, y)) {
-            this.x = 0;
-            this.y = 0;
-            return;
-        }
-
         this.x = x;
         this.y = y;
+        assert !isCoorOutofBoard(x, y) : "Coordinates (x,y) should NOT be out of chessboard (8x8 size)!";
     }
 
     public int getX() {
@@ -106,18 +102,24 @@ public class Coordinate {
         }
     }
 
+    public int[] calculateOffsetFrom(Coordinate otherCoordinate) {
+        int offsetX = this.x - otherCoordinate.getX();
+        int offsetY = this.y - otherCoordinate.getY();
+        return new int[]{ offsetX, offsetY };
+    }
+
     @Override
     public String toString() {
         return String.format("%s%d", BOARD_COLUMNS.charAt(x), (ChessBoard.SIZE - y));
     }
 
+    //@@author onx001
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Coordinate) {
             Coordinate other = (Coordinate) obj;
             return x == other.x && y == other.y;
         }
-
         return false;
     }
 

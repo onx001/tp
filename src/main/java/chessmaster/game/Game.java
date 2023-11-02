@@ -1,87 +1,154 @@
+//@@author TongZhengHong
 package chessmaster.game;
 
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.MoveCommand;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.parser.Parser;
+import chessmaster.storage.Storage;
+import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
+import chessmaster.user.Player;
 
 public class Game {
 
-    // In v1.0 we will only have player1 = human (white)
-    // and player2 = CPU (black).
-    // However in the future these will be modifiable.
-    // private Player player1;
-    // private Player player2;
-    private Human human;
+    private static final String[] START_HELP_STRINGS = {
+        "Thank you for choosing ChessMaster! Here are the commands that you can use:",
+        "Move piece - Input coordinate of piece, followed by coordinate to move to",
+        "   Format: [column][row] [column][row]",
+        "   E.g. a2 a3",
+        "Show board - Shows the current state of the chess board",
+        "   Format: show",
+        "Show available moves - Lists all the available moves for a piece at a coordinate",
+        "   Format: moves [column][row]",
+        "   E.g. moves a2",
+        "Abort game - Exit programme",
+        "   Format: abort",
+        "Obtain rules - Obtain a quick refresher on the rules of chess",
+        "   Format: rules",
+        "Obtain help - Show a list of commands and what they do",
+        "   Format: help"
+    };
+
     private CPU cpu;
+    private Human human;
+    private Player currentPlayer;
 
+    private TextUI ui;
     private ChessBoard board;
+    private Storage storage;
+    private int difficulty;
 
-    private final String logo =
-        "░█████╗░██╗░░██╗███████╗░██████╗░██████╗███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░"
-        + System.lineSeparator() +
-        "██╔══██╗██║░░██║██╔════╝██╔════╝██╔════╝████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗"
-        + System.lineSeparator() +
-        "██║░░╚═╝███████║█████╗░░╚█████╗░╚█████╗░██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝"
-        + System.lineSeparator() +
-        "██║░░██╗██╔══██║██╔══╝░░░╚═══██╗░╚═══██╗██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗"
-        + System.lineSeparator() +
-        "╚█████╔╝██║░░██║███████╗██████╔╝██████╔╝██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║"
-        + System.lineSeparator() +
-        "░╚════╝░╚═╝░░╚═╝╚══════╝╚═════╝░╚═════╝░╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
-        + System.lineSeparator();
+    private Command command;
+    private boolean hasEnded;
 
-    public Game(String mode, int player1Colour) {
-        board = new ChessBoard();
+    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui, int difficulty) {
+        this.ui = ui;
+        this.board = board;
+        this.storage = storage;
+        this.difficulty = difficulty;
 
-        switch (mode) {
-        case "multi":
-            // here for future expansion
-        case "single":
-        default:
-            this.human = new Human(player1Colour);
-            this.cpu = new CPU(1 - player1Colour);
-        }
+        this.human = new Human(playerColour, board);
+        Color cpuColor = playerColour.getOppositeColour();
+        this.cpu = new CPU(cpuColor, board);
+        currentPlayer = human; // Human goes first
 
-        this.human.initialisePieces(board);
-        this.cpu.initialisePieces(board);
+        assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
+        assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
+        assert currentPlayer != null : "A player should always exist in a game!";
+        assert (0 < difficulty) && (difficulty < 5) : "Difficulty should be between 1 and 4!";
     }
 
     public void run() {
-        System.out.println(logo);
+        ui.printText(START_HELP_STRINGS);
+        ui.printChessBoard(board.getBoard());
 
-        while (true) {
+        while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
+            try {
+                assert currentPlayer.isCPU() || currentPlayer.isHuman() : 
+                    "Player should only either be human or CPU!";
 
-            // 1. Show the chessboard at every move.
-            board.showChessBoard();
+                if (currentPlayer.isHuman()) {
+                    command = getUserCommand();
+                    if (!command.isMoveCommand()) {
+                        continue; // Get next command
+                    }
+                    Move playedMove = handleHumanMove();
+                    ui.printChessBoardWithMove(board.getBoard(), playedMove);
+                    
+                } else if (currentPlayer.isCPU()) {
+                    Move playedMove = handleCPUMove();
+                    ui.printChessBoardWithMove(board.getBoard(), playedMove);
+                } 
+                storage.saveBoard(board, currentPlayer);
 
-            // 2. Get the next move.
-            // In v1.0 the human is always white, so they will always go first
-            // But this needs to be changed in future versions
-            Move move = human.getNextMove(board);
-            if (move == null) {
-                // user has entered "abort"
-                break;
-            } else if (move.isEmpty()) {
-                // if the move was not correctly parsed, move to the next iteration of the game
-                continue;
-            } else if (move.getPiece().getColour() != this.human.getColour()) {
-                System.out.println("You're moving for the wrong side! Try moving one of your pieces instead." );
-                continue;
+                hasEnded = checkEndState();
+                currentPlayer = togglePlayerTurn();
+
+            } catch (ChessMasterException e) {
+                ui.printErrorMessage(e);
             }
-
-            // 3. Execute the next move.
-            boolean success = human.move(move, board);
-            if (!success) {
-                // if the move was Invalid, go to next iteration
-                continue;
-            }
-
-            // 4. CPU plays
-            Move randomMove = cpu.getRandomMove(board);
-            cpu.move(randomMove, board);
-
-            // Todo: Check game state
         }
     }
 
+    private Command getUserCommand() throws ChessMasterException {
+        String userInputString = ui.getUserInput();
+        command = Parser.parseCommand(userInputString);
+
+        CommandResult result = command.execute(board, ui);
+        ui.printCommandResult(result);
+        return command;
+    }
+
+    private Move handleHumanMove() throws ChessMasterException {
+        Move humanMove = ((MoveCommand) command).getMove();
+        board.executeMove(humanMove);
+        human.addMove(humanMove);
+        
+        // Handle human promotion
+        if (!board.isEndGame()) {
+            if (board.canPromote(humanMove)) {
+                human.handlePromote(board, ui, humanMove);
+            }
+        }
+
+        return humanMove;
+    }
+
+    private Move handleCPUMove() throws ChessMasterException {
+        Move cpuMove = cpu.getBestMove(board, difficulty);
+        ui.printCPUMove(cpuMove);
+        board.executeMove(cpuMove);
+        cpu.addMove(cpuMove);
+        return cpuMove;
+    }
+
+    private boolean checkEndState() throws ChessMasterException {
+        boolean end = board.isEndGame();
+        if (end) {
+            Color winningColor = board.getWinningColor();
+            ui.printWinnerMessage(winningColor);
+            storage.resetBoard();
+        }
+        return end;
+    }
+
+    public void cpuFirstMove() {
+        try {
+            Move cpuMove = cpu.getRandomMove(board);
+            ui.printCPUMove(cpuMove);
+            board.executeMove(cpuMove);
+            cpu.addMove(cpuMove);
+
+        } catch (ChessMasterException e) {
+            ui.printErrorMessage(e);
+        }
+    }
+
+    private Player togglePlayerTurn() {
+        return currentPlayer.isHuman() ? cpu : human;
+    }
 }

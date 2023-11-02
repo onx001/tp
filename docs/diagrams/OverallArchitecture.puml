@@ -1,0 +1,24 @@
+@startuml OverallArchitecture
+
+rectangle ChessMaster as chessMaster #LightPink
+rectangle Parser as parser #AliceBlue
+rectangle Game as game #Orchid
+rectangle UI as ui #IndianRed
+rectangle Storage as storage #SkyBlue
+rectangle ChessBoard as board #Orange
+actor User as user #BlanchedAlmond
+
+user -d-> ui
+
+chessMaster -r-> ui
+chessMaster -d-> game
+chessMaster -u-> storage
+chessMaster -u-> board
+
+game -> storage
+game -u-> board
+game -u-> ui
+
+storage .up.> board
+
+@enduml

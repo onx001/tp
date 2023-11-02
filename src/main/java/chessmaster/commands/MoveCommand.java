@@ -1,36 +1,50 @@
+//@@author TongZhengHong
 package chessmaster.commands;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.Coordinate;
-import chessmaster.pieces.ChessPiece;
 import chessmaster.game.Move;
+import chessmaster.parser.Parser;
+import chessmaster.ui.TextUI;
 
 public class MoveCommand extends Command {
 
-    private ChessBoard board;
-    private Coordinate from;
-    private Coordinate to;
+    public static final String MOVE_COMAMND_STRING = "move";
+    private static final String MOVE_PIECE_MESSAGE = "You moved %s from %s to %s";
 
-    public MoveCommand(ChessBoard board, Coordinate from, Coordinate to) {
-        this.board = board;
-        this.from = from;
-        this.to = to;
+    private String userInput;
+    private Move move;
+
+    public MoveCommand(String inputString) {
+        this.userInput = inputString;
     }
+
+    /**
+     * Executes the command based on user input, which is expected to consist of two
+     * algebraic coordinate strings separated by whitespace.
+     *
+     * @return A CommandResult object containing the result of the command.
+     * @throws ChessMasterException If the user input cannot be parsed into two
+     *                                  coordinate objects.
+     */
     @Override
-    public boolean execute() {
-        try{
-            ChessPiece relevantPiece = board.getPieceAtCoor(from);
-            Move move = new Move(from, to, relevantPiece);
-            board.executeMove(move);
-        } catch (InvalidMoveException e){
-            System.out.println(e.getMessage());
-        } catch (NullPieceException e){
-            System.out.println("No piece at the coordinate");
+    public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
+        move = Parser.parseMove(userInput, board);
+        if (!move.isValid(board)) {
+            throw new InvalidMoveException();
         }
 
-        return false;
+        String pieceString = move.getPiece().getClass().getSimpleName();
+        String displayString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
+        return new CommandResult(displayString);
+    }
+
+    public Move getMove() throws InvalidMoveException {
+        if (move == null) {
+            throw new InvalidMoveException();
+        }
+        return move;
     }
 
 }

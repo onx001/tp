@@ -3,7 +3,7 @@ package chessmaster.pieces;
 import java.util.ArrayList;
 
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
+import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 
 public class Queen extends ChessPiece {
@@ -13,34 +13,46 @@ public class Queen extends ChessPiece {
     public static final int[][] DIRECTIONS = {
         UP, DOWN, LEFT, RIGHT, UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT,
     };
+    
+    protected static int points = 90;
+    protected static int[][] boardWeight = 
+        {{-2,-1,-1,-1,-1,-1,-1,-2},
+        {-1,0,0,0,0,0,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,1,1,1,1,0,-1},
+        {-1,0,0,0,0,0,0,-1},
+        {-2,-1,-1,-1,-1,-1,-1,-2}};
 
-    public Queen(int row, int col, int color) {
+    public Queen(int row, int col, Color color) {
         super(row, col, color);
+        this.setPoints(points);
+        this.setBoardWeight(boardWeight);
+        assert color != Color.EMPTY : "Queen piece should have either black or white color";
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessTile[][] board) {
+    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
             int offsetX = DIRECTIONS[dir][0];
             int offsetY = DIRECTIONS[dir][1];
-            boolean isBlocked = false;
 
             int multiplier = 1;
+            boolean isBlocked = false;
             ArrayList<Coordinate> possibleCoordInDirection = new ArrayList<>();
-            while (multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY) && !isBlocked) {
+
+            while (!isBlocked && multiplier < ChessBoard.SIZE && position.isOffsetWithinBoard(offsetX, offsetY)) {
 
                 Coordinate possibleCoord = position.addOffsetToCoordinate(offsetX, offsetY);
-                ChessPiece destPiece = board[possibleCoord.getY()][possibleCoord.getX()].getChessPiece();
-                if (destPiece != null) {
-                    if (destPiece.getColour() != this.color) {
-                        possibleCoordInDirection.add(possibleCoord);
-                    }
-                    isBlocked = true;
-                } else {
+                ChessPiece destPiece = board.getPieceAtCoor(possibleCoord);
+
+                isBlocked = !destPiece.isEmptyPiece();
+                if (destPiece.isEmptyPiece() || isOpponent(destPiece)) {
                     possibleCoordInDirection.add(possibleCoord);
-                }
+                } 
 
                 multiplier++;
                 offsetX = DIRECTIONS[dir][0] * multiplier;
@@ -56,6 +68,6 @@ public class Queen extends ChessPiece {
 
     @Override
     public String toString() {
-        return color == ChessPiece.BLACK ? QUEEN_BLACK : QUEEN_WHITE;
+        return color == Color.BLACK ? QUEEN_BLACK : QUEEN_WHITE;
     }
 }

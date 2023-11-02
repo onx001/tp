@@ -1,3 +1,4 @@
+//@@author TongZhengHong
 package chessmaster.exceptions;
 
 public class ChessMasterException extends Exception {
