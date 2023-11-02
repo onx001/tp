@@ -41,12 +41,13 @@ public class Game {
     private ChessBoard board;
     private Storage storage;
     private int difficulty;
-    private Color currentTurnColor;
 
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui, int difficulty) {
+    public Game(Color playerColour, Color currentTurnColor, ChessBoard board, 
+        Storage storage, TextUI ui, int difficulty) {
+
         this.ui = ui;
         this.board = board;
         this.storage = storage;
@@ -55,7 +56,9 @@ public class Game {
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
         this.cpu = new CPU(cpuColor, board);
-        currentPlayer = human; // Human goes first
+
+        // Choose which player goes first
+        currentPlayer = currentTurnColor == playerColour ? human : cpu;
 
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
         assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
@@ -87,9 +90,8 @@ public class Game {
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
-                currentTurnColor = currentPlayer.getColour();
 
-                storage.saveBoard(board, currentTurnColor);
+                storage.saveBoard(board, currentPlayer.getColour());
 
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
@@ -137,18 +139,6 @@ public class Game {
             storage.resetBoard();
         }
         return end;
-    }
-
-    public void cpuFirstMove() {
-        try {
-            Move cpuMove = cpu.getRandomMove(board);
-            ui.printCPUMove(cpuMove);
-            board.executeMove(cpuMove);
-            cpu.addMove(cpuMove);
-
-        } catch (ChessMasterException e) {
-            ui.printErrorMessage(e);
-        }
     }
 
     private Player togglePlayerTurn() {

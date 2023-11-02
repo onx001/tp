@@ -19,11 +19,10 @@ public class ChessMaster {
     private TextUI ui;
     private ChessBoard board;
     private Storage storage;
-    private Color playerColor;
-    private int difficulty;
-    private Color currentTurnColor = Color.WHITE;
 
-    private boolean shouldCPUMove = false;
+    private int difficulty;
+    private Color playerColor;
+    private Color currentTurnColor = Color.WHITE;
 
     private ChessMaster() {
         ui = new TextUI();
@@ -33,10 +32,11 @@ public class ChessMaster {
         try {
             playerColor = storage.loadPlayerColor();
             difficulty = storage.loadDifficulty();
+            currentTurnColor = storage.loadCurrentColor();
             ChessTile[][] existingBoard = storage.loadBoard();
+            
             board = new ChessBoard(playerColor, existingBoard);
             board.setDifficulty(difficulty);
-            currentTurnColor = storage.loadCurrentColor();
 
             if (shouldStartNewGame()) {
                 loadNewGame();
@@ -66,7 +66,6 @@ public class ChessMaster {
     }
 
     private void loadNewGame() {
-
         ui.promptStartingColor(false);
         String input = ui.getUserInput();
 
@@ -89,17 +88,10 @@ public class ChessMaster {
         }
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
-
-        if (!playerColor.equals(currentTurnColor)) {
-            shouldCPUMove = true;
-        }
     }
 
     private void run() {   
-        Game game = new Game(playerColor, board, storage, ui, difficulty);
-        if (shouldCPUMove) {
-            game.cpuFirstMove();
-        }
+        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
         game.run();
     }
 
