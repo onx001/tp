@@ -9,6 +9,9 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
+import chessmaster.user.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -50,7 +53,7 @@ public class Storage {
         }
     }
 
-    //@@author TricaBK
+    //@@author TriciaBK
     /**
      * Saves the state of the ChessBoard to a file. Writes the player's color to the
      * first line
@@ -59,7 +62,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Player currentPlayer) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -68,6 +71,13 @@ public class Storage {
             fileWriter.write(System.lineSeparator());
 
             fileWriter.write(String.valueOf(board.getDifficulty()));
+            fileWriter.write(System.lineSeparator());
+
+            if (currentPlayer.isHuman()) {
+                fileWriter.write("Human");
+            } else {
+                fileWriter.write("CPU");
+            }
             fileWriter.write(System.lineSeparator());
 
             for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -83,7 +93,7 @@ public class Storage {
             throw new SaveBoardException();
         }
     }
-    
+
     //@@author TongZhengHong
     public void resetBoard() throws ChessMasterException {
         createChessMasterFile();
@@ -128,6 +138,11 @@ public class Storage {
         }
 
         //Skip difficulty on second line
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        //Skip current player's turn on third line
         if (fileScanner.hasNext()) {
             fileScanner.nextLine();
         }
@@ -257,4 +272,39 @@ public class Storage {
         fileScanner.close();
         throw new LoadBoardException();
     }
+
+    //@@author TriciaBK
+    /**
+     * Loads the current turn player's
+     * @return The difficulty as an integer.
+     */
+    public Player loadCurrentPlayer() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        if (fileScanner.hasNext()) {
+            String currentPlayerString = fileScanner.nextLine();
+            ChessBoard board = new ChessBoard(loadPlayerColor(), loadBoard());
+            boolean isCPU = currentPlayerString.equals("CPU");
+            return isCPU ? new CPU(loadPlayerColor().getOppositeColour(), board) : new Human(loadPlayerColor(), board);
+        }
+
+        fileScanner.close();
+        throw new LoadBoardException();
+    }
+
 }

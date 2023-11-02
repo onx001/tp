@@ -83,7 +83,7 @@ public class Game {
                     Move playedMove = handleCPUMove();
                     ui.printChessBoardWithMove(board.getBoard(), playedMove);
                 } 
-                storage.saveBoard(board);
+                storage.saveBoard(board, currentPlayer);
 
                 hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
@@ -151,5 +151,4 @@ public class Game {
     private Player togglePlayerTurn() {
         return currentPlayer.isHuman() ? cpu : human;
     }
-
 }

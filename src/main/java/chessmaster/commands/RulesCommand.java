@@ -2,6 +2,12 @@
 package chessmaster.commands;
 
 import chessmaster.game.ChessBoard;
+import chessmaster.pieces.Bishop;
+import chessmaster.pieces.King;
+import chessmaster.pieces.Knight;
+import chessmaster.pieces.Pawn;
+import chessmaster.pieces.Queen;
+import chessmaster.pieces.Rook;
 import chessmaster.ui.TextUI;
 
 public class RulesCommand extends Command {
@@ -11,13 +17,13 @@ public class RulesCommand extends Command {
     private static final String[] RULES_STRINGS = {
         "Here are simple chess rules to get you started:",
         "",
-        "Movement:",
-        "   Pawns move forward one square but capture diagonally.",
-        "   Rooks move horizontally and vertically any number of squares.",
-        "   Knights move in an L-shape: two squares in one direction and one square perpendicular.",
-        "   Bishops move diagonally any number of squares.",
-        "   Queens move horizontally, vertically, and diagonally any number of squares.",
-        "   Kings move one square in any direction.",
+        "Piece movement:",
+        String.format("   Pawn (\"%s\") move forward one square but capture diagonally.", Pawn.PAWN_WHITE),
+        String.format("   Rooks (\"%s\") move horizontally and vertically any number of squares.", Rook.ROOK_WHITE),
+        String.format("   Knights (\"%s\") move in an L-shape.", Knight.KNIGHT_WHITE),
+        String.format("   Bishops (\"%s\") move diagonally any number of squares.", Bishop.BISHOP_WHITE),
+        String.format("   Queens (\"%s\") move any number of squares in any direction.", Queen.QUEEN_WHITE),
+        String.format("   Kings (\"%s\") move one square in any direction.", King.KING_WHITE),
         "",
         "Special Rules:",
         "   Castling - King and rook move simultaneously to safeguard the king.",
@@ -26,7 +32,7 @@ public class RulesCommand extends Command {
         "",
         "Objective:",
         "   Game ends when one player's king is in checkmate, under attack and can't escape capture.",
-        "   The delivering player wins the game.",
+        "   The delivering player wins the game."
     };
 
 
