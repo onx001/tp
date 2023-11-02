@@ -1,11 +1,11 @@
 @startuml MiniMaxSequenceDiagram
 
 actor CPU as user #BlanchedAlmond
-participant MiniMax as MM #IndianRed
-participant ChessBoard as CB #LightPink
-participant Move as M #Orange
-participant BoardScoreTuple as BST #SkyBlue
-participant Exception as E #PaleTurquoise
+participant :MiniMax as MM #IndianRed
+participant :ChessBoard as CB #LightPink
+participant :Move as M #Orange
+participant :BoardScoreTuple as BST #SkyBlue
+participant :ChessMasterException as E #PaleTurquoise
 
 activate MM #AliceBlue
 
