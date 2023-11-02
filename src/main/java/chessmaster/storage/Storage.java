@@ -2,6 +2,7 @@ package chessmaster.storage;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
+import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
@@ -9,9 +10,6 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.user.CPU;
-import chessmaster.user.Human;
-import chessmaster.user.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,7 +60,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board, Player currentPlayer) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Color currentColor) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -73,11 +71,8 @@ public class Storage {
             fileWriter.write(String.valueOf(board.getDifficulty()));
             fileWriter.write(System.lineSeparator());
 
-            if (currentPlayer.isHuman()) {
-                fileWriter.write("Human");
-            } else {
-                fileWriter.write("CPU");
-            }
+
+            fileWriter.write(currentColor.name());
             fileWriter.write(System.lineSeparator());
 
             for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -235,7 +230,7 @@ public class Storage {
      * Loads the current turn player's
      * @return The difficulty as an integer.
      */
-    public Player loadCurrentPlayer() throws ChessMasterException {
+    public Color loadCurrentColor() throws ChessMasterException {
         createChessMasterFile();
 
         Scanner fileScanner;
@@ -254,10 +249,16 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String currentPlayerString = fileScanner.nextLine();
-            ChessBoard board = new ChessBoard(loadPlayerColor(), loadBoard());
-            boolean isCPU = currentPlayerString.equals("CPU");
-            return isCPU ? new CPU(loadPlayerColor().getOppositeColour(), board) : new Human(loadPlayerColor(), board);
+            try {
+                String currentColorString = fileScanner.nextLine();
+                Color color = Color.valueOf(currentColorString);
+                if (color.isEmpty()) {
+                    throw new ParseColorException();
+                }
+                return color;
+            } catch (IllegalArgumentException e) {
+                throw new ParseColorException();
+            }
         }
 
         fileScanner.close();
