@@ -90,7 +90,7 @@ public class ChessMaster {
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
 
-        if (!playerColor.equals(currentColor)){
+        if (!playerColor.equals(currentColor)) {
             shouldCPUMove = true;
         }
     }

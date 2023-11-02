@@ -9,9 +9,6 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.user.CPU;
-import chessmaster.user.Human;
-import chessmaster.user.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
