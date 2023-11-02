@@ -2,7 +2,6 @@ package chessmaster.storage;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
-import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
@@ -249,16 +248,10 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            try {
-                String currentColorString = fileScanner.nextLine();
-                Color color = Color.valueOf(currentColorString);
-                if (color.isEmpty()) {
-                    throw new ParseColorException();
-                }
-                return color;
-            } catch (IllegalArgumentException e) {
-                throw new ParseColorException();
-            }
+            String currentColorString = fileScanner.nextLine();
+            Color color = Parser.parsePlayerColor(currentColorString);
+            fileScanner.close();
+            return color;
         }
 
         fileScanner.close();

@@ -159,9 +159,26 @@ public class Parser {
     }
 
     //@@author TongZhengHong
+    /**
+     * Parses a player's color from a provided string and returns the corresponding Color enumeration.
+     *
+     * This method takes an input color string and converts it into the appropriate Color enumeration value, 
+     * which can be either 'WHITE' or 'BLACK'. 
+     * 
+     * It ensures that the provided color is valid and not 'EMPTY' since a player color can only be black or white.
+     * If the input does not match any valid color, a ParseColorException is thrown.
+     *
+     * @param inputColorString A string representing the player's color ('WHITE' or 'BLACK').
+     * @return The Color enumeration corresponding to the parsed color.
+     * @throws ParseColorException If the input color is not valid or if it is 'EMPTY'.
+     */
     public static Color parsePlayerColor(String inputColorString) throws ParseColorException {
         try {
-            return Color.valueOf(inputColorString);
+            Color color = Color.valueOf(inputColorString);
+            if (color.isEmpty()) {
+                throw new ParseColorException();
+            }
+            return color;
         } catch (IllegalArgumentException e) {
             throw new ParseColorException();
         }
