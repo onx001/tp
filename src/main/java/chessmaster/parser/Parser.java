@@ -5,8 +5,9 @@ import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RulesCommand;
-import chessmaster.commands.ShowMovesCommand;
 import chessmaster.commands.ShowCommand;
+import chessmaster.commands.ShowMovesCommand;
+import chessmaster.commands.LegendCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -139,16 +140,19 @@ public class Parser {
         String commandString = splitInputStrings[0];
 
         switch (commandString) {
-        case HelpCommand.HELP_COMAMND_STRING:
-            return new HelpCommand();
-        case RulesCommand.RULES_COMAMND_STRING:
-            return new RulesCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
-            return new AbortCommand();
         case ShowMovesCommand.SHOW_MOVE_COMMAND_STRING:
             return new ShowMovesCommand(splitInputStrings[1]);
         case ShowCommand.SHOW_COMAMND_STRING:
             return new ShowCommand();
+        case RulesCommand.RULES_COMAMND_STRING:
+            return new RulesCommand();
+        case HelpCommand.HELP_COMAMND_STRING:
+            return new HelpCommand();
+        case LegendCommand.LEGEND_COMMAND_STRING:
+            return new LegendCommand();
+        case AbortCommand.ABORT_COMAMND_STRING:
+            return new AbortCommand();
+
         default:
             return new MoveCommand(in);
         }
