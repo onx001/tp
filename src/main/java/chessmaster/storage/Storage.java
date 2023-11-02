@@ -110,6 +110,11 @@ public class Storage {
     public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
+        int blackPieces = 0;
+        int whitePieces = 0;
+        boolean blackKing = false;
+        boolean whiteKing = false;
+
         Scanner fileScanner;
         try {
             fileScanner = new Scanner(storageFile);
@@ -139,9 +144,47 @@ public class Storage {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 String chessPieceString = String.valueOf(chessRowLine.charAt(col));
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
+                //@@author onx001
+                if (initialPiece.isBlackKing()) {
+                    if (blackKing) {
+                        fileScanner.close();
+                        throw new LoadBoardException();
+                    } else {
+                        blackKing = true;
+                        blackPieces++;
+                    }
+                } else if (initialPiece.isWhiteKing()) {
+                    if (whiteKing) {
+                        fileScanner.close();
+                        throw new LoadBoardException();
+                    } else {
+                        whiteKing = true;
+                        whitePieces++;
+                    }
+                } else if (initialPiece.isBlack()) {
+                    if (blackPieces >= ChessBoard.MAX_PIECES) {
+                        fileScanner.close();
+                        throw new LoadBoardException();
+                    } else {
+                        blackPieces++;
+                    }
+                } else if (initialPiece.isWhite()) {
+                    if (whitePieces >= ChessBoard.MAX_PIECES) {
+                        fileScanner.close();
+                        throw new LoadBoardException();
+                    } else {
+                        whitePieces++;
+                    }
+                }
+                //@@author TriciaBK
                 boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
             rowIndex++;
+        }
+
+        if (!blackKing || !whiteKing) {
+            fileScanner.close();
+            throw new LoadBoardException();
         }
 
         fileScanner.close();

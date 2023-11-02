@@ -12,6 +12,7 @@ public class ChessBoard {
     public static final int SIZE = 8;
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
+    public static final int MAX_PIECES = 16;
 
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
