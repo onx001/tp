@@ -98,6 +98,33 @@ public class ChessBoard {
         return this.difficulty;
     }
 
+    public boolean isChecked() {
+        Move[] moves = getAllMoves(playerColor.getOppositeColour());
+        for (Move move : moves) {
+            Coordinate to = move.getTo();
+            if (this.getPieceAtCoor(to) instanceof King) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCheckmated() {
+        Move[] moves = getAllMoves(playerColor);
+        for (Move move : moves) {
+            ChessBoard newBoard = this.clone();
+            try {
+                newBoard.executeMove(move);
+            } catch (InvalidMoveException e) {
+                continue;
+            }
+            if (!newBoard.isChecked()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public Move[] getAllMoves(Color color) {
         //Declare arraylist of moves as allMoves
