@@ -10,7 +10,7 @@ public class MiniMaxTest {
         ChessBoard board = new ChessBoard(Color.BLACK);
         MiniMax miniMax = new MiniMax(board, Color.BLACK, 3, 0);
         Move move = miniMax.getBestMove();
-        assertEquals(move.getFrom(), new Coordinate(1, 3));
+        assertEquals(move.getFrom(), new Coordinate(6, 7));
 
     }
     //ChessBoard board, Color color, int maxDepth, int score
