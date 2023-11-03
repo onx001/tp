@@ -287,6 +287,9 @@ public class Storage {
                 int difficulty = Parser.parseDifficulty(difficultyLine);
 
                 fileScanner.close();
+                if (difficulty < 1 || difficulty > 3) {
+                    throw new LoadBoardException();
+                }
                 return difficulty;
             } catch (NumberFormatException e) {
                 throw new LoadBoardException();
