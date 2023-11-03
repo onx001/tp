@@ -91,7 +91,7 @@ Additionally, every time a move is executed, ChessMaster provides a comprehensiv
 <tr>
 <td>
   
-```json
+```
 d2 d4
 _________________________________________________________________
 
@@ -122,7 +122,7 @@ _________________________________________________________________
 </td>
 <td>
 
-```json
+```
 
 _________________________________________________________________
 
@@ -184,7 +184,7 @@ Shows the available moves for a piece on the board. This command can be used for
 Format: `moves [column][row]`
 
 Example: 
-```json
+```
 moves e5
                  (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
