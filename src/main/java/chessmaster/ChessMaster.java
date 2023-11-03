@@ -88,6 +88,7 @@ public class ChessMaster {
         }
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
+        currentTurnColor = Color.WHITE;
     }
 
     private void run() {   
