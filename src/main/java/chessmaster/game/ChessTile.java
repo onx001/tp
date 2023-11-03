@@ -6,6 +6,7 @@ import chessmaster.pieces.EmptyPiece;
 public class ChessTile {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
+    private static final String EMPTY_TILE_MOVES_STRING = ".";
     private static final String BACKGROUND_RESET = "\u001B[0m";
     private static final String CAPTURABLE_BACKGROUND = "\u001B[43m";
 
@@ -80,7 +81,7 @@ public class ChessTile {
 
     //@@author ken-ruster
     public String toStringAvailableDest() {
-        String tileContent = isEmpty() ? EMPTY_TILE_STRING : chessPiece.toString();
+        String tileContent = isEmpty() ? EMPTY_TILE_MOVES_STRING : chessPiece.toString();
         String addBrackets = String.format("[%s]", tileContent);
 
         if (!isEmpty()) {
