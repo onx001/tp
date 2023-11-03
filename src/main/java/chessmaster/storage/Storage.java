@@ -46,7 +46,7 @@ public class Storage {
         try {
             storageFile.createNewFile();
         } catch (IOException e) {
-            throw new ChessMasterException("Fatal: Error creating file: " + filePathString + " Exiting ChessMaster");
+            throw new ChessMasterException("Fatal: Error creating file: " + filePathString);
         }
     }
 
@@ -70,7 +70,6 @@ public class Storage {
             fileWriter.write(String.valueOf(board.getDifficulty()));
             fileWriter.write(System.lineSeparator());
 
-
             fileWriter.write(currentColor.name());
             fileWriter.write(System.lineSeparator());
 
@@ -78,6 +77,15 @@ public class Storage {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                     fileWriter.write(piece.toString());
+                }
+                fileWriter.write(System.lineSeparator());
+            }
+
+            for (int row = 0; row < ChessBoard.SIZE; row++) {
+                for (int col = 0; col < ChessBoard.SIZE; col++) {
+                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
+                    String hasMovedString = piece.getHasMoved() ? "1" : "0";
+                    fileWriter.write(hasMovedString);
                 }
                 fileWriter.write(System.lineSeparator());
             }
@@ -121,19 +129,11 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
-        // Skip player colour on first line
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
-        }
-
-        //Skip difficulty on second line
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
-        }
-
-        //Skip current player's turn on third line
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
+        // Skip first three lines
+        for (int i = 0; i < 3; i++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
         }
 
         int rowIndex = 0;
@@ -150,6 +150,24 @@ public class Storage {
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
                 boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
+            rowIndex++;
+        }
+
+        rowIndex = 0;
+        while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
+            String chessRowLine = fileScanner.nextLine();
+            if (chessRowLine.length() != ChessBoard.SIZE) {
+                fileScanner.close();
+                throw new LoadBoardException();
+            }
+
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                boolean hasMoved = Character.getNumericValue(chessRowLine.charAt(col)) > 0;
+                if (hasMoved) {
+                    boardTiles[rowIndex][col].getChessPiece().setHasMoved();
+                }
+            }
+
             rowIndex++;
         }
 
@@ -204,6 +222,7 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
+        // Skip player color first line
         if (fileScanner.hasNext()) {
             fileScanner.nextLine();
         }

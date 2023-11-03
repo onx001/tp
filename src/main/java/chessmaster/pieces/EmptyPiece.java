@@ -17,6 +17,12 @@ public class EmptyPiece extends ChessPiece {
         return new Coordinate[0][];
     }
 
+    // An empty piece will never be moved
+    @Override
+    public boolean getHasMoved() {
+        return false;
+    }
+
     //returns the string representation of the empty piece for cloning
     @Override
     public String toString() {
