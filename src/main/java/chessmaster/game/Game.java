@@ -88,10 +88,9 @@ public class Game {
                     ui.printChessBoardWithMove(board.getBoard(), playedMove);
                 } 
 
-                hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
-
                 storage.saveBoard(board, currentPlayer.getColour());
+                hasEnded = checkEndState(); // Resets board if end
 
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
@@ -135,7 +134,8 @@ public class Game {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
-            ui.printWinnerMessage(winningColor);
+            Player winnerPlayer = human.getColour() == winningColor ? human : cpu;
+            ui.printWinnerMessage(winnerPlayer);
             storage.resetBoard();
         }
         return end;

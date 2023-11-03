@@ -7,10 +7,10 @@ import java.util.Scanner;
 import chessmaster.commands.CommandResult;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
-import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.user.Player;
 
 public final class TextUI {
 
@@ -265,11 +265,12 @@ public final class TextUI {
         printText(e.getMessage());
     }
 
-    public void printWinnerMessage(Color colour) {
-        if (colour.isBlack()) {
-            out.println("BLACK Wins!");
-        } else if (colour.isWhite()) {
-            out.println("WHITE Wins!");
+    public void printWinnerMessage(Player winner) {
+        String winningColorString = winner.getColour().name();
+        if (winner.isHuman()) {
+            printText(String.format(UiMessages.HUMAN_WIN_STRING, winningColorString));
+        } else if (winner.isCPU()) {
+            printText(String.format(UiMessages.CPU_WIN_STRING, winningColorString));
         }
     }
 
