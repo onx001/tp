@@ -89,6 +89,14 @@ public abstract class ChessPiece {
         return flattenedCoordinates.toArray(new Coordinate[0]);
     }
 
+    public boolean isWhiteKing() {
+        return this instanceof King && this.isWhite();
+    }
+
+    public boolean isBlackKing() {
+        return this instanceof King && this.isBlack();
+    }
+
     /**
      * Returns the validity of the move to the destination coordinate.
      * @param destination

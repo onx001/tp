@@ -125,6 +125,7 @@ The Storage component is responsible for handling the storage and retrieval of c
 
 ## Product scope
 ### Target user profile
+
 1. Novice players trying to practice chess and play chess offline without a chess set. 
 2. Time-poor users looking for a very simple, clean, gimmick-free chess application.
 ### Value proposition
@@ -149,6 +150,7 @@ The Storage component is responsible for handling the storage and retrieval of c
 | v2.0    | new player | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
 
 {more to be added}
+
 
 
 ## Non-Functional Requirements

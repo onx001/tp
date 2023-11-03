@@ -22,6 +22,11 @@ public class Storage {
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
+    private int blackPieceNum;
+    private int whitePieceNum;
+    private boolean blackKingPresent;
+    private boolean whiteKingPresent;
+    private Scanner fileScanner;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -115,7 +120,11 @@ public class Storage {
     public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
-        Scanner fileScanner;
+        blackPieceNum = 0;
+        whitePieceNum = 0;
+        blackKingPresent = false;
+        whiteKingPresent = false;
+
         try {
             fileScanner = new Scanner(storageFile);
         } catch (FileNotFoundException e) {
@@ -149,13 +158,59 @@ public class Storage {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 String chessPieceString = String.valueOf(chessRowLine.charAt(col));
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
+                //@@author onx001
+                if (!this.isPieceValid(initialPiece)) {
+                    fileScanner.close();
+                    throw new LoadBoardException();
+                }
+                //@@author TriciaBK
                 boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
             rowIndex++;
         }
 
+        boolean hasBothKings = blackKingPresent && whiteKingPresent;
+
+        if (!hasBothKings) {
+            fileScanner.close();
+            throw new LoadBoardException();
+        }
+
         fileScanner.close();
         return boardTiles;
+    }
+
+    //@@author onx001
+    private boolean isPieceValid (ChessPiece initialPiece) {
+        if (initialPiece.isBlackKing()) {
+            if (blackKingPresent) {
+                return false;
+            } else {
+                blackKingPresent = true;
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhiteKing()) {
+            if (whiteKingPresent) {
+                return false;
+            } else {
+                whiteKingPresent = true;
+                whitePieceNum++;
+            }
+        } else if (initialPiece.isBlack()) {
+            if (blackPieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhite()) {
+            if (whitePieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                whitePieceNum++;
+            }
+        }
+
+        return true;
     }
 
     //@@author TongZhengHong
@@ -249,6 +304,7 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
+
             try {
                 String currentColorString = fileScanner.nextLine();
                 Color color = Color.valueOf(currentColorString);
@@ -259,6 +315,7 @@ public class Storage {
             } catch (IllegalArgumentException e) {
                 throw new ParseColorException();
             }
+
         }
 
         fileScanner.close();
