@@ -31,9 +31,9 @@ public class UiMessages {
         "Invalid piece! Enter b(Bishop), q(Queen), r(Rook) or n(Knight): ";
     
     public static final String CHOOSE_DIFFICULTY_MESSAGE = 
-        "Choose difficulty level [1/2/3/4]: ";
+        "Choose difficulty level [1/2/3]: ";
     public static final String CHOOSE_DIFFICULTY_ERROR_MESSAGE =
-        "Invalid input! Please enter either '1', '2', '3' or '4': ";
+        "Invalid input! Please enter either '1', '2' or '3': ";
 
     public static final String HUMAN_WIN_STRING = "Congratulations! You have won as %s! :)";
     public static final String CPU_WIN_STRING = "Oh no! You have lost as %s. Please try harder next time :(";

@@ -82,12 +82,13 @@ public class ChessMaster {
         ui.promptDifficulty(false);
         input = ui.getUserInput();
         while (!input.equals("1") && !input.equals("2") 
-            && !input.equals("3") && !input.equals("4")) {
+            && !input.equals("3")) {
             ui.promptDifficulty(true);
             input = ui.getUserInput();
         }
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
+        currentTurnColor = Color.WHITE;
     }
 
     private void run() {   
