@@ -24,6 +24,11 @@ public class Storage {
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
+    private int blackPieceNum;
+    private int whitePieceNum;
+    private boolean blackKingPresent;
+    private boolean whiteKingPresent;
+    private Scanner fileScanner;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -120,12 +125,11 @@ public class Storage {
     public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
-        int blackPieces = 0;
-        int whitePieces = 0;
-        boolean blackKing = false;
-        boolean whiteKing = false;
+        blackPieceNum = 0;
+        whitePieceNum = 0;
+        blackKingPresent = false;
+        whiteKingPresent = false;
 
-        Scanner fileScanner;
         try {
             fileScanner = new Scanner(storageFile);
         } catch (FileNotFoundException e) {
@@ -160,36 +164,9 @@ public class Storage {
                 String chessPieceString = String.valueOf(chessRowLine.charAt(col));
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
                 //@@author onx001
-                if (initialPiece.isBlackKing()) {
-                    if (blackKing) {
-                        fileScanner.close();
-                        throw new LoadBoardException();
-                    } else {
-                        blackKing = true;
-                        blackPieces++;
-                    }
-                } else if (initialPiece.isWhiteKing()) {
-                    if (whiteKing) {
-                        fileScanner.close();
-                        throw new LoadBoardException();
-                    } else {
-                        whiteKing = true;
-                        whitePieces++;
-                    }
-                } else if (initialPiece.isBlack()) {
-                    if (blackPieces >= ChessBoard.MAX_PIECES) {
-                        fileScanner.close();
-                        throw new LoadBoardException();
-                    } else {
-                        blackPieces++;
-                    }
-                } else if (initialPiece.isWhite()) {
-                    if (whitePieces >= ChessBoard.MAX_PIECES) {
-                        fileScanner.close();
-                        throw new LoadBoardException();
-                    } else {
-                        whitePieces++;
-                    }
+                if (!this.isPieceValid(initialPiece)) {
+                    fileScanner.close();
+                    throw new LoadBoardException();
                 }
                 //@@author TriciaBK
                 boardTiles[rowIndex][col] = new ChessTile(initialPiece);
@@ -197,13 +174,48 @@ public class Storage {
             rowIndex++;
         }
 
-        if (!blackKing || !whiteKing) {
+        boolean hasBothKings = blackKingPresent && whiteKingPresent;
+
+        if (!hasBothKings) {
             fileScanner.close();
             throw new LoadBoardException();
         }
 
         fileScanner.close();
         return boardTiles;
+    }
+
+    //@@author onx001
+    private boolean isPieceValid (ChessPiece initialPiece) {
+        if (initialPiece.isBlackKing()) {
+            if (blackKingPresent) {
+                return false;
+            } else {
+                blackKingPresent = true;
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhiteKing()) {
+            if (whiteKingPresent) {
+                return false;
+            } else {
+                whiteKingPresent = true;
+                whitePieceNum++;
+            }
+        } else if (initialPiece.isBlack()) {
+            if (blackPieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhite()) {
+            if (whitePieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                whitePieceNum++;
+            }
+        }
+
+        return true;
     }
 
     //@@author TongZhengHong
@@ -300,7 +312,10 @@ public class Storage {
             String currentPlayerString = fileScanner.nextLine();
             ChessBoard board = new ChessBoard(loadPlayerColor(), loadBoard());
             boolean isCPU = currentPlayerString.equals("CPU");
-            return isCPU ? new CPU(loadPlayerColor().getOppositeColour(), board) : new Human(loadPlayerColor(), board);
+            Player currentPlayer = isCPU ? new CPU(loadPlayerColor().getOppositeColour(), board) : 
+                new Human(loadPlayerColor(), board);
+            fileScanner.close();
+            return currentPlayer;
         }
 
         fileScanner.close();
