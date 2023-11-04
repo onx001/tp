@@ -40,6 +40,7 @@ public class MiniMax {
 
         //gets all the moves for the current player
         ChessBoard board = tuple.getBoard();
+        Color playerColor = isMax ? color : color.getOppositeColour();
         Move[] moves = board.getAllMoves(color);
         assert moves.length > 0 : "No moves available for " + color + " at depth " + depth;
         BoardScoreTuple[] boards = new BoardScoreTuple[moves.length];
