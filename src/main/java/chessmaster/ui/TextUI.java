@@ -265,12 +265,13 @@ public final class TextUI {
         printText(e.getMessage());
     }
 
-    public void printWinnerMessage(Player winner) {
+    public void printEndMessage(Player winner) {
         String winningColorString = winner.getColour().name();
         if (winner.isHuman()) {
             printText(String.format(UiMessages.HUMAN_WIN_STRING, winningColorString));
-        } else if (winner.isCPU()) {
-            printText(String.format(UiMessages.CPU_WIN_STRING, winningColorString));
+        } else if (winner.isCPU()) { // Human lost
+            String playerColorString = winner.getColour().getOppositeColour().name();
+            printText(String.format(UiMessages.CPU_WIN_STRING, playerColorString));
         }
     }
 
