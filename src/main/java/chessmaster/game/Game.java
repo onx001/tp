@@ -135,7 +135,7 @@ public class Game {
         if (end) {
             Color winningColor = board.getWinningColor();
             Player winnerPlayer = human.getColour() == winningColor ? human : cpu;
-            ui.printWinnerMessage(winnerPlayer);
+            ui.printEndMessage(winnerPlayer);
             storage.resetBoard();
         }
         return end;
