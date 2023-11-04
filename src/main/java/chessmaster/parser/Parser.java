@@ -138,10 +138,11 @@ public class Parser {
     public static Command parseCommand(String in) {
         String[] splitInputStrings = in.split("\\s+", 2);
         String commandString = splitInputStrings[0];
+        String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
-        case ShowMovesCommand.SHOW_MOVE_COMMAND_STRING:
-            return new ShowMovesCommand(splitInputStrings[1]);
+        case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
+            return new ShowMovesCommand(payload);
         case ShowCommand.SHOW_COMAMND_STRING:
             return new ShowCommand();
         case RulesCommand.RULES_COMAMND_STRING:
