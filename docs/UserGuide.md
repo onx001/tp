@@ -15,7 +15,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
     - Getting help
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
-        - [Legend: `legend`](#view-pieces-representation-legend-)
+        - [Legend: `legend`](#view-pieces-representation-legend)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
