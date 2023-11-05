@@ -89,6 +89,12 @@ public class ChessMaster {
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
         currentTurnColor = Color.WHITE;
+
+        try {
+            storage.saveBoard(board, currentTurnColor);
+        } catch (ChessMasterException e) {
+            ui.printText(e.getMessage());
+        }
     }
 
     private void run() {   
