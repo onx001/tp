@@ -171,8 +171,8 @@ Examples:
 - `a2 a4`
 - `b3 g6`
 
-ChessMaster also automatically checks if the move was valid and legal before it is executed, and shows the following error
-message in the case of an invalid move:
+ChessMaster also automatically checks if the move was valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
+message will be shown:
 
 `Oops, that move isn't valid!`
 
@@ -183,9 +183,10 @@ Shows the available moves for a piece on the board. This command can be used for
 
 Format: `moves [column][row]`
 
-Example: 
+Example:  `moves e5`
+
+Expected Output:
 ```
-moves e5
                  (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
             (8) | R | N | B | Q | K | B | N | R | (8)
@@ -219,11 +220,39 @@ Shows the current state of the chess board.
 
 Format: `show`
 
+Expected Output:
+
+
 ### Show chess rules: `rules`
 
 Obtain a quick refresher on the rules of chess
 
 Format: `rules`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Here are simple chess rules to get you started:
+
+Piece movement:
+   Pawn ("p") move forward one square but capture diagonally.
+   Rooks ("r") move horizontally and vertically any number of squares.
+   Knights ("n") move in an L-shape.
+   Bishops ("b") move diagonally any number of squares.
+   Queens ("q") move any number of squares in any direction.
+   Kings ("k") move one square in any direction.
+
+Special Rules:
+   Castling - King and rook move simultaneously to safeguard the king.
+   En Passant - Pawn capturing when moving two squares from starting position.
+   Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.
+
+Objective:
+   Game ends when one player's king is in checkmate, under attack and can't escape capture.
+   The delivering player wins the game.
+_________________________________________________________________
+```
 
 ### Show commands: `help`
 
@@ -231,11 +260,56 @@ Show a list of commands and what they do
 
 Format: `help`
 
+Expected Output:
+```
+_________________________________________________________________
+
+Seems like you need some help!
+Here are the following commands to play:
+Move piece - Input coordinate of piece, followed by coordinate to move to
+   Format: [column][row] [column][row]
+   E.g. a2 a3
+Show available moves - Lists all the available moves for a piece
+   Format: moves [column][row]
+   E.g. moves a2
+Show board - Shows the current state of the chess board
+   Format: show
+Obtain rules - Obtain a quick refresher on the rules of chess
+   Format: rules
+View pieces representation - Display a legend that explains the piece representations
+   Format: legend
+Abort game - Exit programme
+   Format: abort
+_________________________________________________________________
+```
+
 ### View pieces representation: `legend` 
 
 Display a legend that explains the piece representations
 
 Format: `legend`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Black pieces:
+"R" represents a black rook.
+"N" represents a black knight.
+"B" represents a black bishop.
+"Q" represents a black queen.
+"K" represents a black king.
+"P" represents a black pawn.
+   
+White pieces:
+"r" represents a white rook.
+"n" represents a white knight.
+"b" represents a white bishop.
+"q" represents a white queen.
+"k" represents a white king.
+"p" represents a white pawn.
+_________________________________________________________________
+```
 
 ### Saving and loading games
 
@@ -248,6 +322,14 @@ saved game, and starting a new one will delete the existing save file.
 Exit the ChessMaster application.
 
 Format: `abort`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Exiting program... Thanks for playing!
+_________________________________________________________________
+```
 
 ## FAQ
 
