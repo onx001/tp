@@ -5,8 +5,9 @@ import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RulesCommand;
-import chessmaster.commands.ShowMovesCommand;
 import chessmaster.commands.ShowCommand;
+import chessmaster.commands.ShowMovesCommand;
+import chessmaster.commands.LegendCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -137,27 +138,48 @@ public class Parser {
     public static Command parseCommand(String in) {
         String[] splitInputStrings = in.split("\\s+", 2);
         String commandString = splitInputStrings[0];
+        String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
-        case HelpCommand.HELP_COMAMND_STRING:
-            return new HelpCommand();
-        case RulesCommand.RULES_COMAMND_STRING:
-            return new RulesCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
-            return new AbortCommand();
-        case ShowMovesCommand.SHOW_MOVE_COMMAND_STRING:
-            return new ShowMovesCommand(splitInputStrings[1]);
+        case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
+            return new ShowMovesCommand(payload);
         case ShowCommand.SHOW_COMAMND_STRING:
             return new ShowCommand();
+        case RulesCommand.RULES_COMAMND_STRING:
+            return new RulesCommand();
+        case HelpCommand.HELP_COMAMND_STRING:
+            return new HelpCommand();
+        case LegendCommand.LEGEND_COMMAND_STRING:
+            return new LegendCommand();
+        case AbortCommand.ABORT_COMAMND_STRING:
+            return new AbortCommand();
+
         default:
             return new MoveCommand(in);
         }
     }
 
     //@@author TongZhengHong
+    /**
+     * Parses a player's color from a provided string and returns the corresponding Color enumeration.
+     *
+     * This method takes an input color string and converts it into the appropriate Color enumeration value, 
+     * which can be either 'WHITE' or 'BLACK'. 
+     * 
+     * It ensures that the provided color is valid and not 'EMPTY' since a player color can only be black or white.
+     * If the input does not match any valid color, a ParseColorException is thrown.
+     *
+     * @param inputColorString A string representing the player's color ('WHITE' or 'BLACK').
+     * @return The Color enumeration corresponding to the parsed color.
+     * @throws ParseColorException If the input color is not valid or if it is 'EMPTY'.
+     */
     public static Color parsePlayerColor(String inputColorString) throws ParseColorException {
         try {
-            return Color.valueOf(inputColorString);
+            Color color = Color.valueOf(inputColorString);
+            if (color.isEmpty()) {
+                throw new ParseColorException();
+            }
+            return color;
         } catch (IllegalArgumentException e) {
             throw new ParseColorException();
         }

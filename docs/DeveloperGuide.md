@@ -113,9 +113,9 @@ How the minimax algorithm works:
 
 Below is a class diagram representing the Storage class.
 The Storage component is responsible for handling the storage and retrieval of chess game state.
-![](StorageClass.png)
+![](images/StorageClass.png)
 
-![](StorageSequence.png)
+![](images/StorageSequence.png)
 
 * Creates the necessary parent directories for the file and the file itself if they don't exist 
 * Saves the current state of the ChessBoard to the file. It includes the player's color information and current player's turn as the first line and the state of the chessboard in an 8x8 format.
@@ -126,26 +126,31 @@ The Storage component is responsible for handling the storage and retrieval of c
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
-
+1. Novice players trying to practice chess and play chess offline without a chess set. 
+2. Time-poor users looking for a very simple, clean, gimmick-free chess application.
 ### Value proposition
-
-{Describe the value proposition: what problem does it solve?}
+- Chess novices can use ChessMaster CLI to learn the game's rules and practice their skills.
+- Busy students can open the application up in their terminal easily for a quick game of chess.
+- The CLI interface is intuitive, making it easy for beginners to understand moves and strategies
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v1.0|player|only move valid moves|play chess properly|
-|v1.0|new user|start a new game|play chess multiple times|
-|v1.0|player|see the current state of the chess board on every turn|think about what move to play|
-|v1.0|player|tell which symbol represents which piece|know what is where|
-|v1.0|player|specify move coordinates|move the piece I want how I want it|
-|v1.0|player|promote pieces when the option is available|play extended games properly|
-|v1.0|player|have the option to abort the game|leave the game when I no longer want to play|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
+| Version | As a ...   | I want to ...                                          | So that I can ...                                      |
+|---------|------------|--------------------------------------------------------|--------------------------------------------------------|
+| v1.0    | new user   | see usage instructions                                 | refer to them when I forget how to use the application |
+| v1.0    | player     | do only valid moves                                    | play chess properly                                    |
+| v1.0    | player     | start a new game                                       | play chess multiple times                              |
+| v1.0    | player     | see the current state of the chess board on every turn | think about what move to play                          |
+| v1.0    | player     | tell which symbol represents which piece               | know what is where                                     |
+| v1.0    | player     | specify move coordinates                               | move the piece I want how I want it                    |
+| v1.0    | player     | promote pieces when the option is available            | play extended games properly                           |
+| v1.0    | player     | have the option to abort the game                      | leave the game when I no longer want to play           |
+| v1.0    | player     | save and get back to a game                            | leave when I am busy and resume a game when I am free  |
+| v2.0    | new player | see available moves for a piece                        | learn the rules of chess and valid moves               |
+| v2.0    | new player | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
+
 {more to be added}
+
 
 
 ## Non-Functional Requirements

@@ -45,7 +45,9 @@ public class Game {
     private Command command;
     private boolean hasEnded;
 
-    public Game(Color playerColour, ChessBoard board, Storage storage, TextUI ui, int difficulty) {
+    public Game(Color playerColour, Color currentTurnColor, ChessBoard board, 
+        Storage storage, TextUI ui, int difficulty) {
+
         this.ui = ui;
         this.board = board;
         this.storage = storage;
@@ -54,7 +56,9 @@ public class Game {
         this.human = new Human(playerColour, board);
         Color cpuColor = playerColour.getOppositeColour();
         this.cpu = new CPU(cpuColor, board);
-        currentPlayer = human; // Human goes first
+
+        // Choose which player goes first
+        currentPlayer = currentTurnColor == playerColour ? human : cpu;
 
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
         assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
@@ -83,10 +87,10 @@ public class Game {
                     Move playedMove = handleCPUMove();
                     ui.printChessBoardWithMove(board.getBoard(), playedMove);
                 } 
-                storage.saveBoard(board);
 
-                hasEnded = checkEndState();
                 currentPlayer = togglePlayerTurn();
+                storage.saveBoard(board, currentPlayer.getColour());
+                hasEnded = checkEndState(); // Resets board if end
 
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
@@ -130,26 +134,14 @@ public class Game {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
-            ui.printWinnerMessage(winningColor);
+            Player winnerPlayer = human.getColour() == winningColor ? human : cpu;
+            ui.printEndMessage(winnerPlayer);
             storage.resetBoard();
         }
         return end;
     }
 
-    public void cpuFirstMove() {
-        try {
-            Move cpuMove = cpu.getRandomMove(board);
-            ui.printCPUMove(cpuMove);
-            board.executeMove(cpuMove);
-            cpu.addMove(cpuMove);
-
-        } catch (ChessMasterException e) {
-            ui.printErrorMessage(e);
-        }
-    }
-
     private Player togglePlayerTurn() {
         return currentPlayer.isHuman() ? cpu : human;
     }
-
 }

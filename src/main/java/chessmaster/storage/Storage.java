@@ -21,6 +21,11 @@ public class Storage {
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
+    private int blackPieceNum;
+    private int whitePieceNum;
+    private boolean blackKingPresent;
+    private boolean whiteKingPresent;
+    private Scanner fileScanner;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -46,11 +51,11 @@ public class Storage {
         try {
             storageFile.createNewFile();
         } catch (IOException e) {
-            throw new ChessMasterException("Fatal: Error creating file: " + filePathString + " Exiting ChessMaster");
+            throw new ChessMasterException("Fatal: Error creating file: " + filePathString);
         }
     }
 
-    //@@author TricaBK
+    //@@author TriciaBK
     /**
      * Saves the state of the ChessBoard to a file. Writes the player's color to the
      * first line
@@ -59,7 +64,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Color currentColor) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -70,10 +75,22 @@ public class Storage {
             fileWriter.write(String.valueOf(board.getDifficulty()));
             fileWriter.write(System.lineSeparator());
 
+            fileWriter.write(currentColor.name());
+            fileWriter.write(System.lineSeparator());
+
             for (int row = 0; row < ChessBoard.SIZE; row++) {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                     fileWriter.write(piece.toString());
+                }
+                fileWriter.write(System.lineSeparator());
+            }
+
+            for (int row = 0; row < ChessBoard.SIZE; row++) {
+                for (int col = 0; col < ChessBoard.SIZE; col++) {
+                    ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
+                    String hasMovedString = piece.getHasMoved() ? "1" : "0";
+                    fileWriter.write(hasMovedString);
                 }
                 fileWriter.write(System.lineSeparator());
             }
@@ -83,7 +100,7 @@ public class Storage {
             throw new SaveBoardException();
         }
     }
-    
+
     //@@author TongZhengHong
     public void resetBoard() throws ChessMasterException {
         createChessMasterFile();
@@ -110,21 +127,22 @@ public class Storage {
     public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
-        Scanner fileScanner;
+        blackPieceNum = 0;
+        whitePieceNum = 0;
+        blackKingPresent = false;
+        whiteKingPresent = false;
+
         try {
             fileScanner = new Scanner(storageFile);
         } catch (FileNotFoundException e) {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
-        // Skip player colour on first line
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
-        }
-
-        //Skip difficulty on second line
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
+        // Skip first three lines
+        for (int i = 0; i < 3; i++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
         }
 
         int rowIndex = 0;
@@ -139,13 +157,76 @@ public class Storage {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 String chessPieceString = String.valueOf(chessRowLine.charAt(col));
                 ChessPiece initialPiece = Parser.parseChessPiece(chessPieceString, rowIndex, col);
+                //@@author onx001
+                if (!this.isPieceValid(initialPiece)) {
+                    fileScanner.close();
+                    throw new LoadBoardException();
+                }
+                //@@author TriciaBK
                 boardTiles[rowIndex][col] = new ChessTile(initialPiece);
             }
             rowIndex++;
         }
 
+        boolean hasBothKings = blackKingPresent && whiteKingPresent;
+        if (!hasBothKings) {
+            fileScanner.close();
+            throw new LoadBoardException();
+        }
+
+        rowIndex = 0;
+        while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
+            String chessRowLine = fileScanner.nextLine();
+            if (chessRowLine.length() != ChessBoard.SIZE) {
+                fileScanner.close();
+                throw new LoadBoardException();
+            }
+
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                boolean hasMoved = Character.getNumericValue(chessRowLine.charAt(col)) > 0;
+                if (hasMoved) {
+                    boardTiles[rowIndex][col].getChessPiece().setHasMoved();
+                }
+            }
+
+            rowIndex++;
+        }
+
         fileScanner.close();
         return boardTiles;
+    }
+
+    //@@author onx001
+    private boolean isPieceValid (ChessPiece initialPiece) {
+        if (initialPiece.isBlackKing()) {
+            if (blackKingPresent) {
+                return false;
+            } else {
+                blackKingPresent = true;
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhiteKing()) {
+            if (whiteKingPresent) {
+                return false;
+            } else {
+                whiteKingPresent = true;
+                whitePieceNum++;
+            }
+        } else if (initialPiece.isBlack()) {
+            if (blackPieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                blackPieceNum++;
+            }
+        } else if (initialPiece.isWhite()) {
+            if (whitePieceNum >= ChessBoard.MAX_PIECES) {
+                return false;
+            } else {
+                whitePieceNum++;
+            }
+        }
+
+        return true;
     }
 
     //@@author TongZhengHong
@@ -195,6 +276,7 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
+        // Skip player color first line
         if (fileScanner.hasNext()) {
             fileScanner.nextLine();
         }
@@ -205,6 +287,9 @@ public class Storage {
                 int difficulty = Parser.parseDifficulty(difficultyLine);
 
                 fileScanner.close();
+                if (difficulty < 1 || difficulty > 3) {
+                    throw new LoadBoardException();
+                }
                 return difficulty;
             } catch (NumberFormatException e) {
                 throw new LoadBoardException();
@@ -214,4 +299,39 @@ public class Storage {
         fileScanner.close();
         throw new LoadBoardException();
     }
+
+    //@@author TriciaBK
+    /**
+     * Loads the current turn player's
+     * @return The difficulty as an integer.
+     */
+    public Color loadCurrentColor() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        if (fileScanner.hasNext()) {
+            fileScanner.nextLine();
+        }
+
+        if (fileScanner.hasNext()) {
+            String currentColorString = fileScanner.nextLine();
+            Color color = Parser.parsePlayerColor(currentColorString);
+            fileScanner.close();
+            return color;
+        }
+
+        fileScanner.close();
+        throw new LoadBoardException();
+    }
+
 }

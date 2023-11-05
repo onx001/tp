@@ -19,10 +19,10 @@ public class ChessMaster {
     private TextUI ui;
     private ChessBoard board;
     private Storage storage;
-    private Color playerColor;
-    private int difficulty;
 
-    private boolean shouldCPUStart = false;
+    private int difficulty;
+    private Color playerColor;
+    private Color currentTurnColor = Color.WHITE;
 
     private ChessMaster() {
         ui = new TextUI();
@@ -32,7 +32,9 @@ public class ChessMaster {
         try {
             playerColor = storage.loadPlayerColor();
             difficulty = storage.loadDifficulty();
+            currentTurnColor = storage.loadCurrentColor();
             ChessTile[][] existingBoard = storage.loadBoard();
+            
             board = new ChessBoard(playerColor, existingBoard);
             board.setDifficulty(difficulty);
 
@@ -64,7 +66,6 @@ public class ChessMaster {
     }
 
     private void loadNewGame() {
-
         ui.promptStartingColor(false);
         String input = ui.getUserInput();
 
@@ -81,26 +82,17 @@ public class ChessMaster {
         ui.promptDifficulty(false);
         input = ui.getUserInput();
         while (!input.equals("1") && !input.equals("2") 
-            && !input.equals("3") && !input.equals("4")) {
+            && !input.equals("3")) {
             ui.promptDifficulty(true);
             input = ui.getUserInput();
         }
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
-
-        //@@author TongZhengHong
-
-
-        if (playerColor.isBlack()) {
-            shouldCPUStart = true;
-        }
+        currentTurnColor = Color.WHITE;
     }
 
     private void run() {   
-        Game game = new Game(playerColor, board, storage, ui, difficulty);
-        if (shouldCPUStart) {
-            game.cpuFirstMove();
-        }
+        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
         game.run();
     }
 

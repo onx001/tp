@@ -12,6 +12,7 @@ public class ChessBoard {
     public static final int SIZE = 8;
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
+    public static final int MAX_PIECES = 16;
 
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
@@ -95,6 +96,33 @@ public class ChessBoard {
 
     public int getDifficulty() {
         return this.difficulty;
+    }
+
+    public boolean isChecked() {
+        Move[] moves = getAllMoves(playerColor.getOppositeColour());
+        for (Move move : moves) {
+            Coordinate to = move.getTo();
+            if (this.getPieceAtCoor(to) instanceof King) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCheckmated() {
+        Move[] moves = getAllMoves(playerColor);
+        for (Move move : moves) {
+            ChessBoard newBoard = this.clone();
+            try {
+                newBoard.executeMove(move);
+            } catch (InvalidMoveException e) {
+                continue;
+            }
+            if (!newBoard.isChecked()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 

@@ -44,6 +44,7 @@ public class Move {
         this.piece = piece;
     }
 
+    //@@author onx001
     /**
      * Checks if the move is valid by checking if the to coordinate is in the
      * possibleCoordinates 2d array
@@ -85,6 +86,7 @@ public class Move {
         return "Move [from=" + from + ", to=" + to + ", piece=" + piece + "]";
     }
 
+    // @author TongZhengHong
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Move) {

@@ -15,6 +15,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
     - Getting help
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
+        - [Legend: `legend`](#view-pieces-representation-legend)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
@@ -90,7 +91,7 @@ Additionally, every time a move is executed, ChessMaster provides a comprehensiv
 <tr>
 <td>
   
-```json
+<pre><code>
 d2 d4
 _________________________________________________________________
 
@@ -116,12 +117,12 @@ _________________________________________________________________
             (1) | r | n | b | q | k | b | n | r | (1)
                 _________________________________
                  (a) (b) (c) (d) (e) (f) (g) (h)
-```
+</code></pre>
 
 </td>
 <td>
 
-```json
+<pre><code>
 
 _________________________________________________________________
 
@@ -147,7 +148,7 @@ _________________________________________________________________
             (1) | r | n | b | q | k | b | n | r | (1)
                 _________________________________
                  (a) (b) (c) (d) (e) (f) (g) (h)
-```
+</code></pre>
 
 </td>
 </tr>
@@ -183,7 +184,7 @@ Shows the available moves for a piece on the board. This command can be used for
 Format: `moves [column][row]`
 
 Example: 
-```json
+```
 moves e5
                  (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
@@ -230,6 +231,12 @@ Show a list of commands and what they do
 
 Format: `help`
 
+### View pieces representation: `legend` 
+
+Display a legend that explains the piece representations
+
+Format: `legend`
+
 ### Saving and loading games
 
 Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
@@ -261,11 +268,13 @@ to simulate timed games.
 
 ## Command Summary
 
-| Action     | Format                        |
-|------------|-------------------------------|
-| Move       | `[column][row] [column][row]` |
-| Show moves | `moves [column][row]`         |
-| Show board | `show`                        |
-| Help       | `help`                        |
-| Abort      | `abort`                       |
+| Action        | Format                        |
+|---------------|-------------------------------|
+| Move          | `[column][row] [column][row]` |
+| Show moves    | `moves [column][row]`         |
+| Show board    | `show`                        |
+| Rules         | `rules`                       |
+| Help          | `help`                        |
+| Pieces legend | `legend`                      |
+| Abort         | `abort`                       |
 

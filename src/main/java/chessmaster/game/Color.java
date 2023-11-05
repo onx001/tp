@@ -37,4 +37,13 @@ public enum Color {
     public boolean isBlack() {
         return this == Color.BLACK;
     }
+
+    /**
+     * Checks if a given color is empty.
+     *
+     * @return true if the color is empty; false otherwise.
+     */
+    public boolean isEmpty() {
+        return this == Color.EMPTY;
+    }
 }
