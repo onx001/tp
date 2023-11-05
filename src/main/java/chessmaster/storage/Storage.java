@@ -350,7 +350,7 @@ public class Storage {
      *
      * @param color Color the player is playing as
      * @param board Board being used for the game
-     * @return The human object to be used in the game, complete with the game history.
+     * @return The human object to be used in the game, complete with the move history.
      * @throws ChessMasterException
      */
     public Human loadHuman(Color color, ChessBoard board) throws ChessMasterException{
@@ -397,7 +397,7 @@ public class Storage {
      *
      * @param color Color the CPU is playing as
      * @param board Board being used for the game
-     * @return The CPU object to be used in the game, complete with the game history.
+     * @return The CPU object to be used in the game, complete with the move history.
      * @throws ChessMasterException
      */
     public CPU loadCPU(Color color, ChessBoard board) throws ChessMasterException{
