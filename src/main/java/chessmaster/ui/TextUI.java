@@ -218,8 +218,8 @@ public final class TextUI {
         printText(displayText);
     }
 
-    public void printContinuePrevGame(String colorString) {
-        String displayText = String.format(UiMessages.CONTINUE_PREV_GAME_MESSAGE, colorString);
+    public void printContinuePrevGame(String colorString, int difficulty) {
+        String displayText = String.format(UiMessages.CONTINUE_PREV_GAME_MESSAGE, colorString, difficulty);
         printText(displayText);
     }
 

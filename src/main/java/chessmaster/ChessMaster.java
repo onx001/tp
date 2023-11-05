@@ -58,7 +58,7 @@ public class ChessMaster {
         }
         
         if (input.equals("y")) {
-            ui.printContinuePrevGame(playerColor.name());
+            ui.printContinuePrevGame(playerColor.name(), difficulty);
             return false;
         } else {
             return true;
