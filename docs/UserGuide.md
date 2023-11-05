@@ -15,7 +15,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
     - Getting help
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
-        - [Legend: `legend`](#view-pieces-representation-legend-)
+        - [Legend: `legend`](#view-pieces-representation-legend)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
@@ -91,7 +91,7 @@ Additionally, every time a move is executed, ChessMaster provides a comprehensiv
 <tr>
 <td>
   
-```json
+<pre><code>
 d2 d4
 _________________________________________________________________
 
@@ -117,12 +117,12 @@ _________________________________________________________________
             (1) | r | n | b | q | k | b | n | r | (1)
                 _________________________________
                  (a) (b) (c) (d) (e) (f) (g) (h)
-```
+</code></pre>
 
 </td>
 <td>
 
-```json
+<pre><code>
 
 _________________________________________________________________
 
@@ -148,7 +148,7 @@ _________________________________________________________________
             (1) | r | n | b | q | k | b | n | r | (1)
                 _________________________________
                  (a) (b) (c) (d) (e) (f) (g) (h)
-```
+</code></pre>
 
 </td>
 </tr>
@@ -184,7 +184,7 @@ Shows the available moves for a piece on the board. This command can be used for
 Format: `moves [column][row]`
 
 Example: 
-```json
+```
 moves e5
                  (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________

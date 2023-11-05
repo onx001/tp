@@ -18,10 +18,14 @@ public class ParsePlayerColorTest {
         String inputBlackString = "BLACK";
         Color blackColor = Parser.parsePlayerColor(inputBlackString);
         assertEquals(Color.BLACK, blackColor);
+    }
 
+    @Test
+    public void testParsePlayerColor_inputEmpty_expectParseException() throws ParseColorException {
         String inputEmptyString = "EMPTY";
-        Color emptyColor = Parser.parsePlayerColor(inputEmptyString);
-        assertEquals(Color.EMPTY, emptyColor);
+        assertThrows(ParseColorException.class, () -> {
+            Parser.parsePlayerColor(inputEmptyString);
+        });
     }
 
     @Test
