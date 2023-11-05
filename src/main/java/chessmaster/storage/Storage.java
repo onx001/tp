@@ -3,12 +3,11 @@ package chessmaster.storage;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
 import chessmaster.exceptions.SaveBoardException;
-import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
-import chessmaster.game.Color;
-import chessmaster.game.Coordinate;
+import chessmaster.game.*;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -64,7 +63,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board, Color currentColor) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Color currentColor, Human human, CPU cpu) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -78,6 +77,16 @@ public class Storage {
             fileWriter.write(currentColor.name());
             fileWriter.write(System.lineSeparator());
 
+            //@@author ken_ruster
+            // Save human moves
+            fileWriter.write(human.movesToString());
+            fileWriter.write(System.lineSeparator());
+
+            // Save cpu moves
+            fileWriter.write(cpu.movesToString());
+            fileWriter.write(System.lineSeparator());
+
+            //@@author TriciaBK
             for (int row = 0; row < ChessBoard.SIZE; row++) {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
@@ -138,8 +147,8 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
-        // Skip first three lines
-        for (int i = 0; i < 3; i++) {
+        // Skip first five lines
+        for (int i = 0; i < 5; i++) {
             if (fileScanner.hasNext()) {
                 fileScanner.nextLine();
             }
@@ -334,4 +343,99 @@ public class Storage {
         throw new LoadBoardException();
     }
 
+    //@@author ken_ruster
+
+    /**
+     * Loads a human object from the saved .txt file.
+     *
+     * @param color Color the player is playing as
+     * @param board Board being used for the game
+     * @return The human object to be used in the game, complete with the game history.
+     * @throws ChessMasterException
+     */
+    public Human loadHuman(Color color, ChessBoard board) throws ChessMasterException{
+        assert !color.isEmpty(): "Color cannot be empty for the player!";
+
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        // Skip first 3 lines
+        for (int i = 0; i < 3; i ++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
+        }
+
+        Human human = new Human(color, board);
+        if(fileScanner.hasNext()) {
+            String[] movesStringArray = fileScanner.nextLine().split(", ");
+
+            // Add moves to human
+            for (String moveString : movesStringArray) {
+                String[] moveStringArray = moveString.split(" ");
+                Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
+                Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
+                ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+
+                Move move = new Move(from, to, p);
+                human.addMove(move);
+            }
+        }
+
+        return human;
+    }
+
+    /**
+     * Loads a CPU object from the saved .txt file.
+     *
+     * @param color Color the CPU is playing as
+     * @param board Board being used for the game
+     * @return The CPU object to be used in the game, complete with the game history.
+     * @throws ChessMasterException
+     */
+    public CPU loadCPU(Color color, ChessBoard board) throws ChessMasterException{
+        assert !color.isEmpty(): "Color cannot be empty for the CPU!";
+
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        // Skip first 4 lines
+        for (int i = 0; i < 4; i ++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
+        }
+
+        CPU cpu = new CPU(color, board);
+        if(fileScanner.hasNext()) {
+            String[] movesStringArray = fileScanner.nextLine().split(", ");
+
+            // Add moves to human
+            for (String moveString : movesStringArray) {
+                String[] moveStringArray = moveString.split(" ");
+                Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
+                Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
+                ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+
+                Move move = new Move(from, to, p);
+                cpu.addMove(move);
+            }
+        }
+
+        return cpu;
+    }
 }

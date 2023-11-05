@@ -72,6 +72,27 @@ public abstract class Player {
         }
     }
 
+    /**
+     * Converts the information in the moves array into a String, to be used in saving the game.
+     *
+     * @return String containing information about the player's past moves
+     */
+    public String movesToString() {
+        String out = new String();
+
+        for (int i = 0; i < moves.size(); i = i + 1) {
+            Move move = moves.get(i);
+
+            if (i < moves.size() - 1) {
+                out = out + move.toFileString() + ", ";
+            } else {
+                out = out + move.toFileString();
+            }
+        }
+
+        return out;
+    }
+
     public boolean isHuman() {
         return this instanceof Human;
     }

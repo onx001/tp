@@ -86,6 +86,10 @@ public class Move {
         return "Move [from=" + from + ", to=" + to + ", piece=" + piece + "]";
     }
 
+    public String toFileString() {
+        return from + " " + to + " " + piece.toString() + " " + piece.getPosition().toString();
+    }
+
     // @author TongZhengHong
     @Override
     public boolean equals(Object obj) {

@@ -8,6 +8,8 @@ import chessmaster.game.Color;
 import chessmaster.game.Game;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
 
 /**
  * Main entry-point for ChessMaster application.
@@ -24,6 +26,9 @@ public class ChessMaster {
     private Color playerColor;
     private Color currentTurnColor = Color.WHITE;
 
+    private Human human;
+    private CPU cpu;
+
     private ChessMaster() {
         ui = new TextUI();
         storage = new Storage(FILE_PATH_STRING);
@@ -37,6 +42,9 @@ public class ChessMaster {
             
             board = new ChessBoard(playerColor, existingBoard);
             board.setDifficulty(difficulty);
+
+            human = storage.loadHuman(playerColor, board);
+            cpu = storage.loadCPU(playerColor.getOppositeColour(), board);
 
             if (shouldStartNewGame()) {
                 loadNewGame();
@@ -75,8 +83,13 @@ public class ChessMaster {
         }
         
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
+        Color cpuColor = playerColor.getOppositeColour();
         board = new ChessBoard(playerColor);
         ui.printStartNewGame(playerColor.name());
+
+        //@@author ken_ruster
+        human = new Human(playerColor, board);
+        cpu = new CPU(cpuColor, board);
 
         //@@author onx001
         ui.promptDifficulty(false);
@@ -92,7 +105,7 @@ public class ChessMaster {
     }
 
     private void run() {   
-        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
+        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty, human, cpu);
         game.run();
     }
 
