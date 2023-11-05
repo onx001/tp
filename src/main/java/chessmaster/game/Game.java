@@ -99,7 +99,7 @@ public class Game {
     }
 
     private Command getUserCommand() throws ChessMasterException {
-        String userInputString = ui.getUserInput();
+        String userInputString = ui.getUserInput(true);
         command = Parser.parseCommand(userInputString);
 
         CommandResult result = command.execute(board, ui);
