@@ -39,17 +39,19 @@ public final class TextUI {
      * 
      * @return user input string in LOWER case
      */
-    public String getUserInput() {
+    public String getUserInput(boolean shouldIgnoreEmpty) {
         String fullInputLine = "";
 
         if (scanner.hasNextLine()) {
             fullInputLine = scanner.nextLine().trim();
         }
 
-        // silently consume all ignored lines
-        while (shouldIgnore(fullInputLine)) {
-            if (scanner.hasNextLine()) {
-                fullInputLine = scanner.nextLine().trim();
+        if (shouldIgnoreEmpty) {
+            // silently consume all ignored lines
+            while (shouldIgnore(fullInputLine)) {
+                if (scanner.hasNextLine()) {
+                    fullInputLine = scanner.nextLine().trim();
+                }
             }
         }
 
