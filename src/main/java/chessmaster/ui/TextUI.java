@@ -40,11 +40,17 @@ public final class TextUI {
      * @return user input string in LOWER case
      */
     public String getUserInput() {
-        String fullInputLine = scanner.nextLine().trim();
+        String fullInputLine = "";
+
+        if (scanner.hasNextLine()) {
+            fullInputLine = scanner.nextLine().trim();
+        }
 
         // silently consume all ignored lines
         while (shouldIgnore(fullInputLine)) {
-            fullInputLine = scanner.nextLine();
+            if (scanner.hasNextLine()) {
+                fullInputLine = scanner.nextLine().trim();
+            }
         }
 
         return fullInputLine.toLowerCase();
@@ -224,6 +230,10 @@ public final class TextUI {
         out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
+    public void printCPUThinkingMessage() {
+        out.println(UiMessages.CHESSMASTER_THINKING_MESSAGE);
+    }
+
     public void printCPUMove(Move cpuMove) {
         String pieceString = cpuMove.getPiece().getClass().getSimpleName();
         String displayString = String.format(UiMessages.CPU_MOVE_MESSAGE, pieceString,
@@ -268,10 +278,10 @@ public final class TextUI {
     public void printEndMessage(Player winner) {
         String winningColorString = winner.getColour().name();
         if (winner.isHuman()) {
-            printText(String.format(UiMessages.HUMAN_WIN_STRING, winningColorString));
+            printText(String.format(UiMessages.HUMAN_WIN_MESSAGE, winningColorString));
         } else if (winner.isCPU()) { // Human lost
             String playerColorString = winner.getColour().getOppositeColour().name();
-            printText(String.format(UiMessages.CPU_WIN_STRING, playerColorString));
+            printText(String.format(UiMessages.CPU_WIN_MESSAGE, playerColorString));
         }
     }
 
