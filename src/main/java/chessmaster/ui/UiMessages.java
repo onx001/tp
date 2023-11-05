@@ -35,6 +35,8 @@ public class UiMessages {
     public static final String CHOOSE_DIFFICULTY_ERROR_MESSAGE =
         "Invalid input! Please enter either '1', '2' or '3': ";
 
-    public static final String HUMAN_WIN_STRING = "Congratulations! You have won as %s! :)";
-    public static final String CPU_WIN_STRING = "Oh no! You have lost as %s. Please try harder next time :(";
+    public static final String CHESSMASTER_THINKING_MESSAGE = "ChessMaster is thinking of a move...";
+
+    public static final String HUMAN_WIN_MESSAGE = "Congratulations! You have won as %s! :)";
+    public static final String CPU_WIN_MESSAGE = "Oh no! You have lost as %s. Please try harder next time :(";
 }

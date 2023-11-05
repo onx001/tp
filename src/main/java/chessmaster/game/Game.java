@@ -63,7 +63,7 @@ public class Game {
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
         assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";
         assert currentPlayer != null : "A player should always exist in a game!";
-        assert (0 < difficulty) && (difficulty < 5) : "Difficulty should be between 1 and 4!";
+        assert (1 <= difficulty) && (difficulty <= 3) : "Difficulty should be between 1 and 3!";
     }
 
     public void run() {
@@ -123,6 +123,7 @@ public class Game {
     }
 
     private Move handleCPUMove() throws ChessMasterException {
+        ui.printCPUThinkingMessage();
         Move cpuMove = cpu.getBestMove(board, difficulty);
         ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
