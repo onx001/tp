@@ -3,7 +3,10 @@ package chessmaster.storage;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
 import chessmaster.exceptions.SaveBoardException;
-import chessmaster.game.*;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.ChessTile;
+import chessmaster.game.Color;
+import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
@@ -13,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Storage {
@@ -205,6 +210,46 @@ public class Storage {
         return boardTiles;
     }
 
+    public void executeSavedMoves(Color playerColor,
+                                  ChessBoard board,
+                                  ChessTile[][] otherBoard,
+                                  Human human,
+                                  CPU cpu) throws ChessMasterException {
+        ArrayList moveStringList = new ArrayList<String>();
+        ArrayList<String> humanMoves = loadHumanMoves();
+        ArrayList<String> cpuMoves = loadCPUMoves();
+
+        // Merge move string arrays into a singular array
+        if (playerColor.isWhite()) {
+            for (String move : humanMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < cpuMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, cpuMoves.get(i));
+            }
+        } else if (playerColor.isBlack()) {
+            for (String move : cpuMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < humanMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, humanMoves.get(i));
+            }
+        } else {
+            throw new LoadBoardException();
+        }
+
+        // Execute move string array
+        board.executeMoveArray(moveStringList, human, cpu);
+
+        // Check obtained board with loaded board state
+        if (!board.matchesOtherBoard(otherBoard)) {
+            throw new LoadBoardException("Board state does not match state dictated by move history!");
+        }
+    }
+
+
     //@@author onx001
     private boolean isPieceValid (ChessPiece initialPiece) {
         if (initialPiece.isBlackKing()) {
@@ -343,19 +388,7 @@ public class Storage {
         throw new LoadBoardException();
     }
 
-    //@@author ken_ruster
-
-    /**
-     * Loads a human object from the saved .txt file.
-     *
-     * @param color Color the player is playing as
-     * @param board Board being used for the game
-     * @return The human object to be used in the game, complete with the move history.
-     * @throws ChessMasterException
-     */
-    public Human loadHuman(Color color, ChessBoard board) throws ChessMasterException{
-        assert !color.isEmpty(): "Color cannot be empty for the player!";
-
+    public ArrayList<String> loadHumanMoves() throws ChessMasterException {
         createChessMasterFile();
 
         Scanner fileScanner;
@@ -372,45 +405,16 @@ public class Storage {
             }
         }
 
-        Human human = new Human(color, board);
-        if(fileScanner.hasNext()) {
-            String[] movesStringArray = fileScanner.nextLine().split(", ");
-
-            // Add moves to human
-            for (String moveString : movesStringArray) {
-                String[] moveStringArray = moveString.split(" ");
-                if(moveStringArray[0].equalsIgnoreCase("p")) {
-                    Coordinate coord = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], coord.getY(), coord.getX());
-
-                    PromoteMove promoteMove = new PromoteMove(coord, p);
-                    human.addMove(promoteMove);
-                } else {
-                    Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
-                    Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                    Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
-                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
-
-                    Move move = new Move(from, to, p);
-                    human.addMove(move);
-                }
-            }
+        ArrayList out = new ArrayList<String>();
+        if (fileScanner.hasNext()) {
+            String[] movesArray = fileScanner.nextLine().split(", ");
+            Arrays.stream(movesArray).sequential().forEach(x -> out.add(x));
         }
 
-        return human;
+        return out;
     }
 
-    /**
-     * Loads a CPU object from the saved .txt file.
-     *
-     * @param color Color the CPU is playing as
-     * @param board Board being used for the game
-     * @return The CPU object to be used in the game, complete with the move history.
-     * @throws ChessMasterException
-     */
-    public CPU loadCPU(Color color, ChessBoard board) throws ChessMasterException{
-        assert !color.isEmpty(): "Color cannot be empty for the CPU!";
-
+    public ArrayList<String> loadCPUMoves() throws ChessMasterException {
         createChessMasterFile();
 
         Scanner fileScanner;
@@ -427,30 +431,12 @@ public class Storage {
             }
         }
 
-        CPU cpu = new CPU(color, board);
-        if(fileScanner.hasNext()) {
-            String[] movesStringArray = fileScanner.nextLine().split(", ");
-
-            // Add moves to human
-            for (String moveString : movesStringArray) {
-                String[] moveStringArray = moveString.split(" ");
-                if (moveStringArray[0].equalsIgnoreCase("p")) {
-                    Coordinate coord = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], coord.getY(), coord.getX());
-
-                    PromoteMove promoteMove = new PromoteMove(coord, p);
-                    cpu.addMove(promoteMove);
-                } else {
-                    Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
-                    Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                    Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
-                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
-
-                    Move move = new Move(from, to, p);
-                    cpu.addMove(move);
-                }
-            }
+        ArrayList out = new ArrayList<String>();
+        if (fileScanner.hasNext()) {
+            String[] movesArray = fileScanner.nextLine().split(", ");
+            Arrays.stream(movesArray).sequential().forEach(x -> out.add(x));
         }
-        return cpu;
+
+        return out;
     }
 }

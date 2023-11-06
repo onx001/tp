@@ -87,7 +87,7 @@ public class Move {
     }
 
     public String toFileString() {
-        return from + " " + to + " " + piece.toString() + " " + piece.getPosition().toString();
+        return from + " " + to;
     }
 
     // @author TongZhengHong

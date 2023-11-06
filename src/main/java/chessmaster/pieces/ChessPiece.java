@@ -60,6 +60,11 @@ public abstract class ChessPiece {
         this.color = color;
     }
 
+    //@@author ken-ruster
+    public boolean isSameAs(ChessPiece other) {
+        Coordinate otherPos = other.getPosition();
+        return (this.toString().equals(other.toString()));
+    }
     /**
      * Returns available coordinates in multiple directions from the current position. 
      * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is

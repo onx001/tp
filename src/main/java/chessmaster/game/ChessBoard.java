@@ -2,10 +2,13 @@ package chessmaster.game;
 
 import java.util.ArrayList;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
 
 public class ChessBoard {
 
@@ -336,6 +339,44 @@ public class ChessBoard {
         return new ChessBoard(this.playerColor, boardTiles);
     }
 
+    //@@author ken-ruster
+    public void executeMoveArray(ArrayList<String> moves, Human human, CPU cpu) throws ChessMasterException {
+        boolean isPlayersTurn = playerColor.isWhite();
+
+        for (String move : moves) {
+            String[] moveCommandArray = move.split(" ");
+            boolean isPromote = moveCommandArray[0].equals("p");
+
+            if (!isPromote) {
+                Move toExecute = Parser.parseMoveFile(move, this);
+                assert toExecute.isValid(this) : "Move in file is not valid!";
+                this.executeMove(toExecute);
+
+                if (isPlayersTurn) {
+                    human.addMove(toExecute);
+                } else {
+                    cpu.addMove(toExecute);
+                }
+            } else {
+                Coordinate coord = Coordinate.parseAlgebraicCoor(moveCommandArray[1]);
+                ChessPiece oldPiece = this.getPieceAtCoor(coord);
+                assert this.canPromote(new Move(coord, coord, oldPiece))
+                        : "Move in file tries to make an invalid promotion!";
+                ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
+                this.setPromotionPiece(coord, newPiece);
+
+                PromoteMove promoteMove = new PromoteMove(coord, newPiece);
+                if (isPlayersTurn) {
+                    human.addMove(promoteMove);
+                } else {
+                    cpu.addMove(promoteMove);
+                }
+            }
+
+            isPlayersTurn = !isPlayersTurn;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder boardString = new StringBuilder();
@@ -354,5 +395,19 @@ public class ChessBoard {
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
+    }
+
+    //@@author ken_ruster
+    public boolean matchesOtherBoard(ChessTile[][] otherBoard) {
+        for (ChessTile[] row : otherBoard) {
+            for (ChessTile tile : row) {
+                ChessPiece piece = tile.getChessPiece();
+                Coordinate coord = piece.getPosition();
+                if (!piece.isSameAs(this.getPieceAtCoor(coord))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

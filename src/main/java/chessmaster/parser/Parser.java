@@ -91,6 +91,38 @@ public class Parser {
     }
 
     /**
+     * Parses a chess move from user input and creates a Move object. Used to read
+     * user inputs from the file while setting up the chess game.
+     *
+     * @param in    The file input string with 2 algebraic coordinate notations
+     *              (e.g., "e2 e4").
+     * @param board The ChessBoard where the move is taking place.
+     * @return Move object containing information about the move to be made.
+     *
+     * @throws ParseCoordinateException   If the string entered is not in the
+     *                                    algebraic coordinate notation.
+     * @throws NullPieceException         If the tile at the coordinate is empty
+     */
+    public static Move parseMoveFile(String in, ChessBoard board) throws ParseCoordinateException,
+            NullPieceException, MoveOpponentPieceException {
+
+        String[] parseArray = in.split("\\s+", 2);
+        if (parseArray.length < 2) {
+            throw new ParseCoordinateException();
+        }
+
+        Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
+        Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
+
+        ChessPiece relevantPiece = board.getPieceAtCoor(from);
+        if (relevantPiece.isEmptyPiece()) {
+            throw new NullPieceException();
+        }
+
+        return new Move(from, to, relevantPiece);
+    }
+
+    /**
      * Parses an input string and creates a ChessPiece object at the specified row
      * and column. Used for loading ChessPiece(s) from storage file or loading
      * starting ChessBoard. Returns null for recognised input string to signify that

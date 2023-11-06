@@ -1,6 +1,10 @@
 package chessmaster.user;
 
-import chessmaster.game.*;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
+import chessmaster.game.Coordinate;
+import chessmaster.game.Move;
+import chessmaster.game.PromoteMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
