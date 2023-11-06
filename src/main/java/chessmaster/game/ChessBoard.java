@@ -143,19 +143,8 @@ public class ChessBoard {
     }
 
     public boolean isCheckmated(Color color) {
-        Move[] moves = getAllMoves(color);
-        for (Move move : moves) {
-            ChessBoard newBoard = this.clone();
-            try {
-                newBoard.executeMove(move);
-            } catch (InvalidMoveException e) {
-                continue;
-            }
-            if (!newBoard.isChecked(color)) {
-                return false;
-            }
-        }
-        return true;
+        Move[] moves = getAllUncheckedMoves(color);
+        return moves.length == 0;
     }
 
 
@@ -316,43 +305,23 @@ public class ChessBoard {
         return false;
     }
 
-    //@@author TriciaBK
+    //@@author onx001
     public boolean isEndGame() {
-        isWhiteKingAlive = false; 
-        isBlackKingAlive = false;
-
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
-            for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
-
-                if (piece instanceof King) {
-                    if (piece.isWhite()) {
-                        isWhiteKingAlive = true;
-                    } else if (piece.isBlack()) {
-                        isBlackKingAlive = true;
-                    }
-                }
-            }
-        }
-
-        return !isBlackKingAlive || !isWhiteKingAlive;
+        return isCheckmated(playerColor) || isCheckmated(playerColor.getOppositeColour());
     }
 
     public Color getWinningColor() {
-        boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
-        boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
-
-        if (whiteWin) {
-            return Color.WHITE;
-        } else if (blackWin) {
-            return Color.BLACK;
+        
+        if (isCheckmated(playerColor)) {
+            return playerColor.getOppositeColour();
+        } else if (isCheckmated(playerColor.getOppositeColour())) {
+            return playerColor;
         } else {
             return Color.EMPTY;
         }
     }
     
-    //@@author onx001
+
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
