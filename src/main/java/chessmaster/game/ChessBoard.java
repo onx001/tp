@@ -38,9 +38,6 @@ public class ChessBoard {
 
     private Color playerColor;
 
-    private boolean isWhiteKingAlive = true;
-    private boolean isBlackKingAlive = true;
-
     private int difficulty = 4;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
@@ -143,7 +140,7 @@ public class ChessBoard {
     }
 
     public boolean isCheckmated(Color color) {
-        Move[] moves = getAllUncheckedMoves(color);
+        Move[] moves = getLegalMoves(color);
         return moves.length == 0;
     }
 
@@ -158,7 +155,7 @@ public class ChessBoard {
                 ChessPiece piece = getPieceAtCoor(coor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
+                    Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
                         Move move = new Move(coor, possible, piece);
                         allMoves.add(move);
@@ -169,7 +166,7 @@ public class ChessBoard {
         return allMoves.toArray(new Move[0]);
     }
 
-    public Move[] getAllUncheckedMoves(Color color) {
+    public Move[] getLegalMoves(Color color) {
         Move[] moves = getAllMoves(color);
         ArrayList<Move> uncheckedMoves = new ArrayList<>();
         for (Move move : moves) {
@@ -351,8 +348,8 @@ public class ChessBoard {
 
 
     public ChessBoard clone() {
-        String stringRep = this.toString();
-        return toBoard(stringRep);
+        String boardString = this.toString();
+        return toBoard(boardString);
     }
 
 

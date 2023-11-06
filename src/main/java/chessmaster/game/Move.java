@@ -53,7 +53,7 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = piece.getAvailableCoordinates(board);
+        Coordinate[][] coordinates = piece.getPseudoCoordinates(board);
         for (Coordinate[] direction : coordinates) {
             for (Coordinate coor : direction) {
                 if (coor.equals(to)) {
