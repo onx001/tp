@@ -245,7 +245,7 @@ Piece movement:
    Kings ("k") move one square in any direction.
 
 Special Rules: (Refer to specific move methods in the User Guide)
-   Castling - King and rook move simultaneously to safeguard the king. 
+   Castling - King and rook move simultaneously to safeguard the king. (e.g. e1 g1)
    En Passant - Pawn capturing when moving two squares from starting position.
    Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.
 
@@ -262,8 +262,6 @@ Further details of special rules
    - It's the king's first move. 
    - It's the rook's first move. 
    - There are no pieces between the king and the rook. 
-   - The king is not in check.
-   - The squares the king passes over and lands on are not under attack.
    
    To perform castling on either sides:
     - Move your king two squares to the right/left (towards the rook).
