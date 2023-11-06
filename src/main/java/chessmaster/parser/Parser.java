@@ -3,6 +3,7 @@ package chessmaster.parser;
 import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.HelpCommand;
+import chessmaster.commands.InvalidCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RulesCommand;
 import chessmaster.commands.ShowCommand;
@@ -82,7 +83,7 @@ public class Parser {
 
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
         if (relevantPiece.isEmptyPiece()) {
-            throw new NullPieceException();
+            throw new NullPieceException(from);
         } else if (board.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
@@ -173,6 +174,8 @@ public class Parser {
         String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
+        case MoveCommand.MOVE_COMAMND_STRING:
+            return new MoveCommand(payload);
         case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
             return new ShowMovesCommand(payload);
         case ShowCommand.SHOW_COMAMND_STRING:
@@ -185,9 +188,8 @@ public class Parser {
             return new LegendCommand();
         case AbortCommand.ABORT_COMAMND_STRING:
             return new AbortCommand();
-
         default:
-            return new MoveCommand(in);
+            return new InvalidCommand();
         }
     }
 
