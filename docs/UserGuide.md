@@ -156,8 +156,9 @@ _________________________________________________________________
 
 ## Ending the game
 
-The game will automatically end and a victor be declared when one side has been checkmated (i.e. their king is in check, 
-and there is no possible escape), or if their king has been captured.
+The game will automatically end and a victor be declared when one side has been checkmated, or if their king has been captured.
+Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
+The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
 ## Features 
 
@@ -243,8 +244,8 @@ Piece movement:
    Queens ("q") move any number of squares in any direction.
    Kings ("k") move one square in any direction.
 
-Special Rules:
-   Castling - King and rook move simultaneously to safeguard the king.
+Special Rules: (Refer to specific move methods in the User Guide)
+   Castling - King and rook move simultaneously to safeguard the king. 
    En Passant - Pawn capturing when moving two squares from starting position.
    Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.
 
@@ -253,6 +254,26 @@ Objective:
    The delivering player wins the game.
 _________________________________________________________________
 ```
+
+Further details of special rules
+1. Castling
+
+   For the move to be valid:
+   - It's the king's first move. 
+   - It's the rook's first move. 
+   - There are no pieces between the king and the rook. 
+   - The king is not in check.
+   - The squares the king passes over and lands on are not under attack.
+   
+   To perform castling on either sides:
+    - Move your king two squares to the right/left (towards the rook).
+    - The rook will jump over the king and land on the square next to the king.
+
+2. En Passant:
+   
+   This move only happens when your opponent moves their pawn two squares forward from its starting position and lands next to your pawn.
+   To capture en passant, you must do it on your very next move. 
+   - Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
 
 ### Show commands: `help`
 
