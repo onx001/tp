@@ -408,7 +408,10 @@ public class Storage {
         ArrayList out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
             String[] movesArray = fileScanner.nextLine().split(", ");
-            Arrays.stream(movesArray).sequential().forEach(x -> out.add(x));
+            Arrays.stream(movesArray)
+                    .sequential()
+                    .filter(x -> !x.equals(""))
+                    .forEach(x -> out.add(x));
         }
 
         return out;
@@ -434,7 +437,10 @@ public class Storage {
         ArrayList out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
             String[] movesArray = fileScanner.nextLine().split(", ");
-            Arrays.stream(movesArray).sequential().forEach(x -> out.add(x));
+            Arrays.stream(movesArray)
+                    .sequential()
+                    .filter(x -> !x.equals(""))
+                    .forEach(x -> out.add(x));
         }
 
         return out;

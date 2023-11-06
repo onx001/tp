@@ -104,7 +104,7 @@ public class ChessMaster {
         currentTurnColor = Color.WHITE;
 
         try {
-            storage.saveBoard(board, currentTurnColor);
+            storage.saveBoard(board, currentTurnColor, human, cpu);
         } catch (ChessMasterException e) {
             ui.printText(e.getMessage());
         }

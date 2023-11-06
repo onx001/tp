@@ -117,7 +117,7 @@ public class Parser {
 
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
         if (relevantPiece.isEmptyPiece()) {
-            throw new NullPieceException();
+            throw new NullPieceException(from);
         }
 
         return new Move(from, to, relevantPiece);
