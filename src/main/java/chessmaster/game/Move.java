@@ -69,6 +69,12 @@ public class Move {
             return false;
         }
 
+        if (isLeftCastling() || isRightCastling()) {
+            if (board.isChecked(this.getPiece().getColor())) {
+                return false;
+            }
+        }
+
         ChessBoard boardCopy = board.clone();
         ChessPiece pieceCopy = boardCopy.getPieceAtCoor(from);
         Move moveCopy = new Move(from, to, pieceCopy);
