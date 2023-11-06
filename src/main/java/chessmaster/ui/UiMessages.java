@@ -15,7 +15,7 @@ public class UiMessages {
         "You have an ongoing previous chess game. Continue game? [y/n] ";
     public static final String CONTINUE_PREV_GAME_ERROR_MESSAGE = 
         "Invalid input! Please enter either 'y' for yes or 'n' for no: ";
-    public static final String CONTINUE_PREV_GAME_MESSAGE = "Great! Continuing previous game as %s";
+    public static final String CONTINUE_PREV_GAME_MESSAGE = "Great! Continuing previous game as %s at difficulty %d";
 
     public static final String CHOOSE_PLAYER_COLOR_MESSAGE = "Choose your starting color to start new game! [b/w] ";
     public static final String CHOOSE_PLAYER_COLOR_ERROR_MESSAGE = 
@@ -35,6 +35,8 @@ public class UiMessages {
     public static final String CHOOSE_DIFFICULTY_ERROR_MESSAGE =
         "Invalid input! Please enter either '1', '2' or '3': ";
 
-    public static final String HUMAN_WIN_STRING = "Congratulations! You have won as %s! :)";
-    public static final String CPU_WIN_STRING = "Oh no! You have lost as %s. Please try harder next time :(";
+    public static final String CHESSMASTER_THINKING_MESSAGE = "ChessMaster is thinking of a move...";
+
+    public static final String HUMAN_WIN_MESSAGE = "Congratulations! You have won as %s! :)";
+    public static final String CPU_WIN_MESSAGE = "Oh no! You have lost as %s. Please try harder next time :(";
 }

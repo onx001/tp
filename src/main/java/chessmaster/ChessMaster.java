@@ -57,15 +57,15 @@ public class ChessMaster {
 
     private boolean shouldStartNewGame() {
         ui.promptContinuePrevGame(false);
-        String input = ui.getUserInput();
+        String input = ui.getUserInput(false);
 
         while (!input.equals("y") && !input.equals("n")) {
             ui.promptContinuePrevGame(true);
-            input = ui.getUserInput();
+            input = ui.getUserInput(false);
         }
         
         if (input.equals("y")) {
-            ui.printContinuePrevGame(playerColor.name());
+            ui.printContinuePrevGame(playerColor.name(), difficulty);
             return false;
         } else {
             return true;
@@ -74,11 +74,11 @@ public class ChessMaster {
 
     private void loadNewGame() {
         ui.promptStartingColor(false);
-        String input = ui.getUserInput();
+        String input = ui.getUserInput(false);
 
         while (!input.equals("b") && !input.equals("w")) {
             ui.promptStartingColor(true);
-            input = ui.getUserInput();
+            input = ui.getUserInput(false);
         }
         
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
@@ -87,15 +87,21 @@ public class ChessMaster {
 
         //@@author onx001
         ui.promptDifficulty(false);
-        input = ui.getUserInput();
+        input = ui.getUserInput(false);
         while (!input.equals("1") && !input.equals("2") 
             && !input.equals("3")) {
             ui.promptDifficulty(true);
-            input = ui.getUserInput();
+            input = ui.getUserInput(false);
         }
         difficulty = Integer.parseInt(input);
         board.setDifficulty(difficulty);
         currentTurnColor = Color.WHITE;
+
+        try {
+            storage.saveBoard(board, currentTurnColor);
+        } catch (ChessMasterException e) {
+            ui.printText(e.getMessage());
+        }
     }
 
     private void run() {   
