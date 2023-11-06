@@ -379,13 +379,21 @@ public class Storage {
             // Add moves to human
             for (String moveString : movesStringArray) {
                 String[] moveStringArray = moveString.split(" ");
-                Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
-                Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
-                ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+                if(moveStringArray[0].equalsIgnoreCase("p")) {
+                    Coordinate coord = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], coord.getY(), coord.getX());
 
-                Move move = new Move(from, to, p);
-                human.addMove(move);
+                    PromoteMove promoteMove = new PromoteMove(coord, p);
+                    human.addMove(promoteMove);
+                } else {
+                    Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
+                    Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                    Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
+                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+
+                    Move move = new Move(from, to, p);
+                    human.addMove(move);
+                }
             }
         }
 
@@ -426,16 +434,23 @@ public class Storage {
             // Add moves to human
             for (String moveString : movesStringArray) {
                 String[] moveStringArray = moveString.split(" ");
-                Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
-                Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
-                Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
-                ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+                if (moveStringArray[0].equalsIgnoreCase("p")) {
+                    Coordinate coord = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], coord.getY(), coord.getX());
 
-                Move move = new Move(from, to, p);
-                cpu.addMove(move);
+                    PromoteMove promoteMove = new PromoteMove(coord, p);
+                    cpu.addMove(promoteMove);
+                } else {
+                    Coordinate from = Coordinate.parseAlgebraicCoor(moveStringArray[0]);
+                    Coordinate to = Coordinate.parseAlgebraicCoor(moveStringArray[1]);
+                    Coordinate curr = Coordinate.parseAlgebraicCoor(moveStringArray[3]);
+                    ChessPiece p = Parser.parseChessPiece(moveStringArray[2], curr.getY(), curr.getX());
+
+                    Move move = new Move(from, to, p);
+                    cpu.addMove(move);
+                }
             }
         }
-
         return cpu;
     }
 }
