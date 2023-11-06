@@ -38,6 +38,10 @@ public class Pawn extends ChessPiece {
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS_UP.length][0];
         int[][] directions = board.isPieceFriendly(this) ? DIRECTIONS_UP : DIRECTIONS_DOWN;
+        boolean canEnPassant = false;
+        Coordinate enPassantCoor = null;
+        boolean enPassant = false;
+        boolean normalEat = false;
 
         for (int dir = 0; dir < DIRECTIONS_UP.length; dir++) {
             int offsetX = directions[dir][0];
@@ -52,7 +56,19 @@ public class Pawn extends ChessPiece {
 
             if (directions[dir] == UP_LEFT || directions[dir] == UP_RIGHT || 
                 directions[dir] == DOWN_LEFT || directions[dir] == DOWN_RIGHT) {
+
+                if (board.hasEnPassant()) {
+                    enPassantCoor = board.getEnPassantCoor();
+                    ChessPiece enPassantPiece = board.getPieceAtCoor(enPassantCoor);
+                    if (enPassantPiece instanceof Pawn && enPassantPiece.isOpponent(this)) {
+                        canEnPassant = true;
+                    }
+                }
+
                 // Diagonal move: Destination tile has opponent piece
+                normalEat = !destPiece.isEmptyPiece() && isOpponent(destPiece);
+                enPassant = canEnPassant && newCoor.equals(enPassantCoor);
+
                 if (!destPiece.isEmptyPiece() && isOpponent(destPiece)) {
                     result[dir] = new Coordinate[]{ newCoor };
                 }
@@ -65,14 +81,16 @@ public class Pawn extends ChessPiece {
 
             } else if (directions[dir] == UP_UP || directions[dir] == DOWN_DOWN) {
                 // Double move: first move AND when destination empty AND no blocking piece
-                Coordinate blockPos = board.isPieceFriendly(this) 
+                Coordinate blockPos = board.isPieceFriendly(this)
                     ? position.addOffsetToCoordinate(UP[0], UP[1])
-                    : position.addOffsetToCoordinate(DOWN[0], DOWN[1]); 
+                    : position.addOffsetToCoordinate(DOWN[0], DOWN[1]);
                 ChessPiece blockPiece = board.getPieceAtCoor(blockPos);
 
                 if (!hasMoved && blockPiece.isEmptyPiece() && destPiece.isEmptyPiece()) {
                     result[dir] = new Coordinate[]{ newCoor };
                 }
+
+                this.setEnPassant();
             }
         }
 

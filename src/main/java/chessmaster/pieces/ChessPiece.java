@@ -42,7 +42,9 @@ public abstract class ChessPiece {
     protected Coordinate position;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
+    protected boolean isEnPassant = false;
     protected int points = 0;
+    
 
     //initialise empty boardweights of 0 for parent class to be used for the AI
     private int[][] boardWeight = 
@@ -98,6 +100,18 @@ public abstract class ChessPiece {
 
     public boolean isBlackKing() {
         return this instanceof King && this.isBlack();
+    }
+
+    public void clearEnPassant() {
+        this.isEnPassant = false;
+    }
+
+    public boolean isEnPassant() {
+        return this.isEnPassant;
+    }
+
+    public void setEnPassant() {
+        this.isEnPassant = true;
     }
 
     /**
