@@ -78,9 +78,7 @@ public class Move {
             return false;
         }
 
-        return !boardCopy.isChecked();
-
-
+        return !boardCopy.isChecked(this.getPiece().getColor());
     }
 
     public boolean isLeftCastling() {

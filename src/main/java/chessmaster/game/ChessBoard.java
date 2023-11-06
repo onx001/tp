@@ -98,8 +98,8 @@ public class ChessBoard {
         return this.difficulty;
     }
 
-    public boolean isChecked() {
-        Move[] moves = getAllMoves(playerColor.getOppositeColour());
+    public boolean isChecked(Color color) {
+        Move[] moves = getAllMoves(color.getOppositeColour());
         for (Move move : moves) {
             Coordinate to = move.getTo();
             if (this.getPieceAtCoor(to) instanceof King) {
@@ -142,8 +142,8 @@ public class ChessBoard {
         return null;
     }
 
-    public boolean isCheckmated() {
-        Move[] moves = getAllMoves(playerColor);
+    public boolean isCheckmated(Color color) {
+        Move[] moves = getAllMoves(color);
         for (Move move : moves) {
             ChessBoard newBoard = this.clone();
             try {
@@ -151,7 +151,7 @@ public class ChessBoard {
             } catch (InvalidMoveException e) {
                 continue;
             }
-            if (!newBoard.isChecked()) {
+            if (!newBoard.isChecked(color)) {
                 return false;
             }
         }
@@ -178,6 +178,23 @@ public class ChessBoard {
             }
         }
         return allMoves.toArray(new Move[0]);
+    }
+
+    public Move[] getAllUncheckedMoves(Color color) {
+        Move[] moves = getAllMoves(color);
+        ArrayList<Move> uncheckedMoves = new ArrayList<>();
+        for (Move move : moves) {
+            ChessBoard newBoard = this.clone();
+            try {
+                newBoard.executeMove(move);
+            } catch (InvalidMoveException e) {
+                continue;
+            }
+            if (!newBoard.isChecked(color)) {
+                uncheckedMoves.add(move);
+            }
+        }
+        return uncheckedMoves.toArray(new Move[0]);
     }
 
     //@@author TongZhengHong
@@ -219,14 +236,12 @@ public class ChessBoard {
      * @throws InvalidMoveException If the move is not valid according to the game
      *                              rules.
      */
+
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        if (!move.isValid(this)) {
-            throw new InvalidMoveException();
-        }
 
         chessPiece.setHasMoved();
         chessPiece.updatePosition(destCoor);
@@ -266,6 +281,15 @@ public class ChessBoard {
                     piece.clearEnPassant();
                 }
             }
+        }
+    }
+
+    public void executeMoveWithCheck(Move move) throws InvalidMoveException {
+        
+        if (move.isValidWithCheck(this)) {
+            executeMove(move);
+        } else {
+            throw new InvalidMoveException("Move Causes a check");
         }
     }
 
@@ -353,10 +377,13 @@ public class ChessBoard {
         return points - enemyPoints;
     }
 
+
     public ChessBoard clone() {
         String stringRep = this.toString();
         return toBoard(stringRep);
     }
+
+
 
     public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
