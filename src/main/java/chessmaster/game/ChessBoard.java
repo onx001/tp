@@ -185,8 +185,11 @@ public class ChessBoard {
         ArrayList<Move> uncheckedMoves = new ArrayList<>();
         for (Move move : moves) {
             ChessBoard newBoard = this.clone();
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAtCoor(from);
+            Move moveCopy = new Move(from, move.getTo(), piece);
             try {
-                newBoard.executeMove(move);
+                newBoard.executeMove(moveCopy);
             } catch (InvalidMoveException e) {
                 continue;
             }
