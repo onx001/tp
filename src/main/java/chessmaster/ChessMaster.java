@@ -2,19 +2,12 @@
 package chessmaster;
 
 import chessmaster.exceptions.ChessMasterException;
-import chessmaster.exceptions.LoadBoardException;
-import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.Move;
-import chessmaster.parser.Parser;
 import chessmaster.ui.TextUI;
 import chessmaster.storage.Storage;
-import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Game;
-import chessmaster.storage.Storage;
-import chessmaster.ui.TextUI;
 
 /**
  * Main entry-point for ChessMaster application.
