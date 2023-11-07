@@ -38,9 +38,6 @@ public class ChessBoard {
 
     private Color playerColor;
 
-    private boolean isWhiteKingAlive = true;
-    private boolean isBlackKingAlive = true;
-
     private int difficulty = 4;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
@@ -98,8 +95,8 @@ public class ChessBoard {
         return this.difficulty;
     }
 
-    public boolean isChecked() {
-        Move[] moves = getAllMoves(playerColor.getOppositeColour());
+    public boolean isChecked(Color color) {
+        Move[] moves = getAllMoves(color.getOppositeColour());
         for (Move move : moves) {
             Coordinate to = move.getTo();
             if (this.getPieceAtCoor(to) instanceof King) {
@@ -142,20 +139,9 @@ public class ChessBoard {
         return null;
     }
 
-    public boolean isCheckmated() {
-        Move[] moves = getAllMoves(playerColor);
-        for (Move move : moves) {
-            ChessBoard newBoard = this.clone();
-            try {
-                newBoard.executeMove(move);
-            } catch (InvalidMoveException e) {
-                continue;
-            }
-            if (!newBoard.isChecked()) {
-                return false;
-            }
-        }
-        return true;
+    public boolean isCheckmated(Color color) {
+        Move[] moves = getLegalMoves(color);
+        return moves.length == 0;
     }
 
 
@@ -169,7 +155,7 @@ public class ChessBoard {
                 ChessPiece piece = getPieceAtCoor(coor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
+                    Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
                         Move move = new Move(coor, possible, piece);
                         allMoves.add(move);
@@ -178,6 +164,26 @@ public class ChessBoard {
             }
         }
         return allMoves.toArray(new Move[0]);
+    }
+
+    public Move[] getLegalMoves(Color color) {
+        Move[] moves = getAllMoves(color);
+        ArrayList<Move> uncheckedMoves = new ArrayList<>();
+        for (Move move : moves) {
+            ChessBoard newBoard = this.clone();
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAtCoor(from);
+            Move moveCopy = new Move(from, move.getTo(), piece);
+            try {
+                newBoard.executeMove(moveCopy);
+            } catch (InvalidMoveException e) {
+                continue;
+            }
+            if (!newBoard.isChecked(color)) {
+                uncheckedMoves.add(move);
+            }
+        }
+        return uncheckedMoves.toArray(new Move[0]);
     }
 
     //@@author TongZhengHong
@@ -215,14 +221,12 @@ public class ChessBoard {
      * @throws InvalidMoveException If the move is not valid according to the game
      *                              rules.
      */
+
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPiece();
 
-        if (!move.isValid(this)) {
-            throw new InvalidMoveException();
-        }
 
         chessPiece.setHasMoved();
         chessPiece.updatePosition(destCoor);
@@ -265,6 +269,15 @@ public class ChessBoard {
         }
     }
 
+    public void executeMoveWithCheck(Move move) throws InvalidMoveException {
+        
+        if (move.isValidWithCheck(this)) {
+            executeMove(move);
+        } else {
+            throw new InvalidMoveException("Move Causes a check");
+        }
+    }
+
     //@@author ken-ruster
     public boolean canPromote(Move move) {
         ChessPiece piece = move.getPiece();
@@ -285,43 +298,23 @@ public class ChessBoard {
         return false;
     }
 
-    //@@author TriciaBK
+    //@@author onx001
     public boolean isEndGame() {
-        isWhiteKingAlive = false; 
-        isBlackKingAlive = false;
-
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
-            for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
-
-                if (piece instanceof King) {
-                    if (piece.isWhite()) {
-                        isWhiteKingAlive = true;
-                    } else if (piece.isBlack()) {
-                        isBlackKingAlive = true;
-                    }
-                }
-            }
-        }
-
-        return !isBlackKingAlive || !isWhiteKingAlive;
+        return isCheckmated(playerColor) || isCheckmated(playerColor.getOppositeColour());
     }
 
     public Color getWinningColor() {
-        boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
-        boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
-
-        if (whiteWin) {
-            return Color.WHITE;
-        } else if (blackWin) {
-            return Color.BLACK;
+        
+        if (isCheckmated(playerColor)) {
+            return playerColor.getOppositeColour();
+        } else if (isCheckmated(playerColor.getOppositeColour())) {
+            return playerColor;
         } else {
             return Color.EMPTY;
         }
     }
     
-    //@@author onx001
+
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
@@ -349,10 +342,13 @@ public class ChessBoard {
         return points - enemyPoints;
     }
 
+
     public ChessBoard clone() {
-        String stringRep = this.toString();
-        return toBoard(stringRep);
+        String boardString = this.toString();
+        return toBoard(boardString);
     }
+
+
 
     public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];

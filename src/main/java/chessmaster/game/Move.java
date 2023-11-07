@@ -53,7 +53,7 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = piece.getAvailableCoordinates(board);
+        Coordinate[][] coordinates = piece.getPseudoCoordinates(board);
         for (Coordinate[] direction : coordinates) {
             for (Coordinate coor : direction) {
                 if (coor.equals(to)) {
@@ -69,6 +69,12 @@ public class Move {
             return false;
         }
 
+        if (isLeftCastling() || isRightCastling()) {
+            if (board.isChecked(this.getPiece().getColor())) {
+                return false;
+            }
+        }
+
         ChessBoard boardCopy = board.clone();
         ChessPiece pieceCopy = boardCopy.getPieceAtCoor(from);
         Move moveCopy = new Move(from, to, pieceCopy);
@@ -78,9 +84,7 @@ public class Move {
             return false;
         }
 
-        return !boardCopy.isChecked();
-
-
+        return !boardCopy.isChecked(this.getPiece().getColor());
     }
 
     public boolean isLeftCastling() {
