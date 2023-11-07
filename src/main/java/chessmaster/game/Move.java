@@ -11,7 +11,7 @@ public class Move {
     private Coordinate to;
     private ChessPiece pieceMoved;
     private ChessPiece pieceCaptured;
-    private boolean capturedAPiece;
+    private boolean hasCapturedAPiece;
 
 
     public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved) {
@@ -19,7 +19,7 @@ public class Move {
         this.to = to;
         this.pieceMoved = pieceMoved;
         this.pieceCaptured = null;
-        this.capturedAPiece = false;
+        this.hasCapturedAPiece = false;
 
         assert from != null && to != null : "Coordinates in Move should not be null!";
         assert pieceMoved != null && !pieceMoved.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
@@ -28,7 +28,7 @@ public class Move {
     public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved, ChessPiece pieceCaptured) {
         this(from, to, pieceMoved);
         this.pieceCaptured = pieceCaptured;
-        this.capturedAPiece = true;
+        this.hasCapturedAPiece = true;
     }
 
     public Coordinate getFrom() {
@@ -42,6 +42,12 @@ public class Move {
     public ChessPiece getPieceMoved() {
         return pieceMoved;
     }
+
+//    public ChessPiece getPieceCaptured() {
+//        if (!this.hasCapturedAPiece) {
+//            throw new
+//        }
+//    }
 
     public void setFrom(Coordinate from) {
         this.from = from;
