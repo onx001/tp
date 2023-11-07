@@ -16,6 +16,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
+        - [View history of game moves: `history`](#view-history-of-game-moves-history)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
@@ -238,7 +239,7 @@ Display a legend that explains the piece representations
 
 Format: `legend`
 
-### View history of all game moves: `history`
+### View history of game moves: `history`
 
 Displays a list of all previous moves in the current game
 
@@ -283,5 +284,6 @@ to simulate timed games.
 | Rules         | `rules`                            |
 | Help          | `help`                             |
 | Pieces legend | `legend`                           |
+| History       | `history`                          |
 | Abort         | `abort`                            |
 
