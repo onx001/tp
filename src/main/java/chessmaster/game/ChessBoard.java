@@ -132,14 +132,13 @@ public class ChessBoard {
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
+                Coordinate currentCoor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(currentCoor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(this);
+                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinatesOfLegalMoves(this);
                     for (Coordinate possible: possibleCoordinates) {
-                        Move move = new Move(coor, possible, piece);
-                        allMoves.add(move);
+                        allMoves.add(MoveFactory.createMove(this, currentCoor, possible));
                     }
                 }
             }
@@ -189,7 +188,7 @@ public class ChessBoard {
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPiece();
+        ChessPiece chessPiece = move.getPieceMoved();
 
         if (!move.isValid(this)) {
             throw new InvalidMoveException();
@@ -227,7 +226,7 @@ public class ChessBoard {
 
     //@@author ken-ruster
     public boolean canPromote(Move move) {
-        ChessPiece piece = move.getPiece();
+        ChessPiece piece = move.getPieceMoved();
         Coordinate endCoord = move.getTo();
 
         if (!piece.isPawn()) {
@@ -354,5 +353,9 @@ public class ChessBoard {
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
+    }
+
+    public boolean isTileOccupied(Coordinate coord) {
+        return this.getPieceAtCoor(coord) != null;
     }
 }

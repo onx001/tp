@@ -40,7 +40,7 @@ public class ShowMovesCommand extends Command {
             throw new NullPieceException(coord);
         }
 
-        Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(board);
+        Coordinate[] possibleCoordinates = piece.getFlattenedCoordinatesOfLegalMoves(board);
         ui.printChessBoardAvailableMoves(board.getBoard(), piece, possibleCoordinates);
     
         String[] displayString = piece.getAvailableCoordinatesString(board);

@@ -37,7 +37,7 @@ public class HistoryCommand extends Command {
                 "Move %d (currently highlighted) was %s moving their %s from %s to %s.\n",
                 numMoves,
                 opponent.getColour(),
-                lastMove.getPiece().getPieceName(),
+                lastMove.getPieceMoved().getPieceName(),
                 lastMove.getFrom(),
                 lastMove.getTo()
         );
@@ -50,7 +50,7 @@ public class HistoryCommand extends Command {
                     "Move %d: %s moves %s from %s to %s\n",
                     numMovesCopy,
                     currentPlayer.getColour(),
-                    currentPlayerMove.getPiece().getPieceName(),
+                    currentPlayerMove.getPieceMoved().getPieceName(),
                     currentPlayerMove.getFrom(),
                     currentPlayerMove.getTo()
             );
@@ -64,7 +64,7 @@ public class HistoryCommand extends Command {
                         "Move %d: %s moves %s from %s to %s\n",
                         numMovesCopy,
                         opponent.getColour(),
-                        opponentMove.getPiece().getPieceName(),
+                        opponentMove.getPieceMoved().getPieceName(),
                         opponentMove.getFrom(),
                         opponentMove.getTo()
                 );

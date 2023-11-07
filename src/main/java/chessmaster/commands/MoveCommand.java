@@ -50,7 +50,7 @@ public class MoveCommand extends Command {
             throw new InvalidMoveException();
         }
 
-        String pieceString = move.getPiece().getClass().getSimpleName();
+        String pieceString = move.getPieceMoved().getClass().getSimpleName();
         String displayString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
         return new CommandResult(displayString);
     }

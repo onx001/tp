@@ -77,7 +77,7 @@ public abstract class ChessPiece {
      * @param board The ChessBoard representing the current game state.
      * @return A 1D array of valid coordinates for the piece's legal moves.
      */
-    public Coordinate[] getFlattenedCoordinates(ChessBoard board) {
+    public Coordinate[] getFlattenedCoordinatesOfLegalMoves(ChessBoard board) {
         Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
         ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
 
