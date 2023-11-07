@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.EmptyPiece;
 import chessmaster.pieces.King;
 
 public class ChessBoard {
@@ -356,6 +357,7 @@ public class ChessBoard {
     }
 
     public boolean isTileOccupied(Coordinate coord) {
-        return this.getPieceAtCoor(coord) != null;
+        ChessPiece piece = this.getPieceAtCoor(coord);
+        return piece == null || !(piece instanceof EmptyPiece);
     }
 }

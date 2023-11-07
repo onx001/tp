@@ -43,11 +43,13 @@ public class Move {
         return pieceMoved;
     }
 
-//    public ChessPiece getPieceCaptured() {
-//        if (!this.hasCapturedAPiece) {
-//            throw new
-//        }
-//    }
+    public boolean hasCapturedAPiece() {
+        return this.hasCapturedAPiece;
+    }
+
+    public ChessPiece getPieceCaptured() {
+        return this.pieceCaptured;
+    }
 
     public void setFrom(Coordinate from) {
         this.from = from;

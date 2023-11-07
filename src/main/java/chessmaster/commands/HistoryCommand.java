@@ -71,14 +71,27 @@ public class HistoryCommand extends Command {
             Move move = tuple.getMove();
             Player player = tuple.getPlayer();
 
-            String moveString = String.format(
-                    "Move %d: %s moves %s from %s to %s\n",
-                    moveCounter,
-                    player.getColour(),
-                    move.getPieceMoved().getPieceName(),
-                    move.getFrom(),
-                    move.getTo()
-            );
+            String moveString;
+            if (move.hasCapturedAPiece()) {
+                moveString = String.format(
+                        "Move %d: %s moves %s from %s to %s capturing the opponent's %s!\n",
+                        moveCounter,
+                        player.getColour(),
+                        move.getPieceMoved().getPieceName(),
+                        move.getFrom(),
+                        move.getTo(),
+                        move.getPieceCaptured().getPieceName()
+                );
+            } else {
+                moveString = String.format(
+                        "Move %d: %s moves %s from %s to %s\n",
+                        moveCounter,
+                        player.getColour(),
+                        move.getPieceMoved().getPieceName(),
+                        move.getFrom(),
+                        move.getTo()
+                );
+            }
             returnStringBuilder.append(moveString);
 
             moveCounter++;

@@ -8,8 +8,8 @@ public class MoveFactory {
         ChessPiece pieceMoved = board.getPieceAtCoor(from);
 
         Move move;
-        if (board.isTileOccupied(from)) {
-            ChessPiece pieceCaptured = board.getPieceAtCoor(from);
+        if (board.isTileOccupied(to)) {
+            ChessPiece pieceCaptured = board.getPieceAtCoor(to);
             move = new Move(from, to, pieceMoved, pieceCaptured);
         } else {
             move = new Move(from, to, pieceMoved);

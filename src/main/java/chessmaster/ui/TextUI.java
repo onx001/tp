@@ -237,9 +237,18 @@ public final class TextUI {
 
     public void printCPUMove(Move cpuMove) {
         String pieceString = cpuMove.getPieceMoved().getClass().getSimpleName();
-        String displayString = String.format(UiMessages.CPU_MOVE_MESSAGE, pieceString,
-                cpuMove.getFrom(), cpuMove.getTo());
-        printText(displayString);
+
+        String returnString;
+        if (cpuMove.hasCapturedAPiece()) {
+            returnString = String.format(
+                    UiMessages.CPU_MOVE_AND_CAPTURE_MESSAGE,
+                    pieceString, cpuMove.getFrom(), cpuMove.getTo(), cpuMove.getPieceCaptured().getPieceName()
+            );
+        } else {
+            returnString = String.format(UiMessages.CPU_MOVE_MESSAGE, pieceString, cpuMove.getFrom(), cpuMove.getTo());
+        }
+
+        printText(returnString);
     }
 
     public void printChessBoardDivider() {
