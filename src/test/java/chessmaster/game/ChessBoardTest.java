@@ -1,14 +1,9 @@
 package chessmaster.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import chessmaster.storage.Storage;
 import org.junit.jupiter.api.Test;
 
 import chessmaster.ui.TextUI;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 public class ChessBoardTest {
 

@@ -6,11 +6,13 @@ import chessmaster.game.Color;
 import chessmaster.game.Game;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 import static chessmaster.ConsoleCapture.readExpectedOutputFromFile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * This class contains all tests related to gameplay i.e. testing real gameplay scenarios and command usage.
  * Also known as "end-to-end" tests.
- *
  */
 public class HistoryTest {
 

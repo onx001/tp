@@ -102,7 +102,7 @@ public class Game {
     }
 
     private Command getAndExecuteUserCommand() throws ChessMasterException {
-        String userInputString = ui.getUserInput(false);
+        String userInputString = ui.getUserInput(true);
         this.command = Parser.parseCommand(userInputString);
 
         CommandResult result = command.execute(this);
