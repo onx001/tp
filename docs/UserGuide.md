@@ -157,7 +157,9 @@ _________________________________________________________________
 ## Ending the game
 
 The game will automatically end and a victor be declared when one side has been checkmated, or if their king has been captured.
+
 Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
+
 The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
 ## Features 
@@ -295,7 +297,8 @@ Show board - Shows the current state of the chess board
    Format: show
 Obtain rules - Obtain a quick refresher on the rules of chess
    Format: rules
-View pieces representation - Display a legend that explains the piece representations
+View pieces representation - Display a legend that explains the 
+                             piece representations
    Format: legend
 Abort game - Exit programme
    Format: abort
