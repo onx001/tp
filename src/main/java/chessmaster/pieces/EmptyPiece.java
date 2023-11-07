@@ -12,6 +12,10 @@ public class EmptyPiece extends ChessPiece {
         super(row, col, Color.EMPTY);
     }
 
+    public EmptyPiece(int row, int col, Color color) {
+        super(row, col, color);
+    }
+
     @Override
     public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
         return new Coordinate[0][];

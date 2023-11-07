@@ -109,6 +109,39 @@ public class ChessBoard {
         return false;
     }
 
+    public boolean hasEnPassant() {
+        //Checks all chess pieces for en passant
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public Coordinate getEnPassantCoor() {
+        //Checks all chess pieces for en passant
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    if (piece.isWhite()) {
+                        coor = coor.addOffsetToCoordinate(0, -1);
+                    } else {
+                        coor = coor.addOffsetToCoordinate(0, 1);
+                    }
+                    return coor;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean isCheckmated() {
         Move[] moves = getAllMoves(playerColor);
         for (Move move : moves) {
@@ -218,6 +251,17 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+        }
+
+        //clear all en passants
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    piece.clearEnPassant();
+                }
+            }
         }
     }
 
