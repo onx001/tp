@@ -3,6 +3,8 @@ package chessmaster;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
+import chessmaster.ui.TextUI;
+import chessmaster.storage.Storage;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Game;
@@ -10,6 +12,7 @@ import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
+
 
 /**
  * Main entry-point for ChessMaster application.
