@@ -152,10 +152,6 @@ public class ChessBoard {
         getTileAtCoor(coord).updateTileChessPiece(promotedPiece);
     }
 
-    public void setTile(int row, int col, ChessTile tile) {
-        board[row][col] = tile;
-    }
-
     /**
      * Gets the ChessTile object located at the specified coordinate on the
      * chessboard.
