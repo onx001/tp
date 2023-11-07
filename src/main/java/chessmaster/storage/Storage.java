@@ -334,4 +334,8 @@ public class Storage {
         throw new LoadBoardException();
     }
 
+    public String getFilePath() {
+        return this.filePathString;
+    }
+
 }
