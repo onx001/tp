@@ -1,9 +1,14 @@
 package chessmaster.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import chessmaster.storage.Storage;
 import org.junit.jupiter.api.Test;
 
 import chessmaster.ui.TextUI;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class ChessBoardTest {
 
@@ -17,6 +22,4 @@ public class ChessBoardTest {
         int points = board.getPoints(Color.WHITE);
         assertEquals(0, points);
     }
-    // @@author
-        
 }
