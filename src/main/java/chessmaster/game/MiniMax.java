@@ -42,7 +42,9 @@ public class MiniMax {
         ChessBoard board = tuple.getBoard();
         Color playerColor = isMax ? color : color.getOppositeColour();
         Move[] moves = board.getLegalMoves(playerColor);
-        assert moves.length > 0 : "No moves available for " + color + " at depth " + depth;
+        if (moves.length == 0) {
+            return tuple;
+        }
         BoardScoreTuple[] boards = new BoardScoreTuple[moves.length];
         int bestScore = isMax ? Integer.MIN_VALUE : Integer.MAX_VALUE;
         BoardScoreTuple bestTuple = null;

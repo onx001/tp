@@ -155,7 +155,7 @@ public abstract class ChessPiece {
         };
 
     }
-    //@@author
+    //@@author onx001
 
     public Coordinate getPosition() {
         return this.position;
