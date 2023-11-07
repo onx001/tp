@@ -2,11 +2,10 @@
 package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.game.Game;
 
 public abstract class Command {
-    public abstract CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException;
+    public abstract CommandResult execute(Game game) throws ChessMasterException;
 
     public boolean isMoveCommand() {
         return this instanceof MoveCommand;

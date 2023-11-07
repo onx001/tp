@@ -1,14 +1,6 @@
 package chessmaster.parser;
 
-import chessmaster.commands.AbortCommand;
-import chessmaster.commands.Command;
-import chessmaster.commands.HelpCommand;
-import chessmaster.commands.InvalidCommand;
-import chessmaster.commands.MoveCommand;
-import chessmaster.commands.RulesCommand;
-import chessmaster.commands.ShowCommand;
-import chessmaster.commands.ShowMovesCommand;
-import chessmaster.commands.LegendCommand;
+import chessmaster.commands.*;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -142,20 +134,22 @@ public class Parser {
         String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
-        case MoveCommand.MOVE_COMAMND_STRING:
+        case MoveCommand.MOVE_COMMAND_STRING:
             return new MoveCommand(payload);
         case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
             return new ShowMovesCommand(payload);
-        case ShowCommand.SHOW_COMAMND_STRING:
+        case ShowCommand.SHOW_COMMAND_STRING:
             return new ShowCommand();
-        case RulesCommand.RULES_COMAMND_STRING:
+        case RulesCommand.RULES_COMMAND_STRING:
             return new RulesCommand();
-        case HelpCommand.HELP_COMAMND_STRING:
+        case HelpCommand.HELP_COMMAND_STRING:
             return new HelpCommand();
         case LegendCommand.LEGEND_COMMAND_STRING:
             return new LegendCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
+        case AbortCommand.ABORT_COMMAND_STRING:
             return new AbortCommand();
+        case HistoryCommand.HISTORY_COMMAND_STRING:
+            return new HistoryCommand();
         default:
             return new InvalidCommand();
         }
