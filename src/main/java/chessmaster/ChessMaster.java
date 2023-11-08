@@ -1,6 +1,7 @@
 //@@author TongZhengHong
 package chessmaster;
 
+import chessmaster.commands.AbortCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
 import chessmaster.ui.TextUI;
@@ -118,7 +119,7 @@ public class ChessMaster {
         while (shouldRestart) {
             Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
             boolean restartMidGame = game.run();
-            if (!restartMidGame) {
+            if (restartMidGame) {
                 boolean shouldRestartGame = shouldRestartGame();
                 if (shouldRestartGame) {
                     loadNewGame();

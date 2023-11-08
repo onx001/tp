@@ -1,10 +1,7 @@
 //@@author TongZhengHong
 package chessmaster.game;
 
-import chessmaster.commands.AbortCommand;
-import chessmaster.commands.Command;
-import chessmaster.commands.CommandResult;
-import chessmaster.commands.MoveCommand;
+import chessmaster.commands.*;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.storage.Storage;
@@ -70,7 +67,7 @@ public class Game {
         ui.printText(START_HELP_STRINGS);
         ui.printChessBoard(board.getBoard());
 
-        while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
+        while (!hasEnded && !AbortCommand.isAbortCommand(command) && !RestartCommand.isRestartCommand(command)) {
             try {
                 assert currentPlayer.isCPU() || currentPlayer.isHuman() : 
                     "Player should only either be human or CPU!";
@@ -91,12 +88,17 @@ public class Game {
                 currentPlayer = togglePlayerTurn();
                 storage.saveBoard(board, currentPlayer.getColour());
                 hasEnded = checkEndState(); // Resets board if end
+
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
             }
-            return true;
+            return false;
         }
-        return false;
+        if (hasEnded || RestartCommand.isRestartCommand(command)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private Command getUserCommand() throws ChessMasterException {
