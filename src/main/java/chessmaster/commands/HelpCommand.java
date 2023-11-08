@@ -22,8 +22,10 @@ public class HelpCommand extends Command {
         "Obtain rules - Obtain a quick refresher on the rules of chess",
         "   Format: rules",
         "View pieces representation - Display a legend that explains " ,
-        "                             piece representations",
+        "piece representations",
         "   Format: legend",
+        "Restart game - restart a new game of chess",
+        "   Format: restart",
         "Abort game - Exit programme",
         "   Format: abort",
 
