@@ -2,11 +2,15 @@ package chessmaster.game;
 
 import java.util.ArrayList;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
+
 
 public class ChessBoard {
 
@@ -14,6 +18,7 @@ public class ChessBoard {
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
     public static final int MAX_PIECES = 16;
+    public static final String PROMOTE_MOVE_STRING = "p";
 
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
@@ -381,6 +386,44 @@ public class ChessBoard {
         return new ChessBoard(this.playerColor, boardTiles);
     }
 
+    //@@author ken-ruster
+    public void executeMoveArray(ArrayList<String> moves, Human human, CPU cpu) throws ChessMasterException {
+        boolean isPlayersTurn = playerColor.isWhite();
+
+        for (String move : moves) {
+            String[] moveCommandArray = move.split("\\s+");
+            boolean isPromote = moveCommandArray[0].equals(PROMOTE_MOVE_STRING);
+
+            if (!isPromote) {
+                Move toExecute = Parser.parseMove(move, this, false);
+                assert toExecute.isValid(this) : "Move in file is not valid!";
+                this.executeMove(toExecute);
+
+                if (isPlayersTurn) {
+                    human.addMove(toExecute);
+                } else {
+                    cpu.addMove(toExecute);
+                }
+            } else {
+                Coordinate coord = Coordinate.parseAlgebraicCoor(moveCommandArray[1]);
+                ChessPiece oldPiece = this.getPieceAtCoor(coord);
+                assert this.canPromote(new Move(coord, coord, oldPiece))
+                        : "Move in file tries to make an invalid promotion!";
+                ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
+                this.setPromotionPiece(coord, newPiece);
+
+                PromoteMove promoteMove = new PromoteMove(coord, newPiece);
+                if (isPlayersTurn) {
+                    human.addMove(promoteMove);
+                } else {
+                    cpu.addMove(promoteMove);
+                }
+            }
+
+            isPlayersTurn = !isPlayersTurn;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder boardString = new StringBuilder();
@@ -399,5 +442,12 @@ public class ChessBoard {
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
+    }
+
+    //@@author ken_ruster
+    public boolean equals(ChessBoard otherBoard) {
+        String otherBoardString = otherBoard.toString();
+
+        return otherBoardString.equals(this.toString());
     }
 }

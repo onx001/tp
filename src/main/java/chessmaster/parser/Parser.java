@@ -70,7 +70,7 @@ public class Parser {
      * @throws NullPieceException
      * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException,
+    public static Move parseMove(String in, ChessBoard board, boolean isPlayerTurn) throws ParseCoordinateException,
             NullPieceException, MoveOpponentPieceException {
 
         String[] parseArray = in.split("\\s+", 2);
@@ -84,7 +84,7 @@ public class Parser {
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
         if (relevantPiece.isEmptyPiece()) {
             throw new NullPieceException(from);
-        } else if (board.isPieceOpponent(relevantPiece)) {
+        } else if (isPlayerTurn && board.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
 

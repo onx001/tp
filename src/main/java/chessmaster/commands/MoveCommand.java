@@ -43,7 +43,7 @@ public class MoveCommand extends Command {
             throw new InvalidMoveException(EMPTY_PAYLOAD_ERROR_STRING);
         }
         
-        move = Parser.parseMove(userInput, board);
+        move = Parser.parseMove(userInput, board, true);
         if (!move.isValid(board)) {
             throw new InvalidMoveException();
         }
