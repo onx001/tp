@@ -58,17 +58,14 @@ public class Pawn extends ChessPiece {
 
                 if (board.hasEnPassant()) {
                     enPassantCoor = board.getEnPassantCoor();
-                    ChessPiece enPassantPiece = board.getPieceAtCoor(enPassantCoor);
-                    canEnPassant = board.isPieceFriendly(this)
-                        ? newCoor.equals(enPassantCoor.addOffsetToCoordinate(DOWN[0], DOWN[1]))
-                        : newCoor.equals(enPassantCoor.addOffsetToCoordinate(UP[0], UP[1]));
-                    canEnPassant = canEnPassant && isOpponent(enPassantPiece);
+                    ChessPiece enPassantPiece = board.getEnPassantPiece();
+                    canEnPassant = newCoor.equals(enPassantCoor) && isOpponent(enPassantPiece);
                 }
 
 
 
                 // Diagonal move: Destination tile has opponent piece
-                if (!destPiece.isEmptyPiece() && isOpponent(destPiece) || canEnPassant) {
+                if ( (!destPiece.isEmptyPiece() && isOpponent(destPiece)) || canEnPassant) {
                     result[dir] = new Coordinate[]{ newCoor };
                 }
 
@@ -91,7 +88,6 @@ public class Pawn extends ChessPiece {
                     result[dir] = new Coordinate[]{ newCoor };
                 }
 
-                this.setEnPassant();
             }
         }
 

@@ -30,6 +30,7 @@ public class MoveCommand extends Command {
      */
     @Override
     public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
+
         move = Parser.parseMove(userInput, board);
         if (!move.isValid(board)) {
             throw new InvalidMoveException();

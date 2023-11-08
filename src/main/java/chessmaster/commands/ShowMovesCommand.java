@@ -25,6 +25,8 @@ public class ShowMovesCommand extends Command {
 
     @Override
     public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
+        
+        System.out.println(board.getEnPassantCoor() + " " + board.getEnPassantPiece());
         if (userInput.isBlank()) {
             return new CommandResult(NO_COORDINATE_FOUND_STRING, 
                 SHOW_MOVES_FORMAT_STRING, SHOW_MOVES_EXAMPLE_STRING);
