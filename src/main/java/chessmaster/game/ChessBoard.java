@@ -7,8 +7,10 @@ import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
+import chessmaster.pieces.Pawn;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
+
 
 public class ChessBoard {
 
@@ -131,11 +133,6 @@ public class ChessBoard {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
                 if (piece.isEnPassant()) {
-                    if (piece.isWhite()) {
-                        coor = coor.addOffsetToCoordinate(0, -1);
-                    } else {
-                        coor = coor.addOffsetToCoordinate(0, 1);
-                    }
                     return coor;
                 }
             }
@@ -259,6 +256,19 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+        } else if (move.getPiece() instanceof Pawn && hasEnPassant()) {
+            Coordinate to = move.getTo();
+            Coordinate enPassantCoor = getEnPassantCoor();
+            if (move.getPiece().getColor() == playerColor) {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
+            } else {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
+            }
+            if (to.equals(enPassantCoor)) {
+                ChessPiece enPassantPiece = getPieceAtCoor(enPassantCoor);
+                getTileAtCoor(enPassantCoor).setTileEmpty(enPassantCoor);
+                enPassantPiece.setIsCaptured();
+            }
         }
 
         //clear all en passants

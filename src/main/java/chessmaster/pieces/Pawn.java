@@ -40,8 +40,6 @@ public class Pawn extends ChessPiece {
         int[][] directions = board.isPieceFriendly(this) ? DIRECTIONS_UP : DIRECTIONS_DOWN;
         boolean canEnPassant = false;
         Coordinate enPassantCoor = null;
-        boolean enPassant = false;
-        boolean normalEat = false;
 
         for (int dir = 0; dir < DIRECTIONS_UP.length; dir++) {
             int offsetX = directions[dir][0];
@@ -53,25 +51,28 @@ public class Pawn extends ChessPiece {
 
             Coordinate newCoor = position.addOffsetToCoordinate(offsetX, offsetY);
             ChessPiece destPiece = board.getPieceAtCoor(newCoor);
+            boolean isThisPlayerEat = directions[dir] == UP_LEFT || directions[dir] == UP_RIGHT;
+            boolean isOpponentEat = directions[dir] == DOWN_LEFT || directions[dir] == DOWN_RIGHT;
 
-            if (directions[dir] == UP_LEFT || directions[dir] == UP_RIGHT || 
-                directions[dir] == DOWN_LEFT || directions[dir] == DOWN_RIGHT) {
+            if (isThisPlayerEat || isOpponentEat) {
 
                 if (board.hasEnPassant()) {
                     enPassantCoor = board.getEnPassantCoor();
                     ChessPiece enPassantPiece = board.getPieceAtCoor(enPassantCoor);
-                    if (enPassantPiece instanceof Pawn && enPassantPiece.isOpponent(this)) {
-                        canEnPassant = true;
-                    }
+                    canEnPassant = board.isPieceFriendly(this)
+                        ? newCoor.equals(enPassantCoor.addOffsetToCoordinate(DOWN[0], DOWN[1]))
+                        : newCoor.equals(enPassantCoor.addOffsetToCoordinate(UP[0], UP[1]));
+                    canEnPassant = canEnPassant && isOpponent(enPassantPiece);
                 }
+
+
 
                 // Diagonal move: Destination tile has opponent piece
-                normalEat = !destPiece.isEmptyPiece() && isOpponent(destPiece);
-                enPassant = canEnPassant && newCoor.equals(enPassantCoor);
-
-                if (!destPiece.isEmptyPiece() && isOpponent(destPiece)) {
+                if (!destPiece.isEmptyPiece() && isOpponent(destPiece) || canEnPassant) {
                     result[dir] = new Coordinate[]{ newCoor };
                 }
+
+                
             
             } else if (directions[dir] == UP || directions[dir] == DOWN) {
                 // Normal move: when destination tile is empty
