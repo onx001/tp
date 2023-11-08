@@ -3,6 +3,8 @@ package chessmaster.game;
 import chessmaster.pieces.ChessPiece;
 
 public class PromoteMove extends Move {
+    public static final String PROMOTE_MOVE_STRING = "p %s %s";
+
     public PromoteMove (Coordinate coord, ChessPiece piece) {
         super(coord, coord, piece);
     }
@@ -15,6 +17,7 @@ public class PromoteMove extends Move {
      */
     @Override
     public String toFileString() {
-        return "p " + this.getFrom() + " " + this.getPiece().toString();
+        String out = String.format(PROMOTE_MOVE_STRING, this.getFrom(), this.getPiece().toString());
+        return out;
     }
 }

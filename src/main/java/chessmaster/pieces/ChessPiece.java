@@ -65,7 +65,6 @@ public abstract class ChessPiece {
 
     //@@author ken-ruster
     public boolean isSameAs(ChessPiece other) {
-        Coordinate otherPos = other.getPosition();
         return (this.toString().equals(other.toString()));
     }
     /**

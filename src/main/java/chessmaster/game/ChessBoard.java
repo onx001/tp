@@ -380,7 +380,7 @@ public class ChessBoard {
         boolean isPlayersTurn = playerColor.isWhite();
 
         for (String move : moves) {
-            String[] moveCommandArray = move.split(" ");
+            String[] moveCommandArray = move.split("\\s+");
             boolean isPromote = moveCommandArray[0].equals("p");
 
             if (!isPromote) {
