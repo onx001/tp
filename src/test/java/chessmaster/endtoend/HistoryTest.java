@@ -64,7 +64,9 @@ public class HistoryTest {
 
         // Create a new board and game with your desired testing preferences
         ChessBoard board = new ChessBoard(Color.WHITE);
-        Game game = new Game(Color.WHITE, Color.WHITE, board, storage, ui, 1);
+        Human human = new Human(Color.WHITE, board);
+        CPU cpu = new CPU(Color.BLACK, board);
+        Game game = new Game(Color.WHITE, Color.WHITE, board, storage, ui, 1, human, cpu);
 
         ConsoleCapture consoleCapture = new ConsoleCapture();
         consoleCapture.startCapture();
