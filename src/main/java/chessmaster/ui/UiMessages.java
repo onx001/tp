@@ -45,7 +45,4 @@ public class UiMessages {
     public static final String RESTART_GAME_ERROR_MESSAGE =
             "Invalid input! Please enter either 'y' for yes or 'n' for no: ";
     public static final String RESTARTING_GAME_MESSAGE = "Great! Restarting a new game!";
-
-
-
 }

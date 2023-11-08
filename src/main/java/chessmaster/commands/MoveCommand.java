@@ -59,5 +59,4 @@ public class MoveCommand extends Command {
         }
         return move;
     }
-
 }

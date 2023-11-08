@@ -13,7 +13,7 @@ public class RestartCommand extends Command {
         return new CommandResult();
     }
 
-    public static boolean isRestartCommand(Command command) {
+    public static boolean isRestart(Command command) {
         return command instanceof RestartCommand;
     }
 }

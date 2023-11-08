@@ -1,7 +1,7 @@
 package chessmaster.parser;
 
-import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
+import chessmaster.commands.ExitCommand;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.InvalidCommand;
 import chessmaster.commands.LegendCommand;
@@ -155,8 +155,8 @@ public class Parser {
             return new HelpCommand();
         case LegendCommand.LEGEND_COMMAND_STRING:
             return new LegendCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
-            return new AbortCommand();
+        case ExitCommand.EXIT_COMAMND_STRING:
+            return new ExitCommand();
         case RestartCommand.RESTART_COMAMND_STRING:
             return new RestartCommand();
         default:

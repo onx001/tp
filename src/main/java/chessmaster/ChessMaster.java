@@ -119,15 +119,12 @@ public class ChessMaster {
             Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
             boolean restartMidGame = game.run();
             if (restartMidGame) {
-                boolean shouldRestartGame = shouldRestartGame();
-                if (shouldRestartGame) {
+                shouldRestart = shouldRestartGame();
+                if (shouldRestart) {
                     loadNewGame();
-                } else {
-                    shouldRestart = false;
                 }
-            } else {
-                shouldRestart = false;
             }
+            shouldRestart = false;
         }
     }
 

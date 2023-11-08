@@ -1,7 +1,7 @@
 //@@author TongZhengHong
 package chessmaster.game;
 
-import chessmaster.commands.AbortCommand;
+import chessmaster.commands.ExitCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.CommandResult;
 import chessmaster.commands.MoveCommand;
@@ -67,11 +67,16 @@ public class Game {
         assert (1 <= difficulty) && (difficulty <= 3) : "Difficulty should be between 1 and 3!";
     }
 
+
+    /**
+     * @return true if the game has ended, either by checkmate, stalemate,
+     * or if users wants to reset the game. Returns false if the game is aborted.
+     */
     public boolean run() {
         ui.printText(START_HELP_STRINGS);
         ui.printChessBoard(board.getBoard());
 
-        while (!hasEnded && !AbortCommand.isAbortCommand(command) && !RestartCommand.isRestartCommand(command)) {
+        while (!hasEnded && !ExitCommand.isExit(command) && !RestartCommand.isRestart(command)) {
             try {
                 assert currentPlayer.isCPU() || currentPlayer.isHuman() : 
                     "Player should only either be human or CPU!";
@@ -97,11 +102,7 @@ public class Game {
                 ui.printErrorMessage(e);
             }
         }
-        if (hasEnded || RestartCommand.isRestartCommand(command)) {
-            return true;
-        } else {
-            return false;
-        }
+        return hasEnded || RestartCommand.isRestart(command);
     }
 
     private Command getUserCommand() throws ChessMasterException {
