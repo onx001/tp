@@ -70,7 +70,7 @@ public class Game {
 
     /**
      * @return true if the game has ended, either by checkmate, stalemate,
-     * or if users wants to reset the game. Returns false if the game is aborted.
+     *     or if users wants to reset the game. Returns false if the game is aborted.
      */
     public boolean run() {
         ui.printText(START_HELP_STRINGS);
