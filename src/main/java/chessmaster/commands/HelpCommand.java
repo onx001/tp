@@ -7,8 +7,8 @@ public class HelpCommand extends Command {
 
     public static final String HELP_COMMAND_STRING = "help";
 
-    private static final String[] HELP_STRINGS = { 
-        "Here are the following commands to play:",
+    public static final String[] HELP_STRINGS = {
+        "Here are the commands you can use to play:",
         "move\tMove piece",
         "\tFormat: move [column][row] [column][row]",
         "\te.g. move a2 a3",

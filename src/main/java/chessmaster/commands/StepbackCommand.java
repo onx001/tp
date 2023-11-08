@@ -49,15 +49,24 @@ public class StepbackCommand extends Command {
 
             ChessPiece clonedPieceToMove = historyBoard.getPieceAtCoor(moveTo);
             clonedPieceToMove.updatePosition(moveFrom);
-            historyBoard.getTileAtCoor(moveTo).setTileEmpty(moveTo);
-            historyBoard.getTileAtCoor(moveFrom).updateTileChessPiece(clonedPieceToMove);
 
-            // need to check if the move captured a piece. If it did, need to replace `to` tile with pieceCaptured
+            // Need to check if the move captured a piece. If it did, need to replace `to` tile with pieceCaptured
+            if (previousMove.hasCapturedAPiece()) {
+                historyBoard.getTileAtCoor(moveTo).updateTileChessPiece(previousMove.getPieceCaptured());
+            } else {
+                historyBoard.getTileAtCoor(moveTo).setTileEmpty(moveTo);
+            }
+
+            // The `from` tile always gets the pieceMoved
+            historyBoard.getTileAtCoor(moveFrom).updateTileChessPiece(clonedPieceToMove);
         }
 
         game.getUI().printChessBoard(historyBoard.getBoard());
 
-        return new CommandResult(String.format("Stepped back %d steps!", numMovesToStepBack));
+        return new CommandResult(String.format(
+                "Stepped back %d steps!\nUse `show` to see the current board.",
+                numMovesToStepBack)
+        );
     }
 
 }
