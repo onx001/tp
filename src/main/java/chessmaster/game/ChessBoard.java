@@ -16,6 +16,7 @@ public class ChessBoard {
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
     public static final int MAX_PIECES = 16;
+    public static final String PROMOTE_MOVE_STRING = "p";
 
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
@@ -381,10 +382,10 @@ public class ChessBoard {
 
         for (String move : moves) {
             String[] moveCommandArray = move.split("\\s+");
-            boolean isPromote = moveCommandArray[0].equals("p");
+            boolean isPromote = moveCommandArray[0].equals(PROMOTE_MOVE_STRING);
 
             if (!isPromote) {
-                Move toExecute = Parser.parseMoveFile(move, this);
+                Move toExecute = Parser.parseMove(move, this, false);
                 assert toExecute.isValid(this) : "Move in file is not valid!";
                 this.executeMove(toExecute);
 
@@ -434,16 +435,9 @@ public class ChessBoard {
     }
 
     //@@author ken_ruster
-    public boolean matchesOtherBoard(ChessTile[][] otherBoard) {
-        for (ChessTile[] row : otherBoard) {
-            for (ChessTile tile : row) {
-                ChessPiece piece = tile.getChessPiece();
-                Coordinate coord = piece.getPosition();
-                if (!piece.isSameAs(this.getPieceAtCoor(coord))) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    public boolean equals(ChessBoard otherBoard) {
+        String otherBoardString = otherBoard.toString();
+
+        return otherBoardString.equals(this.toString());
     }
 }

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public abstract class Player {
 
+    private static final String MOVE_DELIMITER = ", ";
+
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
     protected Color colour;
@@ -84,7 +86,7 @@ public abstract class Player {
             Move move = moves.get(i);
 
             if (i < moves.size() - 1) {
-                out = out + move.toFileString() + ", ";
+                out = out + move.toFileString() + MOVE_DELIMITER;
             } else {
                 out = out + move.toFileString();
             }

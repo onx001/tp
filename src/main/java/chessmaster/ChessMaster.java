@@ -39,13 +39,13 @@ public class ChessMaster {
             playerColor = storage.loadPlayerColor();
             difficulty = storage.loadDifficulty();
             currentTurnColor = storage.loadCurrentColor();
-            ChessTile[][] existingBoard = storage.loadBoard();
-            board = new ChessBoard(playerColor);
+            ChessTile[][] existingBoardState = storage.loadBoard();
+            board = new ChessBoard(playerColor, existingBoardState);
 
             human = new Human(playerColor, board);
             cpu = new CPU(playerColor.getOppositeColour(), board);
             
-            storage.executeSavedMoves(playerColor, board, existingBoard, human, cpu);
+            storage.executeSavedMoves(playerColor, board, human, cpu);
             board.setDifficulty(difficulty);
 
             if (shouldStartNewGame()) {

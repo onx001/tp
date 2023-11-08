@@ -211,8 +211,7 @@ public class Storage {
     }
 
     public void executeSavedMoves(Color playerColor,
-                                  ChessBoard board,
-                                  ChessTile[][] otherBoard,
+                                  ChessBoard otherBoard,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
         ArrayList moveStringList = new ArrayList<String>();
@@ -240,11 +239,13 @@ public class Storage {
             throw new LoadBoardException();
         }
 
+        ChessBoard board = new ChessBoard(playerColor);
+
         // Execute move string array
         board.executeMoveArray(moveStringList, human, cpu);
 
         // Check obtained board with loaded board state
-        if (!board.matchesOtherBoard(otherBoard)) {
+        if (!board.equals(otherBoard)) {
             throw new LoadBoardException("Board state does not match state dictated by move history!");
         }
     }
