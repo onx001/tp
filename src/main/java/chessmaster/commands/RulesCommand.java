@@ -1,18 +1,17 @@
 //@@author TriciaBK
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
+import chessmaster.game.Game;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Knight;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Rook;
-import chessmaster.ui.TextUI;
 
 public class RulesCommand extends Command {
 
-    public static final String RULES_COMAMND_STRING = "rules";
+    public static final String RULES_COMMAND_STRING = "rules";
 
     private static final String[] RULES_STRINGS = {
         "Here are simple chess rules to get you started:",
@@ -38,7 +37,7 @@ public class RulesCommand extends Command {
 
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(RULES_STRINGS);
     }
 

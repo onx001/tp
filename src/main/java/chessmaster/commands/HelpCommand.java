@@ -1,36 +1,29 @@
 //@@author TriciaBK
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.game.Game;
 
 public class HelpCommand extends Command {
 
-    public static final String HELP_COMAMND_STRING = "help";
+    public static final String HELP_COMMAND_STRING = "help";
 
     private static final String[] HELP_STRINGS = { 
-        "Seems like you need some help!",
         "Here are the following commands to play:",
-        "Move piece - Input coordinate of piece, followed by coordinate to move to",
-        "   Format: [column][row] [column][row]",
-        "   E.g. a2 a3",
-        "Show available moves - Lists all the available moves for a piece",
-        "   Format: moves [column][row]",
-        "   E.g. moves a2",
-        "Show board - Shows the current state of the chess board",
-        "   Format: show",
-        "Obtain rules - Obtain a quick refresher on the rules of chess",
-        "   Format: rules",
-        "View pieces representation - Display a legend that explains " ,
-        "                             piece representations",
-        "   Format: legend",
-        "Abort game - Exit programme",
-        "   Format: abort",
-
+        "move\tMove piece",
+        "\tFormat: move [column][row] [column][row]",
+        "\te.g. move a2 a3",
+        "moves\tShow available moves for a piece",
+        "\tFormat: moves [column][row]",
+        "\te.g. moves a2",
+        "show\tShow the chessboard",
+        "rules\tObtain a quick refresher on the rules of chess",
+        "legend\tView pieces representation",
+        "history\tView history of all game moves",
+        "abort\tAbort game",
     };
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(HELP_STRINGS);
     }
 

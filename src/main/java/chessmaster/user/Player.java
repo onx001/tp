@@ -102,4 +102,12 @@ public abstract class Player {
     public boolean isCPU() {
         return this instanceof CPU;
     }
+
+    public ArrayList<Move> getMoves() {
+        return this.moves;
+    }
+
+    public ArrayList<ChessPiece> getPieces() {
+        return this.pieces;
+    }
 }

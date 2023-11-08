@@ -69,7 +69,6 @@ Choose your starting color to start new game! [b/w]
 Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
 ```
 Choose your difficulty level! [1/2/3/4]
-
 ```
 
 Now, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
@@ -162,17 +161,19 @@ Checkmate is the point in the game where the attacking player has the opponent's
 
 The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
+Otherwise, you may use the `abort` command if you wish to end the game midway. 
+
 ## Features 
 
 ### Make a move
 
 To make a move, simply enter the coordinate of the piece to be moved, followed by the coordinates it is to be moved to.
 
-Format: `[column][row] [column][row]`
+Format: `move [column][row] [column][row]`
 
 Examples: 
-- `a2 a4`
-- `b3 g6`
+- `move a2 a4`
+- `move b3 g6`
 
 ChessMaster also automatically checks if the move was valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
 message will be shown:
@@ -333,6 +334,12 @@ White pieces:
 _________________________________________________________________
 ```
 
+### View history of all game moves: `history`
+
+Displays a list of all previous moves in the current game
+
+Format: `history`
+
 ### Saving and loading games
 
 Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
@@ -372,13 +379,13 @@ to simulate timed games.
 
 ## Command Summary
 
-| Action        | Format                        |
-|---------------|-------------------------------|
-| Move          | `[column][row] [column][row]` |
-| Show moves    | `moves [column][row]`         |
-| Show board    | `show`                        |
-| Rules         | `rules`                       |
-| Help          | `help`                        |
-| Pieces legend | `legend`                      |
-| Abort         | `abort`                       |
+| Action        | Format                             |
+|---------------|------------------------------------|
+| Move          | `move [column][row] [column][row]` |
+| Show moves    | `moves [column][row]`              |
+| Show board    | `show`                             |
+| Rules         | `rules`                            |
+| Help          | `help`                             |
+| Pieces legend | `legend`                           |
+| Abort         | `abort`                            |
 

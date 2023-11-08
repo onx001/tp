@@ -389,6 +389,10 @@ public class Storage {
         throw new LoadBoardException();
     }
 
+    public String getFilePath() {
+        return this.filePathString;
+    }
+
     public ArrayList<String> loadHumanMoves() throws ChessMasterException {
         createChessMasterFile();
 
@@ -446,4 +450,5 @@ public class Storage {
 
         return out;
     }
+
 }
