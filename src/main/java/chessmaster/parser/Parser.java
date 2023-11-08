@@ -1,15 +1,6 @@
 package chessmaster.parser;
 
-import chessmaster.commands.Command;
-import chessmaster.commands.AbortCommand;
-import chessmaster.commands.HelpCommand;
-import chessmaster.commands.HistoryCommand;
-import chessmaster.commands.InvalidCommand;
-import chessmaster.commands.LegendCommand;
-import chessmaster.commands.MoveCommand;
-import chessmaster.commands.RulesCommand;
-import chessmaster.commands.ShowCommand;
-import chessmaster.commands.ShowMovesCommand;
+import chessmaster.commands.*;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -156,6 +147,8 @@ public class Parser {
             return new AbortCommand();
         case HistoryCommand.HISTORY_COMMAND_STRING:
             return new HistoryCommand();
+        case StepbackCommand.STEPBACK_COMMAND_STRING:
+            return new StepbackCommand(payload);
         default:
             return new InvalidCommand();
         }

@@ -251,11 +251,11 @@ public final class TextUI {
         printText(returnString);
     }
 
-    public void printChessBoardDivider() {
+    private void printChessBoardDivider() {
         System.out.println(CHESS_BOARD_DIVIDER);
     }
 
-    public void printChessBoardHeader() {
+    private void printChessBoardHeader() {
         System.out.print(CHESS_BOARD_PADDING + CHESS_BOARD_TAB);
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
@@ -264,7 +264,7 @@ public final class TextUI {
         System.out.println("");
     }
 
-    public void printChessBoardRow(int rowNum, String chessBoardRow) {
+    private void printChessBoardRow(int rowNum, String chessBoardRow) {
         System.out.print(CHESS_BOARD_PADDING);
         System.out.print(String.format("(%d) ", rowNum));
         System.out.print(chessBoardRow);

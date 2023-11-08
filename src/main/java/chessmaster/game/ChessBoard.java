@@ -163,7 +163,7 @@ public class ChessBoard {
      * @param coor The coordinate of the position to retrieve the tile for.
      * @return The ChessTile object at the specified coordinate.
      */
-    private ChessTile getTileAtCoor(Coordinate coor) {
+    public ChessTile getTileAtCoor(Coordinate coor) {
         return board[coor.getY()][coor.getX()];
     }
 

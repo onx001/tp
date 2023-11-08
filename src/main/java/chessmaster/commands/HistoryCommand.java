@@ -29,7 +29,7 @@ public class HistoryCommand extends Command {
 
     public static final String HISTORY_COMMAND_STRING = "history";
 
-    public ArrayList<PlayerMoveTuple> getAllMovesInChronologicalOrder(Game game) {
+    public static ArrayList<PlayerMoveTuple> getAllMovesInChronologicalOrder(Game game) {
         int totalMoves = game.getNumMoves();
         ArrayList<PlayerMoveTuple> allMoves = new ArrayList<>();
 
