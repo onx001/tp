@@ -65,6 +65,22 @@ public class ChessMaster {
         }
     }
 
+    //@@author TriciaBK
+    private boolean shouldRestartGame() {
+        ui.promptNewGame(false);
+        String input = ui.getUserInput(false);
+        while (!input.equals("y") && !input.equals("n")) {
+            ui.promptNewGame(true);
+            input = ui.getUserInput(false);
+        }
+        if (input.equals("y")) {
+            ui.printRestartingGameMessage();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void loadNewGame() {
         ui.promptStartingColor(false);
         String input = ui.getUserInput(false);
@@ -97,9 +113,20 @@ public class ChessMaster {
         }
     }
 
-    private void run() {   
-        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
-        game.run();
+    private void run() {
+        boolean shouldRestart = true;
+        while (shouldRestart) {
+            Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
+            boolean restartMidGame = game.run();
+            if (!restartMidGame) {
+                boolean shouldRestartGame = shouldRestartGame();
+                if (shouldRestartGame) {
+                    loadNewGame();
+                } else {
+                    shouldRestart = false;
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {

@@ -66,7 +66,7 @@ public class Game {
         assert (1 <= difficulty) && (difficulty <= 3) : "Difficulty should be between 1 and 3!";
     }
 
-    public void run() {
+    public boolean run() {
         ui.printText(START_HELP_STRINGS);
         ui.printChessBoard(board.getBoard());
 
@@ -91,11 +91,12 @@ public class Game {
                 currentPlayer = togglePlayerTurn();
                 storage.saveBoard(board, currentPlayer.getColour());
                 hasEnded = checkEndState(); // Resets board if end
-
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
             }
+            return true;
         }
+        return false;
     }
 
     private Command getUserCommand() throws ChessMasterException {
