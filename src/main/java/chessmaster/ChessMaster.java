@@ -126,6 +126,8 @@ public class ChessMaster {
                 } else {
                     shouldRestart = false;
                 }
+            } else {
+                shouldRestart = false;
             }
         }
     }

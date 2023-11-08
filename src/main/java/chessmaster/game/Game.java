@@ -92,7 +92,6 @@ public class Game {
             } catch (ChessMasterException e) {
                 ui.printErrorMessage(e);
             }
-            return false;
         }
         if (hasEnded || RestartCommand.isRestartCommand(command)) {
             return true;
