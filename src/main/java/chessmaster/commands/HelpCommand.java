@@ -20,7 +20,6 @@ public class HelpCommand extends Command {
         "legend\tView pieces representation",
         "history\tView history of all game moves",
         "abort\tAbort game",
-
     };
 
     @Override

@@ -9,11 +9,15 @@ import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Storage {
@@ -64,7 +68,7 @@ public class Storage {
      * @param board       The ChessBoard to save.
      * @throws ChessMasterException If there is an error saving the board to a file.
      */
-    public void saveBoard(ChessBoard board, Color currentColor) throws ChessMasterException {
+    public void saveBoard(ChessBoard board, Color currentColor, Human human, CPU cpu) throws ChessMasterException {
         createChessMasterFile();
 
         try {
@@ -78,6 +82,16 @@ public class Storage {
             fileWriter.write(currentColor.name());
             fileWriter.write(System.lineSeparator());
 
+            //@@author ken_ruster
+            // Save human moves
+            fileWriter.write(human.movesToString());
+            fileWriter.write(System.lineSeparator());
+
+            // Save cpu moves
+            fileWriter.write(cpu.movesToString());
+            fileWriter.write(System.lineSeparator());
+
+            //@@author TriciaBK
             for (int row = 0; row < ChessBoard.SIZE; row++) {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
@@ -138,8 +152,8 @@ public class Storage {
             throw new LoadBoardException("Invalid file path: " + filePathString);
         }
 
-        // Skip first three lines
-        for (int i = 0; i < 3; i++) {
+        // Skip first five lines
+        for (int i = 0; i < 5; i++) {
             if (fileScanner.hasNext()) {
                 fileScanner.nextLine();
             }
@@ -195,6 +209,47 @@ public class Storage {
         fileScanner.close();
         return boardTiles;
     }
+
+    public void executeSavedMoves(Color playerColor,
+                                  ChessBoard otherBoard,
+                                  Human human,
+                                  CPU cpu) throws ChessMasterException {
+        ArrayList moveStringList = new ArrayList<String>();
+        ArrayList<String> humanMoves = loadHumanMoves();
+        ArrayList<String> cpuMoves = loadCPUMoves();
+
+        // Merge move string arrays into a singular array
+        if (playerColor.isWhite()) {
+            for (String move : humanMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < cpuMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, cpuMoves.get(i));
+            }
+        } else if (playerColor.isBlack()) {
+            for (String move : cpuMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < humanMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, humanMoves.get(i));
+            }
+        } else {
+            throw new LoadBoardException();
+        }
+
+        ChessBoard board = new ChessBoard(playerColor);
+
+        // Execute move string array
+        board.executeMoveArray(moveStringList, human, cpu);
+
+        // Check obtained board with loaded board state
+        if (!board.equals(otherBoard)) {
+            throw new LoadBoardException("Board state does not match state dictated by move history!");
+        }
+    }
+
 
     //@@author onx001
     private boolean isPieceValid (ChessPiece initialPiece) {
@@ -336,6 +391,64 @@ public class Storage {
 
     public String getFilePath() {
         return this.filePathString;
+    }
+
+    public ArrayList<String> loadHumanMoves() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        // Skip first 3 lines
+        for (int i = 0; i < 3; i ++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
+        }
+
+        ArrayList out = new ArrayList<String>();
+        if (fileScanner.hasNext()) {
+            String[] movesArray = fileScanner.nextLine().split(", ");
+            Arrays.stream(movesArray)
+                    .sequential()
+                    .filter(x -> !x.equals(""))
+                    .forEach(x -> out.add(x));
+        }
+
+        return out;
+    }
+
+    public ArrayList<String> loadCPUMoves() throws ChessMasterException {
+        createChessMasterFile();
+
+        Scanner fileScanner;
+        try {
+            fileScanner = new Scanner(storageFile);
+        } catch (FileNotFoundException e) {
+            throw new LoadBoardException("Invalid file path: " + filePathString);
+        }
+
+        // Skip first 4 lines
+        for (int i = 0; i < 4; i ++) {
+            if (fileScanner.hasNext()) {
+                fileScanner.nextLine();
+            }
+        }
+
+        ArrayList out = new ArrayList<String>();
+        if (fileScanner.hasNext()) {
+            String[] movesArray = fileScanner.nextLine().split(", ");
+            Arrays.stream(movesArray)
+                    .sequential()
+                    .filter(x -> !x.equals(""))
+                    .forEach(x -> out.add(x));
+        }
+
+        return out;
     }
 
 }

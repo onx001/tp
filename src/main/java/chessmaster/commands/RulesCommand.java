@@ -25,6 +25,7 @@ public class RulesCommand extends Command {
         String.format("   Kings (\"%s\") move one square in any direction.", King.KING_WHITE),
         "",
         "Special Rules:",
+        "[Refer to specific move methods in the User Guide]",
         "   Castling - King and rook move simultaneously to safeguard the king.",
         "   En Passant - Pawn capturing when moving two squares from starting position.",
         "   Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.",

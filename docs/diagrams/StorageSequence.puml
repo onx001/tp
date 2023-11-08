@@ -7,6 +7,9 @@ participant ":FileWriter" as FileWriter
 participant ":Scanner" as Scanner
 participant ":ChessTile" as ChessTile
 participant ":String" as String
+participant "human:Human" as Human
+participant "cpu:CPU" as CPU
+participant "board:ChessBoard" as ChessBoard
 
 
 create Storage
@@ -43,7 +46,18 @@ FileWriter --> FileWriter--
 FileWriter --> Storage--
 FileWriter -> FileWriter++ : fileWriter.write(): System.lineSeparator()
 FileWriter --> FileWriter--
-
+Storage -> FileWriter++ : fileWriter.write(): human.movesToString()
+FileWriter -> Human++ : movesToString()
+Human --> FileWriter : human moves
+FileWriter -> FileWriter++ : write(): human moves
+FileWriter --> FileWriter--
+FileWriter --> Storage--
+Storage -> FileWriter++ : fileWriter.write(): cpu.movesToString()
+FileWriter -> CPU++ : movesToString()
+CPU --> FileWriter : CPU moves
+FileWriter -> FileWriter++ : write(): CPU moves
+FileWriter --> FileWriter--
+FileWriter --> Storage--
 loop for row from 0 to ChessBoard.SIZE-1
     alt row loop
         FileWriter -> FileWriter++ : .write(): System.lineSeparator()
@@ -113,5 +127,6 @@ loop (rowIndex < ChessBoard.SIZE && fileScanner.hasNext())
 end
 Storage -> Scanner++: close
 Scanner --> Storage--
-Storage --> User: boardTiles
+Storage --> User-- : boardTiles
+
 @enduml
