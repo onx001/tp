@@ -16,5 +16,4 @@ public class RestartCommand extends Command {
     public static boolean isRestartCommand(Command command) {
         return command instanceof RestartCommand;
     }
-
 }

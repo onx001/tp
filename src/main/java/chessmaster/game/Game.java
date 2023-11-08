@@ -1,7 +1,11 @@
 //@@author TongZhengHong
 package chessmaster.game;
 
-import chessmaster.commands.*;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.MoveCommand;
+import chessmaster.commands.RestartCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.storage.Storage;
