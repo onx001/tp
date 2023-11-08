@@ -84,26 +84,4 @@ public class HistoryTest {
         assertEquals(expectedOutput, capturedOutput);
     }
 
-
-//    @Test
-//    public void historyCommand_noMoves() {
-//        String testInput = "history\n" + "abort\n";
-//        giveSystemTestInput(testInput);
-//
-//        TextUI ui = new TextUI();
-//        ChessBoard board = new ChessBoard(Color.WHITE);
-//        Game game = new Game(Color.WHITE, Color.WHITE, board, storage, ui, 1);
-//
-//        ConsoleCapture consoleCapture = new ConsoleCapture();
-//        consoleCapture.startCapture();
-//
-//        game.run();
-//
-//        consoleCapture.stopCapture();
-//
-//        String capturedOutput = consoleCapture.getCapturedOutput();
-//        String expectedOutput = readExpectedOutputFromFile("src/test/resources/historyCommand_noMoves.txt");
-//        assertEquals(expectedOutput, capturedOutput);
-//    }
-
 }
