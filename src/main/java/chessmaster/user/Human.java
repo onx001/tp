@@ -35,14 +35,14 @@ public class Human extends Player {
         boolean promoteFailure = true;
 
         ui.printPromotePrompt(coord);
-        String in = ui.getUserInput();
+        String in = ui.getUserInput(false);
         do {
             ChessPiece promotedPiece = Parser.parsePromote(pawnPiece, in);
             promoteFailure = promotedPiece.isPawn();
 
             if (promoteFailure) {
                 ui.printPromoteInvalidMessage();
-                in = ui.getUserInput();
+                in = ui.getUserInput(false);
             } else {
                 promotedPiece.setHasMoved();
                 this.pieces.add(promotedPiece);

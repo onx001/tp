@@ -11,6 +11,15 @@ import chessmaster.ui.TextUI;
 public class MoveCommand extends Command {
 
     public static final String MOVE_COMAMND_STRING = "move";
+    
+    public static final String NO_MOVE_FOUND_STRING = 
+        "Oops! It seems you forgot to provide the 'from' and 'to' squares!";
+    public static final String MOVE_FORMAT_STRING = 
+        "Format: moves <from> <to>";
+    public static final String MOVE_EXAMPLE_STRING = "Example: move e2 e4";
+
+    private static final String EMPTY_PAYLOAD_ERROR_STRING = NO_MOVE_FOUND_STRING + System.lineSeparator() + 
+        MOVE_FORMAT_STRING + System.lineSeparator() + MOVE_EXAMPLE_STRING;
     private static final String MOVE_PIECE_MESSAGE = "You moved %s from %s to %s";
 
     private String userInput;
@@ -30,7 +39,10 @@ public class MoveCommand extends Command {
      */
     @Override
     public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
-
+        if (userInput.isBlank()) {
+            throw new InvalidMoveException(EMPTY_PAYLOAD_ERROR_STRING);
+        }
+        
         move = Parser.parseMove(userInput, board);
         if (!move.isValid(board)) {
             throw new InvalidMoveException();

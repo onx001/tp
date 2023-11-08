@@ -39,12 +39,20 @@ public final class TextUI {
      * 
      * @return user input string in LOWER case
      */
-    public String getUserInput() {
-        String fullInputLine = scanner.nextLine().trim();
+    public String getUserInput(boolean shouldIgnoreEmpty) {
+        String fullInputLine = "";
 
-        // silently consume all ignored lines
-        while (shouldIgnore(fullInputLine)) {
-            fullInputLine = scanner.nextLine();
+        if (scanner.hasNextLine()) {
+            fullInputLine = scanner.nextLine().trim();
+        }
+
+        if (shouldIgnoreEmpty) {
+            // silently consume all ignored lines
+            while (shouldIgnore(fullInputLine)) {
+                if (scanner.hasNextLine()) {
+                    fullInputLine = scanner.nextLine().trim();
+                }
+            }
         }
 
         return fullInputLine.toLowerCase();
@@ -210,8 +218,8 @@ public final class TextUI {
         printText(displayText);
     }
 
-    public void printContinuePrevGame(String colorString) {
-        String displayText = String.format(UiMessages.CONTINUE_PREV_GAME_MESSAGE, colorString);
+    public void printContinuePrevGame(String colorString, int difficulty) {
+        String displayText = String.format(UiMessages.CONTINUE_PREV_GAME_MESSAGE, colorString, difficulty);
         printText(displayText);
     }
 
@@ -222,6 +230,10 @@ public final class TextUI {
 
     public void printPromoteInvalidMessage() {
         out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
+    }
+
+    public void printCPUThinkingMessage() {
+        out.println(UiMessages.CHESSMASTER_THINKING_MESSAGE);
     }
 
     public void printCPUMove(Move cpuMove) {
@@ -268,10 +280,10 @@ public final class TextUI {
     public void printEndMessage(Player winner) {
         String winningColorString = winner.getColour().name();
         if (winner.isHuman()) {
-            printText(String.format(UiMessages.HUMAN_WIN_STRING, winningColorString));
+            printText(String.format(UiMessages.HUMAN_WIN_MESSAGE, winningColorString));
         } else if (winner.isCPU()) { // Human lost
             String playerColorString = winner.getColour().getOppositeColour().name();
-            printText(String.format(UiMessages.CPU_WIN_STRING, playerColorString));
+            printText(String.format(UiMessages.CPU_WIN_MESSAGE, playerColorString));
         }
     }
 

@@ -35,7 +35,7 @@ public class ShowMovesCommand extends Command {
         Coordinate coord = Coordinate.parseAlgebraicCoor(userInput);
         piece = board.getPieceAtCoor(coord);
         if (piece.isEmptyPiece()) {
-            throw new NullPieceException();
+            throw new NullPieceException(coord);
         }
 
         Coordinate[] possibleCoordinates = piece.getLegalCoordinates(board);
