@@ -17,6 +17,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
         - [View history of game moves: `history`](#view-history-of-game-moves-history)
+        - [Step back in history: `stepback`](#step-back-in-history-stepback)
     - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
@@ -244,6 +245,13 @@ Format: `legend`
 Displays a list of all previous moves in the current game
 
 Format: `history`
+
+### Step back in history: `stepback`
+
+Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
+in the current game.
+
+Format: `stepback [number of moves to step back]`
 
 ### Saving and loading games
 
