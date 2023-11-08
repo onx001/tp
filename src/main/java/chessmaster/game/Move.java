@@ -3,6 +3,7 @@ package chessmaster.game;
 
 import java.util.Arrays;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
 
@@ -71,7 +72,7 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = pieceMoved.getAvailableCoordinates(board);
+        Coordinate[][] coordinates = pieceMoved.getPseudoCoordinates(board);
         for (Coordinate[] direction : coordinates) {
             for (Coordinate coor : direction) {
                 if (coor.equals(to)) {
@@ -80,6 +81,29 @@ public class Move {
             }
         }
         return false;
+    }
+
+    public boolean isValidWithCheck(ChessBoard board) {
+        if (!isValid(board)) {
+            return false;
+        }
+
+        if (isLeftCastling() || isRightCastling()) {
+            if (board.isChecked(this.getPieceMoved().getColor())) {
+                return false;
+            }
+        }
+
+        ChessBoard boardCopy = board.clone();
+        ChessPiece pieceCopy = boardCopy.getPieceAtCoor(from);
+        Move moveCopy = new Move(from, to, pieceCopy);
+        try {
+            boardCopy.executeMove(moveCopy);
+        } catch (ChessMasterException e) {
+            return false;
+        }
+
+        return !boardCopy.isChecked(this.getPieceMoved().getColor());
     }
 
     public boolean isLeftCastling() {
@@ -103,6 +127,10 @@ public class Move {
     @Override
     public String toString() {
         return "Move [from=" + from + ", to=" + to + ", piece=" + pieceMoved + "]";
+    }
+
+    public String toFileString() {
+        return from + " " + to;
     }
 
     // @author TongZhengHong

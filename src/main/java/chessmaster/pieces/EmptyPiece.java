@@ -13,7 +13,7 @@ public class EmptyPiece extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
+    public Coordinate[][] getPseudoCoordinates(ChessBoard board) {
         return new Coordinate[0][];
     }
 

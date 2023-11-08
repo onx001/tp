@@ -4,6 +4,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
+import chessmaster.game.PromoteMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
@@ -22,10 +23,10 @@ public class Human extends Player {
      * piece.
      *
      * @param board       Chessboard that the game is being played on.
-     * @param promoteMove The piece being promoted.
+     * @param move The piece being promoted.
      */
-    public void handlePromote(ChessBoard board, TextUI ui, Move promoteMove) {
-        ChessPiece pawnPiece = promoteMove.getPieceMoved();
+    public void handlePromote(ChessBoard board, TextUI ui, Move move) {
+        ChessPiece pawnPiece = move.getPieceMoved();
         if (!pawnPiece.isPawn()) {
             return;
         }
@@ -48,6 +49,8 @@ public class Human extends Player {
                 this.pieces.add(promotedPiece);
                 this.pieces.remove(pawnPiece);
                 board.setPromotionPiece(coord, promotedPiece);
+                PromoteMove promoteMove = new PromoteMove(coord, promotedPiece);
+                this.addMove(promoteMove);
             }
         } while (promoteFailure);
     }

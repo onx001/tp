@@ -3,6 +3,7 @@ package chessmaster.pieces;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
+import chessmaster.game.Move;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,9 @@ public abstract class ChessPiece {
     protected Coordinate position;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
+    protected boolean isEnPassant = false;
     protected int points = 0;
+    
 
     //initialise empty boardweights of 0 for parent class to be used for the AI
     private int[][] boardWeight = 
@@ -60,6 +63,10 @@ public abstract class ChessPiece {
         this.color = color;
     }
 
+    //@@author ken-ruster
+    public boolean isSameAs(ChessPiece other) {
+        return (this.toString().equals(other.toString()));
+    }
     /**
      * Returns available coordinates in multiple directions from the current position. 
      * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is
@@ -67,7 +74,7 @@ public abstract class ChessPiece {
      *
      * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
      */
-    public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
+    public abstract Coordinate[][] getPseudoCoordinates(ChessBoard board);
 
     //@@author onx001
     /**
@@ -77,19 +84,34 @@ public abstract class ChessPiece {
      * @param board The ChessBoard representing the current game state.
      * @return A 1D array of valid coordinates for the piece's legal moves.
      */
-    public Coordinate[] getFlattenedCoordinatesOfLegalMoves(ChessBoard board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+    public Coordinate[] getLegalCoordinates(ChessBoard board) {
+        Coordinate[][] availableCoordinates = getPseudoCoordinates(board);
         ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
 
         for (Coordinate[] direction : availableCoordinates) {
             for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)) {
-                    flattenedCoordinates.add(possibleCoord);
-                }
+                flattenedCoordinates.add(possibleCoord);
             }
         }
-
         return flattenedCoordinates.toArray(new Coordinate[0]);
+    }
+
+    public Coordinate[][] getFilteredCoordinates(ChessBoard board) {
+        Move[] allMoves = board.getLegalMoves(this.color);
+        ArrayList<Coordinate[]> filteredCoordinates = new ArrayList<>();
+
+        for (Coordinate[] direction : getPseudoCoordinates(board)) {
+            ArrayList<Coordinate> filteredDirection = new ArrayList<>();
+            for (Coordinate possibleCoord : direction) {
+                for (Move move : allMoves) {
+                    if (move.getFrom().equals(this.position) && move.getTo().equals(possibleCoord)) {
+                        filteredDirection.add(possibleCoord);
+                    }
+                }
+            }
+            filteredCoordinates.add(filteredDirection.toArray(new Coordinate[0]));
+        }
+        return filteredCoordinates.toArray(new Coordinate[0][0]);
     }
 
     public boolean isWhiteKing() {
@@ -100,33 +122,23 @@ public abstract class ChessPiece {
         return this instanceof King && this.isBlack();
     }
 
-    /**
-     * Returns the validity of the move to the destination coordinate.
-     * @param destination
-     * @param board
-     * @return
-     */
-    public boolean isMoveValid(Coordinate destination, ChessBoard board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (possibleCoord.equals(destination)) {
-                    ChessPiece destPiece = board.getPieceAtCoor(destination);
-                    if (destPiece.isEmptyPiece()) {
-                        return true;
-                    } else if (destPiece.isOpponent(this)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    public void clearEnPassant() {
+        this.isEnPassant = false;
     }
+
+    public boolean isEnPassant() {
+        return this.isEnPassant;
+    }
+
+    public void setEnPassant() {
+        this.isEnPassant = true;
+    }
+
 
     //@@author ken-ruster
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+        Coordinate[][] availableCoordinates = getFilteredCoordinates(board);
 
         boolean isEmpty = Arrays.stream(availableCoordinates).allMatch(x -> x.length == 0);
         if (isEmpty) {
@@ -147,7 +159,7 @@ public abstract class ChessPiece {
         };
 
     }
-    //@@author
+    //@@author onx001
 
     public Coordinate getPosition() {
         return this.position;

@@ -33,7 +33,7 @@ public class CPU extends Player {
         int iter = 0;
         while (iter < MAX_LOOP_ITERATIONS
                 && (randomPiece.getIsCaptured()
-                || randomPiece.getFlattenedCoordinatesOfLegalMoves(board).length == 0)) {
+                || randomPiece.getLegalCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
             iter++;
         }
@@ -52,7 +52,7 @@ public class CPU extends Player {
         return bestMove;
     }
 
-    //@@author 
+    //@@author
 
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
@@ -65,7 +65,7 @@ public class CPU extends Player {
      * @return A random move the given piece can make on the given board.
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
-        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinatesOfLegalMoves(board);
+        Coordinate[] allPossibleMoves = piece.getLegalCoordinates(board);
         int randIndex = rand.nextInt(allPossibleMoves.length);
         Coordinate randomDestination = allPossibleMoves[randIndex];
 

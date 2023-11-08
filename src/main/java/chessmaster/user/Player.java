@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public abstract class Player {
 
+    private static final String MOVE_DELIMITER = ", ";
+
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
     protected Color colour;
@@ -70,6 +72,27 @@ public abstract class Player {
             System.out.println("Colour: " + p.getColor().toString());
             System.out.println("Is captured: " + p.getIsCaptured());
         }
+    }
+
+    /**
+     * Converts the information in the moves array into a String, to be used in saving the game.
+     *
+     * @return String containing information about the player's past moves
+     */
+    public String movesToString() {
+        String out = new String();
+
+        for (int i = 0; i < moves.size(); i = i + 1) {
+            Move move = moves.get(i);
+
+            if (i < moves.size() - 1) {
+                out = out + move.toFileString() + MOVE_DELIMITER;
+            } else {
+                out = out + move.toFileString();
+            }
+        }
+
+        return out;
     }
 
     public boolean isHuman() {

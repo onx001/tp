@@ -30,16 +30,16 @@ public class Game {
     private boolean hasEnded;
 
     public Game(Color playerColour, Color currentTurnColor, ChessBoard board, 
-        Storage storage, TextUI ui, int difficulty) {
+        Storage storage, TextUI ui, int difficulty, Human human, CPU cpu) {
 
         this.ui = ui;
         this.board = board;
         this.storage = storage;
         this.difficulty = difficulty;
 
-        this.human = new Human(playerColour, board);
+        this.human = human;
         Color cpuColor = playerColour.getOppositeColour();
-        this.cpu = new CPU(cpuColor, board);
+        this.cpu = cpu;
 
         this.numMoves = 0;
 
@@ -80,7 +80,7 @@ public class Game {
                 } 
 
                 currentPlayer = togglePlayerTurn();
-                storage.saveBoard(board, currentPlayer.getColour());
+                storage.saveBoard(board, currentPlayer.getColour(), human, cpu);
                 hasEnded = checkEndState(); // Resets board if end
 
             } catch (ChessMasterException e) {

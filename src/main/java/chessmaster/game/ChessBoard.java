@@ -2,11 +2,16 @@ package chessmaster.game;
 
 import java.util.ArrayList;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
 import chessmaster.pieces.King;
+import chessmaster.pieces.Pawn;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
+
 
 public class ChessBoard {
 
@@ -14,6 +19,7 @@ public class ChessBoard {
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
     public static final int MAX_PIECES = 16;
+    public static final String PROMOTE_MOVE_STRING = "p";
 
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
@@ -38,9 +44,6 @@ public class ChessBoard {
     };
 
     private Color playerColor;
-
-    private boolean isWhiteKingAlive = true;
-    private boolean isBlackKingAlive = true;
 
     private int difficulty = 4;
 
@@ -99,8 +102,8 @@ public class ChessBoard {
         return this.difficulty;
     }
 
-    public boolean isChecked() {
-        Move[] moves = getAllMoves(playerColor.getOppositeColour());
+    public boolean isChecked(Color color) {
+        Move[] moves = getAllMoves(color.getOppositeColour());
         for (Move move : moves) {
             Coordinate to = move.getTo();
             if (this.getPieceAtCoor(to) instanceof King) {
@@ -110,20 +113,37 @@ public class ChessBoard {
         return false;
     }
 
-    public boolean isCheckmated() {
-        Move[] moves = getAllMoves(playerColor);
-        for (Move move : moves) {
-            ChessBoard newBoard = this.clone();
-            try {
-                newBoard.executeMove(move);
-            } catch (InvalidMoveException e) {
-                continue;
-            }
-            if (!newBoard.isChecked()) {
-                return false;
+    public boolean hasEnPassant() {
+        //Checks all chess pieces for en passant
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    return true;
+                }
             }
         }
-        return true;
+        return false;
+    }
+
+    public Coordinate getEnPassantCoor() {
+        //Checks all chess pieces for en passant
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    return coor;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean isCheckmated(Color color) {
+        Move[] moves = getLegalMoves(color);
+        return moves.length == 0;
     }
 
 
@@ -137,7 +157,7 @@ public class ChessBoard {
                 ChessPiece piece = getPieceAtCoor(currentCoor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getFlattenedCoordinatesOfLegalMoves(this);
+                    Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
                         allMoves.add(MoveFactory.createMove(this, currentCoor, possible));
                     }
@@ -147,13 +167,29 @@ public class ChessBoard {
         return allMoves.toArray(new Move[0]);
     }
 
+    public Move[] getLegalMoves(Color color) {
+        Move[] moves = getAllMoves(color);
+        ArrayList<Move> uncheckedMoves = new ArrayList<>();
+        for (Move move : moves) {
+            ChessBoard newBoard = this.clone();
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAtCoor(from);
+            Move moveCopy = new Move(from, move.getTo(), piece);
+            try {
+                newBoard.executeMove(moveCopy);
+            } catch (InvalidMoveException e) {
+                continue;
+            }
+            if (!newBoard.isChecked(color)) {
+                uncheckedMoves.add(move);
+            }
+        }
+        return uncheckedMoves.toArray(new Move[0]);
+    }
+
     //@@author TongZhengHong
     public void setPromotionPiece(Coordinate coord, ChessPiece promotedPiece) {
         getTileAtCoor(coord).updateTileChessPiece(promotedPiece);
-    }
-
-    public void setTile(int row, int col, ChessTile tile) {
-        board[row][col] = tile;
     }
 
     /**
@@ -186,14 +222,12 @@ public class ChessBoard {
      * @throws InvalidMoveException If the move is not valid according to the game
      *                              rules.
      */
+
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPieceMoved();
 
-        if (!move.isValid(this)) {
-            throw new InvalidMoveException();
-        }
 
         chessPiece.setHasMoved();
         chessPiece.updatePosition(destCoor);
@@ -222,6 +256,39 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
+            Coordinate to = move.getTo();
+            Coordinate enPassantCoor = getEnPassantCoor();
+            if (move.getPieceMoved().getColor() == playerColor) {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
+            } else {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
+            }
+            if (to.equals(enPassantCoor)) {
+                ChessPiece enPassantPiece = getPieceAtCoor(enPassantCoor);
+                getTileAtCoor(enPassantCoor).setTileEmpty(enPassantCoor);
+                enPassantPiece.setIsCaptured();
+            }
+        }
+
+        //clear all en passants
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    piece.clearEnPassant();
+                }
+            }
+        }
+    }
+
+    public void executeMoveWithCheck(Move move) throws InvalidMoveException {
+        
+        if (move.isValidWithCheck(this)) {
+            executeMove(move);
+        } else {
+            throw new InvalidMoveException("Move Causes a check");
         }
     }
 
@@ -245,43 +312,23 @@ public class ChessBoard {
         return false;
     }
 
-    //@@author TriciaBK
+    //@@author onx001
     public boolean isEndGame() {
-        isWhiteKingAlive = false; 
-        isBlackKingAlive = false;
-
-        for (int row = 0; row < ChessBoard.SIZE; row++) {
-            for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
-
-                if (piece instanceof King) {
-                    if (piece.isWhite()) {
-                        isWhiteKingAlive = true;
-                    } else if (piece.isBlack()) {
-                        isBlackKingAlive = true;
-                    }
-                }
-            }
-        }
-
-        return !isBlackKingAlive || !isWhiteKingAlive;
+        return isCheckmated(playerColor) || isCheckmated(playerColor.getOppositeColour());
     }
 
     public Color getWinningColor() {
-        boolean whiteWin = isWhiteKingAlive && !isBlackKingAlive;
-        boolean blackWin = isBlackKingAlive && !isWhiteKingAlive;
-
-        if (whiteWin) {
-            return Color.WHITE;
-        } else if (blackWin) {
-            return Color.BLACK;
+        
+        if (isCheckmated(playerColor)) {
+            return playerColor.getOppositeColour();
+        } else if (isCheckmated(playerColor.getOppositeColour())) {
+            return playerColor;
         } else {
             return Color.EMPTY;
         }
     }
     
-    //@@author onx001
+
     public int getPoints(Color color) {
         int points = 0;
         int enemyPoints = 0;
@@ -309,10 +356,13 @@ public class ChessBoard {
         return points - enemyPoints;
     }
 
+
     public ChessBoard clone() {
-        String stringRep = this.toString();
-        return toBoard(stringRep);
+        String boardString = this.toString();
+        return toBoard(boardString);
     }
+
+
 
     public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
@@ -334,6 +384,44 @@ public class ChessBoard {
             }
         }
         return new ChessBoard(this.playerColor, boardTiles);
+    }
+
+    //@@author ken-ruster
+    public void executeMoveArray(ArrayList<String> moves, Human human, CPU cpu) throws ChessMasterException {
+        boolean isPlayersTurn = playerColor.isWhite();
+
+        for (String move : moves) {
+            String[] moveCommandArray = move.split("\\s+");
+            boolean isPromote = moveCommandArray[0].equals(PROMOTE_MOVE_STRING);
+
+            if (!isPromote) {
+                Move toExecute = Parser.parseMove(move, this, false);
+                assert toExecute.isValid(this) : "Move in file is not valid!";
+                this.executeMove(toExecute);
+
+                if (isPlayersTurn) {
+                    human.addMove(toExecute);
+                } else {
+                    cpu.addMove(toExecute);
+                }
+            } else {
+                Coordinate coord = Coordinate.parseAlgebraicCoor(moveCommandArray[1]);
+                ChessPiece oldPiece = this.getPieceAtCoor(coord);
+                assert this.canPromote(new Move(coord, coord, oldPiece))
+                        : "Move in file tries to make an invalid promotion!";
+                ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
+                this.setPromotionPiece(coord, newPiece);
+
+                PromoteMove promoteMove = new PromoteMove(coord, newPiece);
+                if (isPlayersTurn) {
+                    human.addMove(promoteMove);
+                } else {
+                    cpu.addMove(promoteMove);
+                }
+            }
+
+            isPlayersTurn = !isPlayersTurn;
+        }
     }
 
     @Override
@@ -359,5 +447,12 @@ public class ChessBoard {
     public boolean isTileOccupied(Coordinate coord) {
         ChessPiece piece = this.getPieceAtCoor(coord);
         return piece == null || !(piece instanceof EmptyPiece);
+    }
+
+    //@@author ken_ruster
+    public boolean equals(ChessBoard otherBoard) {
+        String otherBoardString = otherBoard.toString();
+
+        return otherBoardString.equals(this.toString());
     }
 }
