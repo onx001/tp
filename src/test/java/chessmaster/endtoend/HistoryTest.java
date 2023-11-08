@@ -4,6 +4,8 @@ import chessmaster.ConsoleCapture;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Game;
+import chessmaster.user.CPU;
+import chessmaster.user.Human;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;
 
