@@ -1,11 +1,25 @@
 package chessmaster.parser;
 
-import chessmaster.commands.*;
+import chessmaster.commands.Command;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.MoveCommand;
+import chessmaster.commands.RulesCommand;
+import chessmaster.commands.ShowCommand;
+import chessmaster.commands.ShowMovesCommand;
+import chessmaster.commands.StepbackCommand;
+import chessmaster.commands.LegendCommand;
+import chessmaster.commands.InvalidCommand;
+import chessmaster.commands.HistoryCommand;
+import chessmaster.commands.HelpCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
 import chessmaster.exceptions.ParseCoordinateException;
-import chessmaster.game.*;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.Color;
+import chessmaster.game.Coordinate;
+import chessmaster.game.Move;
+import chessmaster.game.MoveFactory;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;

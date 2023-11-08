@@ -38,16 +38,20 @@ public class HistoryCommand extends Command {
         Player opponent = currentPlayer.isHuman() ? game.getCPU() : game.getHuman();
         ArrayList<Move> opponentMoves = opponent.getMoves();
 
-        int j = (int) Math.floor(totalMoves/2);
+        int j = (int) Math.floor(totalMoves / 2);
         for (int i = 0; i <= j; i++) {
             // If totalMoves is odd, that means the current player is NOT the player
             // who started playing. The first move of the game was from opponent.
             if (totalMoves % 2 != 0) {
                 allMoves.add(new PlayerMoveTuple(opponent, opponentMoves.get(i)));
-                if (i == j) break; // to account for the odd number of moves
+                if (i == j) {
+                    break; // to account for the odd number of moves
+                }
                 allMoves.add(new PlayerMoveTuple(currentPlayer, currentPlayerMoves.get(i)));
             } else {
-                if (i == j) break;
+                if (i == j) {
+                    break;
+                }
                 allMoves.add(new PlayerMoveTuple(currentPlayer, currentPlayerMoves.get(i)));
                 allMoves.add(new PlayerMoveTuple(opponent, opponentMoves.get(i)));
             }

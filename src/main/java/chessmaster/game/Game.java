@@ -1,7 +1,11 @@
 //@@author TongZhengHong
 package chessmaster.game;
 
-import chessmaster.commands.*;
+import chessmaster.commands.AbortCommand;
+import chessmaster.commands.Command;
+import chessmaster.commands.CommandResult;
+import chessmaster.commands.HelpCommand;
+import chessmaster.commands.MoveCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.storage.Storage;
@@ -10,11 +14,9 @@ import chessmaster.user.CPU;
 import chessmaster.user.Human;
 import chessmaster.user.Player;
 
-import java.util.Arrays;
-
 public class Game {
 
-    private String[] START_HELP_STRINGS;
+    private final String[] START_HELP_STRINGS;
 
     private CPU cpu;
     private Human human;
@@ -46,7 +48,7 @@ public class Game {
         // Choose which player goes first
         currentPlayer = currentTurnColor == playerColour ? human : cpu;
 
-        // Make the START_HELP_STRINGS more robust with just one source-of-truth for commands in HelpCommand.HELP_STRINGS
+        // Make the START_HELP_STRINGS more robust with just one source-of-truth in HelpCommand.HELP_STRINGS
         this.START_HELP_STRINGS = new String[HelpCommand.HELP_STRINGS.length + 1];
         this.START_HELP_STRINGS[0] = "Thank you for choosing ChessMaster!";
         System.arraycopy(HelpCommand.HELP_STRINGS, 0, START_HELP_STRINGS, 1, HelpCommand.HELP_STRINGS.length);
