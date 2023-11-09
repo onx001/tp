@@ -196,7 +196,7 @@ public class ChessBoard {
                 ChessPiece piece = getPieceAtCoor(currentCoor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
+                    Coordinate[] possibleCoordinates = piece.getPseudoLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
                         allMoves.add(MoveFactory.createMove(this, currentCoor, possible));
                     }
