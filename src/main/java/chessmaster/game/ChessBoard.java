@@ -102,17 +102,7 @@ public class ChessBoard {
         return this.difficulty;
     }
 
-    public boolean isChecked(Color color) {
-        Move[] moves = getAllMoves(color.getOppositeColour());
-        for (Move move : moves) {
-            Coordinate to = move.getTo();
-            if (this.getPieceAtCoor(to) instanceof King) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    //@@author onx001
     public boolean hasEnPassant() {
         //Checks all chess pieces for en passant
         for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -163,8 +153,40 @@ public class ChessBoard {
         return moves.length == 0;
     }
 
+    /**
+     * Check if the player of the specified color is in check.
+     *
+     * This method determines whether the player with the specified color is in check, 
+     * meaning their king is under threat. It checks if any moves by the opposing player's pieces 
+     * can reach the player's king.
+     *
+     * @param color The color for which to check if the king is in check ('WHITE' or 'BLACK').
+     * @return `true` if the player is in check; `false` if the player's king is not in immediate danger.
+     */
+    public boolean isChecked(Color color) {
+        Move[] moves = getPseudoLegalMoves(color.getOppositeColour());
+        for (Move move : moves) {
+            Coordinate to = move.getTo();
+            if (this.getPieceAtCoor(to) instanceof King) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public Move[] getAllMoves(Color color) {
+    /**
+     * Retrieve an array of pseudo-legal moves for pieces of the specified color.
+     *
+     * This method calculates and provides an array of pseudo-legal moves for all pieces of the given 
+     * color on the chessboard. Pseudo-legal moves are those that are valid based on the piece's movement rules, 
+     * but they may not account for potential checks on the king.
+     *
+     * @param color The color for which pseudo-legal moves should be generated ('WHITE' or 'BLACK').
+     * @return An array of Move objects, each representing a pseudo-legal move, containing the starting square, 
+     *          destination square, and the ChessPiece involved.
+     */
+
+    public Move[] getPseudoLegalMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
 
@@ -184,9 +206,24 @@ public class ChessBoard {
         return allMoves.toArray(new Move[0]);
     }
 
+    /**
+     * Retrieve an array of legal moves for pieces of the specified color.
+     *
+     * This method calculates and provides an array of legal moves for all pieces of the given color on the 
+     * chessboard. This is done by executing each pseudo-legal move and ensuring that it does not result in 
+     * the king being checked. 
+     * 
+     * Legal moves are those that adhere to the piece's movement rules and do not result in the 
+     * player's own king being in check.
+     *
+     * @param color The color for which legal moves should be generated ('WHITE' or 'BLACK').
+     * @return An array of Move objects, each representing a legal move, containing the starting square, 
+     *          destination square, and the ChessPiece involved.
+     */
     public Move[] getLegalMoves(Color color) {
-        Move[] moves = getAllMoves(color);
-        ArrayList<Move> uncheckedMoves = new ArrayList<>();
+        Move[] moves = getPseudoLegalMoves(color);
+        ArrayList<Move> legalMoves = new ArrayList<>();
+
         for (Move move : moves) {
             ChessBoard newBoard = this.clone();
             Coordinate from = move.getFrom();
@@ -198,10 +235,10 @@ public class ChessBoard {
                 continue;
             }
             if (!newBoard.isChecked(color)) {
-                uncheckedMoves.add(move);
+                legalMoves.add(move);
             }
         }
-        return uncheckedMoves.toArray(new Move[0]);
+        return legalMoves.toArray(new Move[0]);
     }
 
     //@@author TongZhengHong
@@ -287,7 +324,7 @@ public class ChessBoard {
                 enPassantPiece.setIsCaptured();
             }
         } else if (move.isSkippingPawn()) {
-            move.getPiece().setEnPassant();
+            move.getPieceMoved().setEnPassant();
         }
 
         //clear all en passants
@@ -295,7 +332,7 @@ public class ChessBoard {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
-                if (piece.isEnPassant() && piece.getColor() != move.getPiece().getColor()) {
+                if (piece.isEnPassant() && piece.getColor() != move.getPieceMoved().getColor()) {
                     piece.clearEnPassant();
 
                 }
