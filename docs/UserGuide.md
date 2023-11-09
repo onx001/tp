@@ -16,9 +16,10 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
+        - [Restart game: `restart`]()        
         - [View history of game moves: `history`](#view-history-of-game-moves-history)
         - [Step back in history: `stepback`](#step-back-in-history-stepback)
-    - [Aborting game: `abort`](#aborting-game-abort)
+        - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
 ## Quick Start
@@ -335,6 +336,18 @@ White pieces:
 "p" represents a white pawn.
 _________________________________________________________________
 ```
+
+### Start a new game of chess: `restart`
+
+Enables the player to restart the game
+
+Format: `restart`
+
+Expected output:
+```
+Do you want to restart game? [y/n] 
+```
+
 
 ### View history of all game moves: `history`
 
