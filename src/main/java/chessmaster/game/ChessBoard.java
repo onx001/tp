@@ -226,7 +226,7 @@ public class ChessBoard {
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPiece();
+        ChessPiece chessPiece = move.getPieceMoved();
 
 
         chessPiece.setHasMoved();
@@ -256,10 +256,10 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
-        } else if (move.getPiece() instanceof Pawn && hasEnPassant()) {
+        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();
-            if (move.getPiece().getColor() == playerColor) {
+            if (move.getPieceMoved().getColor() == playerColor) {
                 enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
             } else {
                 enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
@@ -294,7 +294,7 @@ public class ChessBoard {
 
     //@@author ken-ruster
     public boolean canPromote(Move move) {
-        ChessPiece piece = move.getPiece();
+        ChessPiece piece = move.getPieceMoved();
         Coordinate endCoord = move.getTo();
 
         if (!piece.isPawn()) {

@@ -29,7 +29,7 @@ public class Move {
         return to;
     }
 
-    public ChessPiece getPiece() {
+    public ChessPiece getPieceMoved() {
         return piece;
     }
 
@@ -70,7 +70,7 @@ public class Move {
         }
 
         if (isLeftCastling() || isRightCastling()) {
-            if (board.isChecked(this.getPiece().getColor())) {
+            if (board.isChecked(this.getPieceMoved().getColor())) {
                 return false;
             }
         }
@@ -84,7 +84,7 @@ public class Move {
             return false;
         }
 
-        return !boardCopy.isChecked(this.getPiece().getColor());
+        return !boardCopy.isChecked(this.getPieceMoved().getColor());
     }
 
     public boolean isLeftCastling() {
@@ -119,7 +119,7 @@ public class Move {
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Move) {
             final Move other = (Move) obj;
-            return from.equals(other.getFrom()) && to.equals(other.getTo()) && piece.equals(other.getPiece());
+            return from.equals(other.getFrom()) && to.equals(other.getTo()) && piece.equals(other.getPieceMoved());
         }
         return false;
     }
