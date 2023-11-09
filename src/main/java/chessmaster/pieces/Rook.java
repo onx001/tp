@@ -33,7 +33,7 @@ public class Rook extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
+    public Coordinate[] getPseudoLegalCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -63,7 +63,7 @@ public class Rook extends ChessPiece {
             result[dir] = possibleCoordInDirection.toArray(new Coordinate[0]);
         }
 
-        return result;
+        return flattenArray(result);
     }
 
     @Override

@@ -1,0 +1,49 @@
+_________________________________________________________________
+
+Thank you for choosing ChessMaster! Here are the commands that you can use:
+Move piece - Input coordinate of piece, followed by coordinate to move to
+   Format: [column][row] [column][row]
+   E.g. a2 a3
+Show board - Shows the current state of the chess board
+   Format: show
+Show available moves - Lists all the available moves for a piece at a coordinate
+   Format: moves [column][row]
+   E.g. moves a2
+Abort game - Exit programme
+   Format: abort
+Obtain rules - Obtain a quick refresher on the rules of chess
+   Format: rules
+Obtain help - Show a list of commands and what they do
+   Format: help
+_________________________________________________________________
+
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R | N | B | Q | K | B | N | R | (8)
+                _________________________________
+            (7) | P | P | P | P | P | P | P | P | (7)
+                _________________________________
+            (6) |   |   |   |   |   |   |   |   | (6)
+                _________________________________
+            (5) |   |   |   |   |   |   |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   |   |   |   | (4)
+                _________________________________
+            (3) |   |   |   |   |   |   |   |   | (3)
+                _________________________________
+            (2) | p | p | p | p | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+
+_________________________________________________________________
+
+No moves have been played yet!
+_________________________________________________________________
+
+_________________________________________________________________
+
+Exiting program... Thanks for playing!
+_________________________________________________________________
+

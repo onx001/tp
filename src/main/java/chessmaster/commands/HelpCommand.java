@@ -1,36 +1,33 @@
 //@@author TriciaBK
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.game.Game;
 
 public class HelpCommand extends Command {
 
-    public static final String HELP_COMAMND_STRING = "help";
+    public static final String HELP_COMMAND_STRING = "help";
 
-    private static final String[] HELP_STRINGS = { 
-        "Seems like you need some help!",
-        "Here are the following commands to play:",
-        "Move piece - Input coordinate of piece, followed by coordinate to move to",
-        "   Format: [column][row] [column][row]",
-        "   E.g. a2 a3",
-        "Show available moves - Lists all the available moves for a piece",
-        "   Format: moves [column][row]",
-        "   E.g. moves a2",
-        "Show board - Shows the current state of the chess board",
-        "   Format: show",
-        "Obtain rules - Obtain a quick refresher on the rules of chess",
-        "   Format: rules",
-        "View pieces representation - Display a legend that explains the piece representations",
-        "   Format: legend",
-        "Abort game - Exit programme",
-        "   Format: abort",
-
+    public static final String[] HELP_STRINGS = {
+        "Here are the commands you can use to play:",
+        "move\t\tMove piece",
+        "\t\tFormat: move [column][row] [column][row]",
+        "\t\te.g. move a2 a3",
+        "moves\t\tShow available moves for a piece",
+        "\t\tFormat: moves [column][row]",
+        "\t\te.g. moves a2",
+        "show\t\tShow the chessboard",
+        "rules\t\tObtain a quick refresher on the rules of chess",
+        "legend\t\tView pieces representation",
+        "restart\tStart a new game",
+        "history\t\tView history of all game moves",
+        "stepback\tView the board as it was a certain number of moves ago",
+        "\t\tFormat: stepback [number of moves to step back]",
+        "\t\te.g. stepback 4",
+        "exit\t\tExit game",
     };
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(HELP_STRINGS);
     }
-
 }

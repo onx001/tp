@@ -16,7 +16,10 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
-    - [Aborting game: `abort`](#aborting-game-abort)
+        - [Restart game: `restart`]()        
+        - [View history of game moves: `history`](#view-history-of-game-moves-history)
+        - [Step back in history: `stepback`](#step-back-in-history-stepback)
+        - [Aborting game: `abort`](#aborting-game-abort)
 - [Command Summary](#command-summary)
 
 ## Quick Start
@@ -69,7 +72,6 @@ Choose your starting color to start new game! [b/w]
 Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
 ```
 Choose your difficulty level! [1/2/3/4]
-
 ```
 
 Now, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
@@ -156,8 +158,13 @@ _________________________________________________________________
 
 ## Ending the game
 
-The game will automatically end and a victor be declared when one side has been checkmated (i.e. their king is in check, 
-and there is no possible escape), or if their king has been captured.
+The game will automatically end and a victor be declared when one side has been checkmated, or if their king has been captured.
+
+Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
+
+The king is "trapped" and has no safe squares to move to, and no other pieces can help.
+
+Otherwise, you may use the `abort` command if you wish to end the game midway. 
 
 ## Features 
 
@@ -165,14 +172,14 @@ and there is no possible escape), or if their king has been captured.
 
 To make a move, simply enter the coordinate of the piece to be moved, followed by the coordinates it is to be moved to.
 
-Format: `[column][row] [column][row]`
+Format: `move [column][row] [column][row]`
 
 Examples: 
-- `a2 a4`
-- `b3 g6`
+- `move a2 a4`
+- `move b3 g6`
 
-ChessMaster also automatically checks if the move was valid and legal before it is executed, and shows the following error
-message in the case of an invalid move:
+ChessMaster also automatically checks if the move was valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
+message will be shown:
 
 `Oops, that move isn't valid!`
 
@@ -183,9 +190,10 @@ Shows the available moves for a piece on the board. This command can be used for
 
 Format: `moves [column][row]`
 
-Example: 
+Example:  `moves e5`
+
+Expected Output:
 ```
-moves e5
                  (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
             (8) | R | N | B | Q | K | B | N | R | (8)
@@ -219,11 +227,57 @@ Shows the current state of the chess board.
 
 Format: `show`
 
+Expected Output:
+
+
 ### Show chess rules: `rules`
 
 Obtain a quick refresher on the rules of chess
 
 Format: `rules`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Here are simple chess rules to get you started:
+
+Piece movement:
+   Pawn ("p") move forward one square but capture diagonally.
+   Rooks ("r") move horizontally and vertically any number of squares.
+   Knights ("n") move in an L-shape.
+   Bishops ("b") move diagonally any number of squares.
+   Queens ("q") move any number of squares in any direction.
+   Kings ("k") move one square in any direction.
+
+Special Rules: (Refer to specific move methods in the User Guide)
+   Castling - King and rook move simultaneously to safeguard the king. (e.g. e1 g1)
+   En Passant - Pawn capturing when moving two squares from starting position.
+   Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.
+
+Objective:
+   Game ends when one player's king is in checkmate, under attack and can't escape capture.
+   The delivering player wins the game.
+_________________________________________________________________
+```
+
+Further details of special rules
+1. Castling
+
+   For the move to be valid:
+   - It's the king's first move. 
+   - It's the rook's first move. 
+   - There are no pieces between the king and the rook. 
+   
+   To perform castling on either sides:
+    - Move your king two squares to the right/left (towards the rook).
+    - The rook will jump over the king and land on the square next to the king.
+
+2. En Passant:
+   
+   This move only happens when your opponent moves their pawn two squares forward from its starting position and lands next to your pawn.
+   To capture en passant, you must do it on your very next move. 
+   - Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
 
 ### Show commands: `help`
 
@@ -231,11 +285,82 @@ Show a list of commands and what they do
 
 Format: `help`
 
+Expected Output:
+```
+_________________________________________________________________
+
+Seems like you need some help!
+Here are the following commands to play:
+Move piece - Input coordinate of piece, followed by coordinate to move to
+   Format: [column][row] [column][row]
+   E.g. a2 a3
+Show available moves - Lists all the available moves for a piece
+   Format: moves [column][row]
+   E.g. moves a2
+Show board - Shows the current state of the chess board
+   Format: show
+Obtain rules - Obtain a quick refresher on the rules of chess
+   Format: rules
+View pieces representation - Display a legend that explains the 
+                             piece representations
+   Format: legend
+Abort game - Exit programme
+   Format: abort
+_________________________________________________________________
+```
+
 ### View pieces representation: `legend` 
 
 Display a legend that explains the piece representations
 
 Format: `legend`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Black pieces:
+"R" represents a black rook.
+"N" represents a black knight.
+"B" represents a black bishop.
+"Q" represents a black queen.
+"K" represents a black king.
+"P" represents a black pawn.
+   
+White pieces:
+"r" represents a white rook.
+"n" represents a white knight.
+"b" represents a white bishop.
+"q" represents a white queen.
+"k" represents a white king.
+"p" represents a white pawn.
+_________________________________________________________________
+```
+
+### Start a new game of chess: `restart`
+
+Enables the player to restart the game
+
+Format: `restart`
+
+Expected output:
+```
+Do you want to restart game? [y/n] 
+```
+
+
+### View history of all game moves: `history`
+
+Displays a list of all previous moves in the current game
+
+Format: `history`
+
+### Step back in history: `stepback`
+
+Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
+in the current game.
+
+Format: `stepback [number of moves to step back]`
 
 ### Saving and loading games
 
@@ -248,6 +373,14 @@ saved game, and starting a new one will delete the existing save file.
 Exit the ChessMaster application.
 
 Format: `abort`
+
+Expected Output:
+```
+_________________________________________________________________
+
+Exiting program... Thanks for playing!
+_________________________________________________________________
+```
 
 ## FAQ
 
@@ -268,13 +401,15 @@ to simulate timed games.
 
 ## Command Summary
 
-| Action        | Format                        |
-|---------------|-------------------------------|
-| Move          | `[column][row] [column][row]` |
-| Show moves    | `moves [column][row]`         |
-| Show board    | `show`                        |
-| Rules         | `rules`                       |
-| Help          | `help`                        |
-| Pieces legend | `legend`                      |
-| Abort         | `abort`                       |
+| Action        | Format                             |
+|---------------|------------------------------------|
+| Move          | `move [column][row] [column][row]` |
+| Show moves    | `moves [column][row]`              |
+| Show board    | `show`                             |
+| Rules         | `rules`                            |
+| Help          | `help`                             |
+| Pieces legend | `legend`                           |
+| History       | `history`                          |
+| Step back     | `stepback`                         |
+| Abort         | `abort`                            |
 

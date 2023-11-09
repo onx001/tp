@@ -3,21 +3,34 @@ package chessmaster.game;
 
 import java.util.Arrays;
 
+import chessmaster.exceptions.ChessMasterException;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
+import chessmaster.pieces.Pawn;
 
 public class Move {
     private Coordinate from;
     private Coordinate to;
-    private ChessPiece piece;
+    private ChessPiece pieceMoved;
+    private ChessPiece pieceCaptured;
+    private boolean hasCapturedAPiece;
 
-    public Move(Coordinate from, Coordinate to, ChessPiece piece) {
+
+    public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved) {
         this.from = from;
         this.to = to;
-        this.piece = piece;
+        this.pieceMoved = pieceMoved;
+        this.pieceCaptured = null;
+        this.hasCapturedAPiece = false;
 
         assert from != null && to != null : "Coordinates in Move should not be null!";
-        assert piece != null && !piece.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
+        assert pieceMoved != null && !pieceMoved.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
+    }
+
+    public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved, ChessPiece pieceCaptured) {
+        this(from, to, pieceMoved);
+        this.pieceCaptured = pieceCaptured;
+        this.hasCapturedAPiece = true;
     }
 
     public Coordinate getFrom() {
@@ -28,8 +41,16 @@ public class Move {
         return to;
     }
 
-    public ChessPiece getPiece() {
-        return piece;
+    public ChessPiece getPieceMoved() {
+        return pieceMoved;
+    }
+
+    public boolean hasCapturedAPiece() {
+        return this.hasCapturedAPiece;
+    }
+
+    public ChessPiece getPieceCaptured() {
+        return this.pieceCaptured;
     }
 
     public void setFrom(Coordinate from) {
@@ -40,8 +61,8 @@ public class Move {
         this.to = to;
     }
 
-    public void setPiece(ChessPiece piece) {
-        this.piece = piece;
+    public void setPieceMoved(ChessPiece pieceMoved) {
+        this.pieceMoved = pieceMoved;
     }
 
     //@@author onx001
@@ -52,19 +73,40 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = piece.getAvailableCoordinates(board);
-        for (Coordinate[] direction : coordinates) {
-            for (Coordinate coor : direction) {
-                if (coor.equals(to)) {
-                    return true;
-                }
+        Coordinate[] coordinates = pieceMoved.getPseudoLegalCoordinates(board);
+        for (Coordinate coor : coordinates) {
+            if (coor.equals(to)) {
+                return true;
             }
         }
         return false;
     }
 
+    public boolean isValidWithCheck(ChessBoard board) {
+        if (!isValid(board)) {
+            return false;
+        }
+
+        if (isLeftCastling() || isRightCastling()) {
+            if (board.isChecked(this.getPieceMoved().getColor())) {
+                return false;
+            }
+        }
+
+        ChessBoard boardCopy = board.clone();
+        ChessPiece pieceCopy = boardCopy.getPieceAtCoor(from);
+        Move moveCopy = new Move(from, to, pieceCopy);
+        try {
+            boardCopy.executeMove(moveCopy);
+        } catch (ChessMasterException e) {
+            return false;
+        }
+
+        return !boardCopy.isChecked(this.getPieceMoved().getColor());
+    }
+
     public boolean isLeftCastling() {
-        if (!(piece instanceof King)) {
+        if (!(pieceMoved instanceof King)) {
             return false;
         }
 
@@ -73,7 +115,7 @@ public class Move {
     }
 
     public boolean isRightCastling() {
-        if (!(piece instanceof King)) {
+        if (!(pieceMoved instanceof King)) {
             return false;
         }
 
@@ -81,9 +123,22 @@ public class Move {
         return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
     }
 
+    public boolean isSkippingPawn() {
+        if (!(pieceMoved instanceof Pawn)) {
+            return false;
+        }
+
+        int[] offset = to.calculateOffsetFrom(from);
+        return Arrays.equals(offset, ChessPiece.UP_UP) || Arrays.equals(offset, ChessPiece.DOWN_DOWN);
+    }
+
     @Override
     public String toString() {
-        return "Move [from=" + from + ", to=" + to + ", piece=" + piece + "]";
+        return "Move [from=" + from + ", to=" + to + ", piece=" + pieceMoved + "]";
+    }
+
+    public String toFileString() {
+        return from + " " + to;
     }
 
     // @author TongZhengHong
@@ -91,7 +146,10 @@ public class Move {
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Move) {
             final Move other = (Move) obj;
-            return from.equals(other.getFrom()) && to.equals(other.getTo()) && piece.equals(other.getPiece());
+            boolean sameFrom = from.equals(other.getFrom());
+            boolean sameTo = to.equals(other.getTo());
+            boolean samePiece = pieceMoved.getPieceName().equals(other.getPieceMoved().getPieceName());
+            return sameFrom && sameTo && samePiece;
         }
         return false;
     }

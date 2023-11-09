@@ -5,6 +5,7 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
+import chessmaster.game.Game;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.ui.TextUI;
 
@@ -24,7 +25,10 @@ public class ShowMovesCommand extends Command {
     }
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) throws ChessMasterException {
+    public CommandResult execute(Game game) throws ChessMasterException {
+        ChessBoard board = game.getBoard();
+        TextUI ui = game.getUI();
+
         if (userInput.isBlank()) {
             return new CommandResult(NO_COORDINATE_FOUND_STRING, 
                 SHOW_MOVES_FORMAT_STRING, SHOW_MOVES_EXAMPLE_STRING);
@@ -33,10 +37,10 @@ public class ShowMovesCommand extends Command {
         Coordinate coord = Coordinate.parseAlgebraicCoor(userInput);
         piece = board.getPieceAtCoor(coord);
         if (piece.isEmptyPiece()) {
-            throw new NullPieceException();
+            throw new NullPieceException(coord);
         }
 
-        Coordinate[] possibleCoordinates = piece.getFlattenedCoordinates(board);
+        Coordinate[] possibleCoordinates = piece.getLegalCoordinates(board);
         ui.printChessBoardAvailableMoves(board.getBoard(), piece, possibleCoordinates);
     
         String[] displayString = piece.getAvailableCoordinatesString(board);

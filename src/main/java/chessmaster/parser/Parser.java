@@ -1,13 +1,17 @@
 package chessmaster.parser;
 
-import chessmaster.commands.AbortCommand;
 import chessmaster.commands.Command;
+import chessmaster.commands.ExitCommand;
 import chessmaster.commands.HelpCommand;
+import chessmaster.commands.HistoryCommand;
+import chessmaster.commands.InvalidCommand;
+import chessmaster.commands.LegendCommand;
 import chessmaster.commands.MoveCommand;
+import chessmaster.commands.RestartCommand;
 import chessmaster.commands.RulesCommand;
 import chessmaster.commands.ShowCommand;
 import chessmaster.commands.ShowMovesCommand;
-import chessmaster.commands.LegendCommand;
+import chessmaster.commands.StepbackCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -16,6 +20,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
+import chessmaster.game.MoveFactory;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -69,7 +74,7 @@ public class Parser {
      * @throws NullPieceException
      * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException,
+    public static Move parseMove(String in, ChessBoard board, boolean isPlayerTurn) throws ParseCoordinateException,
             NullPieceException, MoveOpponentPieceException {
 
         String[] parseArray = in.split("\\s+", 2);
@@ -79,15 +84,15 @@ public class Parser {
 
         Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
+        ChessPiece pieceMoved = board.getPieceAtCoor(from);
 
-        ChessPiece relevantPiece = board.getPieceAtCoor(from);
-        if (relevantPiece.isEmptyPiece()) {
-            throw new NullPieceException();
-        } else if (board.isPieceOpponent(relevantPiece)) {
+        if (pieceMoved.isEmptyPiece()) {
+            throw new NullPieceException(from);
+        } else if (isPlayerTurn && board.isPieceOpponent(pieceMoved)) {
             throw new MoveOpponentPieceException();
         }
 
-        return new Move(from, to, relevantPiece);
+        return MoveFactory.createMove(board, from, to);
     }
 
     /**
@@ -141,21 +146,28 @@ public class Parser {
         String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
+        case MoveCommand.MOVE_COMMAND_STRING:
+            return new MoveCommand(payload);
         case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
             return new ShowMovesCommand(payload);
-        case ShowCommand.SHOW_COMAMND_STRING:
+        case ShowCommand.SHOW_COMMAND_STRING:
             return new ShowCommand();
-        case RulesCommand.RULES_COMAMND_STRING:
+        case RulesCommand.RULES_COMMAND_STRING:
             return new RulesCommand();
-        case HelpCommand.HELP_COMAMND_STRING:
+        case HelpCommand.HELP_COMMAND_STRING:
             return new HelpCommand();
         case LegendCommand.LEGEND_COMMAND_STRING:
             return new LegendCommand();
-        case AbortCommand.ABORT_COMAMND_STRING:
-            return new AbortCommand();
-
+        case ExitCommand.EXIT_COMMAND_STRING:
+            return new ExitCommand();
+        case RestartCommand.RESTART_COMMAND_STRING:
+            return new RestartCommand();
+        case HistoryCommand.HISTORY_COMMAND_STRING:
+            return new HistoryCommand();
+        case StepbackCommand.STEPBACK_COMMAND_STRING:
+            return new StepbackCommand(payload);
         default:
-            return new MoveCommand(in);
+            return new InvalidCommand();
         }
     }
 

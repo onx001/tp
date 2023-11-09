@@ -3,9 +3,10 @@ package chessmaster.user;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
-import chessmaster.pieces.ChessPiece;
 import chessmaster.game.MiniMax;
+import chessmaster.game.Move;
+import chessmaster.game.MoveFactory;
+import chessmaster.pieces.ChessPiece;
 
 import java.util.Random;
 
@@ -37,7 +38,7 @@ public class CPU extends Player {
         int iter = 0;
         while (iter < MAX_LOOP_ITERATIONS
                 && (randomPiece.getIsCaptured()
-                || randomPiece.getFlattenedCoordinates(board).length == 0)) {
+                || randomPiece.getLegalCoordinates(board).length == 0)) {
             randomPiece = getRandomPiece();
             iter++;
         }
@@ -52,11 +53,11 @@ public class CPU extends Player {
         Move bestMove = miniMax.getBestMove();
         Coordinate from = bestMove.getFrom();
         ChessPiece piece = board.getPieceAtCoor(from);
-        bestMove.setPiece(piece);
+        bestMove.setPieceMoved(piece);
         return bestMove;
     }
 
-    //@@author 
+    //@@author
 
     private ChessPiece getRandomPiece() {
         return this.pieces.get(rand.nextInt(pieces.size()));
@@ -69,10 +70,11 @@ public class CPU extends Player {
      * @return A random move the given piece can make on the given board.
      */
     private Move getRandomMoveFromPiece(ChessPiece piece, ChessBoard board) {
-        Coordinate[] allPossibleMoves = piece.getFlattenedCoordinates(board);
+        Coordinate[] allPossibleMoves = piece.getLegalCoordinates(board);
         int randIndex = rand.nextInt(allPossibleMoves.length);
         Coordinate randomDestination = allPossibleMoves[randIndex];
-        return new Move(piece.getPosition(), randomDestination, piece);
+
+        return MoveFactory.createMove(board, piece.getPosition(), randomDestination);
     }
 
 }

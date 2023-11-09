@@ -1,20 +1,19 @@
 //@@author TriciaBK
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
+import chessmaster.game.Game;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Knight;
 import chessmaster.pieces.Pawn;
 import chessmaster.pieces.Queen;
 import chessmaster.pieces.Rook;
-import chessmaster.ui.TextUI;
 
 public class RulesCommand extends Command {
 
-    public static final String RULES_COMAMND_STRING = "rules";
+    public static final String RULES_COMMAND_STRING = "rules";
 
-    private static final String[] RULES_STRINGS = {
+    static final String[] RULES_STRINGS = {
         "Here are simple chess rules to get you started:",
         "",
         "Piece movement:",
@@ -26,6 +25,7 @@ public class RulesCommand extends Command {
         String.format("   Kings (\"%s\") move one square in any direction.", King.KING_WHITE),
         "",
         "Special Rules:",
+        "[Refer to specific move methods in the User Guide]",
         "   Castling - King and rook move simultaneously to safeguard the king.",
         "   En Passant - Pawn capturing when moving two squares from starting position.",
         "   Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.",
@@ -37,8 +37,7 @@ public class RulesCommand extends Command {
 
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(RULES_STRINGS);
     }
-
 }

@@ -1,10 +1,22 @@
 # Developer Guide
 
-## Acknowledgements
+- [Design and implementation](#design-and-implementation)
+    - [Architecture](#architecture)
+        - [Main components of the architecture](#main-components-of-the-architecture)     
+    - [ChessMaster component](#chessmaster-component)
+    - [Game component](#game-component)
+    - [User input handling](#user-input-handling)
+    - [Minimax algorithm](#minimax-algorithm)
+    - [Storage component](#storage-component)
+- [Product scope](#product-scope)
+    - [Target user profile](#target-user-profile)
+    - [Value proposition](#value-proposition)
+- [User stories](#user-stories)
+- [Non-functional requirements](#non-functional-requirements)
+- [Manual testing](#manual-testing)
+    - [End-to-end testing](#end-to-end-testing)
 
-{list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
-
-## Design & implementation
+## Design and implementation
 
 ![](images/OverallArchitecture.png)
 
@@ -55,9 +67,7 @@ How does the Game component work:
 6. Next, it will be the CPU's turn to play. The best move will be calculated by the CPU object and it will be executed on the chess board. This move will also be saved in the storage file.
 7. Once both the user and CPU has made their moves, the game state will be checked where the number of kings on the board and the winner will be determined.
 
-### Architecture
-
-### User Input Handling - `Parser` and `Command`
+### User input handling
 Below is a class diagram representing the Command and Parser classes.
 ![](images/ParserCommandDiagram.png)
 
@@ -106,8 +116,6 @@ How the minimax algorithm works:
 4. The `getBestMove` method calls the `getBestMove` method recursively to populate the child scores.
 5. The `getBestMove` method returns the best move for the CPU to make.
 
-
-
 ### Storage Component
 **API:**
 
@@ -133,7 +141,7 @@ The Storage component is responsible for handling the storage and retrieval of c
 - Busy students can open the application up in their terminal easily for a quick game of chess.
 - The CLI interface is intuitive, making it easy for beginners to understand moves and strategies
 
-## User Stories
+## User stories
 
 | Version | As a ...   | I want to ...                                          | So that I can ...                                      |
 |---------|------------|--------------------------------------------------------|--------------------------------------------------------|
@@ -151,20 +159,97 @@ The Storage component is responsible for handling the storage and retrieval of c
 
 {more to be added}
 
-
-
-## Non-Functional Requirements
+## Non-functional requirements
 
 1. Should work on any mainstream OS as long as it has Java 11 or above installed. 
 2. A user with a basic understanding of chess should be able to navigate the game without difficulty. 
 {More to be added}
 
+## Manual testing
 
-## Glossary
+This section describes the process of manual testing for ChessMaster. ChessMaster utilises `JUnit 5.10.0` for automated testing. Please ensure you are using the same version before proceeding.
 
-* *glossary item* - Definition
+### End-to-end testing
 
-## Instructions for manual testing
+In addition to unit tests, we have also set up functionality for end-to-end tests. End-to-end testing, in the context of ChessMaster, involves testing the entire program, simulating user interactions, and verifying that the system functions as expected. These tests cover a wide range of scenarios, from setting up the game to making moves and evaluating outcomes.
+
+The general idea is to compare expected output to real output, as usual. But we must first capture the `System.out` output to be able to call `assertEquals()` on it with the expected output. This is what our class `ConsoleCapture` does: it just redirects all output from `System.out` to a new, temporary stream. We start the stream before each test, run the game, and then `stopCapture()` after the game is complete.
+
+In general, to create your own end-to-end test, follow these steps:
+
+1. Create a test class: Start by creating a new Java class in the `./src/test/java/chessmaster/endtoend` directory. The name of your class should reflect the feature or scenario you plan to test e.g. `HistoryTest` tests the History command.
+2. Capture program output: To capture the program's output, you can use the `ConsoleCapture` class. This class redirects all output from `System.out` to a temporary stream, allowing you to capture the output during the test. Begin capturing the output before each test and stop it after the test is complete.
+3. Define test input: Construct your test input as a string, ensuring it ends with the abort command or a win condition, depending on your test's requirements.
+4. Run the game: Create and run the game, allowing the test to take in the input you defined in the previous step.
+5. Capture and compare output: Utilise `ConsoleCapture` to capture the program's output and compare it to the expected output. The expected output should be saved in a text file under the `./src/test/resources` directory.
+6. Cleanup: After the test is complete, be sure to stop capturing the output and perform any necessary cleanup steps.
+
+Some sample stub code is provided below.
+
+```java
+public class Test {
+    @BeforeEach
+    public void setup() {
+        // Create temporary storage file just for tests
+        String filepath = "testingStorage.txt";
+        File file = new File(filepath);
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+        this.storage = new Storage(filepath);
+
+        consoleCapture = new ConsoleCapture();
+        consoleCapture.startCapture();
+    }
+
+    @AfterEach
+    public void shutdown() {
+        String filepath = "testingStorage.txt";
+        File file = new File(filepath);
+        file.delete();
+    }
+
+    @Test
+    public void historyCommand_twoMovesWhiteStarts() {
+        // Convert user input string to an InputStream and tell Java to use it as the input
+        String testInput = "<your input here>";
+        ByteArrayInputStream in = new ByteArrayInputStream(testInput.getBytes());
+        System.setIn(in);
+
+        // Need to create TextUI() after setting System input stream
+        ui = new TextUI();
+
+        // Create a new board and game with your desired testing preferences
+        board = new ChessBoard();
+        Game game = new Game();
+
+        // Run the game. This will automatically use the `testInput` string as user input
+        game.run();
+
+        // Compare captured output with expected output and assert
+        consoleCapture.stopCapture();
+        String capturedOutput = consoleCapture.getCapturedOutput();
+        String expectedOutput = readExpectedOutputFromFile("src/test/resources/historyCommand_twoMovesWhiteStarts.txt");
+
+        assertEquals(expectedOutput, capturedOutput);
+    }
+}
+```
+
+Some notes about the above code:
+- @BeforeEach test we create a new storage Object and startCapturing() System.out data.
+- Inside each @Test we first tell Java to use our given string as user input instead of stdin.
+- Then we create our board and game with whichever starting color and orientation we want.
+- We run the game, and then compare the real output to the expected output.
+- Here, the expected output is saved in a .txt file under ./src/test/resources
+- @AfterEach test we delete the storage file.
+
+Things to note when creating your own test:
+- `testInput` MUST end with the abort command (or a win condition) for the test to run properly.
+- Save your expected output in a file named with the same test method name for documentation purposes.
+
+By following these steps, you can create end-to-end tests that cover various gameplay scenarios and command usage. These tests help ensure that the program functions correctly and produces the expected output in response to user interactions.
 
 
-{Give instructions on how to do a manual product testing e.g., how to load sample data to be used for testing}

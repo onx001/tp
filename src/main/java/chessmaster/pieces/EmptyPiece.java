@@ -13,8 +13,8 @@ public class EmptyPiece extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getAvailableCoordinates(ChessBoard board) {
-        return new Coordinate[0][];
+    public Coordinate[] getPseudoLegalCoordinates(ChessBoard board) {
+        return new Coordinate[0];
     }
 
     // An empty piece will never be moved

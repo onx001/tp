@@ -3,14 +3,16 @@ package chessmaster.pieces;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
+import chessmaster.game.Move;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class ChessPiece {
 
     public static final int[] CASTLE_LEFT = {-2, 0};
     public static final int[] CASTLE_RIGHT = {2, 0};
+    public static final int[] UP_UP = {0, -2}; 
+    public static final int[] DOWN_DOWN = {0, 2};
     
     protected static final int[] UP_UP_LEFT = {1, -2}; 
     protected static final int[] UP_UP_RIGHT = {-1, -2}; 
@@ -20,8 +22,6 @@ public abstract class ChessPiece {
     protected static final int[] LEFT_DOWN_LEFT = {2, 1}; 
     protected static final int[] RIGHT_UP_RIGHT = {-2, -1}; 
     protected static final int[] RIGHT_DOWN_RIGHT = {-2, 1}; 
-    protected static final int[] UP_UP = {0, -2}; 
-    protected static final int[] DOWN_DOWN = {0, 2};
 
     protected static final int[] UP = {0, -1}; 
     protected static final int[] DOWN = {0, 1}; 
@@ -42,7 +42,9 @@ public abstract class ChessPiece {
     protected Coordinate position;
     protected boolean hasMoved = false;
     protected boolean isCaptured = false;
+    protected boolean isEnPassant = false;
     protected int points = 0;
+    
 
     //initialise empty boardweights of 0 for parent class to be used for the AI
     private int[][] boardWeight = 
@@ -60,37 +62,70 @@ public abstract class ChessPiece {
         this.color = color;
     }
 
+    //@@author ken-ruster
+    public boolean isSameAs(ChessPiece other) {
+        return (this.toString().equals(other.toString()));
+    }
     /**
-     * Returns available coordinates in multiple directions from the current position. 
-     * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is
-     * in the direction the current chess piece can move to.
+     * Gets an array of pseudo-legal coordinates for potential moves.
      *
-     * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
+     * This abstract method is meant to be implemented by subclasses to provide an array of pseudo-legal 
+     * coordinates representing potential moves for a specific chess piece. The coordinates are based on 
+     * the piece's movement rules and the current state of the chessboard.
+     * 
+     * @param board The current state of the chessboard.
+     * @return An array of Coordinate objects, each representing a pseudo-legal move or destination for the chess piece.
      */
-    public abstract Coordinate[][] getAvailableCoordinates(ChessBoard board);
+    public abstract Coordinate[] getPseudoLegalCoordinates(ChessBoard board);
+
+    /**
+     * Flatten a 2D array of coordinates into a 1D array.
+     *
+     * This method takes a 2D array of coordinates, representing various directions, 
+     * and flattens it into a 1D array for easy access and processing.
+     *
+     * @param coordInDirections A 2D array of coordinates to be flattened.
+     * @return A 1D array of coordinates, combining all coordinates from the input directions.
+     */
+    public Coordinate[] flattenArray(Coordinate[][] coordInDirections) {
+        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
+        for (Coordinate[] direction : coordInDirections) {
+            for (Coordinate coordinate : direction) {
+                flattenedCoordinates.add(coordinate);
+            }
+        }
+        return flattenedCoordinates.toArray(new Coordinate[0]);
+    }
 
     //@@author onx001
     /**
-     * Get a flattened array of valid coordinates for the chess piece's moves based on its available coordinates 
-     * and the current state of the ChessBoard.
+     * Gets an array of legal coordinates representing potential moves that adhere to game rules.
      *
-     * @param board The ChessBoard representing the current game state.
-     * @return A 1D array of valid coordinates for the piece's legal moves.
+     * This method calculates and provides an array of legal coordinates, which represent potential 
+     * moves for the chess piece, based on its movement rules and the current state of the chessboard. 
+     * These coordinates are filtered to ensure they adhere to the game rules, including preventing 
+     * moves that result in the player's own king being in check.
+     * 
+     * @param board The current state of the chessboard.
+     * @return An array of Coordinate objects, each representing a legal move or destination for the chess piece.
      */
-    public Coordinate[] getFlattenedCoordinates(ChessBoard board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
+    public Coordinate[] getLegalCoordinates(ChessBoard board) {
+        Coordinate[] pseudoLegalCoordinates = getPseudoLegalCoordinates(board);
+        Move[] allLegalMoves = board.getLegalMoves(this.color);
 
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (this.isMoveValid(possibleCoord, board)) {
-                    flattenedCoordinates.add(possibleCoord);
+        ArrayList<Coordinate> result = new ArrayList<>();
+        for (Move legalMove : allLegalMoves) {
+            for (Coordinate destCoor : pseudoLegalCoordinates) {
+                Move pseudoLegalMove = new Move(this.position, destCoor, this);
+                if (pseudoLegalMove.equals(legalMove)) {
+                    result.add(destCoor);
                 }
             }
         }
 
-        return flattenedCoordinates.toArray(new Coordinate[0]);
+        return result.toArray(new Coordinate[0]);
     }
+    //@@author
 
     public boolean isWhiteKing() {
         return this instanceof King && this.isWhite();
@@ -100,54 +135,39 @@ public abstract class ChessPiece {
         return this instanceof King && this.isBlack();
     }
 
-    /**
-     * Returns the validity of the move to the destination coordinate.
-     * @param destination
-     * @param board
-     * @return
-     */
-    public boolean isMoveValid(Coordinate destination, ChessBoard board) {
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                if (possibleCoord.equals(destination)) {
-                    ChessPiece destPiece = board.getPieceAtCoor(destination);
-                    if (destPiece.isEmptyPiece()) {
-                        return true;
-                    } else if (destPiece.isOpponent(this)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    public void clearEnPassant() {
+        this.isEnPassant = false;
+    }
+
+    public boolean isEnPassant() {
+        return this.isEnPassant;
+    }
+
+    public void setEnPassant() {
+        this.isEnPassant = true;
     }
 
     //@@author ken-ruster
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
-        Coordinate[][] availableCoordinates = getAvailableCoordinates(board);
+        Coordinate[] legalCoordinates = getLegalCoordinates(board);
 
-        boolean isEmpty = Arrays.stream(availableCoordinates).allMatch(x -> x.length == 0);
-        if (isEmpty) {
+        if (legalCoordinates.length == 0) {
             return new String[] {
                 String.format(NO_AVAILABLE_MOVES_STRING, getPieceName(), this.position)
             };
         }
 
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                out.append(possibleCoord + " ");
-            }
+        for (Coordinate possibleCoord : legalCoordinates) {
+            out.append(possibleCoord + " ");
         }
 
         return new String[] {
             String.format(AVAILABLE_MOVES_STRING, getPieceName(), this.position),
             out.toString()
         };
-
     }
-    //@@author
+    //@@author onx001
 
     public Coordinate getPosition() {
         return this.position;
@@ -182,7 +202,6 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    //@@author onx001
     /**
      * Returns the points of the ChessPiece object. 
      * The points are calculated based on the ChessPiece's position
