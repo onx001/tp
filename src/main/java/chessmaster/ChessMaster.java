@@ -1,7 +1,6 @@
 //@@author TongZhengHong
 package chessmaster;
 
-import chessmaster.commands.CommandResult;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
 import chessmaster.ui.TextUI;
