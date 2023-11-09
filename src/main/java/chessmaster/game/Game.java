@@ -102,7 +102,7 @@ public class Game {
 
     private Move handleHumanMove() throws ChessMasterException {
         Move humanMove = ((MoveCommand) this.command).getMove();
-        board.executeMove(humanMove);
+        board.executeMoveWithCheck(humanMove);
         human.addMove(humanMove);
         numMoves++;
 
@@ -121,7 +121,7 @@ public class Game {
 
         Move cpuMove = cpu.getBestMove(board, difficulty);
         ui.printCPUMove(cpuMove);
-        board.executeMove(cpuMove);
+        board.executeMoveWithCheck(cpuMove);
 
         cpu.addMove(cpuMove);
         numMoves++;

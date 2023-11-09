@@ -114,6 +114,17 @@ public abstract class ChessPiece {
         return filteredCoordinates.toArray(new Coordinate[0][0]);
     }
 
+    public Coordinate[] getFlattenedFilteredCoordinates(ChessBoard board) {
+        Coordinate[][] filteredCoordinates = getFilteredCoordinates(board);
+        ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
+        for (Coordinate[] direction : filteredCoordinates) {
+            for (Coordinate possibleCoord : direction) {
+                flattenedCoordinates.add(possibleCoord);
+            }
+        }
+        return flattenedCoordinates.toArray(new Coordinate[0]);
+    }
+
     public boolean isWhiteKing() {
         return this instanceof King && this.isWhite();
     }
@@ -194,7 +205,6 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    //@@author onx001
     /**
      * Returns the points of the ChessPiece object. 
      * The points are calculated based on the ChessPiece's position

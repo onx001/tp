@@ -448,6 +448,8 @@ public class Storage {
                     .forEach(x -> out.add(x));
         }
 
+        fileScanner.close();
+
         return out;
     }
 
