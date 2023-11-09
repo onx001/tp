@@ -22,11 +22,11 @@ public class ChessMaster {
     private TextUI ui;
     private ChessBoard board;
     private Storage storage;
-
+    private boolean exit = false;
     private int difficulty;
+
     private Color playerColor;
     private Color currentTurnColor = Color.WHITE;
-
     private Human human;
     private CPU cpu;
 
@@ -62,7 +62,7 @@ public class ChessMaster {
         ui.promptContinuePrevGame(false);
         String input = ui.getUserInput(false);
 
-        while (!input.equals("y") && !input.equals("n")) {
+        while (!input.equals("y") && !input.equals("n") && !input.equalsIgnoreCase("exit")) {
             ui.promptContinuePrevGame(true);
             input = ui.getUserInput(false);
         }
@@ -70,8 +70,10 @@ public class ChessMaster {
         if (input.equals("y")) {
             ui.printContinuePrevGame(playerColor.name(), difficulty);
             return false;
-        } else {
+        } else if (input.equals("n")) {
             return true;
+        } else {
+            exit = true;
         }
     }
 
@@ -79,7 +81,7 @@ public class ChessMaster {
         ui.promptStartingColor(false);
         String input = ui.getUserInput(false);
 
-        while (!input.equals("b") && !input.equals("w")) {
+        while (!input.equals("b") && !input.equals("w") && !input.equalsIgnoreCase("exit")) {
             ui.promptStartingColor(true);
             input = ui.getUserInput(false);
         }
