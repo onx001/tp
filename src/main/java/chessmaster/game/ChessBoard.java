@@ -287,7 +287,7 @@ public class ChessBoard {
                 enPassantPiece.setIsCaptured();
             }
         } else if (move.isSkippingPawn()) {
-            move.getPiece().setEnPassant();
+            move.getPieceMoved().setEnPassant();
         }
 
         //clear all en passants
@@ -295,7 +295,7 @@ public class ChessBoard {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
-                if (piece.isEnPassant() && piece.getColor() != move.getPiece().getColor()) {
+                if (piece.isEnPassant() && piece.getColor() != move.getPieceMoved().getColor()) {
                     piece.clearEnPassant();
 
                 }

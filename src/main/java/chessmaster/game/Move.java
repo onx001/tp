@@ -126,7 +126,7 @@ public class Move {
     }
 
     public boolean isSkippingPawn() {
-        if (!(piece instanceof Pawn)) {
+        if (!(pieceMoved instanceof Pawn)) {
             return false;
         }
 
