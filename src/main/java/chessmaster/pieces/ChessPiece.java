@@ -202,7 +202,6 @@ public abstract class ChessPiece {
         this.isCaptured = true;
     }
 
-    //@@author onx001
     /**
      * Returns the points of the ChessPiece object. 
      * The points are calculated based on the ChessPiece's position
