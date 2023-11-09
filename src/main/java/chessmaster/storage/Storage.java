@@ -214,7 +214,7 @@ public class Storage {
                                   ChessBoard otherBoard,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
-        ArrayList moveStringList = new ArrayList<String>();
+        ArrayList<String> moveStringList = new ArrayList<String>();
         ArrayList<String> humanMoves = loadHumanMoves();
         ArrayList<String> cpuMoves = loadCPUMoves();
 
@@ -410,7 +410,7 @@ public class Storage {
             }
         }
 
-        ArrayList out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
             String[] movesArray = fileScanner.nextLine().split(", ");
             Arrays.stream(movesArray)
@@ -419,6 +419,7 @@ public class Storage {
                     .forEach(x -> out.add(x));
         }
 
+        fileScanner.close();
         return out;
     }
 
@@ -439,7 +440,7 @@ public class Storage {
             }
         }
 
-        ArrayList out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
             String[] movesArray = fileScanner.nextLine().split(", ");
             Arrays.stream(movesArray)
@@ -449,7 +450,6 @@ public class Storage {
         }
 
         fileScanner.close();
-
         return out;
     }
 

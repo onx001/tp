@@ -35,5 +35,4 @@ public class LegendCommand extends Command {
     public CommandResult execute(Game game) {
         return new CommandResult(LEGEND_STRINGS);
     }
-
 }
