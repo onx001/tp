@@ -1,6 +1,5 @@
 package chessmaster.ui;
 
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -31,7 +30,6 @@ public final class TextUI {
     private static final String COMMENT_LINE_FORMAT_REGEX = "#.*";
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final PrintStream out = System.out;
 
     /**
      * Prompts for the command and reads the text entered by the user.
@@ -40,6 +38,7 @@ public final class TextUI {
      * @return user input string in LOWER case
      */
     public String getUserInput(boolean shouldIgnoreEmpty) {
+
         String fullInputLine = "";
 
         if (scanner.hasNextLine()) {
@@ -78,13 +77,13 @@ public final class TextUI {
      * @param texts The lines of text to be printed.
      */
     public void printText(String... texts) {
-        out.println(DIVIDER);
+        System.out.println(DIVIDER);
 
         for (String text : texts) {
-            out.println(text);
+            System.out.println(text);
         }
 
-        out.println(DIVIDER);
+        System.out.println(DIVIDER);
     }
 
     //@@author TongZhengHong
@@ -105,7 +104,7 @@ public final class TextUI {
             printChessBoardRow(rowNum, rowString.toString());
         }
         printChessBoardHeader();
-        out.println("");
+        System.out.println("");
     }
 
     public void printChessBoardWithMove(ChessTile[][] tiles, Move move) {
@@ -132,7 +131,7 @@ public final class TextUI {
             printChessBoardRow(rowNum, rowString.toString());
         }
         printChessBoardHeader();
-        out.println("");
+        System.out.println("");
     }
 
     //@@author ken-ruster
@@ -177,7 +176,7 @@ public final class TextUI {
             printChessBoardRow(rowNum, rowString.toString());
         }
         printChessBoardHeader();
-        out.println("");
+        System.out.println("");
     }
     //@@author
 
@@ -191,25 +190,25 @@ public final class TextUI {
 
     public void promptContinuePrevGame(boolean error) {
         if (error) {
-            out.print(UiMessages.CONTINUE_PREV_GAME_ERROR_MESSAGE);
+            System.out.print(UiMessages.CONTINUE_PREV_GAME_ERROR_MESSAGE);
         } else {
-            out.print(UiMessages.EXIST_PREV_GAME_MESSAGE);
+            System.out.print(UiMessages.EXIST_PREV_GAME_MESSAGE);
         }
     }
 
     public void promptDifficulty(boolean error) {
         if (error) {
-            out.print(UiMessages.CHOOSE_DIFFICULTY_ERROR_MESSAGE);
+            System.out.print(UiMessages.CHOOSE_DIFFICULTY_ERROR_MESSAGE);
         } else {
-            out.print(UiMessages.CHOOSE_DIFFICULTY_MESSAGE);
+            System.out.print(UiMessages.CHOOSE_DIFFICULTY_MESSAGE);
         }
     }
 
     public void promptStartingColor(boolean error) {
         if (error) {
-            out.print(UiMessages.CHOOSE_PLAYER_COLOR_ERROR_MESSAGE);
+            System.out.print(UiMessages.CHOOSE_PLAYER_COLOR_ERROR_MESSAGE);
         } else {
-            out.print(UiMessages.CHOOSE_PLAYER_COLOR_MESSAGE);
+            System.out.print(UiMessages.CHOOSE_PLAYER_COLOR_MESSAGE);
         }
     }
 
@@ -225,15 +224,15 @@ public final class TextUI {
 
     public void printPromotePrompt(Coordinate coord) {
         String message = String.format(UiMessages.PROMPT_PROMOTE_MESSAGE, coord.toString());
-        out.print(message);
+        System.out.print(message);
     }
 
     public void printPromoteInvalidMessage() {
-        out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
+        System.out.print(UiMessages.PROMPT_PROMOTE_INVALID_MESSAGE);
     }
 
     public void printCPUThinkingMessage() {
-        out.println(UiMessages.CHESSMASTER_THINKING_MESSAGE);
+        System.out.println(UiMessages.CHESSMASTER_THINKING_MESSAGE);
     }
 
     public void printCPUMove(Move cpuMove) {
@@ -244,26 +243,26 @@ public final class TextUI {
     }
 
     public void printChessBoardDivider() {
-        out.println(CHESS_BOARD_DIVIDER);
+        System.out.println(CHESS_BOARD_DIVIDER);
     }
 
     public void printChessBoardHeader() {
-        out.print(CHESS_BOARD_PADDING + CHESS_BOARD_TAB);
+        System.out.print(CHESS_BOARD_PADDING + CHESS_BOARD_TAB);
         for (int i = 0; i < COLUMN_HEADER.length(); i++) {
             char col = COLUMN_HEADER.charAt(i);
-            out.printf(" (%s)", col);
+            System.out.printf(" (%s)", col);
         }
-        out.println("");
+        System.out.println("");
     }
 
     public void printChessBoardRow(int rowNum, String chessBoardRow) {
-        out.print(CHESS_BOARD_PADDING);
-        out.print(String.format("(%d) ", rowNum));
-        out.print(chessBoardRow);
-        out.print(ChessTile.TILE_DIVIDER);
-        out.print(String.format(" (%d)", rowNum));
-        out.print(System.lineSeparator() + CHESS_BOARD_DIVIDER);
-        out.println("");
+        System.out.print(CHESS_BOARD_PADDING);
+        System.out.print(String.format("(%d) ", rowNum));
+        System.out.print(chessBoardRow);
+        System.out.print(ChessTile.TILE_DIVIDER);
+        System.out.print(String.format(" (%d)", rowNum));
+        System.out.print(System.lineSeparator() + CHESS_BOARD_DIVIDER);
+        System.out.println("");
     }
 
     public void printCommandResult(CommandResult result) {

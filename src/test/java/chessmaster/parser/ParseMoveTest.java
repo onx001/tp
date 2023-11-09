@@ -45,7 +45,7 @@ public class ParseMoveTest {
     public void testParseMove_inputValidMove() throws ChessMasterException {
         String inputString = "h2 h4";
         ChessBoard emptyBoard = loadChessBoard();
-        Move move = Parser.parseMove(inputString, emptyBoard);
+        Move move = Parser.parseMove(inputString, emptyBoard, true);
 
         Coordinate from = new Coordinate(7, 6); // h2
         Coordinate to = new Coordinate(7, 4);   // h4
@@ -59,7 +59,7 @@ public class ParseMoveTest {
         String inputString = "h2dasd h4";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(ParseCoordinateException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 
@@ -68,7 +68,7 @@ public class ParseMoveTest {
         String inputString = "h2 h4dafsd";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(ParseCoordinateException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 
@@ -77,7 +77,7 @@ public class ParseMoveTest {
         String inputString = "h2 h4 a3";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(ParseCoordinateException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 
@@ -86,7 +86,7 @@ public class ParseMoveTest {
         String inputString = "h2";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(ParseCoordinateException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 
@@ -95,7 +95,7 @@ public class ParseMoveTest {
         String inputString = "d4 d5";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(NullPieceException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 
@@ -104,7 +104,7 @@ public class ParseMoveTest {
         String inputString = "a7 a6";
         ChessBoard emptyBoard = loadChessBoard();
         assertThrows(MoveOpponentPieceException.class, () -> {
-            Parser.parseMove(inputString, emptyBoard);
+            Parser.parseMove(inputString, emptyBoard, true);
         });
     }
 }

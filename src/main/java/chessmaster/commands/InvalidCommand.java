@@ -1,7 +1,6 @@
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.game.Game;
 
 public class InvalidCommand extends Command {
 
@@ -10,7 +9,7 @@ public class InvalidCommand extends Command {
         "Please use 'help' to view a list of available commands.";
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(INVALID_COMMAND_STRING);
     }
     

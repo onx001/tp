@@ -3,6 +3,7 @@ package chessmaster.parser;
 import chessmaster.commands.Command;
 import chessmaster.commands.ExitCommand;
 import chessmaster.commands.HelpCommand;
+import chessmaster.commands.HistoryCommand;
 import chessmaster.commands.InvalidCommand;
 import chessmaster.commands.LegendCommand;
 import chessmaster.commands.MoveCommand;
@@ -71,7 +72,7 @@ public class Parser {
      * @throws NullPieceException
      * @throws MoveOpponentPieceException
      */
-    public static Move parseMove(String in, ChessBoard board) throws ParseCoordinateException,
+    public static Move parseMove(String in, ChessBoard board, boolean isPlayerTurn) throws ParseCoordinateException,
             NullPieceException, MoveOpponentPieceException {
 
         String[] parseArray = in.split("\\s+", 2);
@@ -85,7 +86,7 @@ public class Parser {
         ChessPiece relevantPiece = board.getPieceAtCoor(from);
         if (relevantPiece.isEmptyPiece()) {
             throw new NullPieceException(from);
-        } else if (board.isPieceOpponent(relevantPiece)) {
+        } else if (isPlayerTurn && board.isPieceOpponent(relevantPiece)) {
             throw new MoveOpponentPieceException();
         }
 
@@ -143,15 +144,15 @@ public class Parser {
         String payload = splitInputStrings.length > 1 ? splitInputStrings[1] : ""; // Remaining input text
 
         switch (commandString) {
-        case MoveCommand.MOVE_COMAMND_STRING:
+        case MoveCommand.MOVE_COMMAND_STRING:
             return new MoveCommand(payload);
         case ShowMovesCommand.SHOW_MOVES_COMMAND_STRING:
             return new ShowMovesCommand(payload);
-        case ShowCommand.SHOW_COMAMND_STRING:
+        case ShowCommand.SHOW_COMMAND_STRING:
             return new ShowCommand();
-        case RulesCommand.RULES_COMAMND_STRING:
+        case RulesCommand.RULES_COMMAND_STRING:
             return new RulesCommand();
-        case HelpCommand.HELP_COMAMND_STRING:
+        case HelpCommand.HELP_COMMAND_STRING:
             return new HelpCommand();
         case LegendCommand.LEGEND_COMMAND_STRING:
             return new LegendCommand();
@@ -159,6 +160,8 @@ public class Parser {
             return new ExitCommand();
         case RestartCommand.RESTART_COMMAND_STRING:
             return new RestartCommand();
+        case HistoryCommand.HISTORY_COMMAND_STRING:
+            return new HistoryCommand();
         default:
             return new InvalidCommand();
         }

@@ -17,6 +17,4 @@ public class ChessBoardTest {
         int points = board.getPoints(Color.WHITE);
         assertEquals(0, points);
     }
-    // @@author
-        
 }

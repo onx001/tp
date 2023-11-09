@@ -1,8 +1,7 @@
 //@@author TriciaBK
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.game.Game;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Knight;
@@ -33,7 +32,7 @@ public class LegendCommand extends Command {
     };
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) {
         return new CommandResult(LEGEND_STRINGS);
     }
 

@@ -37,6 +37,7 @@ public class Game {
     private CPU cpu;
     private Human human;
     private Player currentPlayer;
+    private int numMoves;
 
     private TextUI ui;
     private ChessBoard board;
@@ -47,16 +48,18 @@ public class Game {
     private boolean hasEnded;
 
     public Game(Color playerColour, Color currentTurnColor, ChessBoard board, 
-        Storage storage, TextUI ui, int difficulty) {
+        Storage storage, TextUI ui, int difficulty, Human human, CPU cpu) {
 
         this.ui = ui;
         this.board = board;
         this.storage = storage;
         this.difficulty = difficulty;
 
-        this.human = new Human(playerColour, board);
+        this.human = human;
         Color cpuColor = playerColour.getOppositeColour();
-        this.cpu = new CPU(cpuColor, board);
+        this.cpu = cpu;
+
+        this.numMoves = 0;
 
         // Choose which player goes first
         currentPlayer = currentTurnColor == playerColour ? human : cpu;
@@ -69,7 +72,12 @@ public class Game {
 
 
     /**
-     *
+     * Manages the main gameplay of ChessMasster
+     * This code segment orchestrates the primary gameplay loop of Chess Master, which encompasses player turns, move handling, and the management of the game state.
+     * It starts by displaying the initial game setup, including the chessboard, and then enters a loop where players take turns making moves.
+     * If a player enters a valid move, the chessboard is updated, and the game progresses.
+     * If an exception is encountered during this process, an error message is displayed to the user.
+     * The loop continues until the game ends or specific commands are issued to abort, restart, or exit the game.
      *
      * @return true if the game has ended, either by checkmate, stalemate,
      *     or if users wants to reset the game. Returns false if the game is aborted.
@@ -84,7 +92,7 @@ public class Game {
                     "Player should only either be human or CPU!";
 
                 if (currentPlayer.isHuman()) {
-                    command = getUserCommand();
+                    command = getAndExecuteUserCommand();
                     if (!command.isMoveCommand()) {
                         continue; // Get next command
                     }
@@ -97,7 +105,7 @@ public class Game {
                 } 
 
                 currentPlayer = togglePlayerTurn();
-                storage.saveBoard(board, currentPlayer.getColour());
+                storage.saveBoard(board, currentPlayer.getColour(), human, cpu);
                 hasEnded = checkEndState(); // Resets board if end
 
             } catch (ChessMasterException e) {
@@ -107,20 +115,21 @@ public class Game {
         return hasEnded || RestartCommand.isRestart(command);
     }
 
-    private Command getUserCommand() throws ChessMasterException {
+    private Command getAndExecuteUserCommand() throws ChessMasterException {
         String userInputString = ui.getUserInput(true);
-        command = Parser.parseCommand(userInputString);
+        this.command = Parser.parseCommand(userInputString);
 
-        CommandResult result = command.execute(board, ui);
+        CommandResult result = command.execute(this);
         ui.printCommandResult(result);
-        return command;
+        return this.command;
     }
 
     private Move handleHumanMove() throws ChessMasterException {
-        Move humanMove = ((MoveCommand) command).getMove();
+        Move humanMove = ((MoveCommand) this.command).getMove();
         board.executeMove(humanMove);
         human.addMove(humanMove);
-        
+        numMoves++;
+
         // Handle human promotion
         if (!board.isEndGame()) {
             if (board.canPromote(humanMove)) {
@@ -133,10 +142,14 @@ public class Game {
 
     private Move handleCPUMove() throws ChessMasterException {
         ui.printCPUThinkingMessage();
+
         Move cpuMove = cpu.getBestMove(board, difficulty);
         ui.printCPUMove(cpuMove);
         board.executeMove(cpuMove);
+
         cpu.addMove(cpuMove);
+        numMoves++;
+
         return cpuMove;
     }
 
@@ -153,5 +166,29 @@ public class Game {
 
     private Player togglePlayerTurn() {
         return currentPlayer.isHuman() ? cpu : human;
+    }
+
+    public ChessBoard getBoard() {
+        return this.board;
+    }
+
+    public TextUI getUI() {
+        return this.ui;
+    }
+
+    public CPU getCPU() {
+        return this.cpu;
+    }
+
+    public Human getHuman() {
+        return this.human;
+    }
+
+    public int getNumMoves() {
+        return this.numMoves;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
     }
 }
