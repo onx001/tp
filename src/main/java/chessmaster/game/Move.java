@@ -6,6 +6,7 @@ import java.util.Arrays;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
+import chessmaster.pieces.Pawn;
 
 public class Move {
     private Coordinate from;
@@ -122,6 +123,15 @@ public class Move {
 
         int[] offset = to.calculateOffsetFrom(from);
         return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
+    }
+
+    public boolean isSkippingPawn() {
+        if (!(piece instanceof Pawn)) {
+            return false;
+        }
+
+        int[] offset = to.calculateOffsetFrom(from);
+        return Arrays.equals(offset, ChessPiece.UP_UP) || Arrays.equals(offset, ChessPiece.DOWN_DOWN);
     }
 
     @Override

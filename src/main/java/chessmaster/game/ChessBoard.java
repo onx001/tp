@@ -127,6 +127,19 @@ public class ChessBoard {
         return false;
     }
 
+    public ChessPiece getEnPassantPiece() {
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
     public Coordinate getEnPassantCoor() {
         //Checks all chess pieces for en passant
         for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -134,7 +147,11 @@ public class ChessBoard {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
                 if (piece.isEnPassant()) {
-                    return coor;
+                    if (piece.isSameColorAs(playerColor)) {
+                        return coor.addOffsetToCoordinate(0, 1);
+                    } else {
+                        return coor.addOffsetToCoordinate(0, -1);
+                    }
                 }
             }
         }
@@ -259,16 +276,18 @@ public class ChessBoard {
         } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();
-            if (move.getPieceMoved().getColor() == playerColor) {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-            } else {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-            }
             if (to.equals(enPassantCoor)) {
-                ChessPiece enPassantPiece = getPieceAtCoor(enPassantCoor);
-                getTileAtCoor(enPassantCoor).setTileEmpty(enPassantCoor);
+                ChessPiece enPassantPiece = getEnPassantPiece();
+                if (enPassantPiece.isSameColorAs(playerColor)) {
+                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
+                } else {
+                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
+                }
+                getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
                 enPassantPiece.setIsCaptured();
             }
+        } else if (move.isSkippingPawn()) {
+            move.getPiece().setEnPassant();
         }
 
         //clear all en passants
@@ -276,8 +295,9 @@ public class ChessBoard {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
-                if (piece.isEnPassant()) {
+                if (piece.isEnPassant() && piece.getColor() != move.getPiece().getColor()) {
                     piece.clearEnPassant();
+
                 }
             }
         }
