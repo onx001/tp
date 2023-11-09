@@ -6,7 +6,6 @@ import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class ChessPiece {
 
@@ -68,51 +67,65 @@ public abstract class ChessPiece {
         return (this.toString().equals(other.toString()));
     }
     /**
-     * Returns available coordinates in multiple directions from the current position. 
-     * The directions are dependent on the chess piece type. Each inner array stores the coordinates that is
-     * in the direction the current chess piece can move to.
+     * Gets an array of pseudo-legal coordinates for potential moves.
      *
-     * @return A 2D array of Coordinate arrays representing available coordinates in different directions.
+     * This abstract method is meant to be implemented by subclasses to provide an array of pseudo-legal 
+     * coordinates representing potential moves for a specific chess piece. The coordinates are based on 
+     * the piece's movement rules and the current state of the chessboard.
+     * 
+     * @param board The current state of the chessboard.
+     * @return An array of Coordinate objects, each representing a pseudo-legal move or destination for the chess piece.
      */
-    public abstract Coordinate[][] getPseudoCoordinates(ChessBoard board);
+    public abstract Coordinate[] getPseudoLegalCoordinates(ChessBoard board);
 
-    //@@author onx001
     /**
-     * Get a flattened array of valid coordinates for the chess piece's moves based on its available coordinates 
-     * and the current state of the ChessBoard.
+     * Flatten a 2D array of coordinates into a 1D array.
      *
-     * @param board The ChessBoard representing the current game state.
-     * @return A 1D array of valid coordinates for the piece's legal moves.
+     * This method takes a 2D array of coordinates, representing various directions, 
+     * and flattens it into a 1D array for easy access and processing.
+     *
+     * @param coordInDirections A 2D array of coordinates to be flattened.
+     * @return A 1D array of coordinates, combining all coordinates from the input directions.
      */
-    public Coordinate[] getLegalCoordinates(ChessBoard board) {
-        Coordinate[][] availableCoordinates = getPseudoCoordinates(board);
+    public Coordinate[] flattenArray(Coordinate[][] coordInDirections) {
         ArrayList<Coordinate> flattenedCoordinates = new ArrayList<>();
-
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                flattenedCoordinates.add(possibleCoord);
+        for (Coordinate[] direction : coordInDirections) {
+            for (Coordinate coordinate : direction) {
+                flattenedCoordinates.add(coordinate);
             }
         }
         return flattenedCoordinates.toArray(new Coordinate[0]);
     }
 
-    public Coordinate[][] getFilteredCoordinates(ChessBoard board) {
-        Move[] allMoves = board.getLegalMoves(this.color);
-        ArrayList<Coordinate[]> filteredCoordinates = new ArrayList<>();
+    //@@author onx001
+    /**
+     * Gets an array of legal coordinates representing potential moves that adhere to game rules.
+     *
+     * This method calculates and provides an array of legal coordinates, which represent potential 
+     * moves for the chess piece, based on its movement rules and the current state of the chessboard. 
+     * These coordinates are filtered to ensure they adhere to the game rules, including preventing 
+     * moves that result in the player's own king being in check.
+     * 
+     * @param board The current state of the chessboard.
+     * @return An array of Coordinate objects, each representing a legal move or destination for the chess piece.
+     */
+    public Coordinate[] getLegalCoordinates(ChessBoard board) {
+        Coordinate[] pseudoLegalCoordinates = getPseudoLegalCoordinates(board);
+        Move[] allLegalMoves = board.getLegalMoves(this.color);
 
-        for (Coordinate[] direction : getPseudoCoordinates(board)) {
-            ArrayList<Coordinate> filteredDirection = new ArrayList<>();
-            for (Coordinate possibleCoord : direction) {
-                for (Move move : allMoves) {
-                    if (move.getFrom().equals(this.position) && move.getTo().equals(possibleCoord)) {
-                        filteredDirection.add(possibleCoord);
-                    }
+        ArrayList<Coordinate> result = new ArrayList<>();
+        for (Move legalMove : allLegalMoves) {
+            for (Coordinate destCoor : pseudoLegalCoordinates) {
+                Move pseudoLegalMove = new Move(this.position, destCoor, this);
+                if (pseudoLegalMove.equals(legalMove)) {
+                    result.add(destCoor);
                 }
             }
-            filteredCoordinates.add(filteredDirection.toArray(new Coordinate[0]));
         }
-        return filteredCoordinates.toArray(new Coordinate[0][0]);
+
+        return result.toArray(new Coordinate[0]);
     }
+    //@@author
 
     public boolean isWhiteKing() {
         return this instanceof King && this.isWhite();
@@ -134,30 +147,25 @@ public abstract class ChessPiece {
         this.isEnPassant = true;
     }
 
-
     //@@author ken-ruster
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
-        Coordinate[][] availableCoordinates = getFilteredCoordinates(board);
+        Coordinate[] legalCoordinates = getLegalCoordinates(board);
 
-        boolean isEmpty = Arrays.stream(availableCoordinates).allMatch(x -> x.length == 0);
-        if (isEmpty) {
+        if (legalCoordinates.length == 0) {
             return new String[] {
                 String.format(NO_AVAILABLE_MOVES_STRING, getPieceName(), this.position)
             };
         }
 
-        for (Coordinate[] direction : availableCoordinates) {
-            for (Coordinate possibleCoord : direction) {
-                out.append(possibleCoord + " ");
-            }
+        for (Coordinate possibleCoord : legalCoordinates) {
+            out.append(possibleCoord + " ");
         }
 
         return new String[] {
             String.format(AVAILABLE_MOVES_STRING, getPieceName(), this.position),
             out.toString()
         };
-
     }
     //@@author onx001
 
