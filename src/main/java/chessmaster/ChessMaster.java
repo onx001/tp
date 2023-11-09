@@ -127,11 +127,10 @@ public class ChessMaster {
         }
     }
 
-<<<<<<< HEAD
     private void run() {
         boolean shouldRestart = true;
         while (shouldRestart) {
-            Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty);
+            Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty, human, cpu);
             boolean restartMidGame = game.run();
             if (!restartMidGame) {
                 shouldRestart = false;
@@ -142,11 +141,6 @@ public class ChessMaster {
                 loadNewGame();
             }
         }
-=======
-    private void run() {   
-        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty, human, cpu);
-        game.run();
->>>>>>> eb1b78842b7217e37f4efb49e42a0427e2041495
     }
 
     public static void main(String[] args) {

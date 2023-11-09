@@ -1,8 +1,8 @@
 //@@author TongZhengHong
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.game.Game;
 
 public class ExitCommand extends Command {
 
@@ -11,7 +11,7 @@ public class ExitCommand extends Command {
     private static final String EXIT_MESSAGE = "Exiting program... Thanks for playing!";
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) throws ChessMasterException {
         return new CommandResult(EXIT_MESSAGE);
     }
 

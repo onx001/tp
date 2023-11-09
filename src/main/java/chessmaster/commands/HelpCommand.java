@@ -27,5 +27,4 @@ public class HelpCommand extends Command {
     public CommandResult execute(Game game) {
         return new CommandResult(HELP_STRINGS);
     }
-
 }

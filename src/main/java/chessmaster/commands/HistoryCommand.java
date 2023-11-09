@@ -75,6 +75,4 @@ public class HistoryCommand extends Command {
 
         return new CommandResult(returnStringBuilder.toString());
     }
-
-
 }

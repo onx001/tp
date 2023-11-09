@@ -40,5 +40,4 @@ public class RulesCommand extends Command {
     public CommandResult execute(Game game) {
         return new CommandResult(RULES_STRINGS);
     }
-
 }

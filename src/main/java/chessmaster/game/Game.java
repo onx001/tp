@@ -72,9 +72,11 @@ public class Game {
 
 
     /**
-     * Manages the main gameplay of ChessMasster
-     * This code segment orchestrates the primary gameplay loop of Chess Master, which encompasses player turns, move handling, and the management of the game state.
-     * It starts by displaying the initial game setup, including the chessboard, and then enters a loop where players take turns making moves.
+     * Manages the main gameplay of ChessMaster
+     * This code segment orchestrates the primary gameplay loop of Chess Master, which encompasses player turns,
+     * move handling, and the management of the game state.
+     * It starts by displaying the initial game setup, including the chessboard, and then enters a loop where players
+     * take turns making moves.
      * If a player enters a valid move, the chessboard is updated, and the game progresses.
      * If an exception is encountered during this process, an error message is displayed to the user.
      * The loop continues until the game ends or specific commands are issued to abort, restart, or exit the game.

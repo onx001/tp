@@ -287,14 +287,14 @@ public final class TextUI {
     }
 
     public void printRestartingGameMessage() {
-        out.println(UiMessages.RESTARTING_GAME_MESSAGE);
+        System.out.println(UiMessages.RESTARTING_GAME_MESSAGE);
     }
     //@@author TriciaBK
     public void promptNewGame(boolean error) {
         if (error) {
-            out.println(UiMessages.RESTART_GAME_ERROR_MESSAGE);
+            System.out.println(UiMessages.RESTART_GAME_ERROR_MESSAGE);
         } else {
-            out.println(UiMessages.RESTART_GAME_MESSAGE);
+            System.out.println(UiMessages.RESTART_GAME_MESSAGE);
         }
     }
 

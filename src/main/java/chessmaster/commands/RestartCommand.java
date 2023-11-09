@@ -1,7 +1,7 @@
 package chessmaster.commands;
 
-import chessmaster.game.ChessBoard;
-import chessmaster.ui.TextUI;
+import chessmaster.exceptions.ChessMasterException;
+import chessmaster.game.Game;
 
 public class RestartCommand extends Command {
 
@@ -9,7 +9,7 @@ public class RestartCommand extends Command {
 
 
     @Override
-    public CommandResult execute(ChessBoard board, TextUI ui) {
+    public CommandResult execute(Game game) throws ChessMasterException {
         return new CommandResult();
     }
 
