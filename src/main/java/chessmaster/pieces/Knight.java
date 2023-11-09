@@ -37,7 +37,7 @@ public class Knight extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getPseudoCoordinates(ChessBoard board) {
+    public Coordinate[] getPseudoLegalCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS.length][0];
 
         for (int dir = 0; dir < DIRECTIONS.length; dir++) {
@@ -56,7 +56,7 @@ public class Knight extends ChessPiece {
             }
         }
 
-        return result;
+        return flattenArray(result);
     }
 
 }

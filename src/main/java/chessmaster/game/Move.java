@@ -73,12 +73,10 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = pieceMoved.getPseudoCoordinates(board);
-        for (Coordinate[] direction : coordinates) {
-            for (Coordinate coor : direction) {
-                if (coor.equals(to)) {
-                    return true;
-                }
+        Coordinate[] coordinates = pieceMoved.getPseudoLegalCoordinates(board);
+        for (Coordinate coor : coordinates) {
+            if (coor.equals(to)) {
+                return true;
             }
         }
         return false;
@@ -126,7 +124,7 @@ public class Move {
     }
 
     public boolean isSkippingPawn() {
-        if (!(piece instanceof Pawn)) {
+        if (!(pieceMoved instanceof Pawn)) {
             return false;
         }
 
@@ -148,7 +146,10 @@ public class Move {
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Move) {
             final Move other = (Move) obj;
-            return from.equals(other.getFrom()) && to.equals(other.getTo()) && pieceMoved.equals(other.getPieceMoved());
+            boolean sameFrom = from.equals(other.getFrom());
+            boolean sameTo = to.equals(other.getTo());
+            boolean samePiece = pieceMoved.getPieceName().equals(other.getPieceMoved().getPieceName());
+            return sameFrom && sameTo && samePiece;
         }
         return false;
     }
