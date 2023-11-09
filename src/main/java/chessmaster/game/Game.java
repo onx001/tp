@@ -4,6 +4,7 @@ package chessmaster.game;
 import chessmaster.commands.ExitCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.CommandResult;
+import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RestartCommand;
 import chessmaster.exceptions.ChessMasterException;
@@ -16,23 +17,7 @@ import chessmaster.user.Player;
 
 public class Game {
 
-    private static final String[] START_HELP_STRINGS = {
-        "Thank you for choosing ChessMaster! Here are the commands that you can use:",
-        "Move piece - Input coordinate of piece, followed by coordinate to move to",
-        "   Format: [column][row] [column][row]",
-        "   E.g. a2 a3",
-        "Show board - Shows the current state of the chess board",
-        "   Format: show",
-        "Show available moves - Lists all the available moves for a piece at a coordinate",
-        "   Format: moves [column][row]",
-        "   E.g. moves a2",
-        "Abort game - Exit programme",
-        "   Format: abort",
-        "Obtain rules - Obtain a quick refresher on the rules of chess",
-        "   Format: rules",
-        "Obtain help - Show a list of commands and what they do",
-        "   Format: help"
-    };
+    private final String[] START_HELP_STRINGS;
 
     private CPU cpu;
     private Human human;
@@ -63,6 +48,11 @@ public class Game {
 
         // Choose which player goes first
         currentPlayer = currentTurnColor == playerColour ? human : cpu;
+
+        // Make the START_HELP_STRINGS more robust with just one source-of-truth in HelpCommand.HELP_STRINGS
+        this.START_HELP_STRINGS = new String[HelpCommand.HELP_STRINGS.length + 1];
+        this.START_HELP_STRINGS[0] = "Thank you for choosing ChessMaster!";
+        System.arraycopy(HelpCommand.HELP_STRINGS, 0, START_HELP_STRINGS, 1, HelpCommand.HELP_STRINGS.length);
 
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";
         assert cpuColor != Color.EMPTY : "CPU player color should not be EMPTY!";

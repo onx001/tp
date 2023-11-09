@@ -12,6 +12,8 @@ public abstract class ChessPiece {
 
     public static final int[] CASTLE_LEFT = {-2, 0};
     public static final int[] CASTLE_RIGHT = {2, 0};
+    public static final int[] UP_UP = {0, -2}; 
+    public static final int[] DOWN_DOWN = {0, 2};
     
     protected static final int[] UP_UP_LEFT = {1, -2}; 
     protected static final int[] UP_UP_RIGHT = {-1, -2}; 
@@ -21,8 +23,6 @@ public abstract class ChessPiece {
     protected static final int[] LEFT_DOWN_LEFT = {2, 1}; 
     protected static final int[] RIGHT_UP_RIGHT = {-2, -1}; 
     protected static final int[] RIGHT_DOWN_RIGHT = {-2, 1}; 
-    protected static final int[] UP_UP = {0, -2}; 
-    protected static final int[] DOWN_DOWN = {0, 2};
 
     protected static final int[] UP = {0, -1}; 
     protected static final int[] DOWN = {0, 1}; 

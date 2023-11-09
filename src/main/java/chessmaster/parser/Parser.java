@@ -11,6 +11,7 @@ import chessmaster.commands.RestartCommand;
 import chessmaster.commands.RulesCommand;
 import chessmaster.commands.ShowCommand;
 import chessmaster.commands.ShowMovesCommand;
+import chessmaster.commands.StepbackCommand;
 import chessmaster.exceptions.MoveOpponentPieceException;
 import chessmaster.exceptions.NullPieceException;
 import chessmaster.exceptions.ParseColorException;
@@ -19,6 +20,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Move;
+import chessmaster.game.MoveFactory;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -82,15 +84,15 @@ public class Parser {
 
         Coordinate from = Coordinate.parseAlgebraicCoor(parseArray[0]);
         Coordinate to = Coordinate.parseAlgebraicCoor(parseArray[1]);
+        ChessPiece pieceMoved = board.getPieceAtCoor(from);
 
-        ChessPiece relevantPiece = board.getPieceAtCoor(from);
-        if (relevantPiece.isEmptyPiece()) {
+        if (pieceMoved.isEmptyPiece()) {
             throw new NullPieceException(from);
-        } else if (isPlayerTurn && board.isPieceOpponent(relevantPiece)) {
+        } else if (isPlayerTurn && board.isPieceOpponent(pieceMoved)) {
             throw new MoveOpponentPieceException();
         }
 
-        return new Move(from, to, relevantPiece);
+        return MoveFactory.createMove(board, from, to);
     }
 
     /**
@@ -162,6 +164,8 @@ public class Parser {
             return new RestartCommand();
         case HistoryCommand.HISTORY_COMMAND_STRING:
             return new HistoryCommand();
+        case StepbackCommand.STEPBACK_COMMAND_STRING:
+            return new StepbackCommand(payload);
         default:
             return new InvalidCommand();
         }
