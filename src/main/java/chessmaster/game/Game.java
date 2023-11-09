@@ -31,6 +31,7 @@ public class Game {
 
     private Command command;
     private boolean hasEnded;
+    private boolean exit = false;
 
     public Game(Color playerColour, Color currentTurnColor, ChessBoard board, 
         Storage storage, TextUI ui, int difficulty, Human human, CPU cpu) {
