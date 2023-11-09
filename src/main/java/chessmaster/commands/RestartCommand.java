@@ -5,7 +5,7 @@ import chessmaster.ui.TextUI;
 
 public class RestartCommand extends Command {
 
-    public static final String RESTART_COMAMND_STRING = "restart";
+    public static final String RESTART_COMMAND_STRING = "restart";
 
 
     @Override

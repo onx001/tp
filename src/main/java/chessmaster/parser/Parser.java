@@ -155,9 +155,9 @@ public class Parser {
             return new HelpCommand();
         case LegendCommand.LEGEND_COMMAND_STRING:
             return new LegendCommand();
-        case ExitCommand.EXIT_COMAMND_STRING:
+        case ExitCommand.EXIT_COMMAND_STRING:
             return new ExitCommand();
-        case RestartCommand.RESTART_COMAMND_STRING:
+        case RestartCommand.RESTART_COMMAND_STRING:
             return new RestartCommand();
         default:
             return new InvalidCommand();
