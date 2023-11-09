@@ -35,9 +35,10 @@ public class Pawn extends ChessPiece {
     }
 
     @Override
-    public Coordinate[][] getPseudoCoordinates(ChessBoard board) {
+    public Coordinate[] getPseudoLegalCoordinates(ChessBoard board) {
         Coordinate[][] result = new Coordinate[DIRECTIONS_UP.length][0];
         int[][] directions = board.isPieceFriendly(this) ? DIRECTIONS_UP : DIRECTIONS_DOWN;
+        
         boolean canEnPassant = false;
         Coordinate enPassantCoor = null;
 
@@ -91,7 +92,7 @@ public class Pawn extends ChessPiece {
             }
         }
 
-        return result;
+        return flattenArray(result);
     }
 
     @Override
