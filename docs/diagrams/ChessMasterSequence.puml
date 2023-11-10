@@ -15,7 +15,7 @@ activate storage
 storage --> chessMaster : prevBoard:ChessBoard
 deactivate storage
 
-alt [. Previous board exists]
+alt Previous board exists
 
     chessMaster -> ui : shouldStartNewGame()
     activate ui
@@ -23,9 +23,9 @@ alt [. Previous board exists]
     ui --> chessMaster : :boolean
     deactivate ui
 
-    opt [startNewGame]
+    opt startNewGame
 
-        chessMaster -> ui : chooseColor
+        chessMaster -> ui : chooseColor()
         activate ui
         user -> ui : "black/white"
         ui --> chessMaster : playerColor:Color
@@ -33,9 +33,9 @@ alt [. Previous board exists]
 
     end
 
-else [. No previous board]
+else No previous board
 
-    chessMaster -> ui : chooseColor
+    chessMaster -> ui : chooseColor()
     activate ui
     user -> ui : "black/white"
     ui --> chessMaster : playerColor:Color

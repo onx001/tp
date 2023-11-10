@@ -21,4 +21,8 @@ game -u-> ui
 
 storage .up.> board
 
+game .right.> parser
+storage .> parser
+board .> parser
+
 @enduml
