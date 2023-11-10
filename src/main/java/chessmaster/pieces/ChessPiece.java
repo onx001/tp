@@ -148,6 +148,13 @@ public abstract class ChessPiece {
     }
 
     //@@author ken-ruster
+    /**
+     * Convert all the possible moves of the piece into a String.
+     * Returns a message saying that there are no moves available if there are no legal moves the piece can make.
+     *
+     * @param board Board the piece is located on
+     * @return A String containing the coordinates the piece is able to move to
+     */
     public String[] getAvailableCoordinatesString(ChessBoard board) {
         StringBuilder out = new StringBuilder();
         Coordinate[] legalCoordinates = getLegalCoordinates(board);
