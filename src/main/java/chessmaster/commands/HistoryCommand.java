@@ -85,6 +85,12 @@ public class HistoryCommand extends Command {
                         move.getTo(),
                         move.getPieceCaptured().getPieceName()
                 );
+            } else if (move.isCastling()) {
+                moveString = String.format(
+                        "Move %d: %s castles!\n",
+                        moveCounter,
+                        player.getColour()
+                );
             } else {
                 moveString = String.format(
                         "Move %d: %s moves %s from %s to %s\n",

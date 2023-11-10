@@ -11,9 +11,11 @@ import chessmaster.pieces.Pawn;
 public class Move {
     private Coordinate from;
     private Coordinate to;
-    private ChessPiece pieceMoved;
+    private ChessPiece pieceMoved; // if castling then pieceMoved instanceof King
     private ChessPiece pieceCaptured;
     private boolean hasCapturedAPiece;
+    private boolean isCastling;
+    private Move rookMoveIfCastle;
 
 
     public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved) {
@@ -22,6 +24,7 @@ public class Move {
         this.pieceMoved = pieceMoved;
         this.pieceCaptured = null;
         this.hasCapturedAPiece = false;
+        this.isCastling = false;
 
         assert from != null && to != null : "Coordinates in Move should not be null!";
         assert pieceMoved != null && !pieceMoved.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
@@ -63,6 +66,22 @@ public class Move {
 
     public void setPieceMoved(ChessPiece pieceMoved) {
         this.pieceMoved = pieceMoved;
+    }
+
+    public boolean isCastling() {
+        return isCastling;
+    }
+
+    public void setCastling() {
+        isCastling = true;
+    }
+
+    public Move getRookMoveIfCastle() {
+        return rookMoveIfCastle;
+    }
+
+    public void setRookMoveIfCastle(Move rookMoveIfCastle) {
+        this.rookMoveIfCastle = rookMoveIfCastle;
     }
 
     //@@author onx001

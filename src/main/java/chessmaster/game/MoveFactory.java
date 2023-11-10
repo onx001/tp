@@ -15,6 +15,10 @@ public class MoveFactory {
             move = new Move(from, to, pieceMoved);
         }
 
+        if (move.isLeftCastling() || move.isRightCastling()) {
+            move.setCastling();
+        }
+
         return move;
     }
 

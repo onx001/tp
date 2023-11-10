@@ -282,7 +282,6 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPieceMoved();
 
-
         chessPiece.setHasMoved();
         chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
@@ -292,24 +291,32 @@ public class ChessBoard {
         if (move.isLeftCastling() && startCoor.isOffsetWithinBoard(-4, 0)) {
             Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
             Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
-            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
 
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
+            Move rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMoveIfCastle(rookCastleMove);
 
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+            this.executeMove(rookCastleMove);
+
+//            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+//            rook.setHasMoved();
+//            rook.updatePosition(rookDestCoor);
+//            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
+//            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
 
         } else if (move.isRightCastling() && startCoor.isOffsetWithinBoard(3, 0)) {
             Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
             Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
             ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
 
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
+            Move rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMoveIfCastle(rookCastleMove);
 
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+            this.executeMove(rookCastleMove);
+
+//            rook.setHasMoved();
+//            rook.updatePosition(rookDestCoor);
+//            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
+//            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
         } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();

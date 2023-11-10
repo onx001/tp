@@ -19,6 +19,23 @@ public class StepbackCommand extends Command {
         this.userInput = inputString;
     }
 
+    private void reverseMove(Move move, ChessBoard board) {
+        // need to reverse the previousMove by moving the piece back from `to` to `from`.
+        Coordinate moveTo = move.getTo();
+        Coordinate moveFrom = move.getFrom();
+
+        ChessPiece clonedPieceToMove = board.getPieceAtCoor(moveTo);
+        clonedPieceToMove.updatePosition(moveFrom);
+        board.getTileAtCoor(moveFrom).updateTileChessPiece(clonedPieceToMove);
+
+        // Need to check if the move captured a piece. If it did, need to replace `to` tile with pieceCaptured
+        if (move.hasCapturedAPiece()) {
+            board.getTileAtCoor(moveTo).updateTileChessPiece(move.getPieceCaptured());
+        } else {
+            board.getTileAtCoor(moveTo).setTileEmpty(moveTo);
+        }
+    }
+
     @Override
     public CommandResult execute(Game game) throws ChessMasterException {
         ChessBoard currentBoard = game.getBoard();
@@ -42,23 +59,16 @@ public class StepbackCommand extends Command {
 
         for (int i = 0; i < numMovesToStepBack; i++) {
             Move previousMove = allMoves.get(i).getMove();
+            reverseMove(previousMove, historyBoard);
 
-            // need to reverse the previousMove by moving the piece back from `to` to `from`.
-            Coordinate moveTo = previousMove.getTo();
-            Coordinate moveFrom = previousMove.getFrom();
+            System.out.println("Is it castling?");
+            System.out.println(previousMove.isCastling());
 
-            ChessPiece clonedPieceToMove = historyBoard.getPieceAtCoor(moveTo);
-            clonedPieceToMove.updatePosition(moveFrom);
-
-            // Need to check if the move captured a piece. If it did, need to replace `to` tile with pieceCaptured
-            if (previousMove.hasCapturedAPiece()) {
-                historyBoard.getTileAtCoor(moveTo).updateTileChessPiece(previousMove.getPieceCaptured());
-            } else {
-                historyBoard.getTileAtCoor(moveTo).setTileEmpty(moveTo);
+            // If castling, need to reverse the rook move as well
+            if (previousMove.isCastling()) {
+                Move rookCastleMove = previousMove.getRookMoveIfCastle();
+                reverseMove(rookCastleMove, historyBoard);
             }
-
-            // The `from` tile always gets the pieceMoved
-            historyBoard.getTileAtCoor(moveFrom).updateTileChessPiece(clonedPieceToMove);
         }
 
         game.getUI().printChessBoard(historyBoard.getBoard());
