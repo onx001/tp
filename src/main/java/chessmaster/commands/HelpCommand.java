@@ -18,7 +18,7 @@ public class HelpCommand extends Command {
         "show\t\tShow the chessboard",
         "rules\t\tObtain a quick refresher on the rules of chess",
         "legend\t\tView pieces representation",
-        "restart\tStart a new game",
+        "restart\t\tStart a new game",
         "history\t\tView history of all game moves",
         "stepback\tView the board as it was a certain number of moves ago",
         "\t\tFormat: stepback [number of moves to step back]",
