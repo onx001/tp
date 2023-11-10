@@ -22,7 +22,8 @@ import java.util.Scanner;
 
 public class Storage {
     //@@author ken_ruster
-    private static final String LOAD_BOARD_MISMATCH_STRING = "Board state does not match state dictated by move history!";
+    private static final String LOAD_BOARD_MISMATCH_STRING =
+            "Board state does not match state dictated by move history!";
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
