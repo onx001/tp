@@ -4,7 +4,8 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.game.Game;
-import chessmaster.game.Move;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 
 import java.util.ArrayList;
@@ -61,12 +62,9 @@ public class StepbackCommand extends Command {
             Move previousMove = allMoves.get(i).getMove();
             reverseMove(previousMove, historyBoard);
 
-            System.out.println("Is it castling?");
-            System.out.println(previousMove.isCastling());
-
             // If castling, need to reverse the rook move as well
-            if (previousMove.isCastling()) {
-                Move rookCastleMove = previousMove.getRookMoveIfCastle();
+            if (previousMove instanceof CastleMove) {
+                Move rookCastleMove = ((CastleMove) previousMove).getRookMove();
                 reverseMove(rookCastleMove, historyBoard);
             }
         }

@@ -13,7 +13,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 
 public class ParseMoveTest {

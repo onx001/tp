@@ -1,22 +1,20 @@
 // @author TongZhengHong
-package chessmaster.game;
+package chessmaster.game.move;
 
 import java.util.Arrays;
 
 import chessmaster.exceptions.ChessMasterException;
+import chessmaster.game.ChessBoard;
+import chessmaster.game.Coordinate;
 import chessmaster.pieces.ChessPiece;
-import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 
 public class Move {
-    private Coordinate from;
-    private Coordinate to;
-    private ChessPiece pieceMoved; // if castling then pieceMoved instanceof King
-    private ChessPiece pieceCaptured;
-    private boolean hasCapturedAPiece;
-    private boolean isCastling;
-    private Move rookMoveIfCastle;
-
+    protected Coordinate from;
+    protected Coordinate to;
+    protected ChessPiece pieceMoved; // if castling then pieceMoved instanceof King
+    protected ChessPiece pieceCaptured;
+    protected boolean hasCapturedAPiece;
 
     public Move(Coordinate from, Coordinate to, ChessPiece pieceMoved) {
         this.from = from;
@@ -24,7 +22,6 @@ public class Move {
         this.pieceMoved = pieceMoved;
         this.pieceCaptured = null;
         this.hasCapturedAPiece = false;
-        this.isCastling = false;
 
         assert from != null && to != null : "Coordinates in Move should not be null!";
         assert pieceMoved != null && !pieceMoved.isEmptyPiece() : "Chess piece in Move should not be null or empty!";
@@ -68,21 +65,6 @@ public class Move {
         this.pieceMoved = pieceMoved;
     }
 
-    public boolean isCastling() {
-        return isCastling;
-    }
-
-    public void setCastling() {
-        isCastling = true;
-    }
-
-    public Move getRookMoveIfCastle() {
-        return rookMoveIfCastle;
-    }
-
-    public void setRookMoveIfCastle(Move rookMoveIfCastle) {
-        this.rookMoveIfCastle = rookMoveIfCastle;
-    }
 
     //@@author onx001
     /**
@@ -101,17 +83,22 @@ public class Move {
         return false;
     }
 
+    protected boolean isTryingToCastleUnderCheck(ChessBoard board) {
+        return false; // Only CastleMove objects can castle!
+    }
+
     public boolean isValidWithCheck(ChessBoard board) {
-        if (!isValid(board)) {
+        // Check if the current move is valid on the board
+        if (!this.isValid(board)) {
             return false;
         }
 
-        if (isLeftCastling() || isRightCastling()) {
-            if (board.isChecked(this.getPieceMoved().getColor())) {
-                return false;
-            }
+        // Cannot castle while in check
+        if (isTryingToCastleUnderCheck(board)) {
+            return false;
         }
 
+        // Attempt to make the move on a cloned board
         ChessBoard boardCopy = board.clone();
         ChessPiece pieceCopy = boardCopy.getPieceAtCoor(from);
         Move moveCopy = new Move(from, to, pieceCopy);
@@ -120,26 +107,9 @@ public class Move {
         } catch (ChessMasterException e) {
             return false;
         }
+        boolean stillInCheckAfterMove = boardCopy.isChecked(this.getPieceMoved().getColor());
 
-        return !boardCopy.isChecked(this.getPieceMoved().getColor());
-    }
-
-    public boolean isLeftCastling() {
-        if (!(pieceMoved instanceof King)) {
-            return false;
-        }
-
-        int[] offset = to.calculateOffsetFrom(from);
-        return Arrays.equals(offset, ChessPiece.CASTLE_LEFT);
-    }
-
-    public boolean isRightCastling() {
-        if (!(pieceMoved instanceof King)) {
-            return false;
-        }
-
-        int[] offset = to.calculateOffsetFrom(from);
-        return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
+        return !stillInCheckAfterMove;
     }
 
     public boolean isSkippingPawn() {

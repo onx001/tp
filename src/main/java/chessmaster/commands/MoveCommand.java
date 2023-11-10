@@ -5,7 +5,7 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Game;
-import chessmaster.game.Move;
+import chessmaster.game.move.Move;
 import chessmaster.parser.Parser;
 
 public class MoveCommand extends Command {

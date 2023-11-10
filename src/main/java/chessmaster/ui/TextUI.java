@@ -7,7 +7,7 @@ import chessmaster.commands.CommandResult;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.ChessTile;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.user.Player;
 

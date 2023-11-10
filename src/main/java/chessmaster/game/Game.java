@@ -8,6 +8,7 @@ import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
 import chessmaster.commands.RestartCommand;
 import chessmaster.exceptions.ChessMasterException;
+import chessmaster.game.move.Move;
 import chessmaster.parser.Parser;
 import chessmaster.storage.Storage;
 import chessmaster.ui.TextUI;

@@ -1,5 +1,6 @@
 //@@author onx001
 package chessmaster.game;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 
 import chessmaster.exceptions.ChessMasterException;
