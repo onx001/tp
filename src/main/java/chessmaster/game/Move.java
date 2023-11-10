@@ -6,6 +6,7 @@ import java.util.Arrays;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.King;
+import chessmaster.pieces.Pawn;
 
 public class Move {
     private Coordinate from;
@@ -72,12 +73,10 @@ public class Move {
      * @return
      */
     public boolean isValid(ChessBoard board) {
-        Coordinate[][] coordinates = pieceMoved.getPseudoCoordinates(board);
-        for (Coordinate[] direction : coordinates) {
-            for (Coordinate coor : direction) {
-                if (coor.equals(to)) {
-                    return true;
-                }
+        Coordinate[] coordinates = pieceMoved.getPseudoLegalCoordinates(board);
+        for (Coordinate coor : coordinates) {
+            if (coor.equals(to)) {
+                return true;
             }
         }
         return false;
@@ -124,6 +123,15 @@ public class Move {
         return Arrays.equals(offset, ChessPiece.CASTLE_RIGHT);
     }
 
+    public boolean isSkippingPawn() {
+        if (!(pieceMoved instanceof Pawn)) {
+            return false;
+        }
+
+        int[] offset = to.calculateOffsetFrom(from);
+        return Arrays.equals(offset, ChessPiece.UP_UP) || Arrays.equals(offset, ChessPiece.DOWN_DOWN);
+    }
+
     @Override
     public String toString() {
         return "Move [from=" + from + ", to=" + to + ", piece=" + pieceMoved + "]";
@@ -138,7 +146,10 @@ public class Move {
     public boolean equals(Object obj) {
         if (obj != null && obj instanceof Move) {
             final Move other = (Move) obj;
-            return from.equals(other.getFrom()) && to.equals(other.getTo()) && pieceMoved.equals(other.getPieceMoved());
+            boolean sameFrom = from.equals(other.getFrom());
+            boolean sameTo = to.equals(other.getTo());
+            boolean samePiece = pieceMoved.getPieceName().equals(other.getPieceMoved().getPieceName());
+            return sameFrom && sameTo && samePiece;
         }
         return false;
     }

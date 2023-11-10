@@ -237,7 +237,6 @@ public final class TextUI {
 
     public void printCPUMove(Move cpuMove) {
         String pieceString = cpuMove.getPieceMoved().getClass().getSimpleName();
-
         String returnString;
         if (cpuMove.hasCapturedAPiece()) {
             returnString = String.format(
@@ -294,5 +293,18 @@ public final class TextUI {
             printText(String.format(UiMessages.CPU_WIN_MESSAGE, playerColorString));
         }
     }
+
+    public void printRestartingGameMessage() {
+        System.out.println(UiMessages.RESTARTING_GAME_MESSAGE);
+    }
+    //@@author TriciaBK
+    public void promptNewGame(boolean error) {
+        if (error) {
+            System.out.println(UiMessages.RESTART_GAME_ERROR_MESSAGE);
+        } else {
+            System.out.println(UiMessages.RESTART_GAME_MESSAGE);
+        }
+    }
+
 
 }

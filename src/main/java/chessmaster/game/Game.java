@@ -1,11 +1,12 @@
 //@@author TongZhengHong
 package chessmaster.game;
 
-import chessmaster.commands.AbortCommand;
+import chessmaster.commands.ExitCommand;
 import chessmaster.commands.Command;
 import chessmaster.commands.CommandResult;
 import chessmaster.commands.HelpCommand;
 import chessmaster.commands.MoveCommand;
+import chessmaster.commands.RestartCommand;
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.parser.Parser;
 import chessmaster.storage.Storage;
@@ -59,11 +60,25 @@ public class Game {
         assert (1 <= difficulty) && (difficulty <= 3) : "Difficulty should be between 1 and 3!";
     }
 
-    public void run() {
+
+    /**
+     * Manages the main gameplay of ChessMaster
+     * This code segment orchestrates the primary gameplay loop of Chess Master, which encompasses player turns,
+     * move handling, and the management of the game state.
+     * It starts by displaying the initial game setup, including the chessboard, and then enters a loop where players
+     * take turns making moves.
+     * If a player enters a valid move, the chessboard is updated, and the game progresses.
+     * If an exception is encountered during this process, an error message is displayed to the user.
+     * The loop continues until the game ends or specific commands are issued to abort, restart, or exit the game.
+     *
+     * @return true if the game has ended, either by checkmate, stalemate,
+     *     or if users wants to reset the game. Returns false if the game is aborted.
+     */
+    public boolean run() {
         ui.printText(START_HELP_STRINGS);
         ui.printChessBoard(board.getBoard());
 
-        while (!hasEnded && !AbortCommand.isAbortCommand(command)) {
+        while (!hasEnded && !ExitCommand.isExit(command) && !RestartCommand.isRestart(command)) {
             try {
                 assert currentPlayer.isCPU() || currentPlayer.isHuman() : 
                     "Player should only either be human or CPU!";
@@ -89,6 +104,7 @@ public class Game {
                 ui.printErrorMessage(e);
             }
         }
+        return hasEnded || RestartCommand.isRestart(command);
     }
 
     private Command getAndExecuteUserCommand() throws ChessMasterException {
@@ -102,7 +118,7 @@ public class Game {
 
     private Move handleHumanMove() throws ChessMasterException {
         Move humanMove = ((MoveCommand) this.command).getMove();
-        board.executeMove(humanMove);
+        board.executeMoveWithCheck(humanMove);
         human.addMove(humanMove);
         numMoves++;
 
@@ -121,7 +137,7 @@ public class Game {
 
         Move cpuMove = cpu.getBestMove(board, difficulty);
         ui.printCPUMove(cpuMove);
-        board.executeMove(cpuMove);
+        board.executeMoveWithCheck(cpuMove);
 
         cpu.addMove(cpuMove);
         numMoves++;

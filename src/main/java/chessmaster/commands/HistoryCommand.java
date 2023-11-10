@@ -74,7 +74,6 @@ public class HistoryCommand extends Command {
         for (PlayerMoveTuple tuple : allMoves) {
             Move move = tuple.getMove();
             Player player = tuple.getPlayer();
-
             String moveString;
             if (move.hasCapturedAPiece()) {
                 moveString = String.format(
@@ -103,6 +102,4 @@ public class HistoryCommand extends Command {
 
         return new CommandResult(returnStringBuilder.toString());
     }
-
-
 }
