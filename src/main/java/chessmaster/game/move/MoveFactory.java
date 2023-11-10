@@ -18,14 +18,12 @@ public class MoveFactory {
 
         Move move;
         // Check if the move is a capturing move
-        // TODO
         if (board.isTileOccupied(to)) {
             ChessPiece pieceCaptured = board.getPieceAtCoor(to);
             move = new Move(from, to, pieceMoved, pieceCaptured);
         } else {
             move = new Move(from, to, pieceMoved);
         }
-
 
         return move;
     }
