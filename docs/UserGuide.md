@@ -368,11 +368,11 @@ Every time a turn ends, ChessMaster will save the current state of the game. Whe
 user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
 saved game, and starting a new one will delete the existing save file.
 
-### Aborting game: `abort`
+### Exit the game: `exit`
 
 Exit the ChessMaster application.
 
-Format: `abort`
+Format: `exit`
 
 Expected Output:
 ```
@@ -411,5 +411,5 @@ to simulate timed games.
 | Pieces legend | `legend`                           |
 | History       | `history`                          |
 | Step back     | `stepback`                         |
-| Abort         | `abort`                            |
+| Exit          | `exit`                             |
 
