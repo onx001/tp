@@ -18,7 +18,7 @@ import chessmaster.user.Player;
 
 public class Game {
 
-    private final String[] START_HELP_STRINGS;
+    private static final String[] START_HELP_STRINGS = new String[HelpCommand.HELP_STRINGS.length + 1];
 
     private CPU cpu;
     private Human human;
@@ -52,8 +52,7 @@ public class Game {
         currentPlayer = currentTurnColor == playerColour ? human : cpu;
 
         // Make the START_HELP_STRINGS more robust with just one source-of-truth in HelpCommand.HELP_STRINGS
-        this.START_HELP_STRINGS = new String[HelpCommand.HELP_STRINGS.length + 1];
-        this.START_HELP_STRINGS[0] = "Thank you for choosing ChessMaster!";
+        START_HELP_STRINGS[0] = "Thank you for choosing ChessMaster!";
         System.arraycopy(HelpCommand.HELP_STRINGS, 0, START_HELP_STRINGS, 1, HelpCommand.HELP_STRINGS.length);
 
         assert playerColour != Color.EMPTY : "Human player color should not be EMPTY!";

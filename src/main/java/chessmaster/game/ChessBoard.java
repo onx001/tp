@@ -4,7 +4,11 @@ import java.util.ArrayList;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.game.move.*;
+import chessmaster.game.move.PromoteMove;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.CastleSide;
+import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
