@@ -13,7 +13,7 @@ public class RulesCommand extends Command {
 
     public static final String RULES_COMMAND_STRING = "rules";
 
-    private static final String[] RULES_STRINGS = {
+    static final String[] RULES_STRINGS = {
         "Here are simple chess rules to get you started:",
         "",
         "Piece movement:",
@@ -40,5 +40,4 @@ public class RulesCommand extends Command {
     public CommandResult execute(Game game) {
         return new CommandResult(RULES_STRINGS);
     }
-
 }

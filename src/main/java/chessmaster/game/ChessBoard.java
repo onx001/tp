@@ -6,6 +6,7 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.EmptyPiece;
 import chessmaster.pieces.King;
 import chessmaster.pieces.Pawn;
 import chessmaster.user.CPU;
@@ -101,17 +102,7 @@ public class ChessBoard {
         return this.difficulty;
     }
 
-    public boolean isChecked(Color color) {
-        Move[] moves = getAllMoves(color.getOppositeColour());
-        for (Move move : moves) {
-            Coordinate to = move.getTo();
-            if (this.getPieceAtCoor(to) instanceof King) {
-                return true;
-            }
-        }
-        return false;
-    }
-
+    //@@author onx001
     public boolean hasEnPassant() {
         //Checks all chess pieces for en passant
         for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -126,6 +117,19 @@ public class ChessBoard {
         return false;
     }
 
+    public ChessPiece getEnPassantPiece() {
+        for (int row = 0; row < ChessBoard.SIZE; row++) {
+            for (int col = 0; col < ChessBoard.SIZE; col++) {
+                Coordinate coor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(coor);
+                if (piece.isEnPassant()) {
+                    return piece;
+                }
+            }
+        }
+        return null;
+    }
+
     public Coordinate getEnPassantCoor() {
         //Checks all chess pieces for en passant
         for (int row = 0; row < ChessBoard.SIZE; row++) {
@@ -133,7 +137,11 @@ public class ChessBoard {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
                 if (piece.isEnPassant()) {
-                    return coor;
+                    if (piece.isSameColorAs(playerColor)) {
+                        return coor.addOffsetToCoordinate(0, 1);
+                    } else {
+                        return coor.addOffsetToCoordinate(0, -1);
+                    }
                 }
             }
         }
@@ -145,21 +153,52 @@ public class ChessBoard {
         return moves.length == 0;
     }
 
+    /**
+     * Check if the player of the specified color is in check.
+     *
+     * This method determines whether the player with the specified color is in check, 
+     * meaning their king is under threat. It checks if any moves by the opposing player's pieces 
+     * can reach the player's king.
+     *
+     * @param color The color for which to check if the king is in check ('WHITE' or 'BLACK').
+     * @return `true` if the player is in check; `false` if the player's king is not in immediate danger.
+     */
+    public boolean isChecked(Color color) {
+        Move[] moves = getPseudoLegalMoves(color.getOppositeColour());
+        for (Move move : moves) {
+            Coordinate to = move.getTo();
+            if (this.getPieceAtCoor(to) instanceof King) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public Move[] getAllMoves(Color color) {
+    /**
+     * Retrieve an array of pseudo-legal moves for pieces of the specified color.
+     *
+     * This method calculates and provides an array of pseudo-legal moves for all pieces of the given 
+     * color on the chessboard. Pseudo-legal moves are those that are valid based on the piece's movement rules, 
+     * but they may not account for potential checks on the king.
+     *
+     * @param color The color for which pseudo-legal moves should be generated ('WHITE' or 'BLACK').
+     * @return An array of Move objects, each representing a pseudo-legal move, containing the starting square, 
+     *          destination square, and the ChessPiece involved.
+     */
+
+    public Move[] getPseudoLegalMoves(Color color) {
         //Declare arraylist of moves as allMoves
         ArrayList<Move> allMoves = new ArrayList<>();
 
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
-                Coordinate coor = new Coordinate(col, row);
-                ChessPiece piece = getPieceAtCoor(coor);
+                Coordinate currentCoor = new Coordinate(col, row);
+                ChessPiece piece = getPieceAtCoor(currentCoor);
 
                 if (piece.isSameColorAs(color)) {
-                    Coordinate[] possibleCoordinates = piece.getLegalCoordinates(this);
+                    Coordinate[] possibleCoordinates = piece.getPseudoLegalCoordinates(this);
                     for (Coordinate possible: possibleCoordinates) {
-                        Move move = new Move(coor, possible, piece);
-                        allMoves.add(move);
+                        allMoves.add(MoveFactory.createMove(this, currentCoor, possible));
                     }
                 }
             }
@@ -167,9 +206,24 @@ public class ChessBoard {
         return allMoves.toArray(new Move[0]);
     }
 
+    /**
+     * Retrieve an array of legal moves for pieces of the specified color.
+     *
+     * This method calculates and provides an array of legal moves for all pieces of the given color on the 
+     * chessboard. This is done by executing each pseudo-legal move and ensuring that it does not result in 
+     * the king being checked. 
+     * 
+     * Legal moves are those that adhere to the piece's movement rules and do not result in the 
+     * player's own king being in check.
+     *
+     * @param color The color for which legal moves should be generated ('WHITE' or 'BLACK').
+     * @return An array of Move objects, each representing a legal move, containing the starting square, 
+     *          destination square, and the ChessPiece involved.
+     */
     public Move[] getLegalMoves(Color color) {
-        Move[] moves = getAllMoves(color);
-        ArrayList<Move> uncheckedMoves = new ArrayList<>();
+        Move[] moves = getPseudoLegalMoves(color);
+        ArrayList<Move> legalMoves = new ArrayList<>();
+
         for (Move move : moves) {
             ChessBoard newBoard = this.clone();
             Coordinate from = move.getFrom();
@@ -181,10 +235,10 @@ public class ChessBoard {
                 continue;
             }
             if (!newBoard.isChecked(color)) {
-                uncheckedMoves.add(move);
+                legalMoves.add(move);
             }
         }
-        return uncheckedMoves.toArray(new Move[0]);
+        return legalMoves.toArray(new Move[0]);
     }
 
     //@@author TongZhengHong
@@ -199,7 +253,7 @@ public class ChessBoard {
      * @param coor The coordinate of the position to retrieve the tile for.
      * @return The ChessTile object at the specified coordinate.
      */
-    private ChessTile getTileAtCoor(Coordinate coor) {
+    public ChessTile getTileAtCoor(Coordinate coor) {
         return board[coor.getY()][coor.getX()];
     }
 
@@ -226,7 +280,7 @@ public class ChessBoard {
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPiece();
+        ChessPiece chessPiece = move.getPieceMoved();
 
 
         chessPiece.setHasMoved();
@@ -256,19 +310,21 @@ public class ChessBoard {
 
             getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
             getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
-        } else if (move.getPiece() instanceof Pawn && hasEnPassant()) {
+        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();
-            if (move.getPiece().getColor() == playerColor) {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-            } else {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-            }
             if (to.equals(enPassantCoor)) {
-                ChessPiece enPassantPiece = getPieceAtCoor(enPassantCoor);
-                getTileAtCoor(enPassantCoor).setTileEmpty(enPassantCoor);
+                ChessPiece enPassantPiece = getEnPassantPiece();
+                if (enPassantPiece.isSameColorAs(playerColor)) {
+                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
+                } else {
+                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
+                }
+                getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
                 enPassantPiece.setIsCaptured();
             }
+        } else if (move.isSkippingPawn()) {
+            move.getPieceMoved().setEnPassant();
         }
 
         //clear all en passants
@@ -276,8 +332,9 @@ public class ChessBoard {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
-                if (piece.isEnPassant()) {
+                if (piece.isEnPassant() && piece.getColor() != move.getPieceMoved().getColor()) {
                     piece.clearEnPassant();
+
                 }
             }
         }
@@ -294,7 +351,7 @@ public class ChessBoard {
 
     //@@author ken-ruster
     public boolean canPromote(Move move) {
-        ChessPiece piece = move.getPiece();
+        ChessPiece piece = move.getPieceMoved();
         Coordinate endCoord = move.getTo();
 
         if (!piece.isPawn()) {
@@ -442,6 +499,11 @@ public class ChessBoard {
 
     public boolean isPieceOpponent(ChessPiece otherPiece) {
         return this.playerColor != otherPiece.getColor();
+    }
+
+    public boolean isTileOccupied(Coordinate coord) {
+        ChessPiece piece = this.getPieceAtCoor(coord);
+        return piece == null || !(piece instanceof EmptyPiece);
     }
 
     //@@author ken_ruster

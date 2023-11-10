@@ -22,11 +22,10 @@ public class ChessMaster {
     private TextUI ui;
     private ChessBoard board;
     private Storage storage;
-
     private int difficulty;
+    private boolean exit = false;
     private Color playerColor;
     private Color currentTurnColor = Color.WHITE;
-
     private Human human;
     private CPU cpu;
 
@@ -48,10 +47,9 @@ public class ChessMaster {
             storage.executeSavedMoves(playerColor, board, human, cpu);
             board.setDifficulty(difficulty);
 
-            if (shouldStartNewGame()) {
+            if (shouldStartNewGame() && !exit) {
                 loadNewGame();
             }
-
         } catch (ChessMasterException e) {
             ui.printLoadBoardError();
             loadNewGame();
@@ -63,6 +61,10 @@ public class ChessMaster {
         String input = ui.getUserInput(false);
 
         while (!input.equals("y") && !input.equals("n")) {
+            if (input.equalsIgnoreCase("exit")) {
+                exit = true;
+                break;
+            }
             ui.promptContinuePrevGame(true);
             input = ui.getUserInput(false);
         }
@@ -75,15 +77,39 @@ public class ChessMaster {
         }
     }
 
+    //@@author TriciaBK
+    private boolean shouldRestartGame() {
+        ui.promptNewGame(false);
+        String input = ui.getUserInput(false);
+        while (!input.equals("y") && !input.equals("n")) {
+            if (input.equalsIgnoreCase("exit")) {
+                exit = true;
+                break;
+            }
+            ui.promptNewGame(true);
+            input = ui.getUserInput(false);
+        }
+        if (input.equals("y")) {
+            ui.printRestartingGameMessage();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void loadNewGame() {
         ui.promptStartingColor(false);
         String input = ui.getUserInput(false);
 
         while (!input.equals("b") && !input.equals("w")) {
+            if (input.equalsIgnoreCase("exit")) {
+                exit = true;
+                return;
+            }
             ui.promptStartingColor(true);
             input = ui.getUserInput(false);
         }
-        
+
         playerColor = input.equals("b") ? Color.BLACK : Color.WHITE;
         Color cpuColor = playerColor.getOppositeColour();
         board = new ChessBoard(playerColor);
@@ -95,8 +121,11 @@ public class ChessMaster {
         //@@author onx001
         ui.promptDifficulty(false);
         input = ui.getUserInput(false);
-        while (!input.equals("1") && !input.equals("2") 
-            && !input.equals("3")) {
+        while (!input.equals("1") && !input.equals("2") && !input.equals("3")) {
+            if (input.equalsIgnoreCase("exit")) {
+                exit = true;
+                return;
+            }
             ui.promptDifficulty(true);
             input = ui.getUserInput(false);
         }
@@ -111,9 +140,20 @@ public class ChessMaster {
         }
     }
 
-    private void run() {   
-        Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty, human, cpu);
-        game.run();
+    private void run() {
+        boolean shouldRestart = true;
+        while (shouldRestart && !exit) {
+            Game game = new Game(playerColor, currentTurnColor, board, storage, ui, difficulty, human, cpu);
+            boolean restartMidGame = game.run();
+            if (!restartMidGame) {
+                shouldRestart = false;
+                continue;
+            }
+            shouldRestart = shouldRestartGame();
+            if (shouldRestart) {
+                loadNewGame();
+            }
+        }
     }
 
     public static void main(String[] args) {
