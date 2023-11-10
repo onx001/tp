@@ -420,7 +420,12 @@ public class ChessBoard {
     }
 
 
-
+    /**
+     * Converts a String representing a board into a new ChessBoard.
+     *
+     * @param board String representing the board
+     * @return ChessBoard generated from input string
+     */
     public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
@@ -444,6 +449,16 @@ public class ChessBoard {
     }
 
     //@@author ken-ruster
+
+    /**
+     * Takes in an array of multiple moves, and executes them in order. Also updates the move history
+     * stored in the human and CPU objects.
+     *
+     * @param moves ArrayList of moves to be executed
+     * @param human Object representing the human player
+     * @param cpu Object representing the CPU player
+     * @throws ChessMasterException
+     */
     public void executeMoveArray(ArrayList<String> moves, Human human, CPU cpu) throws ChessMasterException {
         boolean isPlayersTurn = playerColor.isWhite();
 

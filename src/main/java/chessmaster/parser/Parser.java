@@ -140,6 +140,15 @@ public class Parser {
     }
     //@@author
 
+    /**
+     * Parses the user's input to return the appropriate Command.
+     * Returns an InvalidCommand if the input does not match any of the expected patterns.
+     * Used to discern the program's appropriate response to the user's input.
+     *
+     * @param in User's input, stored as a String
+     * @return A command corresponding to user input, or InvalidCommand if the input is not recognised
+     */
+
     public static Command parseCommand(String in) {
         String[] splitInputStrings = in.split("\\s+", 2);
         String commandString = splitInputStrings[0];

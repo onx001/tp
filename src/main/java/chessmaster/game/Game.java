@@ -108,6 +108,14 @@ public class Game {
         return hasEnded || RestartCommand.isRestart(command);
     }
 
+    /**
+     * Represents main part of gameplay loop for the human user. Responsible for
+     * taking in the user's input and discerning the user's intention based on the input.
+     * Also executes and handles all commands except `MoveCommand`.
+     *
+     * @return Command corresponding to the user's input
+     * @throws ChessMasterException
+     */
     private Command getAndExecuteUserCommand() throws ChessMasterException {
         String userInputString = ui.getUserInput(true);
         this.command = Parser.parseCommand(userInputString);
@@ -117,6 +125,15 @@ public class Game {
         return this.command;
     }
 
+    /**
+     * Handles the user input in the case that a move was made by the player.
+     * Extracts the move from the current command, and reflects the move on the chessboard.
+     * When the move is done, it also handles any possible promotions which can be made.
+     * Returns the move which has been made to be printed in the run()  function.
+     *
+     * @return Move which has been executed
+     * @throws ChessMasterException
+     */
     private Move handleHumanMove() throws ChessMasterException {
         Move humanMove = ((MoveCommand) this.command).getMove();
         board.executeMoveWithCheck(humanMove);
@@ -133,6 +150,14 @@ public class Game {
         return humanMove;
     }
 
+    /**
+     * Obtains and executes the CPU's move in response to the current board state.
+     * Also prints a message informing the player of the CPU thinking as it may take some time
+     * to compute the most optimal move in higher difficulty levels.
+     *
+     * @return The move that the CPU made
+     * @throws ChessMasterException
+     */
     private Move handleCPUMove() throws ChessMasterException {
         ui.printCPUThinkingMessage();
 
@@ -146,6 +171,13 @@ public class Game {
         return cpuMove;
     }
 
+    /**
+     * Checks whether the current state of the board qualifies as the game having ended.
+     * If the game has ended, prints a message signalling the end of the game, and resets the saved board.
+     *
+     * @return Whether the game has ended
+     * @throws ChessMasterException
+     */
     private boolean checkEndState() throws ChessMasterException {
         boolean end = board.isEndGame();
         if (end) {
