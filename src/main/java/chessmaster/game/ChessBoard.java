@@ -277,7 +277,6 @@ public class ChessBoard {
      * @throws InvalidMoveException If the move is not valid according to the game
      *                              rules.
      */
-
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
@@ -313,12 +312,6 @@ public class ChessBoard {
             EnPassantMove enPassantMove = (EnPassantMove) move;
             ChessPiece enPassantPiece = enPassantMove.getPieceCaptured();
             Coordinate enPassantCoor = enPassantPiece.getPosition();
-
-            if (enPassantPiece.isSameColorAs(playerColor)) {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-            } else {
-                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-            }
 
             // Run capturing logic
             this.getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
