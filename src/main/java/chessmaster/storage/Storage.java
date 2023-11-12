@@ -224,11 +224,12 @@ public class Storage {
      * @param cpu Object representing information about the computer-controlled player
      * @throws ChessMasterException
      */
-    public void executeSavedMoves(Color playerColor,
+    public ChessBoard executeSavedMoves(Color playerColor,
                                   ChessBoard otherBoard,
+                                  ChessBoard board,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
-        ArrayList<String> moveStringList = new ArrayList<String>();
+        ArrayList<String> moveStringList = new ArrayList();
         ArrayList<String> humanMoves = loadHumanMoves();
         ArrayList<String> cpuMoves = loadCPUMoves();
 
@@ -252,8 +253,6 @@ public class Storage {
         } else {
             throw new LoadBoardException();
         }
-
-        ChessBoard board = new ChessBoard(playerColor);
 
         //Execute move string Array
         board.executeMoveArray(moveStringList, human, cpu);
@@ -280,6 +279,8 @@ public class Storage {
         if (!board.equals(otherBoard)) {
             throw new LoadBoardException(LOAD_BOARD_MISMATCH_STRING);
         }
+
+        return board;
     }
 
 
