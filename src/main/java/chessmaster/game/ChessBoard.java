@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.game.move.PromoteMove;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.CastleSide;
+import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
+import chessmaster.game.move.EnPassantMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -270,82 +276,97 @@ public class ChessBoard {
     }
 
     /**
-     * Executes a chess move on the chessboard.
-     *
-     * @param move The Move object representing the move to be executed.
-     * @throws InvalidMoveException If the move is not valid according to the game
-     *                              rules.
+     * For castling moves, executeBasicMove() only moves the King. This method will move the rook correctly
+     * based on whether the player has castled queen-side or king-side.
+     * @param move The CastleMove to execute
+     * @throws InvalidMoveException If the rook move is not valid according to game rules
      */
-
-    public void executeMove(Move move) throws InvalidMoveException {
+    private void executeCastlingRookMove(CastleMove move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
-        Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPieceMoved();
+        CastleSide side = move.getSide();
 
-
-        chessPiece.setHasMoved();
-        chessPiece.updatePosition(destCoor);
-        getTileAtCoor(startCoor).setTileEmpty(startCoor);
-        getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
-
-        //@@author onx001
-        if (move.isLeftCastling() && startCoor.isOffsetWithinBoard(-4, 0)) {
+        Move rookCastleMove;
+        if (side == CastleSide.LEFT && startCoor.isOffsetWithinBoard(-4, 0)) {
             Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
             Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
-            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+            rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMove(rookCastleMove);
 
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
-
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
-
-        } else if (move.isRightCastling() && startCoor.isOffsetWithinBoard(3, 0)) {
+            this.executeMove(rookCastleMove);
+        } else if (side == CastleSide.RIGHT && startCoor.isOffsetWithinBoard(3, 0)) {
             Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
             Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
-            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+            rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMove(rookCastleMove);
 
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
-
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
-        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
-            Coordinate to = move.getTo();
-            Coordinate enPassantCoor = getEnPassantCoor();
-            if (to.equals(enPassantCoor)) {
-                ChessPiece enPassantPiece = getEnPassantPiece();
-                if (enPassantPiece.isSameColorAs(playerColor)) {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-                } else {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-                }
-                getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
-                enPassantPiece.setIsCaptured();
-            }
-        } else if (move.isSkippingPawn()) {
-            move.getPieceMoved().setEnPassant();
+            this.executeMove(rookCastleMove);
         }
+    }
 
-        //clear all en passants
+    private void executeEnPassantCapture(EnPassantMove move) {
+        ChessPiece enPassantPiece = move.getPieceCaptured();
+
+        // Capture the enPassantPiece
+        this.getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
+        enPassantPiece.setIsCaptured();
+    }
+
+    /**
+     * Moves a piece from the start coordinate to the destination coordinate.
+     * @param move The move to execute
+     */
+    private void executeBasicMove(Move move) {
+        Coordinate startCoor = move.getFrom();
+        Coordinate destCoor = move.getTo();
+        ChessPiece pieceMoved = move.getPieceMoved();
+
+        pieceMoved.setHasMoved();
+        pieceMoved.updatePosition(destCoor);
+
+        getTileAtCoor(startCoor).setTileEmpty(startCoor);
+        getTileAtCoor(destCoor).getChessPiece().setIsCaptured();
+        getTileAtCoor(destCoor).updateTileChessPiece(pieceMoved);
+    }
+
+
+    private void clearAllEnPassants(Move move) {
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
                 if (piece.isEnPassant() && piece.getColor() != move.getPieceMoved().getColor()) {
                     piece.clearEnPassant();
-
                 }
             }
         }
     }
 
+    /**
+     * Executes a chess move on the chessboard.
+     *
+     * @param move The Move object representing the move to be executed.
+     * @throws InvalidMoveException If the move is not valid according to the game
+     *                              rules.
+     */
+    public void executeMove(Move move) throws InvalidMoveException {
+        this.executeBasicMove(move);
+
+        if (move instanceof CastleMove) {
+            this.executeCastlingRookMove((CastleMove) move);
+        } else if (move instanceof EnPassantMove) {
+            this.executeEnPassantCapture((EnPassantMove) move);
+        } else if (move.isSkippingPawn()) {
+            move.getPieceMoved().setEnPassant();
+        }
+
+        this.clearAllEnPassants(move);
+    }
+
     public void executeMoveWithCheck(Move move) throws InvalidMoveException {
-        
         if (move.isValidWithCheck(this)) {
             executeMove(move);
         } else {
-            throw new InvalidMoveException("Move Causes a check");
+            throw new InvalidMoveException("Move causes a check");
         }
     }
 
@@ -375,8 +396,9 @@ public class ChessBoard {
     }
 
     public Color getWinningColor() {
-        
-        if (isCheckmated(playerColor)) {
+        if (isCheckmated(playerColor) && isCheckmated(playerColor.getOppositeColour())) {
+            return Color.DRAW;
+        } else if (isCheckmated(playerColor)) {
             return playerColor.getOppositeColour();
         } else if (isCheckmated(playerColor.getOppositeColour())) {
             return playerColor;
@@ -420,7 +442,12 @@ public class ChessBoard {
     }
 
 
-
+    /**
+     * Converts a String representing a board into a new ChessBoard.
+     *
+     * @param board String representing the board
+     * @return ChessBoard generated from input string
+     */
     public ChessBoard toBoard(String board) {
         ChessTile[][] boardTiles = new ChessTile[SIZE][SIZE];
         int row = 0;
@@ -444,6 +471,15 @@ public class ChessBoard {
     }
 
     //@@author ken-ruster
+    /**
+     * Takes in an array of multiple moves, and executes them in order. Also updates the move history
+     * stored in the human and CPU objects.
+     *
+     * @param moves ArrayList of moves to be executed
+     * @param human Object representing the human player
+     * @param cpu Object representing the CPU player
+     * @throws ChessMasterException
+     */
     public void executeMoveArray(ArrayList<String> moves, Human human, CPU cpu) throws ChessMasterException {
         boolean isPlayersTurn = playerColor.isWhite();
 
@@ -466,10 +502,11 @@ public class ChessBoard {
                 ChessPiece oldPiece = this.getPieceAtCoor(coord);
                 assert this.canPromote(new Move(coord, coord, oldPiece))
                         : "Move in file tries to make an invalid promotion!";
+                assert oldPiece instanceof Pawn;
                 ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
                 this.setPromotionPiece(coord, newPiece);
 
-                PromoteMove promoteMove = new PromoteMove(coord, newPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, (Pawn) oldPiece, newPiece);
                 if (isPlayersTurn) {
                     human.addMove(promoteMove);
                 } else {

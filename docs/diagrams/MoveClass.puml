@@ -1,0 +1,15 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class Move {
+  - from: Coordinate
+  - to: Coordinate
+  - pieceMoved: ChessPiece
+  - pieceCaptured: ChessPiece
+  + getPieceMoved(): ChessPiece
+  + hasCapturedAPiece(): boolean
+  + getPieceCaptured(): ChessPiece
+  + isValidWithCheck(board: ChessBoard): boolean
+}
+@enduml

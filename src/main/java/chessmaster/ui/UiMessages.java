@@ -12,7 +12,7 @@ public class UiMessages {
         "where CHESS becomes an exciting journey of strategy and skill!" };
 
     public static final String EXIST_PREV_GAME_MESSAGE = 
-        "You have an ongoing previous chess game. Continue game? [y/n] ";
+        "You have an ongoing previous chess game. Continue game? [y/n/exit] ";
     public static final String CONTINUE_PREV_GAME_ERROR_MESSAGE = 
         "Invalid input! Please enter either 'y' for yes or 'n' for no: ";
     public static final String CONTINUE_PREV_GAME_MESSAGE = "Great! Continuing previous game as %s at difficulty %d";
@@ -41,6 +41,7 @@ public class UiMessages {
 
     public static final String HUMAN_WIN_MESSAGE = "Congratulations! You have won as %s! :)";
     public static final String CPU_WIN_MESSAGE = "Oh no! You have lost as %s. Please try harder next time :(";
+    public static final String DRAW_MESSAGE = "It's a draw!";
 
     public static final String RESTART_GAME_MESSAGE =
             "Do you want to restart game? [y/n] ";

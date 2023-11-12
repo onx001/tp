@@ -14,7 +14,7 @@ user -> MM : getBestMove()
 
 MM -> MM : mostPoints()
 
-loop ["depth < maxDepth"]
+loop "depth < maxDepth"
 
     MM -> CB : getBoard()
     deactivate MM
@@ -49,7 +49,7 @@ loop ["depth < maxDepth"]
     deactivate CB
     CB -> MM : Continue loop
     deactivate CB
-    loop ["depth < maxDepth"]
+    loop "depth < maxDepth"
         activate MM
         MM -> MM : Recursively call mostPoints() while incrementing depth
         MM --> MM : bestTuple
@@ -68,8 +68,6 @@ deactivate BST
 MM -> user : Return bestMove
 deactivate MM
 destroy MM
-destroy CB
-destroy M
 destroy BST
 
 @enduml

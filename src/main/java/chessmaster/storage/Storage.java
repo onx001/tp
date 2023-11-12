@@ -12,6 +12,7 @@ import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -21,7 +22,9 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Storage {
-
+    //@@author ken_ruster
+    private static final String LOAD_BOARD_MISMATCH_STRING =
+            "Board state does not match state dictated by move history!";
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
@@ -30,6 +33,7 @@ public class Storage {
     private boolean blackKingPresent;
     private boolean whiteKingPresent;
     private Scanner fileScanner;
+    private Coordinate lastMove;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -210,6 +214,16 @@ public class Storage {
         return boardTiles;
     }
 
+    /**
+     * Executes moves saved in the txt file so that it can be checked against the save board state.
+     * Also stores the saved move history of both the human and CPU.
+     *
+     * @param playerColor The color which the player is playing as
+     * @param otherBoard A temporary board to be compared with the board saved in the .txt file
+     * @param human Object representing information about the human player
+     * @param cpu Object representing information about the computer-controlled player
+     * @throws ChessMasterException
+     */
     public void executeSavedMoves(Color playerColor,
                                   ChessBoard otherBoard,
                                   Human human,
@@ -241,12 +255,30 @@ public class Storage {
 
         ChessBoard board = new ChessBoard(playerColor);
 
-        // Execute move string array
+        //Execute move string Array
         board.executeMoveArray(moveStringList, human, cpu);
 
+        //@@author onx001
+        // get the destination coordinate of the last move
+        try {
+            String lastMoveString = moveStringList.get(moveStringList.size() - 1);
+            String[] lastMoveArray = lastMoveString.split(" ");
+            lastMove = Coordinate.parseAlgebraicCoor(lastMoveArray[1]);
+
+            if (otherBoard.getPieceAtCoor(lastMove).isPawn()) {
+                otherBoard.getPieceAtCoor(lastMove).setEnPassant();
+                board.getPieceAtCoor(lastMove).setEnPassant();
+            }
+        } catch (Exception e) {
+            assert moveStringList.size() == 0 : "Last move should be empty";
+        }
+
+
+
+        //@@author TriciaBK
         // Check obtained board with loaded board state
         if (!board.equals(otherBoard)) {
-            throw new LoadBoardException("Board state does not match state dictated by move history!");
+            throw new LoadBoardException(LOAD_BOARD_MISMATCH_STRING);
         }
     }
 
@@ -393,6 +425,13 @@ public class Storage {
         return this.filePathString;
     }
 
+    /**
+     * Loads the history of moves made by the human player in the saved game.
+     * Parses the moves into Move objects, and returns a null array if no moves were found.
+     *
+     * @return ArrayList containing the move history of the human player
+     * @throws ChessMasterException
+     */
     public ArrayList<String> loadHumanMoves() throws ChessMasterException {
         createChessMasterFile();
 
@@ -423,6 +462,13 @@ public class Storage {
         return out;
     }
 
+    /**
+     * Loads the history of moves made by the CPU player in the saved game.
+     * Parses the moves into Move objects, and returns a null array if no moves were found.
+     *
+     * @return ArrayList containing the move history of the CPU player
+     * @throws ChessMasterException
+     */
     public ArrayList<String> loadCPUMoves() throws ChessMasterException {
         createChessMasterFile();
 

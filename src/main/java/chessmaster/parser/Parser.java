@@ -19,8 +19,8 @@ import chessmaster.exceptions.ParseCoordinateException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
-import chessmaster.game.MoveFactory;
+import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
 import chessmaster.pieces.Bishop;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -138,7 +138,17 @@ public class Parser {
             return new EmptyPiece(row, col);
         }
     }
+
     //@@author
+
+    /**
+     * Parses the user's input to return the appropriate Command.
+     * Returns an InvalidCommand if the input does not match any of the expected patterns.
+     * Used to discern the program's appropriate response to the user's input.
+     *
+     * @param in User's input, stored as a String
+     * @return A command corresponding to user input, or InvalidCommand if the input is not recognised
+     */
 
     public static Command parseCommand(String in) {
         String[] splitInputStrings = in.split("\\s+", 2);

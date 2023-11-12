@@ -1,5 +1,6 @@
 //@@author onx001
 package chessmaster.game;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 
 import chessmaster.exceptions.ChessMasterException;
@@ -56,22 +57,7 @@ public class MiniMax {
         }
 
         //for each move, clone the board and execute the move as a possibility
-        for (int i = 0; i < moves.length; i++) {
-            assert moves[i] != null : "moves[i] is null";
-            ChessBoard newBoard = board.clone();
-            Move move = moves[i];
-            Coordinate from = move.getFrom();
-            ChessPiece piece = newBoard.getPieceAtCoor(from);
-            move.setPieceMoved(piece);
-            try {
-                newBoard.executeMove(move);
-                //get the score of the board after the move
-                int newScore = newBoard.getPoints(color);
-                boards[i] = new BoardScoreTuple(newBoard, newScore, move);
-            } catch (ChessMasterException e) {
-                continue;
-            }
-        }
+        boards = getBoards(moves, board, color);
         
         //go through boards and find one with best points
         for (int i = 0; i < boards.length; i++) {
@@ -81,24 +67,10 @@ public class MiniMax {
 
             //recursively call mostPoints to find the best move for current board
             BoardScoreTuple tuple1 = mostPoints(iterTuple, color, depth + 1, score, !isMax, maxDepth);
-
-            //prints score as branch
-            //System.out.println("|" + "---".repeat(depth) + " " + tuple1.getScore() + tuple.getMove());
           
             //Sets new score to current child score
             int newScore = tuple1.getScore();
-
-            if (isMax) {
-                //maximises child score if CPU turn
-                if (newScore > bestScore) {
-                    bestScore = newScore;
-                }
-            } else {
-                //minimises child score if player turn
-                if (newScore < bestScore) {
-                    bestScore = newScore;
-                }
-            }
+            bestScore = updateScore(isMax, bestScore, newScore);
 
             //set current tuple based on best child score
             bestTuple = bestScore == newScore ? iterTuple : bestTuple;
@@ -114,6 +86,44 @@ public class MiniMax {
         BoardScoreTuple bestTuple = mostPoints(tuple, color, 0, score, true, maxDepth);
         Move bestMove = bestTuple.getMove();
         return bestMove;
+    }
+
+
+
+    //Helper function to get all the boards for the current player
+    private static BoardScoreTuple[] getBoards(Move[] moves, ChessBoard board, Color color) {
+        BoardScoreTuple[] boards = new BoardScoreTuple[moves.length];
+        for (int i = 0; i < moves.length; i++) {
+            ChessBoard newBoard = board.clone();
+            Move move = moves[i];
+            Coordinate from = move.getFrom();
+            ChessPiece piece = newBoard.getPieceAtCoor(from);
+            move.setPieceMoved(piece);
+            try {
+                newBoard.executeMove(move);
+                int newScore = newBoard.getPoints(color);
+                boards[i] = new BoardScoreTuple(newBoard, newScore, move);
+            } catch (ChessMasterException e) {
+                continue;
+            }
+        }
+        return boards;
+    }
+
+    //Helper function to update the best score
+    private static int updateScore(boolean isMax, int bestScore, int newScore) {
+        if (isMax) {
+            //maximises child score if CPU turn
+            if (newScore > bestScore) {
+                bestScore = newScore;
+            }
+        } else {
+            //minimises child score if player turn
+            if (newScore < bestScore) {
+                bestScore = newScore;
+            }
+        }
+        return bestScore;
     }
 
 

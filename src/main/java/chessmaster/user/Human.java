@@ -3,10 +3,12 @@ package chessmaster.user;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
-import chessmaster.game.PromoteMove;
+import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
+import chessmaster.game.move.PromoteMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
 public class Human extends Player {
@@ -30,6 +32,7 @@ public class Human extends Player {
         if (!pawnPiece.isPawn()) {
             return;
         }
+        Pawn pawnPromoted = (Pawn) pawnPiece;
 
         ui.printChessBoard(board.getBoard());
         Coordinate coord = pawnPiece.getPosition();
@@ -49,7 +52,7 @@ public class Human extends Player {
                 this.pieces.add(promotedPiece);
                 this.pieces.remove(pawnPiece);
                 board.setPromotionPiece(coord, promotedPiece);
-                PromoteMove promoteMove = new PromoteMove(coord, promotedPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, pawnPromoted, promotedPiece);
                 this.addMove(promoteMove);
             }
         } while (promoteFailure);

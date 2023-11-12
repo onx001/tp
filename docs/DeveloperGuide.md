@@ -7,6 +7,7 @@
     - [Game component](#game-component)
     - [User input handling](#user-input-handling)
     - [Minimax algorithm](#minimax-algorithm)
+    - [Move types](#move-types)
     - [Storage component](#storage-component)
 - [Product scope](#product-scope)
     - [Target user profile](#target-user-profile)
@@ -115,6 +116,36 @@ How the minimax algorithm works:
 3. The `Minimax` class then calls the `getBestMove` method to determine the best move for the CPU to make by maximising CPU score and minimizing the player score.
 4. The `getBestMove` method calls the `getBestMove` method recursively to populate the child scores.
 5. The `getBestMove` method returns the best move for the CPU to make.
+
+### Move types
+The Move class and its subclasses are responsible for handling the different types of moves in chess. The Move class is an abstract class that is extended by the following subclasses: StandardMove, PawnOpening, CastleMove, EnPassantMove and PromotionMove. The Move class is also extended by the following classes: CastleSide, Direction, MoveDirection, MoveType and PromotionPiece.
+Below is a class diagram representing the Move class.
+![](images/MoveClass.png)
+
+#### Standard moves
+Standard moves are the most common type of moves in chess. They are moves that involve moving a piece from one tile to another without considering special cases. Standard moves are further classified into two types: normal moves and capture moves. This information is implemented in the ChessPiece classes.
+
+How standard moves are generated:
+1. The chess piece has directions that it can move in. For example, a rook can move in the up, down, left and right directions. 
+2. The chess piece has a maximum number of steps it can take in each direction. For example, a rook can move any number of steps in the up, down, left and right directions as constrained by the chess board.
+3. The chess piece cannot move past another chess piece. For example, a rook cannot move past another chess piece in the up, down, left and right directions.
+4. Any chess piece that "blocks" the path of the chess piece is checked for colour. If the chess piece is of the same colour, the chess piece cannot move past it. If the chess piece is of the opposite colour, the chess piece can capture it. For example, a rook can capture an enemy chess piece in the up, down, left and right directions. (Note that pawn moves are an exception to this rule. Pawn pieces can only capture enemy chess pieces in the forward diagonal directions.)
+5. Special cases such as castling, en passant and promotion are also encoded as `directions` and executed separately with different move functions.
+
+
+#### Pawn Opening
+A pawn opening is a special type of move that involves moving a pawn from its starting position to another tile two spaces ahead. This move is only valid if the pawn is in its starting position and the tile it is moving to as well as the tile in between is empty. 
+
+#### Castling
+Castling is a special type of move that involves moving the king and rook at the same time. This move is only valid if the king and rook have not moved before and there are no pieces between them. Castling is further classified into two types: king-side castling and queen-side castling. This information is implemented in the ChessPiece King and Rook classes and executed with the CastleMove and CastleSide classes.
+
+#### En Passant
+En passant is a special type of move that involves capturing a pawn that has just moved two spaces. This move is only valid if the pawn is in the correct position and the pawn is the last piece to move. This information is implemented in the Pawn class and executed with the EnPassantMove class. 
+
+#### Promotion
+Promotion is a special type of move that involves promoting a pawn to another piece. This move is only valid if the pawn is in the correct position, which is at the other end of the board from which it starts. This information is implemented in the Pawn class and executed with the PromotionMove class.
+
+
 
 ### Storage Component
 **API:**

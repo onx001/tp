@@ -1,5 +1,7 @@
 package chessmaster.game;
 
+import chessmaster.game.move.Move;
+
 public class BoardScoreTuple implements Comparable<BoardScoreTuple> {
 
     private ChessBoard board;

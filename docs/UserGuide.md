@@ -268,16 +268,145 @@ Further details of special rules
    - It's the king's first move. 
    - It's the rook's first move. 
    - There are no pieces between the king and the rook. 
+   - The king is not in check and the king will not be in check after castling
    
    To perform castling on either sides:
     - Move your king two squares to the right/left (towards the rook).
     - The rook will jump over the king and land on the square next to the king.
+
+   Example:  `moves e1`
+
+   Expected Output:
+
+   ```
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R |   |   |   | K |   |   | R | (8)
+                _________________________________
+            (7) | P | P | P |   |   |   | P | P | (7)
+                _________________________________
+            (6) |   |   |   |   |   |   |   |   | (6)
+                _________________________________
+            (5) |   |   | q |   |   | P |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   | p |   |   | (4)
+                _________________________________
+            (3) |   |   | n |   |   |   |   |   | (3)
+                _________________________________
+            (2) | B | p |   |[.]|[.]| p | p | p | (2)
+                _________________________________
+            (1) | r |   |[.]|[.]|{k}| b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+
+   _________________________________________________________________
+
+   Available coordinates for King at e1:
+   e2 d1 d2 c1
+   _________________________________________________________________
+   
+   ```
+
+   Example:  `move e1 c1`
+
+   Expected Output:
+
+   ```
+   _________________________________________________________________
+
+   You moved King from e1 to c1
+   _________________________________________________________________
+
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R |   |   |   | K |   |   | R | (8)
+                _________________________________
+            (7) | P | P | P |   |   |   | P | P | (7)
+                _________________________________
+            (6) |   |   |   |   |   |   |   |   | (6)
+                _________________________________
+            (5) |   |   | q |   |   | P |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   | p |   |   | (4)
+                _________________________________
+            (3) |   |   | n |   |   |   |   |   | (3)
+                _________________________________
+            (2) | B | p |   |   |   | p | p | p | (2)
+                _________________________________
+            (1) |   |   |(k)| r |( )| b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+   ```
 
 2. En Passant:
    
    This move only happens when your opponent moves their pawn two squares forward from its starting position and lands next to your pawn.
    To capture en passant, you must do it on your very next move. 
    - Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
+
+
+   Sample previous board: 
+   ```
+   _________________________________________________________________
+
+   ChessMaster moved Pawn from e7 to e5
+   _________________________________________________________________
+
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R |   | B | Q | K | B |   | R | (8)
+                _________________________________
+            (7) | P | P | P | P |( )| P | P | P | (7)
+                _________________________________
+            (6) |   |   | N |   |   |   |   |   | (6)
+                _________________________________
+            (5) |   |   |   | p |(P)|   |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   |   |   |   | (4)
+                _________________________________
+            (3) |   |   |   |   |   |   |   |   | (3)
+                _________________________________
+            (2) | p | p |   |   | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+   ```
+
+   Example: `moves d5`
+
+   Expected output:
+
+   ```
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R |   | B | Q | K | B |   | R | (8)
+                _________________________________
+            (7) | P | P | P | P |   | P | P | P | (7)
+                _________________________________
+            (6) |   |   |[N]|[.]|[.]|   |   |   | (6)
+                _________________________________
+            (5) |   |   |   |{p}| P |   |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   |   |   |   | (4)
+                _________________________________
+            (3) |   |   |   |   |   |   |   |   | (3)
+                _________________________________
+            (2) | p | p |   |   | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+
+   _________________________________________________________________
+
+   Available coordinates for Pawn at d5:
+   e6 c6 d6
+   _________________________________________________________________
+
+   ```
+
+
 
 ### Show commands: `help`
 
@@ -368,11 +497,11 @@ Every time a turn ends, ChessMaster will save the current state of the game. Whe
 user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
 saved game, and starting a new one will delete the existing save file.
 
-### Aborting game: `abort`
+### Exit the game: `exit`
 
 Exit the ChessMaster application.
 
-Format: `abort`
+Format: `exit`
 
 Expected Output:
 ```
@@ -399,6 +528,10 @@ and type `y` when prompted to load a saved game.
 **A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
 to simulate timed games.
 
+**Q**: Can I draw by repeating moves?
+
+**A**: ChessMaster does not currently support draws by repetition. However, you can use the `abort` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check.
+
 ## Command Summary
 
 | Action        | Format                             |
@@ -411,5 +544,5 @@ to simulate timed games.
 | Pieces legend | `legend`                           |
 | History       | `history`                          |
 | Step back     | `stepback`                         |
-| Abort         | `abort`                            |
+| Exit          | `exit`                             |
 

@@ -10,22 +10,22 @@ participant ":Storage" as storage #PaleTurquoise
 
 activate game #AliceBlue
 
-loop [hasGameEnded]
+loop hasGameEnded
 
-    game -> ui : getUserCommand()
+    game -> ui : getUserInput()
     activate ui
-    user -> ui : "a2 a3"
-    ui --> game : :String
+    user -> ui : input
+    ui --> game : userInputString :String
     deactivate ui
 
-    game -> parser : parseCommand("a2 a3")
+    game -> parser : parseCommand(userInputString)
     activate parser
     parser --> game : :Command
     deactivate parser
 
-    opt [isMoveCommand]
+    opt isMoveCommand
 
-        game -> parser : parseMove("a2 a3")
+        game -> parser : parseMove(input)
         activate parser
         parser --> game : humanMove:Move
         deactivate parser
