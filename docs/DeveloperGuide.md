@@ -119,6 +119,13 @@ How the minimax algorithm works:
 ### Move types
 
 #### Standard moves
+Standard moves are the most common type of moves in chess. They are moves that involve moving a piece from one tile to another without considering special cases. Standard moves are further classified into two types: normal moves and capture moves. This information is implemented in the ChessPiece classes.
+
+How standard moves work:
+1. The chess piece has directions that it can move in. For example, a rook can move in the up, down, left and right directions. 
+
+#### Pawn Opening
+A pawn opening is a special type of move that involves moving a pawn from its starting position to another tile two spaces ahead. This move is only valid if the pawn is in its starting position and the tile it is moving to is empty.
 
 #### Castling
 

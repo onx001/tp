@@ -319,11 +319,6 @@ public class ChessBoard {
             Coordinate enPassantCoor = getEnPassantCoor();
             if (to.equals(enPassantCoor)) {
                 ChessPiece enPassantPiece = getEnPassantPiece();
-                if (enPassantPiece.isSameColorAs(playerColor)) {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-                } else {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-                }
                 getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
                 enPassantPiece.setIsCaptured();
             }
