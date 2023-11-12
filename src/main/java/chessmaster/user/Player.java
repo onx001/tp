@@ -3,7 +3,7 @@ package chessmaster.user;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
-import chessmaster.game.Move;
+import chessmaster.game.move.Move;
 import chessmaster.pieces.ChessPiece;
 
 import java.util.ArrayList;

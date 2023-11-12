@@ -2,7 +2,8 @@ package chessmaster.commands;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.Game;
-import chessmaster.game.Move;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.Move;
 import chessmaster.user.Player;
 
 import java.util.ArrayList;
@@ -84,6 +85,12 @@ public class HistoryCommand extends Command {
                         move.getFrom(),
                         move.getTo(),
                         move.getPieceCaptured().getPieceName()
+                );
+            } else if (move instanceof CastleMove) {
+                moveString = String.format(
+                        "Move %d: %s castles!\n",
+                        moveCounter,
+                        player.getColour()
                 );
             } else {
                 moveString = String.format(

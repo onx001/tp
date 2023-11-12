@@ -2,6 +2,7 @@ package chessmaster.game;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import chessmaster.game.move.Move;
 import org.junit.jupiter.api.Test;
 
 public class MiniMaxTest {

@@ -1,5 +1,6 @@
-package chessmaster.game;
+package chessmaster.game.move;
 
+import chessmaster.game.Coordinate;
 import chessmaster.pieces.ChessPiece;
 
 public class PromoteMove extends Move {

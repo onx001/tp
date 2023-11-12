@@ -5,7 +5,8 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Game;
-import chessmaster.game.Move;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.Move;
 import chessmaster.parser.Parser;
 
 public class MoveCommand extends Command {
@@ -22,6 +23,8 @@ public class MoveCommand extends Command {
         MOVE_FORMAT_STRING + System.lineSeparator() + MOVE_EXAMPLE_STRING;
     private static final String MOVE_PIECE_MESSAGE = "You moved %s from %s to %s";
     private static final String MOVE_AND_CAPTURE_MESSAGE = "You moved %s from %s to %s and captured the opponent's %s!";
+
+    private static final String MOVE_CASTLE_STRING = "You castled your King!";
 
     private String userInput;
     private Move move;
@@ -59,6 +62,8 @@ public class MoveCommand extends Command {
                     MOVE_AND_CAPTURE_MESSAGE,
                     pieceString, move.getFrom(), move.getTo(), move.getPieceCaptured().getPieceName()
             );
+        } else if (move instanceof CastleMove) {
+            returnString = MOVE_CASTLE_STRING;
         } else {
             returnString = String.format(MOVE_PIECE_MESSAGE, pieceString, move.getFrom(), move.getTo());
         }

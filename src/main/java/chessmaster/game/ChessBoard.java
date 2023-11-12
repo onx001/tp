@@ -4,6 +4,11 @@ import java.util.ArrayList;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
+import chessmaster.game.move.PromoteMove;
+import chessmaster.game.move.CastleMove;
+import chessmaster.game.move.CastleSide;
+import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -282,34 +287,33 @@ public class ChessBoard {
         Coordinate destCoor = move.getTo();
         ChessPiece chessPiece = move.getPieceMoved();
 
-
         chessPiece.setHasMoved();
         chessPiece.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
         getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
 
         //@@author onx001
-        if (move.isLeftCastling() && startCoor.isOffsetWithinBoard(-4, 0)) {
-            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
-            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
-            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
+        // Deal with castling
+        if (move instanceof CastleMove) {
+            CastleMove castleMove = (CastleMove) move;
+            CastleSide side = castleMove.getSide();
 
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
+            Move rookCastleMove;
+            if (side == CastleSide.LEFT && startCoor.isOffsetWithinBoard(-4, 0)) {
+                Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
+                Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
+                rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+                castleMove.setRookMove(rookCastleMove);
 
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+                this.executeMove(rookCastleMove);
+            } else if (side == CastleSide.RIGHT && startCoor.isOffsetWithinBoard(3, 0)) {
+                Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
+                Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
+                rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+                castleMove.setRookMove(rookCastleMove);
 
-        } else if (move.isRightCastling() && startCoor.isOffsetWithinBoard(3, 0)) {
-            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
-            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
-            ChessPiece rook = getTileAtCoor(rookStartCoor).getChessPiece();
-
-            rook.setHasMoved();
-            rook.updatePosition(rookDestCoor);
-
-            getTileAtCoor(rookStartCoor).setTileEmpty(rookStartCoor);
-            getTileAtCoor(rookDestCoor).updateTileChessPiece(rook);
+                this.executeMove(rookCastleMove);
+            }
         } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
             Coordinate to = move.getTo();
             Coordinate enPassantCoor = getEnPassantCoor();
@@ -327,25 +331,23 @@ public class ChessBoard {
             move.getPieceMoved().setEnPassant();
         }
 
-        //clear all en passants
+        // Clear all en-passants
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
                 ChessPiece piece = getPieceAtCoor(coor);
                 if (piece.isEnPassant() && piece.getColor() != move.getPieceMoved().getColor()) {
                     piece.clearEnPassant();
-
                 }
             }
         }
     }
 
     public void executeMoveWithCheck(Move move) throws InvalidMoveException {
-        
         if (move.isValidWithCheck(this)) {
             executeMove(move);
         } else {
-            throw new InvalidMoveException("Move Causes a check");
+            throw new InvalidMoveException("Move causes a check");
         }
     }
 
