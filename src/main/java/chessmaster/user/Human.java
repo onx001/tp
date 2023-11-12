@@ -8,6 +8,7 @@ import chessmaster.game.move.MoveFactory;
 import chessmaster.game.move.PromoteMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 import chessmaster.ui.TextUI;
 
 public class Human extends Player {
@@ -31,6 +32,7 @@ public class Human extends Player {
         if (!pawnPiece.isPawn()) {
             return;
         }
+        Pawn pawnPromoted = (Pawn) pawnPiece;
 
         ui.printChessBoard(board.getBoard());
         Coordinate coord = pawnPiece.getPosition();
@@ -50,7 +52,7 @@ public class Human extends Player {
                 this.pieces.add(promotedPiece);
                 this.pieces.remove(pawnPiece);
                 board.setPromotionPiece(coord, promotedPiece);
-                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, promotedPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, pawnPromoted, promotedPiece);
                 this.addMove(promoteMove);
             }
         } while (promoteFailure);

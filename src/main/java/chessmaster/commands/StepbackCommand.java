@@ -8,6 +8,7 @@ import chessmaster.game.move.CastleMove;
 import chessmaster.game.move.Move;
 import chessmaster.game.move.PromoteMove;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,9 +39,12 @@ public class StepbackCommand extends Command {
         }
     }
 
-//    private void reversePromotion(Move move, ChessBoard board) {
-//
-//    }
+    private void reversePromotion(PromoteMove move, ChessBoard board) {
+        // Put the original pawn which was promoted back on the tile
+        Coordinate endTile = move.getTo(); // move.getFrom() is the same
+        Pawn pawnPromoted = move.getPawnPromoted();
+        board.getTileAtCoor(endTile).updateTileChessPiece(pawnPromoted);
+    }
 
     @Override
     public CommandResult execute(Game game) throws ChessMasterException {
@@ -73,8 +77,7 @@ public class StepbackCommand extends Command {
                 Move rookCastleMove = ((CastleMove) previousMove).getRookMove();
                 reverseMove(rookCastleMove, historyBoard);
             } else if (previousMove instanceof PromoteMove) {
-                // TODO
-                // reversePromotion();
+                 reversePromotion((PromoteMove) previousMove, historyBoard);
             }
         }
 

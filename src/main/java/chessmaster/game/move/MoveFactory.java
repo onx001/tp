@@ -3,6 +3,7 @@ package chessmaster.game.move;
 import chessmaster.game.ChessBoard;
 import chessmaster.game.Coordinate;
 import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Pawn;
 
 public class MoveFactory {
 
@@ -28,8 +29,8 @@ public class MoveFactory {
         return move;
     }
 
-    public static PromoteMove createPromoteMove(Coordinate coord, ChessPiece newPiece) {
-        return new PromoteMove(coord, newPiece);
+    public static PromoteMove createPromoteMove(Coordinate coord, Pawn pawnPromoted, ChessPiece newPiece) {
+        return new PromoteMove(coord, pawnPromoted, newPiece);
     }
 
 }

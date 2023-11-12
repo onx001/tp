@@ -483,10 +483,11 @@ public class ChessBoard {
                 ChessPiece oldPiece = this.getPieceAtCoor(coord);
                 assert this.canPromote(new Move(coord, coord, oldPiece))
                         : "Move in file tries to make an invalid promotion!";
+                assert oldPiece instanceof Pawn;
                 ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
                 this.setPromotionPiece(coord, newPiece);
 
-                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, newPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, (Pawn) oldPiece, newPiece);
                 if (isPlayersTurn) {
                     human.addMove(promoteMove);
                 } else {
