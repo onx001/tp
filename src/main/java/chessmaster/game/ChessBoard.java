@@ -377,8 +377,9 @@ public class ChessBoard {
     }
 
     public Color getWinningColor() {
-        
-        if (isCheckmated(playerColor)) {
+        if (isCheckmated(playerColor) && isCheckmated(playerColor.getOppositeColour())) {
+            return Color.DRAW;
+        } else if (isCheckmated(playerColor)) {
             return playerColor.getOppositeColour();
         } else if (isCheckmated(playerColor.getOppositeColour())) {
             return playerColor;

@@ -41,6 +41,7 @@ public class UiMessages {
 
     public static final String HUMAN_WIN_MESSAGE = "Congratulations! You have won as %s! :)";
     public static final String CPU_WIN_MESSAGE = "Oh no! You have lost as %s. Please try harder next time :(";
+    public static final String DRAW_MESSAGE = "It's a draw!";
 
     public static final String RESTART_GAME_MESSAGE =
             "Do you want to restart game? [y/n] ";

@@ -2,7 +2,7 @@
 package chessmaster.game;
 
 public enum Color {
-    WHITE, BLACK, EMPTY;
+    WHITE, BLACK, EMPTY, DRAW;
 
     /**
      * Get the opposite color given the player's color.
@@ -45,5 +45,14 @@ public enum Color {
      */
     public boolean isEmpty() {
         return this == Color.EMPTY;
+    }
+
+    /**
+     * Checks if a given color is draw.
+     *
+     * @return true if the color is draw; false otherwise.
+     */
+    public boolean isDraw() {
+        return this == Color.DRAW;
     }
 }
