@@ -17,15 +17,24 @@ public class MoveFactory {
             return new CastleMove(from, to, pieceMoved, CastleSide.RIGHT);
         }
 
-        Move move;
+        // Check if move is an en passant move
+        //@@author onx001
+        if (pieceMoved instanceof Pawn && board.hasEnPassant()) {
+            Coordinate enPassantCoor = board.getEnPassantCoor();
+            if (to.equals(enPassantCoor)) {
+                ChessPiece enPassantPiece = board.getEnPassantPiece();
+                return new EnPassantMove(from, to, pieceMoved, enPassantPiece);
+            }
+        }
+
         // Check if the move is a capturing move
+        Move move;
         if (board.isTileOccupied(to)) {
             ChessPiece pieceCaptured = board.getPieceAtCoor(to);
             move = new Move(from, to, pieceMoved, pieceCaptured);
         } else {
             move = new Move(from, to, pieceMoved);
         }
-
         return move;
     }
 

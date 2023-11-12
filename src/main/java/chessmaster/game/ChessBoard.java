@@ -4,11 +4,7 @@ import java.util.ArrayList;
 
 import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.InvalidMoveException;
-import chessmaster.game.move.PromoteMove;
-import chessmaster.game.move.CastleMove;
-import chessmaster.game.move.CastleSide;
-import chessmaster.game.move.Move;
-import chessmaster.game.move.MoveFactory;
+import chessmaster.game.move.*;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
@@ -285,14 +281,13 @@ public class ChessBoard {
     public void executeMove(Move move) throws InvalidMoveException {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
-        ChessPiece chessPiece = move.getPieceMoved();
+        ChessPiece pieceMoved = move.getPieceMoved();
 
-        chessPiece.setHasMoved();
-        chessPiece.updatePosition(destCoor);
+        pieceMoved.setHasMoved();
+        pieceMoved.updatePosition(destCoor);
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
-        getTileAtCoor(destCoor).updateTileChessPiece(chessPiece);
+        getTileAtCoor(destCoor).updateTileChessPiece(pieceMoved);
 
-        //@@author onx001
         // Deal with castling
         if (move instanceof CastleMove) {
             CastleMove castleMove = (CastleMove) move;
@@ -314,19 +309,20 @@ public class ChessBoard {
 
                 this.executeMove(rookCastleMove);
             }
-        } else if (move.getPieceMoved() instanceof Pawn && hasEnPassant()) {
-            Coordinate to = move.getTo();
-            Coordinate enPassantCoor = getEnPassantCoor();
-            if (to.equals(enPassantCoor)) {
-                ChessPiece enPassantPiece = getEnPassantPiece();
-                if (enPassantPiece.isSameColorAs(playerColor)) {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
-                } else {
-                    enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
-                }
-                getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
-                enPassantPiece.setIsCaptured();
+        } else if (move instanceof EnPassantMove) {
+            EnPassantMove enPassantMove = (EnPassantMove) move;
+            ChessPiece enPassantPiece = enPassantMove.getPieceCaptured();
+            Coordinate enPassantCoor = enPassantPiece.getPosition();
+
+            if (enPassantPiece.isSameColorAs(playerColor)) {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, 1);
+            } else {
+                enPassantCoor = enPassantCoor.addOffsetToCoordinate(0, -1);
             }
+
+            // Run capturing logic
+            this.getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
+            enPassantPiece.setIsCaptured();
         } else if (move.isSkippingPawn()) {
             move.getPieceMoved().setEnPassant();
         }
