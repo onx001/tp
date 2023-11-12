@@ -77,7 +77,7 @@ public class StepbackCommand extends Command {
                 Move rookCastleMove = ((CastleMove) previousMove).getRookMove();
                 reverseMove(rookCastleMove, historyBoard);
             } else if (previousMove instanceof PromoteMove) {
-                 reversePromotion((PromoteMove) previousMove, historyBoard);
+                reversePromotion((PromoteMove) previousMove, historyBoard);
             }
         }
 
