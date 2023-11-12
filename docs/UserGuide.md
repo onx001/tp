@@ -528,6 +528,10 @@ and type `y` when prompted to load a saved game.
 **A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
 to simulate timed games.
 
+**Q**: Can I draw by repeating moves?
+
+**A**: ChessMaster does not currently support draws by repetition. However, you can use the `abort` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check.
+
 ## Command Summary
 
 | Action        | Format                             |
