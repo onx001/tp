@@ -28,4 +28,8 @@ public class MoveFactory {
         return move;
     }
 
+    public static PromoteMove createPromoteMove(Coordinate coord, ChessPiece newPiece) {
+        return new PromoteMove(coord, newPiece);
+    }
+
 }

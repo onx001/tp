@@ -6,6 +6,7 @@ import chessmaster.game.Coordinate;
 import chessmaster.game.Game;
 import chessmaster.game.move.CastleMove;
 import chessmaster.game.move.Move;
+import chessmaster.game.move.PromoteMove;
 import chessmaster.pieces.ChessPiece;
 
 import java.util.ArrayList;
@@ -37,12 +38,17 @@ public class StepbackCommand extends Command {
         }
     }
 
+//    private void reversePromotion(Move move, ChessBoard board) {
+//
+//    }
+
     @Override
     public CommandResult execute(Game game) throws ChessMasterException {
         ChessBoard currentBoard = game.getBoard();
         ChessBoard historyBoard = currentBoard.clone();
         int totalNumMoves = game.getNumMoves();
 
+        // INPUT ERROR HANDLING
         int numMovesToStepBack = 0;
         try {
             numMovesToStepBack = Integer.parseInt(this.userInput);
@@ -66,6 +72,9 @@ public class StepbackCommand extends Command {
             if (previousMove instanceof CastleMove) {
                 Move rookCastleMove = ((CastleMove) previousMove).getRookMove();
                 reverseMove(rookCastleMove, historyBoard);
+            } else if (previousMove instanceof PromoteMove) {
+                // TODO
+                // reversePromotion();
             }
         }
 

@@ -4,6 +4,7 @@ import chessmaster.game.ChessBoard;
 import chessmaster.game.Color;
 import chessmaster.game.Coordinate;
 import chessmaster.game.move.Move;
+import chessmaster.game.move.MoveFactory;
 import chessmaster.game.move.PromoteMove;
 import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
@@ -49,7 +50,7 @@ public class Human extends Player {
                 this.pieces.add(promotedPiece);
                 this.pieces.remove(pawnPiece);
                 board.setPromotionPiece(coord, promotedPiece);
-                PromoteMove promoteMove = new PromoteMove(coord, promotedPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, promotedPiece);
                 this.addMove(promoteMove);
             }
         } while (promoteFailure);

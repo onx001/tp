@@ -486,7 +486,7 @@ public class ChessBoard {
                 ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
                 this.setPromotionPiece(coord, newPiece);
 
-                PromoteMove promoteMove = new PromoteMove(coord, newPiece);
+                PromoteMove promoteMove = MoveFactory.createPromoteMove(coord, newPiece);
                 if (isPlayersTurn) {
                     human.addMove(promoteMove);
                 } else {
