@@ -271,56 +271,59 @@ public class ChessBoard {
     }
 
     /**
-     * Executes a chess move on the chessboard.
-     *
-     * @param move The Move object representing the move to be executed.
-     * @throws InvalidMoveException If the move is not valid according to the game
-     *                              rules.
+     * For castling moves, executeBasicMove() only moves the King. This method will move the rook correctly
+     * based on whether the player has castled queen-side or king-side.
+     * @param move The CastleMove to execute
+     * @throws InvalidMoveException If the rook move is not valid according to game rules
      */
-    public void executeMove(Move move) throws InvalidMoveException {
+    private void executeCastlingRookMove(CastleMove move) throws InvalidMoveException {
+        Coordinate startCoor = move.getFrom();
+        CastleSide side = move.getSide();
+
+        Move rookCastleMove;
+        if (side == CastleSide.LEFT && startCoor.isOffsetWithinBoard(-4, 0)) {
+            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
+            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
+            rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMove(rookCastleMove);
+
+            this.executeMove(rookCastleMove);
+        } else if (side == CastleSide.RIGHT && startCoor.isOffsetWithinBoard(3, 0)) {
+            Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
+            Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
+            rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
+            move.setRookMove(rookCastleMove);
+
+            this.executeMove(rookCastleMove);
+        }
+    }
+
+    private void executeEnPassantCapture(EnPassantMove move) {
+        ChessPiece enPassantPiece = move.getPieceCaptured();
+
+        // Capture the enPassantPiece
+        this.getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
+        enPassantPiece.setIsCaptured();
+    }
+
+    /**
+     * Moves a piece from the start coordinate to the destination coordinate.
+     * @param move The move to execute
+     */
+    private void executeBasicMove(Move move) {
         Coordinate startCoor = move.getFrom();
         Coordinate destCoor = move.getTo();
         ChessPiece pieceMoved = move.getPieceMoved();
 
         pieceMoved.setHasMoved();
         pieceMoved.updatePosition(destCoor);
+
         getTileAtCoor(startCoor).setTileEmpty(startCoor);
+        getTileAtCoor(destCoor).getChessPiece().setIsCaptured();
         getTileAtCoor(destCoor).updateTileChessPiece(pieceMoved);
+    }
 
-        // Deal with castling
-        if (move instanceof CastleMove) {
-            CastleMove castleMove = (CastleMove) move;
-            CastleSide side = castleMove.getSide();
-
-            Move rookCastleMove;
-            if (side == CastleSide.LEFT && startCoor.isOffsetWithinBoard(-4, 0)) {
-                Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(-4, 0);
-                Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(-1, 0);
-                rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
-                castleMove.setRookMove(rookCastleMove);
-
-                this.executeMove(rookCastleMove);
-            } else if (side == CastleSide.RIGHT && startCoor.isOffsetWithinBoard(3, 0)) {
-                Coordinate rookStartCoor = startCoor.addOffsetToCoordinate(3, 0);
-                Coordinate rookDestCoor = startCoor.addOffsetToCoordinate(1, 0);
-                rookCastleMove = MoveFactory.createMove(this, rookStartCoor, rookDestCoor);
-                castleMove.setRookMove(rookCastleMove);
-
-                this.executeMove(rookCastleMove);
-            }
-        } else if (move instanceof EnPassantMove) {
-            EnPassantMove enPassantMove = (EnPassantMove) move;
-            ChessPiece enPassantPiece = enPassantMove.getPieceCaptured();
-            Coordinate enPassantCoor = enPassantPiece.getPosition();
-
-            // Run capturing logic
-            this.getTileAtCoor(enPassantPiece.getPosition()).setTileEmpty(enPassantPiece.getPosition());
-            enPassantPiece.setIsCaptured();
-        } else if (move.isSkippingPawn()) {
-            move.getPieceMoved().setEnPassant();
-        }
-
-        // Clear all en-passants
+    private void clearAllEnPassants(Move move) {
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
                 Coordinate coor = new Coordinate(col, row);
@@ -330,6 +333,27 @@ public class ChessBoard {
                 }
             }
         }
+    }
+
+    /**
+     * Executes a chess move on the chessboard.
+     *
+     * @param move The Move object representing the move to be executed.
+     * @throws InvalidMoveException If the move is not valid according to the game
+     *                              rules.
+     */
+    public void executeMove(Move move) throws InvalidMoveException {
+        this.executeBasicMove(move);
+
+        if (move instanceof CastleMove) {
+            this.executeCastlingRookMove((CastleMove) move);
+        } else if (move instanceof EnPassantMove) {
+            this.executeEnPassantCapture((EnPassantMove) move);
+        } else if (move.isSkippingPawn()) {
+            move.getPieceMoved().setEnPassant();
+        }
+
+        this.clearAllEnPassants(move);
     }
 
     public void executeMoveWithCheck(Move move) throws InvalidMoveException {
