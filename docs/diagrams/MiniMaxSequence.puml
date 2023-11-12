@@ -68,8 +68,6 @@ deactivate BST
 MM -> user : Return bestMove
 deactivate MM
 destroy MM
-destroy CB
-destroy M
 destroy BST
 
 @enduml

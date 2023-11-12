@@ -116,6 +116,16 @@ How the minimax algorithm works:
 4. The `getBestMove` method calls the `getBestMove` method recursively to populate the child scores.
 5. The `getBestMove` method returns the best move for the CPU to make.
 
+### Move types
+
+#### Standard moves
+
+#### Castling
+
+#### En Passant
+
+#### Promotion
+
 ### Storage Component
 **API:**
 
