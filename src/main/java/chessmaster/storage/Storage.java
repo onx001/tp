@@ -12,6 +12,7 @@ import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -32,6 +33,7 @@ public class Storage {
     private boolean blackKingPresent;
     private boolean whiteKingPresent;
     private Scanner fileScanner;
+    private Coordinate lastMove;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -253,9 +255,27 @@ public class Storage {
 
         ChessBoard board = new ChessBoard(playerColor);
 
-        // Execute move string array
+        //Execute move string Array
         board.executeMoveArray(moveStringList, human, cpu);
 
+        //@@author onx001
+        // get the destination coordinate of the last move
+        try {
+            String lastMoveString = moveStringList.get(moveStringList.size() - 1);
+            String[] lastMoveArray = lastMoveString.split(" ");
+            lastMove = Coordinate.parseAlgebraicCoor(lastMoveArray[1]);
+
+            if (otherBoard.getPieceAtCoor(lastMove).isPawn()) {
+                otherBoard.getPieceAtCoor(lastMove).setEnPassant();
+                board.getPieceAtCoor(lastMove).setEnPassant();
+            }
+        } catch (Exception e) {
+            assert moveStringList.size() == 0 : "Last move should be empty";
+        }
+
+
+
+        //@@author TriciaBK
         // Check obtained board with loaded board state
         if (!board.equals(otherBoard)) {
             throw new LoadBoardException(LOAD_BOARD_MISMATCH_STRING);
