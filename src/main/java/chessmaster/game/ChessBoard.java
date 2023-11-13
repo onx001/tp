@@ -505,7 +505,7 @@ public class ChessBoard {
         return new ChessBoard(this.playerColor, boardTiles);
     }
 
-    //@@author ken_ruster
+    //@@author ken-ruster
     /**
      * Takes in an array of multiple moves, and executes them in order. Also updates the move history
      * stored in the human and CPU objects.

@@ -215,6 +215,7 @@ public class Storage {
         return boardTiles;
     }
 
+    //@@author ken-ruster
     /**
      * Executes moves saved in the txt file so that it can be checked against the save board state.
      * Also stores the saved move history of both the human and CPU.
@@ -427,6 +428,7 @@ public class Storage {
         return this.filePathString;
     }
 
+    //@@author ken-ruster
     /**
      * Loads the history of moves made by the human player in the saved game.
      * Parses the moves into Move objects, and returns a null array if no moves were found.
