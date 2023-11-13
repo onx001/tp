@@ -206,7 +206,6 @@ Here is a brief overview of how the storage handles the data storage:
 | v2.0    | new player | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
 | v2.0    | player     | see past move history                                  | recap through the gameplay                             |
 | v2.0    | player     | see captured pieces                                    | gauge the state of the game                            |
-| v2.0    | new player | retract my past moves                                  | learn from my mistakes and select a better move        |
 
 
 ## Non-functional requirements
