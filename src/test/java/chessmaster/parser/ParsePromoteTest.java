@@ -2,7 +2,12 @@
 package chessmaster.parser;
 
 import chessmaster.game.Color;
-import chessmaster.pieces.*;
+import chessmaster.pieces.Bishop;
+import chessmaster.pieces.ChessPiece;
+import chessmaster.pieces.Knight;
+import chessmaster.pieces.Pawn;
+import chessmaster.pieces.Queen;
+import chessmaster.pieces.Rook;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -18,10 +18,10 @@ public class ShowMovesCommandTest {
     private static final String FILE_PATH_STRING = "data/ChessMaster.txt";
     private static final String[] AVAILABLE_COORDINATES_STRING = {"Available coordinates for Pawn at e2: ", "e3 e4 " };
     private static final String[] NO_AVAILABLE_STRING = {"There aren't any moves available for King at e1!"};
-    public static final String[] NO_COORDINATE_FOUND_STRING =
-            {"Oops! Looks like you forgot to specify a coordinate!"
-            , "Format: moves [column][row]"
-            , "Example: moves a2"};
+    private static final String[] NO_COORDINATE_FOUND_STRING =
+        {"Oops! Looks like you forgot to specify a coordinate!"
+        , "Format: moves [column][row]"
+        , "Example: moves a2"};
     private static final String AVAILABLE_COORDINATES_INPUT = "e2";
     private static final String NO_AVAILABLE_INPUT = "e1";
     private static final String NO_PIECE_INPUT = "e4";
