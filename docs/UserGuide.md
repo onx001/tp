@@ -96,7 +96,7 @@ Additionally, every time a move is executed, ChessMaster provides a comprehensiv
 <td>
   
 <pre><code>
-d2 d4
+move d2 d4
 _________________________________________________________________
 
 You moved Pawn from d2 to d4
@@ -127,7 +127,7 @@ _________________________________________________________________
 <td>
 
 <pre><code>
-
+ChessMaster is thinking of a move...
 _________________________________________________________________
 
 ChessMaster moved Pawn from e7 to e5
@@ -291,7 +291,8 @@ Objective:
 _________________________________________________________________
 ```
 
-Further details of special rules
+#### Further details of special rules
+
 1. Castling
 
    For the move to be valid:
@@ -334,7 +335,6 @@ Further details of special rules
    Available coordinates for King at e1:
    e2 d1 d2 c1
    _________________________________________________________________
-   
    ```
 
    Example:  `move e1 c1`
@@ -366,7 +366,7 @@ Further details of special rules
             (1) |   |   |(k)| r |( )| b | n | r | (1)
                 _________________________________
                  (a) (b) (c) (d) (e) (f) (g) (h)
-   ```
+    ```
 
 2. En Passant:
    
@@ -374,8 +374,8 @@ Further details of special rules
    To capture en passant, you must do it on your very next move. 
    - Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
 
-
    Sample previous board: 
+   
    ```
    _________________________________________________________________
 
@@ -433,10 +433,7 @@ Further details of special rules
    Available coordinates for Pawn at d5:
    e6 c6 d6
    _________________________________________________________________
-
    ```
-
-
 
 ### Show commands: `help`
 
@@ -445,6 +442,7 @@ Show a list of commands and what they do
 Format: `help`
 
 Expected Output:
+
 ```
 _________________________________________________________________
 
@@ -476,6 +474,7 @@ Display a legend that explains the piece representations
 Format: `legend`
 
 Expected Output:
+
 ```
 _________________________________________________________________
 
@@ -505,6 +504,7 @@ Selecting `y` will restart the game, while `n` will cause player to exit program
 Format: `restart`
 
 Expected output:
+
 ```
 Do you want to restart game? [y/n] 
 ```
@@ -526,7 +526,6 @@ Move 3: WHITE moves Knight from b8 to c6
 _________________________________________________________________
 ```
 
-
 ### Step back in history: `stepback`
 
 Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
@@ -537,26 +536,27 @@ Format: `stepback [number of moves to step back]`
 Example: `stepback 2`
 
 Sample output:
+
 ```
-(a) (b) (c) (d) (e) (f) (g) (h)
-_________________________________
-(8) | r | n | b | q | k | b |   | r | (8)
-_________________________________
-(7) | p | p | p | p | p | p | p | p | (7)
-_________________________________
-(6) |   |   |   |   |   | n |   |   | (6)
-_________________________________
-(5) |   |   |   |   |   |   |   |   | (5)
-_________________________________
-(4) |   |   |   |   |   |   |   |   | (4)
-_________________________________
-(3) |   |   |   |   |   |   |   |   | (3)
-_________________________________
-(2) | P | P | P | P | P | P | P | P | (2)
-_________________________________
-(1) | R | N | B | Q | K | B | N | R | (1)
-_________________________________
-(a) (b) (c) (d) (e) (f) (g) (h)
+                (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | r | n | b | q | k | b |   | r | (8)
+                _________________________________
+            (7) | p | p | p | p | p | p | p | p | (7)
+                _________________________________
+            (6) |   |   |   |   |   | n |   |   | (6)
+                _________________________________
+            (5) |   |   |   |   |   |   |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   |   |   |   | (4)
+                _________________________________
+            (3) |   |   |   |   |   |   |   |   | (3)
+                _________________________________
+            (2) | P | P | P | P | P | P | P | P | (2)
+                _________________________________
+            (1) | R | N | B | Q | K | B | N | R | (1)
+                _________________________________
+                (a) (b) (c) (d) (e) (f) (g) (h)
 
 _________________________________________________________________
 
@@ -573,6 +573,7 @@ Lists each player's pieces grouped by whether they have been captured or not.
 Format: `captured`
 
 Sample output:
+
 ```
 _________________________________________________________________
 
@@ -617,6 +618,7 @@ Exit the ChessMaster application.
 Format: `exit`
 
 Expected Output:
+
 ```
 _________________________________________________________________
 
@@ -632,21 +634,21 @@ saved game, and starting a new one will delete the existing save file.
 
 ## FAQ
 
-**Q**: How do I transfer my data to another computer? 
+> **Q**: How do I transfer my data to another computer? 
 
 **A**: You can navigate to your root folder, and find the file `data/ChessMaster.txt`. Transfer the file to your other computer,
 and find the `data` folder in the ChessMaster install folder in the other computer. Copy the file into the folder. Start ChessMaster,
 and type `y` when prompted to load a saved game.
 
-**Q**: How do I play with another person?
+> **Q**: How do I play with another person?
 
 **A**: Currently, ChessMaster does not support multiplayer. 
 
-**Q**: Can we play timed games?
+> **Q**: Can we play timed games?
 
 **A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch to simulate timed games.
 
-**Q**: Can I draw by repeating moves?
+> **Q**: Can I draw by repeating moves?
 
 **A**: ChessMaster does not currently support draws by repetition. However, you can use the `exit` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check or there are only kings left on the board.
 
