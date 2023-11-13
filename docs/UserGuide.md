@@ -17,9 +17,10 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
         - [Restart game: `restart`]()        
-        - [View history of game moves: `history`](#view-history-of-game-moves-history)
+        - [View history of game moves: `history`](#view-history-of-all-game-moves-history)
         - [Step back in history: `stepback`](#step-back-in-history-stepback)
-        - [Aborting game: `abort`](#aborting-game-abort)
+        - [List pieces in play: `captured`](#list-pieces-in-play-captured)
+        - [Exit game: `exit`](#exit-the-game-exit)
 - [Command Summary](#command-summary)
 
 ## Quick Start
@@ -229,6 +230,33 @@ Format: `show`
 
 Expected Output:
 
+```
+_________________________________________________________________
+
+Here is the current board state:
+_________________________________________________________________
+
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                _________________________________
+            (8) | R | N | B | Q | K | B | N | R | (8)
+                _________________________________
+            (7) | P | P | P | P | P | P | P | P | (7)
+                _________________________________
+            (6) |   |   |   |   |   |   |   |   | (6)
+                _________________________________
+            (5) |   |   |   |   |   |   |   |   | (5)
+                _________________________________
+            (4) |   |   |   |   |   |   |   |   | (4)
+                _________________________________
+            (3) |   |   |   |   |   |   |   |   | (3)
+                _________________________________
+            (2) | p | p | p | p | p | p | p | p | (2)
+                _________________________________
+            (1) | r | n | b | q | k | b | n | r | (1)
+                _________________________________
+                 (a) (b) (c) (d) (e) (f) (g) (h)
+                 
+```
 
 ### Show chess rules: `rules`
 
@@ -274,7 +302,7 @@ Further details of special rules
     - Move your king two squares to the right/left (towards the rook).
     - The rook will jump over the king and land on the square next to the king.
 
-   Example:  `moves e1`
+   Example of castling availability:  `moves e1`
 
    Expected Output:
 
@@ -373,7 +401,7 @@ Further details of special rules
                  (a) (b) (c) (d) (e) (f) (g) (h)
    ```
 
-   Example: `moves d5`
+   Example: `move d5 e6`
 
    Expected output:
 
@@ -384,9 +412,9 @@ Further details of special rules
                 _________________________________
             (7) | P | P | P | P |   | P | P | P | (7)
                 _________________________________
-            (6) |   |   |[N]|[.]|[.]|   |   |   | (6)
+            (6) |   |   | N |   |(p)|   |   |   | (6)
                 _________________________________
-            (5) |   |   |   |{p}| P |   |   |   | (5)
+            (5) |   |   |   |( )|   |   |   |   | (5)
                 _________________________________
             (4) |   |   |   |   |   |   |   |   | (4)
                 _________________________________
@@ -477,7 +505,6 @@ Expected output:
 Do you want to restart game? [y/n] 
 ```
 
-
 ### View history of all game moves: `history`
 
 Displays a list of all previous moves in the current game
@@ -491,11 +518,49 @@ in the current game.
 
 Format: `stepback [number of moves to step back]`
 
-### Saving and loading games
+### List pieces in play: `captured`
 
-Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
-user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
-saved game, and starting a new one will delete the existing save file.
+Lists each player's pieces grouped by whether they have been captured or not.
+
+Format: `captured`
+
+Sample output:
+```
+_________________________________________________________________
+
+Player's pieces
+----------------------------------------
+In play:
+- Bishop x2
+- King
+- Knight
+- Pawn x7
+- Rook x2
+
+Captured:
+- Queen
+- Knight
+- Pawn
+
+
+CPU's pieces
+----------------------------------------
+
+In play:
+- Bishop x2
+- King
+- Queen
+- Knight
+- Pawn x7
+- Rook x2
+
+Captured:
+- Knight
+- Pawn
+
+_________________________________________________________________
+
+```
 
 ### Exit the game: `exit`
 
@@ -510,6 +575,12 @@ _________________________________________________________________
 Exiting program... Thanks for playing!
 _________________________________________________________________
 ```
+
+### Saving and loading games
+
+Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
+user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
+saved game, and starting a new one will delete the existing save file.
 
 ## FAQ
 
@@ -529,7 +600,7 @@ and type `y` when prompted to load a saved game.
 
 **Q**: Can I draw by repeating moves?
 
-**A**: ChessMaster does not currently support draws by repetition. However, you can use the `abort` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check.
+**A**: ChessMaster does not currently support draws by repetition. However, you can use the `exit` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check or there are only kings left on the board.
 
 ## Command Summary
 
@@ -542,6 +613,7 @@ and type `y` when prompted to load a saved game.
 | Help          | `help`                             |
 | Pieces legend | `legend`                           |
 | History       | `history`                          |
-| Step back     | `stepback`                         |
+| Step back     | `stepback [number of steps]`       |
+| List pieces   | `captured`                         |
 | Exit          | `exit`                             |
 

@@ -68,6 +68,7 @@ How does the Game component work:
 
 ### User input handling
 Below is a class diagram representing the Command and Parser classes.
+
 ![](images/ParserCommandDiagram.png)
 
 In order to handle user input into the program during the game, the `Parser` class was implemented.
@@ -118,6 +119,7 @@ How the minimax algorithm works:
 ### Move types
 The Move class and its subclasses are responsible for handling the different types of moves in chess. The Move class is an abstract class that is extended by the following subclasses: StandardMove, PawnOpening, CastleMove, EnPassantMove and PromotionMove. The Move class is also extended by the following classes: CastleSide, Direction, MoveDirection, MoveType and PromotionPiece.
 Below is a class diagram representing the Move class.
+
 ![](images/MoveClass.png)
 
 #### Standard moves
@@ -130,6 +132,9 @@ How standard moves are generated:
 4. Any chess piece that "blocks" the path of the chess piece is checked for colour. If the chess piece is of the same colour, the chess piece cannot move past it. If the chess piece is of the opposite colour, the chess piece can capture it. For example, a rook can capture an enemy chess piece in the up, down, left and right directions. (Note that pawn moves are an exception to this rule. Pawn pieces can only capture enemy chess pieces in the forward diagonal directions.)
 5. Special cases such as castling, en passant and promotion are also encoded as `directions` and executed separately with different move functions.
 
+Below is a sequence diagram representing the process of generating and executing moves.
+
+![](images/MoveSequence.png)
 
 #### Pawn Opening
 A pawn opening is a special type of move that involves moving a pawn from its starting position to another tile two spaces ahead. This move is only valid if the pawn is in its starting position and the tile it is moving to as well as the tile in between is empty. 
@@ -144,12 +149,12 @@ En passant is a special type of move that involves capturing a pawn that has jus
 Promotion is a special type of move that involves promoting a pawn to another piece. This move is only valid if the pawn is in the correct position, which is at the other end of the board from which it starts. This information is implemented in the Pawn class and executed with the PromotionMove class.
 
 
-
 ### Storage Component
 **API:**
 
 Below is a class diagram representing the Storage class.
 The Storage component is responsible for handling the storage and retrieval of chess game state.
+
 ![](images/StorageClass.png)
 
 ![](images/StorageSequence.png)
