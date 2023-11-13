@@ -23,6 +23,7 @@
 ### Documentation:
 #### User Guide:
 Added documentation for the features storage and command features (Exit, Help, Restart, Rules, Show)
+Implemented command summary and expected outputs of commands.
 
 #### Developer Guide:
 - Added implementation details of the storage feature.
