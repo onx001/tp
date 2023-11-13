@@ -26,7 +26,10 @@ public class ChessBoard {
     public static final int BOTTOM_ROW_INDEX = 7;
     public static final int MAX_PIECES = 16;
     public static final String PROMOTE_MOVE_STRING = "p";
-
+    public static final String INVALID_SAVE_STRING =
+            "Invalid move found in save file! Please start a new game or correct the invalid move!";
+    public static final String INVALID_PROMOTE_STRING =
+            "Invalid promotion found in save file! Please start a new game or correct the invalid move!";
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
         { "p", "p", "p", "p", "p", "p", "p", "p" }, 
@@ -502,7 +505,7 @@ public class ChessBoard {
         return new ChessBoard(this.playerColor, boardTiles);
     }
 
-    //@@author ken-ruster
+    //@@author ken_ruster
     /**
      * Takes in an array of multiple moves, and executes them in order. Also updates the move history
      * stored in the human and CPU objects.
@@ -521,7 +524,9 @@ public class ChessBoard {
 
             if (!isPromote) {
                 Move toExecute = Parser.parseMove(move, this, false);
-                assert toExecute.isValid(this) : "Move in file is not valid!";
+                if (!toExecute.isValid(this)) {
+                    throw new InvalidMoveException(INVALID_SAVE_STRING);
+                }
                 this.executeMove(toExecute);
 
                 if (isPlayersTurn) {
@@ -532,9 +537,10 @@ public class ChessBoard {
             } else {
                 Coordinate coord = Coordinate.parseAlgebraicCoor(moveCommandArray[1]);
                 ChessPiece oldPiece = this.getPieceAtCoor(coord);
-                assert this.canPromote(new Move(coord, coord, oldPiece))
-                        : "Move in file tries to make an invalid promotion!";
                 assert oldPiece instanceof Pawn;
+                if (!this.canPromote(new Move(coord, coord, oldPiece))) {
+                    throw new InvalidMoveException(INVALID_PROMOTE_STRING);
+                }
                 ChessPiece newPiece = Parser.parsePromote(oldPiece, moveCommandArray[2]);
                 this.setPromotionPiece(coord, newPiece);
 

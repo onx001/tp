@@ -11,7 +11,8 @@ import chessmaster.user.CPU;
 import chessmaster.user.Human;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class ShowMovesCommandTest {
     private static final String FILE_PATH_STRING = "data/ChessMaster.txt";

@@ -25,6 +25,7 @@ public class Storage {
     //@@author ken_ruster
     private static final String LOAD_BOARD_MISMATCH_STRING =
             "Board state does not match state dictated by move history!";
+    private static final String PATH_EMPTY_STRING = "File path cannot be empty or null";
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
@@ -38,7 +39,7 @@ public class Storage {
     public Storage(String filePath) {
         filePathString = filePath;
         storageFile = new File(filePath);
-        assert !filePathString.isEmpty() && filePath != null : "File path cannot be empty or null";
+        assert !filePathString.isEmpty() && filePath != null : PATH_EMPTY_STRING;
     }
 
     //@@author TongZhengHong
