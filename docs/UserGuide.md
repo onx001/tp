@@ -158,7 +158,7 @@ _________________________________________________________________
 
 ## Ending the game
 
-The game will automatically end and a victor be declared when one side has been checkmated, or if their king has been captured.
+The game will automatically end and a victor be declared when one side has been checkmated, or if both players are stuck in a stalemate situation where neither player can avoid moving into a checked position.
 
 Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
 
