@@ -13,13 +13,12 @@ import org.junit.jupiter.api.Test;
 import chessmaster.ui.TextUI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChessBoardTest {
 
     private static final String[] MOVE_STRING_ARRAY =
-            {"d2 d4", "g8 f6", "g1 f3", "b8 c6", "c1 f4", "d7 d5",
-            "c2 c3", "f6 e4", "b1 d2", "e4 d2", "d1 d2", "f7 f5"};
+        {"d2 d4", "g8 f6", "g1 f3", "b8 c6", "c1 f4", "d7 d5",
+        "c2 c3", "f6 e4", "b1 d2", "e4 d2", "d1 d2", "f7 f5"};
     private static final String[][] MOVED_CHESSBOARD = {
             { "R", ".", "B", "Q", "K", "B", ".", "R" },
             { "P", "P", "P", ".", "P", ".", "P", "P" },
