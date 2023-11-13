@@ -40,8 +40,6 @@ Our application also uses other classes to store information about the chess gam
 
 ### ChessMaster component
 
-<!-- Here is a partial class diagram of ChessMaster.  -->
-
 The sequence diagram below illustrates the interactions within the ChessMaster component, when they launch the program. 
 
 ![](images/ChessMasterSequence.png)
@@ -50,12 +48,12 @@ How does ChessMaster component work:
 
 1. Attempts to load previously stored game in storage
 2. If previous game exists, asks the user if a new game or the previous game should be loaded. 
-3. If a new game is selected, the user will be prompted for the color to start. 
+3. If a new game is selected, the user will be prompted for the color and difficulty to start. 
 4. Start running the new or previous game instance. 
 
 ### Game component
 
-The sequence diagram below illustrates the interactions within the Game component, taking a move of "a2 a3" as example.
+The sequence diagram below illustrates the interactions within the Game component.
 
 ![](images/GameSequence.png)
 
@@ -156,17 +154,25 @@ The Storage component is responsible for handling the storage and retrieval of c
 
 ![](images/StorageSequence.png)
 
-* Creates the necessary parent directories for the file and the file itself if they don't exist 
-* Saves the current state of the ChessBoard to the file. It includes the player's color information and current player's turn as the first line and the state of the chessboard in an 8x8 format.
+Here is a brief overview of how the storage handles the data storage:
+1. In the text file, the following contents are stored in order, each taking up a line:
+   1. Player's color information 
+   2. Game difficulty
+   3. Color of the next player (the color to be played upon the loading of game)
+   4. Human player's past moves in the form of comma-separated string
+   5. CPU's past moves in the form of comma-separated string 
+   6. State of the chessboard in an 8x8 format, taking up 8 lines.
+
+2. Creates the necessary parent directories for the file and the file itself if they don't exist 
 * Allows resetting the game by clearing the contents of the file.
 * Loads the state of the chessboard from the file by constructing a 2D array of ChessTile objects.
 
 
 ## Product scope
 ### Target user profile
-
 1. Novice players trying to practice chess and play chess offline without a chess set. 
 2. Time-poor users looking for a very simple, clean, gimmick-free chess application.
+
 ### Value proposition
 - Chess novices can use ChessMaster CLI to learn the game's rules and practice their skills.
 - Busy students can open the application up in their terminal easily for a quick game of chess.
@@ -174,19 +180,20 @@ The Storage component is responsible for handling the storage and retrieval of c
 
 ## User stories
 
-| Version | As a ...   | I want to ...                                          | So that I can ...                                      |
-|---------|------------|--------------------------------------------------------|--------------------------------------------------------|
-| v1.0    | new user   | see usage instructions                                 | refer to them when I forget how to use the application |
-| v1.0    | player     | do only valid moves                                    | play chess properly                                    |
-| v1.0    | player     | start a new game                                       | play chess multiple times                              |
-| v1.0    | player     | see the current state of the chess board on every turn | think about what move to play                          |
-| v1.0    | player     | tell which symbol represents which piece               | know what is where                                     |
-| v1.0    | player     | specify move coordinates                               | move the piece I want how I want it                    |
-| v1.0    | player     | promote pieces when the option is available            | play extended games properly                           |
-| v1.0    | player     | have the option to abort the game                      | leave the game when I no longer want to play           |
-| v1.0    | player     | save and get back to a game                            | leave when I am busy and resume a game when I am free  |
-| v2.0    | new player | see available moves for a piece                        | learn the rules of chess and valid moves               |
-| v2.0    | new player | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
+| Version | As a ...    | I want to ...                                          | So that I can ...                                      |
+|---------|-------------|--------------------------------------------------------|--------------------------------------------------------|
+| v1.0    | new user    | see usage instructions                                 | refer to them when I forget how to use the application |
+| v1.0    | player      | do only valid moves                                    | play chess properly                                    |
+| v1.0    | player      | start a new game                                       | play chess multiple times                              |
+| v1.0    | player      | see the current state of the chess board on every turn | think about what move to play                          |
+| v1.0    | player      | tell which symbol represents which piece               | know what is where                                     |
+| v1.0    | player      | specify move coordinates                               | move the piece I want how I want it                    |
+| v1.0    | player      | promote pieces when the option is available            | play extended games properly                           |
+| v1.0    | player      | have the option to abort the game                      | leave the game when I no longer want to play           |
+| v1.0    | player      | save and get back to a game                            | leave when I am busy and resume a game when I am free  |
+| v2.0    | new player  | see available moves for a piece                        | learn the rules of chess and valid moves               |
+| v2.0    | new player  | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
+| v2.0    | new player  | retract my past moves                                  | learn from my mistakes and select a better move        |
 
 {more to be added}
 

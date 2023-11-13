@@ -525,8 +525,7 @@ and type `y` when prompted to load a saved game.
 
 **Q**: Can we play timed games?
 
-**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
-to simulate timed games.
+**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch to simulate timed games.
 
 **Q**: Can I draw by repeating moves?
 
