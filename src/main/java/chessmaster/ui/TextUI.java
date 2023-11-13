@@ -297,6 +297,12 @@ public final class TextUI {
     public void printRestartingGameMessage() {
         System.out.println(UiMessages.RESTARTING_GAME_MESSAGE);
     }
+
+    //@@author onx001
+    public void printDrawMessage() {
+        System.out.println(UiMessages.DRAW_MESSAGE);
+    }
+    
     //@@author TriciaBK
     public void promptNewGame(boolean error) {
         if (error) {

@@ -159,7 +159,7 @@ _________________________________________________________________
 
 ## Ending the game
 
-The game will automatically end and a victor be declared when one side has been checkmated, or if their king has been captured.
+The game will automatically end and a victor be declared when one side has been checkmated, or if both players are stuck in a stalemate situation where neither player can avoid moving into a checked position.
 
 Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
 
@@ -571,6 +571,10 @@ and type `y` when prompted to load a saved game.
 
 **A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
 to simulate timed games.
+
+**Q**: Can I draw by repeating moves?
+
+**A**: ChessMaster does not currently support draws by repetition. However, you can use the `abort` command to end the game. Alternatively, you can maneuver the game to a draw by stalemate, where neither party can move without being in check.
 
 ## Command Summary
 

@@ -182,8 +182,12 @@ public class Game {
         boolean end = board.isEndGame();
         if (end) {
             Color winningColor = board.getWinningColor();
-            Player winnerPlayer = human.getColour() == winningColor ? human : cpu;
-            ui.printEndMessage(winnerPlayer);
+            if (winningColor == Color.DRAW) {
+                ui.printDrawMessage();
+            } else {
+                Player winnerPlayer = human.getColour() == winningColor ? human : cpu;
+                ui.printEndMessage(winnerPlayer);
+            }
             storage.resetBoard();
         }
         return end;

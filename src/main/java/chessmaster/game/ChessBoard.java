@@ -328,6 +328,7 @@ public class ChessBoard {
         getTileAtCoor(destCoor).updateTileChessPiece(pieceMoved);
     }
 
+
     private void clearAllEnPassants(Move move) {
         for (int row = 0; row < ChessBoard.SIZE; row++) {
             for (int col = 0; col < ChessBoard.SIZE; col++) {
@@ -395,8 +396,9 @@ public class ChessBoard {
     }
 
     public Color getWinningColor() {
-        
-        if (isCheckmated(playerColor)) {
+        if (isCheckmated(playerColor) && isCheckmated(playerColor.getOppositeColour())) {
+            return Color.DRAW;
+        } else if (isCheckmated(playerColor)) {
             return playerColor.getOppositeColour();
         } else if (isCheckmated(playerColor.getOppositeColour())) {
             return playerColor;

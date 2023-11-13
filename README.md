@@ -70,7 +70,7 @@ A summary of user commands can be found in the table below:
 | History       | `history`                          |
 | Step back     | `stepback`                         |
 | List pieces   | `captured`                         |
-| Abort         | `abort`                            |
+| Exit          | `exit`                             |
 
 Please visit our [User Guide](https://ay2324s1-cs2113-t18-1.github.io/tp/UserGuide.html) for further details on each 
 of these commands.
