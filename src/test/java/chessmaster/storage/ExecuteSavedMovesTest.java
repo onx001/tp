@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ExecuteSavedMovesTest {
     private static final String FILE_PATH_STRING =
-            "src/test/java/chessmaster/data/storageTest.txt";
+            "src/test/resources/storageTest.txt";
     private static final String INVALID_FILE_PATH_STRING =
-            "src/test/java/chessmaster/data/storageTest_invalidMove.txt";
+            "src/test/resources/storageTest_invalidMove.txt";
     private static final String[][] MOVED_CHESSBOARD = {
             { "R", ".", "B", "Q", "K", "B", ".", "R" },
             { "P", "P", "P", ".", "P", ".", "P", "P" },
