@@ -11,14 +11,14 @@ import chessmaster.user.CPU;
 import chessmaster.user.Human;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class executeShowMovesCommandTest {
+public class ShowMovesCommandTest {
     private static final String FILE_PATH_STRING = "data/ChessMaster.txt";
     private static final String[] AVAILABLE_COORDINATES_STRING = {"Available coordinates for Pawn at e2: ", "e3 e4 " };
     private static final String[] NO_AVAILABLE_STRING = {"There aren't any moves available for King at e1!"};
+    public static final String[] NO_COORDINATE_FOUND_STRING =
+            {"Oops! Looks like you forgot to specify a coordinate!"};
     private static final String AVAILABLE_COORDINATES_INPUT = "e2";
     private static final String NO_AVAILABLE_INPUT = "e1";
     private static final String NO_PIECE_INPUT = "e4";
@@ -34,7 +34,7 @@ public class executeShowMovesCommandTest {
     }
 
     @Test
-    public void testShowMoves_inputValid() throws ChessMasterException {
+    public void testExecute_inputValid() throws ChessMasterException {
         Game game = loadGame();
 
         ShowMovesCommand commandHasPiece = new ShowMovesCommand(AVAILABLE_COORDINATES_INPUT);
@@ -47,7 +47,17 @@ public class executeShowMovesCommandTest {
         String[] noMoves = commandNoMoves.execute(game).getMessageStrings();
         assertArrayEquals(noMoves, NO_AVAILABLE_STRING);
 
-        assertThrows(NullPieceException.class, 
+        assertThrows(NullPieceException.class,
                 () -> commandNoPiece.execute(game).getMessageStrings());
+    }
+
+    @Test
+    public void testExecute_inputEmpty_expectNullPieceException() throws ChessMasterException {
+        Game game = loadGame();
+
+        ShowMovesCommand commandNoInput = new ShowMovesCommand("");
+
+        String[] noInput = commandNoInput.execute(game).getMessageStrings();
+        assertArrayEquals(noInput, NO_COORDINATE_FOUND_STRING);
     }
 }
