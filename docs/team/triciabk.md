@@ -2,7 +2,7 @@
 
 ## Project: ChessMaster
 
-###### Chessmaster is a ChessMasterCLI is a command-line interface (CLI) chess game designed to make learning and training accessible for beginners while offering an engaging experience for all skill levels. This sleek and user-friendly chess simulator provides a platform for novice players to build their skills and understanding of the game.
+###### ChessMaster is a ChessMasterCLI is a command-line interface (CLI) chess game designed to make learning and training accessible for beginners while offering an engaging experience for all skill levels. This sleek and user-friendly chess simulator provides a platform for novice players to build their skills and understanding of the game.
 
 ### Given below are my contributions to the project:
 
@@ -16,13 +16,15 @@
 - Allow for restart of new game after a game is completed
 
 #### Other Trivial Commands
-- 
+- `help` command 
+- `show` board command
+- `rules` command 
 
 ### Documentation:
 #### User Guide:
 Added documentation for the features storage and command features (Exit, Help, Restart, Rules, Show)
+Implemented command summary and expected outputs of commands.
 
 #### Developer Guide:
 - Added implementation details of the storage feature.
 - Contributed to product scope and target users.
-

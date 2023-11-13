@@ -16,7 +16,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
         - [Show chess rules: `rules`](#show-chess-rules-rules)
         - [Show commands: `help`](#show-commands-help)
         - [Legend: `legend`](#view-pieces-representation-legend)
-        - [Restart game: `restart`]()        
+        - [Restart game: `restart`](#start-a-new-game-of-chess-restart)        
         - [View history of game moves: `history`](#view-history-of-all-game-moves-history)
         - [Step back in history: `stepback`](#step-back-in-history-stepback)
         - [List pieces in play: `captured`](#list-pieces-in-play-captured)
@@ -61,21 +61,22 @@ _________________________________________________________________
 Upon launching the application, ChessMaster checks if there is a previous game in progress. If a previous game exists, you'll be presented with the option to continue from where you left off. Please enter `y` for **yes** and `n` for **no**.
 
 ```
-You have an ongoing previous chess game. Continue game? [y/n]
+You have an ongoing previous chess game. Continue game? [y/n/exit]
 ```
 
 However, if you prefer to **start a fresh game** or if **no previous game is found**, ChessMaster will prompt you to select your preferred color—whether it's "White" or "Black." Please enter `b` for **black** and `w` for **white**.
 
 ```
-Choose your starting color to start new game! [b/w]
+Choose your starting color to start new game! [b/w/exit]
 ```
 
 Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
 ```
-Choose your difficulty level! [1/2/3/4]
+Choose your difficulty level! [1/2/3/4/exit]
 ```
 
-Now, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
+Inputs that are not compliant with the expect input (indicated in `[]`) will be rejected and users will be prompted to re-input.
+Else, you'll be off to a rewarding journey of enhancing your chess skills and enjoying the timeless game of strategy and tactics with ChessMaster!
 
 ## Gameplay
 
@@ -165,7 +166,7 @@ Checkmate is the point in the game where the attacking player has the opponent's
 
 The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
-Otherwise, you may use the `abort` command if you wish to end the game midway. 
+Otherwise, you may use the `exit` command if you wish to end the game midway and quit the program or `restart` command to start a new game. 
 
 ## Features 
 
@@ -278,8 +279,9 @@ Piece movement:
    Queens ("q") move any number of squares in any direction.
    Kings ("k") move one square in any direction.
 
-Special Rules: (Refer to specific move methods in the User Guide)
-   Castling - King and rook move simultaneously to safeguard the king. (e.g. e1 g1)
+Special Rules:
+[Refer to specific move methods in the User Guide]
+   Castling - King and rook move simultaneously to safeguard the king.
    En Passant - Pawn capturing when moving two squares from starting position.
    Pawn Promotion - Promote a pawn to another piece (except king) upon reaching the back rank.
 
@@ -446,25 +448,26 @@ Expected Output:
 ```
 _________________________________________________________________
 
-Seems like you need some help!
-Here are the following commands to play:
-Move piece - Input coordinate of piece, followed by coordinate to move to
-   Format: [column][row] [column][row]
-   E.g. a2 a3
-Show available moves - Lists all the available moves for a piece
-   Format: moves [column][row]
-   E.g. moves a2
-Show board - Shows the current state of the chess board
-   Format: show
-Obtain rules - Obtain a quick refresher on the rules of chess
-   Format: rules
-View pieces representation - Display a legend that explains the 
-                             piece representations
-   Format: legend
-Abort game - Exit programme
-   Format: abort
+Here are the commands you can use to play:
+move		Move piece
+		Format: move [column][row] [column][row]
+		e.g. move a2 a3
+moves		Show available moves for a piece
+		Format: moves [column][row]
+		e.g. moves a2
+show		Show the chessboard
+rules		Obtain a quick refresher on the rules of chess
+legend		View pieces representation
+restart		Start a new game
+history		View history of all game moves
+stepback	View the board as it was a certain number of moves ago
+		Format: stepback [number of moves to step back]
+		e.g. stepback 4
+captured	See which Player and CPU pieces have been captured so far
+exit		Exit game
 _________________________________________________________________
 ```
+
 
 ### View pieces representation: `legend` 
 
@@ -496,7 +499,8 @@ _________________________________________________________________
 
 ### Start a new game of chess: `restart`
 
-Enables the player to restart the game
+Enables the player to restart the game.
+Selecting `y` will restart the game, while `n` will cause player to exit program.
 
 Format: `restart`
 
@@ -511,12 +515,56 @@ Displays a list of all previous moves in the current game
 
 Format: `history`
 
+Sample output:
+```
+_________________________________________________________________
+
+Move 1: WHITE moves Knight from g8 to f6
+Move 2: BLACK moves Pawn from a2 to a4
+Move 3: WHITE moves Knight from b8 to c6
+
+_________________________________________________________________
+```
+
+
 ### Step back in history: `stepback`
 
 Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
 in the current game.
 
 Format: `stepback [number of moves to step back]`
+
+Example: `stepback 2`
+
+Sample output:
+```
+(a) (b) (c) (d) (e) (f) (g) (h)
+_________________________________
+(8) | r | n | b | q | k | b |   | r | (8)
+_________________________________
+(7) | p | p | p | p | p | p | p | p | (7)
+_________________________________
+(6) |   |   |   |   |   | n |   |   | (6)
+_________________________________
+(5) |   |   |   |   |   |   |   |   | (5)
+_________________________________
+(4) |   |   |   |   |   |   |   |   | (4)
+_________________________________
+(3) |   |   |   |   |   |   |   |   | (3)
+_________________________________
+(2) | P | P | P | P | P | P | P | P | (2)
+_________________________________
+(1) | R | N | B | Q | K | B | N | R | (1)
+_________________________________
+(a) (b) (c) (d) (e) (f) (g) (h)
+
+_________________________________________________________________
+
+Stepped back 2 steps!
+Use `show` to see the current board.
+_________________________________________________________________
+```
+
 
 ### List pieces in play: `captured`
 
@@ -596,8 +644,7 @@ and type `y` when prompted to load a saved game.
 
 **Q**: Can we play timed games?
 
-**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch 
-to simulate timed games.
+**A**: ChessMaster does not come with an internal timer. However, you are able to use your own chess timer or stopwatch to simulate timed games.
 
 **Q**: Can I draw by repeating moves?
 
@@ -605,16 +652,17 @@ to simulate timed games.
 
 ## Command Summary
 
-| Action        | Format                             |
-|---------------|------------------------------------|
-| Move          | `move [column][row] [column][row]` |
-| Show moves    | `moves [column][row]`              |
-| Show board    | `show`                             |
-| Rules         | `rules`                            |
-| Help          | `help`                             |
-| Pieces legend | `legend`                           |
-| History       | `history`                          |
-| Step back     | `stepback [number of steps]`       |
-| List pieces   | `captured`                         |
-| Exit          | `exit`                             |
+| Action               | Format                             |
+|----------------------|------------------------------------|
+| Move                 | `move [column][row] [column][row]` |
+| Show moves           | `moves [column][row]`              |
+| Show board           | `show`                             |
+| Rules                | `rules`                            |
+| Help                 | `help`                             |
+| Pieces legend        | `legend`                           |
+| Restart game         | `restart`                          |
+| History              | `history`                          |
+| Step back            | `stepback [number of steps]`       |
+| List captured pieces | `captured`                         |
+| Exit                 | `exit`                             |
 
