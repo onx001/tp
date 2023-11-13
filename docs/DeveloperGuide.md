@@ -191,20 +191,21 @@ Here is a brief overview of how the storage handles the data storage:
 
 ## User stories
 
-| Version | As a ...    | I want to ...                                          | So that I can ...                                      |
-|---------|-------------|--------------------------------------------------------|--------------------------------------------------------|
-| v1.0    | new user    | see usage instructions                                 | refer to them when I forget how to use the application |
-| v1.0    | player      | do only valid moves                                    | play chess properly                                    |
-| v1.0    | player      | start a new game                                       | play chess multiple times                              |
-| v1.0    | player      | see the current state of the chess board on every turn | think about what move to play                          |
-| v1.0    | player      | tell which symbol represents which piece               | know what is where                                     |
-| v1.0    | player      | specify move coordinates                               | move the piece I want how I want it                    |
-| v1.0    | player      | promote pieces when the option is available            | play extended games properly                           |
-| v1.0    | player      | have the option to abort the game                      | leave the game when I no longer want to play           |
-| v1.0    | player      | save and get back to a game                            | leave when I am busy and resume a game when I am free  |
-| v2.0    | new player  | see available moves for a piece                        | learn the rules of chess and valid moves               |
-| v2.0    | new player  | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
-| v2.0    | new player  | retract my past moves                                  | learn from my mistakes and select a better move        |
+| Version | As a ...   | I want to ...                                          | So that I can ...                                      |
+|---------|------------|--------------------------------------------------------|--------------------------------------------------------|
+| v1.0    | new user   | see usage instructions                                 | refer to them when I forget how to use the application |
+| v1.0    | player     | do only valid moves                                    | play chess properly                                    |
+| v1.0    | player     | start a new game                                       | play chess multiple times                              |
+| v1.0    | player     | see the current state of the chess board on every turn | think about what move to play                          |
+| v1.0    | player     | tell which symbol represents which piece               | know what is where                                     |
+| v1.0    | player     | specify move coordinates                               | move the piece I want how I want it                    |
+| v1.0    | player     | promote pieces when the option is available            | play extended games properly                           |
+| v1.0    | player     | have the option to abort the game                      | leave the game when I no longer want to play           |
+| v1.0    | player     | save and get back to a game                            | leave when I am busy and resume a game when I am free  |
+| v2.0    | new player | see available moves for a piece                        | learn the rules of chess and valid moves               |
+| v2.0    | new player | refresh the rules of chess anytime                     | recap and learn the rules of chess                     |
+| v2.0    | new player | retract my past moves                                  | learn from my mistakes and select a better move        |
+| v2.0    | player     | see captured pieces                                    | gauge the state of the game                            |
 
 
 ## Non-functional requirements
