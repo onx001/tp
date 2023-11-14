@@ -11,7 +11,7 @@ import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
+import chessmaster.user.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -167,7 +167,7 @@ public class Storage {
         int rowIndex = 0;
         ChessTile[][] boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
         while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
-            String chessRowLine = fileScanner.nextLine();
+            String chessRowLine = fileScanner.nextLine().trim();
             if (chessRowLine.length() != ChessBoard.SIZE) {
                 fileScanner.close();
                 throw new LoadBoardException();
@@ -195,7 +195,7 @@ public class Storage {
 
         rowIndex = 0;
         while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
-            String chessRowLine = fileScanner.nextLine();
+            String chessRowLine = fileScanner.nextLine().trim();
             if (chessRowLine.length() != ChessBoard.SIZE) {
                 fileScanner.close();
                 throw new LoadBoardException();
@@ -231,7 +231,7 @@ public class Storage {
                                   ChessBoard board,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
-        ArrayList<String> moveStringList = new ArrayList();
+        ArrayList<String> moveStringList = new ArrayList<String>();
         ArrayList<String> humanMoves = loadHumanMoves();
         ArrayList<String> cpuMoves = loadCPUMoves();
 
@@ -287,7 +287,7 @@ public class Storage {
 
 
     //@@author onx001
-    private boolean isPieceValid (ChessPiece initialPiece) {
+    private boolean isPieceValid(ChessPiece initialPiece) {
         if (initialPiece.isBlackKing()) {
             if (blackKingPresent) {
                 return false;
@@ -339,8 +339,8 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String colorLine = fileScanner.nextLine();
-            Color playerColor = Parser.parsePlayerColor(colorLine);
+            String colorLine = fileScanner.nextLine().trim();
+            Color playerColor = Parser.parsePlayerColor(colorLine.toUpperCase());
 
             fileScanner.close();
             return playerColor;
@@ -373,7 +373,7 @@ public class Storage {
 
         if (fileScanner.hasNext()) {
             try {
-                String difficultyLine = fileScanner.nextLine();
+                String difficultyLine = fileScanner.nextLine().trim();
                 int difficulty = Parser.parseDifficulty(difficultyLine);
 
                 fileScanner.close();
@@ -414,8 +414,8 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String currentColorString = fileScanner.nextLine();
-            Color color = Parser.parsePlayerColor(currentColorString);
+            String currentColorString = fileScanner.nextLine().trim();
+            Color color = Parser.parsePlayerColor(currentColorString.toUpperCase());
             fileScanner.close();
             return color;
         }
@@ -455,11 +455,12 @@ public class Storage {
 
         ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
-            String[] movesArray = fileScanner.nextLine().split(", ");
+            String movesString = fileScanner.nextLine().trim();
+            String[] movesArray = movesString.split(Player.MOVE_DELIMITER);
             Arrays.stream(movesArray)
                     .sequential()
                     .filter(x -> !x.equals(""))
-                    .forEach(x -> out.add(x));
+                    .forEach(x -> out.add(x.trim()));
         }
 
         fileScanner.close();
@@ -492,11 +493,12 @@ public class Storage {
 
         ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
-            String[] movesArray = fileScanner.nextLine().split(", ");
+            String movesString = fileScanner.nextLine().trim();
+            String[] movesArray = movesString.split(Player.MOVE_DELIMITER);
             Arrays.stream(movesArray)
                     .sequential()
                     .filter(x -> !x.equals(""))
-                    .forEach(x -> out.add(x));
+                    .forEach(x -> out.add(x.trim()));
         }
 
         fileScanner.close();
