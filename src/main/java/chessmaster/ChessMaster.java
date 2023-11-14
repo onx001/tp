@@ -37,7 +37,7 @@ public class ChessMaster {
         try {
             playerColor = storage.loadPlayerColor();
             difficulty = storage.loadDifficulty();
-            currentTurnColor = storage.loadCurrentColor();
+
             //@@author ken_ruster
             ChessTile[][] existingBoardState = storage.loadBoard();
             ChessBoard existingBoard = new ChessBoard(playerColor, existingBoardState);
@@ -47,6 +47,8 @@ public class ChessMaster {
             storage.executeSavedMoves(playerColor, existingBoard, board, human, cpu);
             board.setDifficulty(difficulty);
 
+            currentTurnColor = getCurrentTurnColor(human, cpu, playerColor);
+
             if (shouldStartNewGame() && !exit) {
                 loadNewGame();
             }
@@ -54,6 +56,21 @@ public class ChessMaster {
             ui.printLoadBoardError();
             loadNewGame();
         }
+    }
+
+    private Color getCurrentTurnColor(Human human, CPU cpu, Color playerColor) throws ChessMasterException {
+        int noHumanMoves = human.getMovesLength();
+        int noCPUMoves = cpu.getMovesLength();
+
+        if (noHumanMoves == noCPUMoves) {
+            return playerColor;
+        } else if (noHumanMoves > noCPUMoves && playerColor.isWhite()
+            || noHumanMoves < noCPUMoves && playerColor.isBlack()) {
+            return playerColor.getOppositeColour();
+        }
+
+        throw new ChessMasterException(
+                "Moves in save file are invalid! Please start a new game or correct the error");
     }
 
     private boolean shouldStartNewGame() {

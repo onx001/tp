@@ -235,8 +235,29 @@ public class Storage {
         ArrayList<String> humanMoves = loadHumanMoves();
         ArrayList<String> cpuMoves = loadCPUMoves();
 
+        if (cpuMoves.size() > humanMoves.size() && playerColor.isWhite()
+            || cpuMoves.size() < humanMoves.size() && playerColor.isBlack()) {
+            throw new ChessMasterException(
+                    "Moves in save file are invalid! Please start a new game or correct the error");
+        }
+
         // Merge move string arrays into a singular array
-        if (playerColor.isWhite()) {
+        boolean isPlayerTurn = playerColor.isWhite();
+        int noOfMoves = humanMoves.size() + cpuMoves.size();
+
+        for (int i = 0; i < noOfMoves; i ++) {
+            int turnIndex = i / 2;
+            if (isPlayerTurn && humanMoves.size() >= turnIndex + 1) {
+                moveStringList.add(humanMoves.get(turnIndex));
+            } else if (cpuMoves.size() >= turnIndex + 1) {
+                moveStringList.add(cpuMoves.get(turnIndex));
+            }
+
+            isPlayerTurn = !isPlayerTurn;
+        }
+
+        /*
+        if (playerColor.isWhite() && humanMoves.size() == cpuMoves.size()) {
             for (String move : humanMoves) {
                 moveStringList.add(move);
             }
@@ -244,7 +265,23 @@ public class Storage {
             for (int i = 0; i < cpuMoves.size(); i ++) {
                 moveStringList.add(2 * i + 1, cpuMoves.get(i));
             }
-        } else if (playerColor.isBlack()) {
+        } else if (playerColor.isBlack() && humanMoves.size() == cpuMoves.size()) {
+            for (String move : cpuMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < humanMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, humanMoves.get(i));
+            }
+        } else if (playerColor.isWhite() && humanMoves.size() > cpuMoves.size()) {
+            for (String move : humanMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < cpuMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, cpuMoves.get(i));
+            }
+        } else if (playerColor.isBlack() && humanMoves.size() > cpuMoves.size()) {
             for (String move : cpuMoves) {
                 moveStringList.add(move);
             }
@@ -255,6 +292,7 @@ public class Storage {
         } else {
             throw new LoadBoardException();
         }
+         */
 
         //Execute move string Array
         board.executeMoveArray(moveStringList, human, cpu);
@@ -384,40 +422,6 @@ public class Storage {
             } catch (NumberFormatException e) {
                 throw new LoadBoardException();
             }
-        }
-
-        fileScanner.close();
-        throw new LoadBoardException();
-    }
-
-    //@@author TriciaBK
-    /**
-     * Loads the current turn player's
-     * @return The difficulty as an integer.
-     */
-    public Color loadCurrentColor() throws ChessMasterException {
-        createChessMasterFile();
-
-        Scanner fileScanner;
-        try {
-            fileScanner = new Scanner(storageFile);
-        } catch (FileNotFoundException e) {
-            throw new LoadBoardException("Invalid file path: " + filePathString);
-        }
-
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
-        }
-
-        if (fileScanner.hasNext()) {
-            fileScanner.nextLine();
-        }
-
-        if (fileScanner.hasNext()) {
-            String currentColorString = fileScanner.nextLine();
-            Color color = Parser.parsePlayerColor(currentColorString);
-            fileScanner.close();
-            return color;
         }
 
         fileScanner.close();
