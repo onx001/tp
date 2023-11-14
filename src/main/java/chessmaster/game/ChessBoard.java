@@ -25,11 +25,14 @@ public class ChessBoard {
     public static final int TOP_ROW_INDEX = 0;
     public static final int BOTTOM_ROW_INDEX = 7;
     public static final int MAX_PIECES = 16;
+    
     public static final String PROMOTE_MOVE_STRING = "p";
+
     public static final String INVALID_SAVE_STRING =
             "Invalid move found in save file! Please start a new game or correct the invalid move!";
     public static final String INVALID_PROMOTE_STRING =
             "Invalid promotion found in save file! Please start a new game or correct the invalid move!";
+
     private static final String[][] STARTING_CHESSBOARD_BLACK = { 
         { "r", "n", "b", "q", "k", "b", "n", "r" }, 
         { "p", "p", "p", "p", "p", "p", "p", "p" }, 
@@ -54,7 +57,7 @@ public class ChessBoard {
 
     private Color playerColor;
 
-    private int difficulty = 4;
+    private int difficulty = 1;
 
     private final ChessTile[][] board = new ChessTile[SIZE][SIZE];
 

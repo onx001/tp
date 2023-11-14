@@ -301,7 +301,10 @@ public class Storage {
         // get the destination coordinate of the last move
         try {
             String lastMoveString = moveStringList.get(moveStringList.size() - 1);
-            String[] lastMoveArray = lastMoveString.split(" ");
+            String[] lastMoveArray = lastMoveString.split("\\s+");
+            if (lastMoveArray.length < 2) {
+                throw new LoadBoardException();
+            }
             lastMove = Coordinate.parseAlgebraicCoor(lastMoveArray[1]);
 
             if (otherBoard.getPieceAtCoor(lastMove).isPawn()) {
@@ -310,6 +313,7 @@ public class Storage {
             }
         } catch (Exception e) {
             assert moveStringList.size() == 0 : "Last move should be empty";
+            throw new LoadBoardException();
         }
 
 
