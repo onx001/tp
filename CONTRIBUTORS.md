@@ -1,10 +1,13 @@
 # Contributors
 
-Display | Name | Github Profile | Homepage
----|:---:|:---:|:---:
-![](https://avatars0.githubusercontent.com/u/22460123?s=100) | Jeffry Lum | [Github](https://github.com/j-lum/) | [Homepage](https://se.kasugano.moe)
-![](https://avatars0.githubusercontent.com/u/1673303?s=100) | Damith C. Rajapakse | [Github](https://github.com/damithc/) | [Homepage](https://www.comp.nus.edu.sg/~damithch/)
-![]() | Ou Ningxiang | [Github](https://github.com/onx001/) | [Homepage](https://github.com/onx001)
+Name | Github Profile
+---|:---:
+Antriksh Dhand | [Github](https://github.com/antrikshdhand/)
+Ou Ningxiang | [Github](https://github.com/onx001/)
+Oh Ken Wei | [Github](https://github.com/ken-ruster/)
+Tong Zheng Hong | [Github](https://://github.com/TongZhengHong/)
+Tricia Boo Koh | [Github](https://://github.com/TriciaBK/)
 # I would like to join this list. How can I help the project
 
-For more information, please refer to our [contributor's guide](https://oss-generic.github.io/process/).
+
+For more information, please refer to our [contributor's guide](README.md#contributing).
