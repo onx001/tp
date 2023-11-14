@@ -59,7 +59,7 @@ public class ChessBoardTest {
         ChessBoard board = new ChessBoard(Color.WHITE);
         Human human = new Human(Color.WHITE, board);
         CPU cpu = new CPU(Color.BLACK, board);
-        ArrayList moveList = new ArrayList<String>();
+        ArrayList<String> moveList = new ArrayList<String>();
         for (String moveString: MOVE_STRING_ARRAY) {
             moveList.add(moveString);
         }
