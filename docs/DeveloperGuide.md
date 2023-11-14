@@ -153,8 +153,6 @@ Promotion is a special type of move that involves promoting a pawn to another pi
 
 
 ### Storage Component
-**API:**
-
 Below is a class diagram representing the Storage class.
 The Storage component is responsible for handling the storage and retrieval of chess game state.
 
