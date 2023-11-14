@@ -5,12 +5,10 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.game.ChessBoard;
 import chessmaster.ui.TextUI;
 import chessmaster.storage.Storage;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
 import chessmaster.game.Game;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
 
 /**
  * Main entry-point for ChessMaster application.
@@ -39,12 +37,13 @@ public class ChessMaster {
             difficulty = storage.loadDifficulty();
 
             //@@author ken_ruster
-            ChessTile[][] existingBoardState = storage.loadBoard();
-            ChessBoard existingBoard = new ChessBoard(playerColor, existingBoardState);
+            // ChessTile[][] existingBoardState = storage.loadBoard();
+            // ChessBoard existingBoard = new ChessBoard(playerColor, existingBoardState);
             board = new ChessBoard(playerColor);
             human = new Human(playerColor, board);
             cpu = new CPU(playerColor.getOppositeColour(), board);
-            storage.executeSavedMoves(playerColor, existingBoard, board, human, cpu);
+
+            storage.executeSavedMoves(playerColor, board, human, cpu);
             board.setDifficulty(difficulty);
 
             currentTurnColor = getCurrentTurnColor(human, cpu, playerColor);

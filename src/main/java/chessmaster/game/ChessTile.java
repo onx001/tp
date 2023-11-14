@@ -3,7 +3,7 @@ package chessmaster.game;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.pieces.EmptyPiece;
 
-public class ChessTile {
+public class ChessTile implements Cloneable {
     public static final String TILE_DIVIDER = "|";
     private static final String EMPTY_TILE_STRING = " ";
     private static final String EMPTY_TILE_MOVES_STRING = ".";
