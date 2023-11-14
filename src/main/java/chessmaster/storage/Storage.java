@@ -4,11 +4,8 @@ import chessmaster.exceptions.ChessMasterException;
 import chessmaster.exceptions.LoadBoardException;
 import chessmaster.exceptions.SaveBoardException;
 import chessmaster.game.ChessBoard;
-import chessmaster.game.ChessTile;
 import chessmaster.game.Color;
-import chessmaster.game.Coordinate;
 import chessmaster.parser.Parser;
-import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
 import chessmaster.user.Player;
@@ -23,18 +20,13 @@ import java.util.Scanner;
 
 public class Storage {
     //@@author ken_ruster
-    private static final String LOAD_BOARD_MISMATCH_STRING =
-            "Board state does not match state dictated by move history!";
+    // private static final String LOAD_BOARD_MISMATCH_STRING =
+    //         "Board state does not match state dictated by move history!";
     private static final String PATH_EMPTY_STRING = "File path cannot be empty or null";
     //@@author TriciaBK
     private String filePathString;
     private File storageFile;
-    private int blackPieceNum;
-    private int whitePieceNum;
-    private boolean blackKingPresent;
-    private boolean whiteKingPresent;
-    private Scanner fileScanner;
-    private Coordinate lastMove;
+    // private Coordinate lastMove;
 
     public Storage(String filePath) {
         filePathString = filePath;
@@ -97,7 +89,7 @@ public class Storage {
             fileWriter.write(System.lineSeparator());
 
             //@@author TriciaBK
-            for (int row = 0; row < ChessBoard.SIZE; row++) {
+            /*for (int row = 0; row < ChessBoard.SIZE; row++) {
                 for (int col = 0; col < ChessBoard.SIZE; col++) {
                     ChessPiece piece = board.getPieceAtCoor(new Coordinate(col, row));
                     fileWriter.write(piece.toString());
@@ -112,7 +104,7 @@ public class Storage {
                     fileWriter.write(hasMovedString);
                 }
                 fileWriter.write(System.lineSeparator());
-            }
+            }*/
 
             fileWriter.close();
         } catch (IOException e) {
@@ -143,7 +135,7 @@ public class Storage {
      * @throws ChessMasterException If there is an error loading the board from the
      *                              file.
      */
-    public ChessTile[][] loadBoard() throws ChessMasterException {
+    /* public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
         blackPieceNum = 0;
@@ -213,7 +205,7 @@ public class Storage {
 
         fileScanner.close();
         return boardTiles;
-    }
+    } */
 
     //@@author ken-ruster
     /**
@@ -227,7 +219,6 @@ public class Storage {
      * @throws ChessMasterException
      */
     public ChessBoard executeSavedMoves(Color playerColor,
-                                  ChessBoard otherBoard,
                                   ChessBoard board,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
@@ -299,7 +290,7 @@ public class Storage {
 
         //@@author onx001
         // get the destination coordinate of the last move
-        try {
+        /*try {
             String lastMoveString = moveStringList.get(moveStringList.size() - 1);
             String[] lastMoveArray = lastMoveString.split("\\s+");
             if (lastMoveArray.length < 2) {
@@ -314,22 +305,22 @@ public class Storage {
         } catch (Exception e) {
             assert moveStringList.size() == 0 : "Last move should be empty";
             throw new LoadBoardException();
-        }
+        }*/
 
 
 
         //@@author TriciaBK
         // Check obtained board with loaded board state
-        if (!board.equals(otherBoard)) {
+        /*if (!board.equals(otherBoard)) {
             throw new LoadBoardException(LOAD_BOARD_MISMATCH_STRING);
-        }
+        }*/
 
         return board;
     }
 
 
     //@@author onx001
-    private boolean isPieceValid(ChessPiece initialPiece) {
+    /*private boolean isPieceValid(ChessPiece initialPiece) {
         if (initialPiece.isBlackKing()) {
             if (blackKingPresent) {
                 return false;
@@ -359,7 +350,7 @@ public class Storage {
         }
 
         return true;
-    }
+    }*/
 
     //@@author TongZhengHong
     /**
