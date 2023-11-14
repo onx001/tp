@@ -70,9 +70,9 @@ However, if you prefer to **start a fresh game** or if **no previous game is fou
 Choose your starting color to start new game! [b/w/exit]
 ```
 
-Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
+Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 3. Please enter the number corresponding to your preferred difficulty level.
 ```
-Choose your difficulty level! [1/2/3/4/exit]
+Choose your difficulty level! [1/2/3/exit]
 ```
 
 Inputs that are not compliant with the expect input (indicated in `[]`) will be rejected and users will be prompted to re-input.
@@ -94,7 +94,7 @@ Additionally, every time a move is executed, ChessMaster provides a comprehensiv
 </tr>
 <tr>
 <td>
-  
+
 <pre><code>
 move d2 d4
 _________________________________________________________________
@@ -162,9 +162,7 @@ _________________________________________________________________
 
 The game will automatically end and a victor be declared when one side has been checkmated, or if both players are stuck in a stalemate situation where neither player can avoid moving into a checked position.
 
-Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
-
-The king is "trapped" and has no safe squares to move to, and no other pieces can help.
+Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move. The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
 Otherwise, you may use the `exit` command if you wish to end the game midway and quit the program or `restart` command to start a new game. 
 
@@ -180,7 +178,7 @@ Examples:
 - `move a2 a4`
 - `move b3 g6`
 
-ChessMaster also automatically checks if the move was valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
+ChessMaster automatically checks if the move is valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
 message will be shown:
 
 `Oops, that move isn't valid!`
@@ -291,26 +289,29 @@ Objective:
 _________________________________________________________________
 ```
 
-#### Further details of special rules
+#### 1. Castling
 
-1. Castling
+For the move to be valid:
+- It's the king's first move. 
+- It's the rook's first move. 
+- There are no pieces between the king and the rook. 
+- The king is not in check and the king will not be in check after castling
 
-   For the move to be valid:
-   - It's the king's first move. 
-   - It's the rook's first move. 
-   - There are no pieces between the king and the rook. 
-   - The king is not in check and the king will not be in check after castling
-   
-   To perform castling on either sides:
-    - Move your king two squares to the right/left (towards the rook).
-    - The rook will jump over the king and land on the square next to the king.
+To perform castling on either sides:
+- Move your king two squares to the right/left (towards the rook).
+- The rook will jump over the king and land on the square next to the king.
 
-   Example of castling availability:  `moves e1`
+Examples and expected output:
 
-   Expected Output:
+<table>
+<tr>
+    <th>Castling availability: <code>moves e1</code></th>
+    <th>Execute castle move: <code>moves e1 c1</code></th>
+</tr>
+<tr>
+<td>
 
-   <pre><code>
-                 (a) (b) (c) (d) (e) (f) (g) (h)
+<pre><code>                 (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
             (8) | R |   |   |   | K |   |   | R | (8)
                 _________________________________
@@ -328,26 +329,23 @@ _________________________________________________________________
                 _________________________________
             (1) | r |   |[.]|[.]|{k}| b | n | r | (1)
                 _________________________________
-                 (a) (b) (c) (d) (e) (f) (g) (h)
+                (a) (b) (c) (d) (e) (f) (g) (h)
 
-   _________________________________________________________________
+_________________________________________________________________
 
-   Available coordinates for King at e1:
-   e2 d1 d2 c1
-   _________________________________________________________________
-   </code></pre>
+Available coordinates for King at e1:
+e2 d1 d2 c1
+_________________________________________________________________</code></pre>
 
-   Example:  `move e1 c1`
+</td>
+<td>
 
-   Expected Output:
+<pre><code>_________________________________________________________________
 
-   <pre><code>
-   _________________________________________________________________
+You moved King from e1 to c1
+_________________________________________________________________
 
-   You moved King from e1 to c1
-   _________________________________________________________________
-
-                 (a) (b) (c) (d) (e) (f) (g) (h)
+                (a) (b) (c) (d) (e) (f) (g) (h)
                 _________________________________
             (8) | R |   |   |   | K |   |   | R | (8)
                 _________________________________
@@ -365,75 +363,82 @@ _________________________________________________________________
                 _________________________________
             (1) |   |   |(k)| r |( )| b | n | r | (1)
                 _________________________________
-                 (a) (b) (c) (d) (e) (f) (g) (h)
-    </code></pre>
+                (a) (b) (c) (d) (e) (f) (g) (h)</code></pre>
 
-2. En Passant:
+</td>
+</tr>
+</table>
+
+#### 2. En Passant:
    
-   This move only happens when your opponent moves their pawn two squares forward from its starting position and lands next to your pawn.
-   To capture en passant, you must do it on your very next move. 
-   - Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
+This move only happens when your opponent moves their pawn two squares forward from its starting position and lands next to your pawn.
+To capture en passant, you must do it on your very next move. 
+- Move your pawn diagonally forward to the square that your opponent's pawn would have occupied if it had moved only one square forward.
 
-   Sample previous board: 
-   
-   <pre><code>
-   _________________________________________________________________
+<table>
+<tr>
+    <th>Sample board before en passant</th>
+    <th>Executing en passant move: <code>move d5 e6</code></th>
+</tr>
+<tr>
+<td>
 
-   ChessMaster moved Pawn from e7 to e5
-   _________________________________________________________________
+<pre><code>_________________________________________________________________
 
-                 (a) (b) (c) (d) (e) (f) (g) (h)
-                _________________________________
-            (8) | R |   | B | Q | K | B |   | R | (8)
-                _________________________________
-            (7) | P | P | P | P |( )| P | P | P | (7)
-                _________________________________
-            (6) |   |   | N |   |   |   |   |   | (6)
-                _________________________________
-            (5) |   |   |   | p |(P)|   |   |   | (5)
-                _________________________________
-            (4) |   |   |   |   |   |   |   |   | (4)
-                _________________________________
-            (3) |   |   |   |   |   |   |   |   | (3)
-                _________________________________
-            (2) | p | p |   |   | p | p | p | p | (2)
-                _________________________________
-            (1) | r | n | b | q | k | b | n | r | (1)
-                _________________________________
-                 (a) (b) (c) (d) (e) (f) (g) (h)
-   </code></pre>
+ChessMaster moved Pawn from e7 to e5
+_________________________________________________________________
 
-   Example: `move d5 e6`
+             (a) (b) (c) (d) (e) (f) (g) (h)
+            _________________________________
+        (8) | R |   | B | Q | K | B |   | R | (8)
+            _________________________________
+        (7) | P | P | P | P |( )| P | P | P | (7)
+            _________________________________
+        (6) |   |   | N |   |   |   |   |   | (6)
+            _________________________________
+        (5) |   |   |   | p |(P)|   |   |   | (5)
+            _________________________________
+        (4) |   |   |   |   |   |   |   |   | (4)
+            _________________________________
+        (3) |   |   |   |   |   |   |   |   | (3)
+            _________________________________
+        (2) | p | p |   |   | p | p | p | p | (2)
+            _________________________________
+        (1) | r | n | b | q | k | b | n | r | (1)
+            _________________________________
+             (a) (b) (c) (d) (e) (f) (g) (h)</code></pre>
 
-   Expected output:
+</td>
+<td>
 
-   <pre><code>
-                 (a) (b) (c) (d) (e) (f) (g) (h)
-                _________________________________
-            (8) | R |   | B | Q | K | B |   | R | (8)
-                _________________________________
-            (7) | P | P | P | P |   | P | P | P | (7)
-                _________________________________
-            (6) |   |   | N |   |(p)|   |   |   | (6)
-                _________________________________
-            (5) |   |   |   |( )|   |   |   |   | (5)
-                _________________________________
-            (4) |   |   |   |   |   |   |   |   | (4)
-                _________________________________
-            (3) |   |   |   |   |   |   |   |   | (3)
-                _________________________________
-            (2) | p | p |   |   | p | p | p | p | (2)
-                _________________________________
-            (1) | r | n | b | q | k | b | n | r | (1)
-                _________________________________
-                 (a) (b) (c) (d) (e) (f) (g) (h)
+<pre><code>_________________________________________________________________
 
-   _________________________________________________________________
+You moved Pawn from d5 to e6
+_________________________________________________________________
 
-   Available coordinates for Pawn at d5:
-   e6 c6 d6
-   _________________________________________________________________
-   </code></pre>
+             (a) (b) (c) (d) (e) (f) (g) (h)
+            _________________________________
+        (8) | R |   | B | Q | K | B |   | R | (8)
+            _________________________________
+        (7) | P | P | P | P |   | P | P | P | (7)
+            _________________________________
+        (6) |   |   | N |   |(p)|   |   |   | (6)
+            _________________________________
+        (5) |   |   |   |( )|   |   |   |   | (5)
+            _________________________________
+        (4) |   |   |   |   |   |   |   |   | (4)
+            _________________________________
+        (3) |   |   |   |   |   |   |   |   | (3)
+            _________________________________
+        (2) | p | p |   |   | p | p | p | p | (2)
+            _________________________________
+        (1) | r | n | b | q | k | b | n | r | (1)
+            _________________________________
+             (a) (b) (c) (d) (e) (f) (g) (h)</code></pre>
+
+</td>
+</tr>
+</table>
 
 ### Show commands: `help`
 
@@ -528,8 +533,8 @@ _________________________________________________________________
 
 ### Step back in history: `stepback`
 
-Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
-in the current game.
+Displays the board state as it was a certain number of moves ago. **Note that this command does not reverse any moves
+in the current game.**
 
 Format: `stepback [number of moves to step back]`
 
@@ -564,7 +569,6 @@ Stepped back 2 steps!
 Use `show` to see the current board.
 _________________________________________________________________
 ```
-
 
 ### List pieces in play: `captured`
 
@@ -631,6 +635,21 @@ _________________________________________________________________
 Every time a turn ends, ChessMaster will save the current state of the game. When ChessMaster is restarted, the
 user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
 saved game, and starting a new one will delete the existing save file.
+
+### Editing the storage file
+Tasks data are saved automatically in a text (.txt) file `<JAR file location>/data/ChessMaster.txt`. Users are welcome to update data directly by editing this data file to achieve a desired game state. 
+
+The format of the saved game in the storage file is as follows:
+
+```json
+[CURRENT_PLAYER_COLOR]  // Either BLACK or WHITE
+[GAME_DIFFICULTY]       // Integer from 1 - 3
+[NEXT_TURN_COLOR]       // Either BLACK or WHITE
+[HUMAN_MOVE_HISTORY]    // delimited by ','
+[CPU_MOVE_HISTORY]      // delimited by ','
+[CHESS_BOARD_PIECE]     // Next 8 lines of 8 characters each
+[hasMoved_FLAGS]        // Next 8 lines of 8 characters each
+```
 
 ## FAQ
 

@@ -11,7 +11,7 @@ import chessmaster.parser.Parser;
 import chessmaster.pieces.ChessPiece;
 import chessmaster.user.CPU;
 import chessmaster.user.Human;
-
+import chessmaster.user.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -167,7 +167,7 @@ public class Storage {
         int rowIndex = 0;
         ChessTile[][] boardTiles = new ChessTile[ChessBoard.SIZE][ChessBoard.SIZE];
         while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
-            String chessRowLine = fileScanner.nextLine();
+            String chessRowLine = fileScanner.nextLine().trim();
             if (chessRowLine.length() != ChessBoard.SIZE) {
                 fileScanner.close();
                 throw new LoadBoardException();
@@ -195,7 +195,7 @@ public class Storage {
 
         rowIndex = 0;
         while (rowIndex < ChessBoard.SIZE && fileScanner.hasNext()) {
-            String chessRowLine = fileScanner.nextLine();
+            String chessRowLine = fileScanner.nextLine().trim();
             if (chessRowLine.length() != ChessBoard.SIZE) {
                 fileScanner.close();
                 throw new LoadBoardException();
@@ -231,12 +231,33 @@ public class Storage {
                                   ChessBoard board,
                                   Human human,
                                   CPU cpu) throws ChessMasterException {
-        ArrayList<String> moveStringList = new ArrayList();
+        ArrayList<String> moveStringList = new ArrayList<String>();
         ArrayList<String> humanMoves = loadHumanMoves();
         ArrayList<String> cpuMoves = loadCPUMoves();
 
+        if (cpuMoves.size() > humanMoves.size() && playerColor.isWhite()
+            || cpuMoves.size() < humanMoves.size() && playerColor.isBlack()) {
+            throw new ChessMasterException(
+                    "Moves in save file are invalid! Please start a new game or correct the error");
+        }
+
         // Merge move string arrays into a singular array
-        if (playerColor.isWhite()) {
+        boolean isPlayerTurn = playerColor.isWhite();
+        int noOfMoves = humanMoves.size() + cpuMoves.size();
+
+        for (int i = 0; i < noOfMoves; i ++) {
+            int turnIndex = i / 2;
+            if (isPlayerTurn && humanMoves.size() >= turnIndex + 1) {
+                moveStringList.add(humanMoves.get(turnIndex));
+            } else if (cpuMoves.size() >= turnIndex + 1) {
+                moveStringList.add(cpuMoves.get(turnIndex));
+            }
+
+            isPlayerTurn = !isPlayerTurn;
+        }
+
+        /*
+        if (playerColor.isWhite() && humanMoves.size() == cpuMoves.size()) {
             for (String move : humanMoves) {
                 moveStringList.add(move);
             }
@@ -244,7 +265,23 @@ public class Storage {
             for (int i = 0; i < cpuMoves.size(); i ++) {
                 moveStringList.add(2 * i + 1, cpuMoves.get(i));
             }
-        } else if (playerColor.isBlack()) {
+        } else if (playerColor.isBlack() && humanMoves.size() == cpuMoves.size()) {
+            for (String move : cpuMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < humanMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, humanMoves.get(i));
+            }
+        } else if (playerColor.isWhite() && humanMoves.size() > cpuMoves.size()) {
+            for (String move : humanMoves) {
+                moveStringList.add(move);
+            }
+
+            for (int i = 0; i < cpuMoves.size(); i ++) {
+                moveStringList.add(2 * i + 1, cpuMoves.get(i));
+            }
+        } else if (playerColor.isBlack() && humanMoves.size() > cpuMoves.size()) {
             for (String move : cpuMoves) {
                 moveStringList.add(move);
             }
@@ -255,6 +292,7 @@ public class Storage {
         } else {
             throw new LoadBoardException();
         }
+         */
 
         //Execute move string Array
         board.executeMoveArray(moveStringList, human, cpu);
@@ -287,7 +325,7 @@ public class Storage {
 
 
     //@@author onx001
-    private boolean isPieceValid (ChessPiece initialPiece) {
+    private boolean isPieceValid(ChessPiece initialPiece) {
         if (initialPiece.isBlackKing()) {
             if (blackKingPresent) {
                 return false;
@@ -339,8 +377,8 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String colorLine = fileScanner.nextLine();
-            Color playerColor = Parser.parsePlayerColor(colorLine);
+            String colorLine = fileScanner.nextLine().trim();
+            Color playerColor = Parser.parsePlayerColor(colorLine.toUpperCase());
 
             fileScanner.close();
             return playerColor;
@@ -373,7 +411,7 @@ public class Storage {
 
         if (fileScanner.hasNext()) {
             try {
-                String difficultyLine = fileScanner.nextLine();
+                String difficultyLine = fileScanner.nextLine().trim();
                 int difficulty = Parser.parseDifficulty(difficultyLine);
 
                 fileScanner.close();
@@ -389,6 +427,7 @@ public class Storage {
         fileScanner.close();
         throw new LoadBoardException();
     }
+
 
     //@@author TriciaBK
     /**
@@ -414,8 +453,8 @@ public class Storage {
         }
 
         if (fileScanner.hasNext()) {
-            String currentColorString = fileScanner.nextLine();
-            Color color = Parser.parsePlayerColor(currentColorString);
+            String currentColorString = fileScanner.nextLine().trim();
+            Color color = Parser.parsePlayerColor(currentColorString.toUpperCase());
             fileScanner.close();
             return color;
         }
@@ -423,6 +462,7 @@ public class Storage {
         fileScanner.close();
         throw new LoadBoardException();
     }
+
 
     public String getFilePath() {
         return this.filePathString;
@@ -455,11 +495,12 @@ public class Storage {
 
         ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
-            String[] movesArray = fileScanner.nextLine().split(", ");
+            String movesString = fileScanner.nextLine().trim();
+            String[] movesArray = movesString.split(Player.MOVE_DELIMITER);
             Arrays.stream(movesArray)
                     .sequential()
                     .filter(x -> !x.equals(""))
-                    .forEach(x -> out.add(x));
+                    .forEach(x -> out.add(x.trim()));
         }
 
         fileScanner.close();
@@ -492,11 +533,12 @@ public class Storage {
 
         ArrayList<String> out = new ArrayList<String>();
         if (fileScanner.hasNext()) {
-            String[] movesArray = fileScanner.nextLine().split(", ");
+            String movesString = fileScanner.nextLine().trim();
+            String[] movesArray = movesString.split(Player.MOVE_DELIMITER);
             Arrays.stream(movesArray)
                     .sequential()
                     .filter(x -> !x.equals(""))
-                    .forEach(x -> out.add(x));
+                    .forEach(x -> out.add(x.trim()));
         }
 
         fileScanner.close();
