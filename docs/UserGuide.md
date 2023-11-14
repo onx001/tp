@@ -70,9 +70,9 @@ However, if you prefer to **start a fresh game** or if **no previous game is fou
 Choose your starting color to start new game! [b/w/exit]
 ```
 
-Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 4. Please enter the number corresponding to your preferred difficulty level.
+Next, you can choose the difficulty of the AI you will be pitched against! The current supported difficulty levels range from 1 to 3. Please enter the number corresponding to your preferred difficulty level.
 ```
-Choose your difficulty level! [1/2/3/4/exit]
+Choose your difficulty level! [1/2/3/exit]
 ```
 
 Inputs that are not compliant with the expect input (indicated in `[]`) will be rejected and users will be prompted to re-input.
@@ -162,9 +162,7 @@ _________________________________________________________________
 
 The game will automatically end and a victor be declared when one side has been checkmated, or if both players are stuck in a stalemate situation where neither player can avoid moving into a checked position.
 
-Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move.
-
-The king is "trapped" and has no safe squares to move to, and no other pieces can help.
+Checkmate is the point in the game where the attacking player has the opponent's king in a situation where it can't escape being captured on the next move. The king is "trapped" and has no safe squares to move to, and no other pieces can help.
 
 Otherwise, you may use the `exit` command if you wish to end the game midway and quit the program or `restart` command to start a new game. 
 
@@ -180,7 +178,7 @@ Examples:
 - `move a2 a4`
 - `move b3 g6`
 
-ChessMaster also automatically checks if the move was valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
+ChessMaster automatically checks if the move is valid and legal before it is executed. If the move is valid, an output as shown above in the [Gameplay](#gameplay) section will be output. Else, the following error
 message will be shown:
 
 `Oops, that move isn't valid!`
@@ -535,8 +533,8 @@ _________________________________________________________________
 
 ### Step back in history: `stepback`
 
-Displays the board state as it was a certain number of moves ago. Note that this command does not reverse any moves
-in the current game.
+Displays the board state as it was a certain number of moves ago. **Note that this command does not reverse any moves
+in the current game.**
 
 Format: `stepback [number of moves to step back]`
 
