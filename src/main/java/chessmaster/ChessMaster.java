@@ -62,10 +62,11 @@ public class ChessMaster {
         int noHumanMoves = human.getMovesLength();
         int noCPUMoves = cpu.getMovesLength();
 
-        if (noHumanMoves == noCPUMoves) {
+        if (noHumanMoves == noCPUMoves && playerColor.isWhite()
+            || noHumanMoves < noCPUMoves && playerColor.isBlack()) {
             return playerColor;
         } else if (noHumanMoves > noCPUMoves && playerColor.isWhite()
-            || noHumanMoves < noCPUMoves && playerColor.isBlack()) {
+            || noHumanMoves == noCPUMoves && playerColor.isBlack()) {
             return playerColor.getOppositeColour();
         }
 
