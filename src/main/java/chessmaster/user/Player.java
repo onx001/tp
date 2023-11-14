@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public abstract class Player {
 
-    private static final String MOVE_DELIMITER = ", ";
+    public static final String MOVE_DELIMITER = ",";
 
     protected ArrayList<Move> moves;
     protected ArrayList<ChessPiece> pieces;
