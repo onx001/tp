@@ -31,6 +31,10 @@ Given below are my contributions to the project:
 ### **New feature**: Handling promotion
 - Justification: Promotion is an essential mechanic of Chess.
 - Highlights: Handling promotion required extensive modification of several classes relating to game function.
+- How it works:
+  - Game checks for pieces able to promoted at the end of each move
+  - User is prompted to promote a piece, and the input is parsed to return a new piece
+  - The pawn to be promoted is replaced with the new piece
 ### **Project Management**:
 - Set up GitHub organisation and repo
 - Managed repo branch security settings
@@ -45,6 +49,8 @@ Given below are my contributions to the project:
 ### **Documentation**:
 - Developer Guide:
   - Added documentation for the `Parser` and `Command` subclasses
+  - Added sequence diagram for move parsing
+  - Added class diagram describing `Parser` and `Command`
 - User Guide:
   - Added documentation for the Features section
   - Updated the Command Summary
