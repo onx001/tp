@@ -1,9 +1,9 @@
 # About us
 
-| Name            | ID        | Github        | PPP                                |
-|-----------------|-----------|---------------|------------------------------------|
-| Antriksh Dhand  | A0278458J | antrikshdhand |                                    |
-| Oh Ken Wei      | A0251850J | ken-ruster    |                                    |
-| Ou Ningxiang    | A0249445W | onx001        |                                    |
-| Tong Zheng Hong | A0251819Y | TongZhengHong |                                    |
-| Tricia Boo Koh  | A0264665U | TriciaBK      | [TriciaBK's PPP](team/triciabk.md) |
+| Name                                 | ID        | Github        |
+|--------------------------------------|-----------|---------------|
+| [Antriksh Dhand](team/antrikshdhand.md) | A0278458J | antrikshdhand |
+| [Oh Ken Wei](team/ken-ruster.md)     | A0251850J | ken-ruster    |
+| [Ou Ningxiang ](team/onx001.md)      | A0249445W | onx001        |
+| [Tong Zheng Hong](team/tongzhenghong.md) | A0251819Y | TongZhengHong |
+| [Tricia Boo Koh](team/triciabk.md)   | A0264665U | TriciaBK      |
