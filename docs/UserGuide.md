@@ -641,14 +641,11 @@ Tasks data are saved automatically in a text (.txt) file `<JAR file location>/da
 
 The format of the saved game in the storage file is as follows:
 
-```json
+```java
 [CURRENT_PLAYER_COLOR]  // Either BLACK or WHITE
-[GAME_DIFFICULTY]       // Integer from 1 - 3
-[NEXT_TURN_COLOR]       // Either BLACK or WHITE
+[GAME_DIFFICULTY]       // Integer from 1 to 3
 [HUMAN_MOVE_HISTORY]    // delimited by ','
 [CPU_MOVE_HISTORY]      // delimited by ','
-[CHESS_BOARD_PIECE]     // Next 8 lines of 8 characters each
-[hasMoved_FLAGS]        // Next 8 lines of 8 characters each
 ```
 
 ## FAQ
