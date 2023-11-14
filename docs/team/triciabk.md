@@ -6,6 +6,7 @@ ChessMaster is a ChessMasterCLI is a command-line interface (CLI) chess game des
 This sleek and user-friendly chess simulator provides a platform for novice players to build their skills and understanding of the game.
 
 ### Given below are my contributions to the project:
+###### My code contribution can be found in this [TP Dashboard](https://nus-cs2113-ay2324s1.github.io/tp-dashboard/?search=triciabk&breakdown=false&sort=groupTitle%20dsc&sortWithin=title&since=2023-09-22&timeframe=commit&mergegroup=&groupSelect=groupByRepos)
 
 #### Storage Class
 - Stores the current state of board
