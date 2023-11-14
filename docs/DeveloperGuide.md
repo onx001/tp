@@ -118,10 +118,9 @@ How the minimax algorithm works:
 5. The `getBestMove` method returns the best move for the CPU to make.
 
 ### Move types
-The Move class and its subclasses are responsible for handling the different types of moves in chess. 
-The Move class is an abstract class that is extended by the following subclasses: StandardMove, PawnOpening, CastleMove, EnPassantMove and PromotionMove. 
-The Move class is also extended by the following classes: CastleSide, Direction, MoveDirection, MoveType and PromotionPiece.
-Below is a class diagram representing the Move class.
+The Move class and its subclasses are responsible for handling the different types of moves in chess. The Move class is a parent class of several move types: CastleMove, EnPassantMove and PromoteMove. The MoveFactory class is responsible for generating the correct move type.
+
+Below is a class diagram representing the parent Move class.
 
 ![](images/MoveClass.png)
 
