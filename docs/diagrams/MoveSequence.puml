@@ -23,7 +23,9 @@ g -> cb : move :Move
 deactivate g
 activate cb
 cb -> cb : isValidMove()
+activate cb
 cb --> cb : :boolean
+deactivate cb
 alt Move is valid
     create mf
     cb -> mf : createMove()
