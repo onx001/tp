@@ -126,15 +126,15 @@ public class Storage {
     }
 
     //@@author TriciaBK
-    /**
-     * Loads the state of the chessboard from a file.
-     * Ignores the first line player color information as it can be retrieved with
-     * loadPlayerColor() method
-     *
-     * @return A 2D array of ChessTile objects representing the loaded chessboard.
-     * @throws ChessMasterException If there is an error loading the board from the
-     *                              file.
-     */
+    // /**
+    //  * Loads the state of the chessboard from a file.
+    //  * Ignores the first line player color information as it can be retrieved with
+    //  * loadPlayerColor() method
+    //  *
+    //  * @return A 2D array of ChessTile objects representing the loaded chessboard.
+    //  * @throws ChessMasterException If there is an error loading the board from the
+    //  *                              file.
+    //  */
     /* public ChessTile[][] loadBoard() throws ChessMasterException {
         createChessMasterFile();
 
@@ -213,7 +213,7 @@ public class Storage {
      * Also stores the saved move history of both the human and CPU.
      *
      * @param playerColor The color which the player is playing as
-    //  * @param otherBoard A temporary board to be compared with the board saved in the .txt file
+     * //@param otherBoard A temporary board to be compared with the board saved in the .txt file
      * @param human Object representing information about the human player
      * @param cpu Object representing information about the computer-controlled player
      * @throws ChessMasterException
