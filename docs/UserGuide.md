@@ -636,6 +636,21 @@ Every time a turn ends, ChessMaster will save the current state of the game. Whe
 user will be prompted to choose whether to load the saved game or begin a new one. ChessMaster only supports a single
 saved game, and starting a new one will delete the existing save file.
 
+### Editing the storage file
+Tasks data are saved automatically in a text (.txt) file `<JAR file location>/data/ChessMaster.txt`. Users are welcome to update data directly by editing this data file to achieve a desired game state. 
+
+The format of the saved game in the storage file is as follows:
+
+```json
+[CURRENT_PLAYER_COLOR]  // Either BLACK or WHITE
+[GAME_DIFFICULTY]       // Integer from 1 - 3
+[NEXT_TURN_COLOR]       // Either BLACK or WHITE
+[HUMAN_MOVE_HISTORY]    // delimited by ','
+[CPU_MOVE_HISTORY]      // delimited by ','
+[CHESS_BOARD_PIECE]     // Next 8 lines of 8 characters each
+[hasMoved_FLAGS]        // Next 8 lines of 8 characters each
+```
+
 ## FAQ
 
 > **Q**: How do I transfer my data to another computer? 
