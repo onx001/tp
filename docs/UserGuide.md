@@ -6,7 +6,7 @@ ChessMasterCLI is a command-line interface (CLI) chess game designed to make lea
 
 - [Quick Start](#quick-start)
 - [Starting a game](#starting-a-game)
-- [Gameplay]()
+- [Gameplay](#gameplay)
 - [Features](#features)
     - Gameplay features
         - [Make a move](#make-a-move)
